@@ -30,7 +30,7 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
 
     @Override
     public String name() {
-        return "海戦・ドロップ報告書";
+        return "battleResultLog";
     }
 
     @Override

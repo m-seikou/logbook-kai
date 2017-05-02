@@ -19,7 +19,7 @@ public class CreateitemLogFormat extends LogFormatBase<Createitem> {
 
     @Override
     public String name() {
-        return "開発報告書";
+        return "createItemLog";
     }
 
     @Override

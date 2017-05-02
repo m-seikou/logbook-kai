@@ -13,7 +13,7 @@ public class MaterialLogFormat extends LogFormatBase<Map<Integer, Material>> {
 
     @Override
     public String name() {
-        return "資材ログ";
+        return "materialLog";
     }
 
     @Override
