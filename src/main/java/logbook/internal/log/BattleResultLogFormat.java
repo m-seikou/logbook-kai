@@ -14,6 +14,8 @@ import logbook.bean.BattleTypes.IFormation;
 import logbook.bean.BattleTypes.IKouku;
 import logbook.bean.BattleTypes.Kouku;
 import logbook.bean.BattleTypes.Stage1;
+import logbook.bean.BattleTypes.ICombinedBattle;
+import logbook.bean.BattleTypes.ICombinedEcBattle;
 import logbook.bean.MapStartNext;
 import logbook.bean.Ship;
 import logbook.bean.ShipMst;
@@ -159,6 +161,23 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
         // ドロップ艦娘
         joiner.add(Optional.ofNullable(result.getGetShip()).map(BattleResult.GetShip::getShipName).orElse(""));
         // 味方艦
+<<<<<<< HEAD
+        if (!(battle instanceof ICombinedBattle)) {
+            // 通常艦隊はDockIdの艦隊
+            List<Ship> friendFleet = log.getDeckMap().get(battle.getDockId());
+            for (int i = 0; i < 12; i++) {
+                if (friendFleet.size() > i) {
+                    Ship ship = friendFleet.get(i);
+                    if (ship != null) {
+                        // 名前
+                        joiner.add(Ships.toName(ship));
+                        // HP
+                        joiner.add(battle.getFNowhps().get(i) + "/" + battle.getFMaxhps().get(i));
+                    } else {
+                        joiner.add("");
+                        joiner.add("");
+                    }
+=======
         List<Ship> friendFleet = log.getDeckMap().get(battle.getDockId());
         for (int i = 0; i < 12; i++) {
             if (friendFleet.size() > i) {
@@ -168,6 +187,7 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
                     joiner.add(Ships.toName(ship));
                     // HP
                     joiner.add(battle.getFNowhps().get(i) + "/" + battle.getFMaxhps().get(i));
+>>>>>>> parent of 65a1aad... 海戦・ドロップ報告書に連合艦隊第二艦隊の情報が記載されていなかった。
                 } else {
                     joiner.add("");
                     joiner.add("");
@@ -179,7 +199,7 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
         }
         // 敵艦
         List<Integer> enemyFleet = battle.getShipKe();
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 6; i++) {
             if (enemyFleet.size() > i) {
                 ShipMst shipMst = ShipMstCollection.get()
                         .getShipMap()
@@ -198,6 +218,39 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
                     joiner.add("");
                 }
             } else {
+                joiner.add("");
+                joiner.add("");
+            }
+        }
+
+        // 敵連合艦隊第二艦隊
+        if (battle instanceof ICombinedEcBattle) {
+            enemyFleet = battle.getShipKeCombined();
+            for (int i = 0; i < 6; i++) {
+                if (enemyFleet.size() > i) {
+                    ShipMst shipMst = ShipMstCollection.get()
+                            .getShipMap()
+                            .get(enemyFleet.get(i));
+
+                    if (shipMst != null) {
+                        String flagship = shipMst.getYomi();
+                        if ("".equals(flagship) || "-".equals(flagship)) {
+                            joiner.add(shipMst.getName());
+                        } else {
+                            joiner.add(shipMst.getName() + "(" + flagship + ")");
+                        }
+                        joiner.add(battle.getENowhpsCombined().get(i) + "/" + battle.getEMaxhpsCombined().get(i));
+                    } else {
+                        joiner.add("");
+                        joiner.add("");
+                    }
+                } else {
+                    joiner.add("");
+                    joiner.add("");
+                }
+            }
+        } else {
+            for (int i = 0; i < 6; i++) {
                 joiner.add("");
                 joiner.add("");
             }
