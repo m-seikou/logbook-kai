@@ -29,11 +29,20 @@ public class ApiReqCombinedBattleSpMidnight implements APIListenerSpi {
         JsonObject data = json.getJsonObject("api_data");
         if (data != null) {
 
-            BattleLog log = AppCondition.get().getBattleResult();
+            AppCondition condition = AppCondition.get();
+            BattleLog log = condition.getBattleResult();
             if (log != null) {
+                condition.setBattleCount(condition.getBattleCount() + 1);
+                log.setBattleCount(condition.getBattleCount());
+                log.setRoute(condition.getRoute());
+
                 log.setBattle(CombinedBattleSpMidnight.toBattle(data));
+                // ローデータを設定する
+                if (AppConfig.get().isIncludeRawData()) {
+                    BattleLog.setRawData(log, BattleLog.RawData::setBattle, data, req);
+                }
                 // 艦隊スナップショットを作る
-                log.setDeckMap(BattleLog.deckMap(1, 2));
+                BattleLog.snapshot(log, 1, 2);
                 if (AppConfig.get().isApplyBattle()) {
                     // 艦隊を更新
                     PhaseState p = new PhaseState(log);

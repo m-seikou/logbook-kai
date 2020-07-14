@@ -6,7 +6,6 @@ import javax.json.JsonObject;
 
 import logbook.bean.Ship;
 import logbook.bean.ShipCollection;
-import logbook.internal.JsonHelper;
 import logbook.proxy.RequestMetaData;
 import logbook.proxy.ResponseMetaData;
 
@@ -24,11 +23,8 @@ public class ApiReqKaisouSlotExchangeIndex implements APIListenerSpi {
             Map<Integer, Ship> shipMap = ShipCollection.get()
                     .getShipMap();
 
-            Integer shipId = Integer.valueOf(req.getParameterMap().get("api_id").get(0));
-            Ship ship = shipMap.get(shipId)
-                    .clone();
-            ship.setSlot(JsonHelper.toIntegerList(data.getJsonArray("api_slot")));
-            shipMap.put(shipId, ship);
+            Integer shipId = Integer.valueOf(req.getParameter("api_id"));
+            shipMap.put(shipId, Ship.toShip(data.getJsonObject("api_ship_data")));
         }
     }
 

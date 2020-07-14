@@ -1,6 +1,8 @@
 package logbook.internal.gui;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,9 +24,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,19 +34,26 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableColumn.SortType;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.util.Duration;
 import logbook.bean.AppConfig;
+import logbook.bean.Mission;
+import logbook.bean.MissionCollection;
 import logbook.internal.BattleLogs.Unit;
+import logbook.internal.LoggerHolder;
 import logbook.internal.Logs;
+import logbook.internal.Tuple;
+import logbook.internal.Tuple.Pair;
 import logbook.internal.log.LogWriter;
 import logbook.internal.log.MissionResultLogFormat;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -53,6 +61,15 @@ import lombok.Data;
  *
  */
 public class MissionLogController extends WindowController {
+
+    @FXML
+    private SplitPane splitPane1;
+
+    @FXML
+    private SplitPane splitPane2;
+
+    @FXML
+    private SplitPane splitPane3;
 
     /** 統計 */
     @FXML
@@ -154,6 +171,14 @@ public class MissionLogController extends WindowController {
     void initialize() {
         TableTool.setVisible(this.detail, this.getClass() + "#" + "detail");
         TableTool.setVisible(this.aggregate, this.getClass() + "#" + "aggregate");
+        // SplitPaneの分割サイズ
+        Timeline x = new Timeline();
+        x.getKeyFrames().add(new KeyFrame(Duration.millis(1), (e) -> {
+            Tools.Conrtols.setSplitWidth(this.splitPane1, this.getClass() + "#" + "splitPane1");
+            Tools.Conrtols.setSplitWidth(this.splitPane2, this.getClass() + "#" + "splitPane2");
+            Tools.Conrtols.setSplitWidth(this.splitPane3, this.getClass() + "#" + "splitPane3");
+        }));
+        x.play();
 
         // 集計
         this.collect.setShowRoot(false);
@@ -165,7 +190,7 @@ public class MissionLogController extends WindowController {
 
         // 詳細
         SortedList<MissionLogDetail> sortedList = new SortedList<>(this.details);
-        this.detail.setItems(this.details);
+        this.detail.setItems(sortedList);
         sortedList.comparatorProperty().bind(this.detail.comparatorProperty());
         this.detail.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.detail.setOnKeyPressed(TableTool::defaultOnKeyPressedHandler);
@@ -184,7 +209,7 @@ public class MissionLogController extends WindowController {
 
         // 集計
         SortedList<MissionAggregate> sortedList2 = new SortedList<>(this.aggregates);
-        this.aggregate.setItems(this.aggregates);
+        this.aggregate.setItems(sortedList2);
         sortedList2.comparatorProperty().bind(this.aggregate.comparatorProperty());
         this.aggregate.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.aggregate.setOnKeyPressed(TableTool::defaultOnKeyPressedHandler);
@@ -195,6 +220,9 @@ public class MissionLogController extends WindowController {
         this.readLog();
         this.setCollect();
 
+        this.collect.setSortPolicy((params) -> sortCollect(params.getSortOrder(), this.collect.getRoot().getChildren()));
+        TreeTableTool.setVisible(this.collect, this.getClass() + "#" + "collect");
+
         // 選択された時のリスナーを設定
         this.collect.getSelectionModel()
                 .selectedItemProperty()
@@ -204,6 +232,35 @@ public class MissionLogController extends WindowController {
                 .addListener(this::chart);
     }
 
+    private boolean sortCollect(List<TreeTableColumn<MissionLogCollect, ?>> sortOrder, List<TreeItem<MissionLogCollect>> items) {
+        items.sort((o1, o2) -> {
+            MissionLogCollect c1 = (MissionLogCollect)o1.getValue();
+            MissionLogCollect c2 = (MissionLogCollect)o2.getValue();
+            for (TreeTableColumn<MissionLogCollect, ?> column : sortOrder) {
+                int diff = 0;
+                if (column == this.unit) {
+                    if (c1.getName() != null && c2.getName() != null) {
+                        diff = c1.getName().compareTo(c2.getName());
+                    } else {
+                        diff = c1.getSortOrder() - c2.getSortOrder();
+                    }
+                } else if (column == this.successGood) {
+                    diff = c1.successGoodProperty().get() - c2.successGoodProperty().get();
+                } else if (column == this.success) {
+                    diff = c1.successProperty().get() - c2.successProperty().get();
+                } else if (column == this.fail) {
+                    diff = c1.failProperty().get() - c2.failProperty().get();
+                }
+                if (diff != 0) {
+                    return (column.getSortType() == SortType.DESCENDING ? -1 : 1) * diff;
+                }
+            }
+            return c1.getSortOrder() - c2.getSortOrder();
+        });
+        items.forEach(item -> sortCollect(sortOrder, item.getChildren()));
+        return true;
+    }
+    
     @FXML
     void copyDetail(ActionEvent event) {
         TableTool.selectionCopy(this.detail);
@@ -220,7 +277,7 @@ public class MissionLogController extends WindowController {
             TableTool.showVisibleSetting(this.detail, this.getClass() + "#" + "detail",
                     this.getWindow());
         } catch (Exception e) {
-            LoggerHolder.LOG.error("FXMLの初期化に失敗しました", e);
+            LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
     }
 
@@ -240,7 +297,7 @@ public class MissionLogController extends WindowController {
             TableTool.showVisibleSetting(this.aggregate, this.getClass() + "#" + "aggregate",
                     this.getWindow());
         } catch (Exception e) {
-            LoggerHolder.LOG.error("FXMLの初期化に失敗しました", e);
+            LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
     }
 
@@ -272,10 +329,10 @@ public class MissionLogController extends WindowController {
                     .map(MissionLogDetail::toMissionLogDetail)
                     .collect(Collectors.toList()));
 
-            List<Pair> aggregateBase = this.aggregateBase(subLog);
+            List<Pair<String, Integer>> aggregateBase = this.aggregateBase(subLog);
 
-            BiConsumer<Map<String, Integer>, Pair> accumulator = (map, pair) -> {
-                map.merge(pair.getName(), pair.getValue(), Integer::sum);
+            BiConsumer<Map<String, Integer>, Pair<String, Integer>> accumulator = (map, pair) -> {
+                map.merge(pair.getKey(), pair.getValue(), Integer::sum);
             };
             BiConsumer<Map<String, Integer>, Map<String, Integer>> combiner = (map1, map2) -> {
                 for (Entry<String, Integer> entry : map2.entrySet()) {
@@ -289,7 +346,12 @@ public class MissionLogController extends WindowController {
                 MissionAggregate agg = new MissionAggregate();
                 agg.setResource(entry.getKey());
                 agg.setCount(entry.getValue());
-                agg.setAverage(((double) entry.getValue()) / subLog.size());
+                double average = ((double) entry.getValue()) / subLog.size();
+                average = BigDecimal.valueOf(entry.getValue())
+                    .divide(BigDecimal.valueOf(subLog.size()), 2, RoundingMode.HALF_UP)
+                    .setScale(2)
+                    .doubleValue();
+                agg.setAverage(average);
 
                 // 資材別の合計を表示する
                 this.aggregates.add(agg);
@@ -328,8 +390,8 @@ public class MissionLogController extends WindowController {
 
                 for (Entry<String, List<SimpleMissionLog>> entry : subLog.entrySet()) {
                     int sum = this.aggregateBase(entry.getValue()).stream()
-                            .filter(p -> p.getName().equals(value.resourceProperty().get()))
-                            .mapToInt(Pair::getValue)
+                            .filter(p -> p.getKey().equals(value.resourceProperty().get()))
+                            .mapToInt(Pair<String, Integer>::getValue)
                             .sum();
                     if (sum > 0) {
                         this.chart.getData().add(new PieChart.Data(entry.getKey(), sum));
@@ -347,7 +409,7 @@ public class MissionLogController extends WindowController {
             try {
                 return new SimpleMissionLog(line);
             } catch (Exception e) {
-                LoggerHolder.LOG.warn("遠征報告書の読み込み中に例外", e);
+                LoggerHolder.get().warn("遠征報告書の読み込み中に例外", e);
             }
             return null;
         };
@@ -395,12 +457,16 @@ public class MissionLogController extends WindowController {
         TreeItem<MissionLogCollect> root = new TreeItem<MissionLogCollect>(new MissionLogCollect());
         this.collect.setRoot(root);
 
+        int index = 0;
+        Map<String, Integer> orders = MissionCollection.get().getMissionMap().values().stream().collect(
+                Collectors.toMap(Mission::getName, m -> m.getMapareaId()*10000+m.getId(), (k1, k2) -> k1));
         for (Unit unit : Unit.values()) {
             List<SimpleMissionLog> list = this.logMap.get(unit);
             // 単位のルート
             MissionLogCollect rootValue = collect(list, null);
             rootValue.setUnit(unit.getName());
             rootValue.setCollectUnit(unit);
+            rootValue.setSortOrder(index++);
 
             TreeItem<MissionLogCollect> unitRoot = new TreeItem<MissionLogCollect>(rootValue);
             unitRoot.setExpanded(true);
@@ -416,7 +482,7 @@ public class MissionLogController extends WindowController {
                 MissionLogCollect subValue = collect(list, name);
                 subValue.setCollectUnit(unit);
                 subValue.setName(name);
-
+                subValue.setSortOrder(orders.getOrDefault(name, Integer.MAX_VALUE));
                 TreeItem<MissionLogCollect> subRow = new TreeItem<MissionLogCollect>(subValue);
                 unitRoot.getChildren().add(subRow);
             }
@@ -453,19 +519,19 @@ public class MissionLogController extends WindowController {
         return row;
     }
 
-    private List<Pair> aggregateBase(List<SimpleMissionLog> log) {
+    private List<Pair<String, Integer>> aggregateBase(List<SimpleMissionLog> log) {
         return log.stream()
                 .flatMap(e -> {
-                    List<Pair> pairs = new ArrayList<>();
-                    pairs.add(new Pair("燃料", e.getFuel()));
-                    pairs.add(new Pair("弾薬", e.getAmmo()));
-                    pairs.add(new Pair("鋼材", e.getMetal()));
-                    pairs.add(new Pair("ボーキ", e.getBauxite()));
+                    List<Pair<String, Integer>> pairs = new ArrayList<>();
+                    pairs.add(Tuple.of("燃料", e.getFuel()));
+                    pairs.add(Tuple.of("弾薬", e.getAmmo()));
+                    pairs.add(Tuple.of("鋼材", e.getMetal()));
+                    pairs.add(Tuple.of("ボーキ", e.getBauxite()));
                     if (!e.getItem1name().isEmpty()) {
-                        pairs.add(new Pair(e.getItem1name(), e.getItem1count()));
+                        pairs.add(Tuple.of(e.getItem1name(), e.getItem1count()));
                     }
                     if (!e.getItem2name().isEmpty()) {
-                        pairs.add(new Pair(e.getItem2name(), e.getItem2count()));
+                        pairs.add(Tuple.of(e.getItem2name(), e.getItem2count()));
                     }
                     return pairs.stream();
                 })
@@ -538,22 +604,5 @@ public class MissionLogController extends WindowController {
             if (columns.length > 12)
                 this.setExp(columns[12].isEmpty() ? 0 : Integer.parseInt(columns[12]));
         }
-    }
-
-    /**
-     * 名前と値のペア
-     */
-    @Data
-    @AllArgsConstructor
-    private static class Pair {
-
-        private String name;
-
-        private int value;
-    }
-
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(MissionLogController.class);
     }
 }

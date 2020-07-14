@@ -3,6 +3,7 @@ package logbook.api;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import java.util.stream.Collectors;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 
+import javafx.application.Platform;
+import logbook.bean.AppBouyomiConfig;
 import logbook.bean.AppCondition;
 import logbook.bean.AppConfig;
 import logbook.bean.Basic;
@@ -25,7 +28,11 @@ import logbook.bean.Ship;
 import logbook.bean.ShipCollection;
 import logbook.bean.SlotItem;
 import logbook.bean.SlotItemCollection;
+import logbook.internal.Audios;
+import logbook.internal.BouyomiChanUtils;
+import logbook.internal.BouyomiChanUtils.Type;
 import logbook.internal.JsonHelper;
+import logbook.internal.gui.Tools;
 import logbook.internal.log.LogWriter;
 import logbook.internal.log.MaterialLogFormat;
 import logbook.proxy.RequestMetaData;
@@ -50,6 +57,7 @@ public class ApiPortPort implements APIListenerSpi {
             this.apiCombinedFlag(data);
             this.condition();
             this.akashiTimer();
+            this.detectGimmick(data);
         }
     }
 
@@ -81,14 +89,16 @@ public class ApiPortPort implements APIListenerSpi {
         // cond値が更新されたかを検出
         Predicate<Ship> update = beforeShip -> {
             Ship afterShip = afterShipMap.get(beforeShip.getId());
-            if (afterShip != null) {
+            // 本来このチェックは正しくないが、自然回復の起点となる時間を知りえないのでこのチェックで代用する。
+            // このチェックだと、自然回復以外にも出撃によるcond値の低下が起きた時や、
+            // cond値40未満の艦の入渠、49前後の艦の演習参加などでもリセットされてしまうが、
+            // 最大で3分の誤差でしかないので許容する。
+            if (afterShip != null && (beforeShip.getCond() < 49 || afterShip.getCond() < 49)) {
                 return !beforeShip.getCond().equals(afterShip.getCond());
             }
             return false;
         };
-        if (before.values().stream()
-                .filter(ship -> ship.getCond() < 49)
-                .anyMatch(update)) {
+        if (before.values().stream().anyMatch(update)) {
             ZonedDateTime time = ZonedDateTime.now(ZoneId.systemDefault());
             AppCondition.get().setCondUpdateTime(time.toEpochSecond());
         }
@@ -197,11 +207,15 @@ public class ApiPortPort implements APIListenerSpi {
     private void condition() {
         AppCondition condition = AppCondition.get();
         // 出撃中ではない
-        condition.setMapStart(Boolean.FALSE);
+        condition.setMapStart(false);
         // 退避を削除
         condition.getEscape().clear();
         // 戦闘結果を削除
         condition.setBattleResultConfirm(null);
+        // 戦闘回数リセット
+        condition.setBattleCount(0);
+        // ルート削除
+        condition.setRoute(new ArrayList<>());
     }
 
     /**
@@ -211,6 +225,32 @@ public class ApiPortPort implements APIListenerSpi {
         long timer = AppCondition.get().getAkashiTimer();
         if (System.currentTimeMillis() - timer >= Duration.ofMinutes(20).toMillis()) {
             AppCondition.get().setAkashiTimer(System.currentTimeMillis());
+        }
+    }
+
+    /**
+     * api_data.api_event_object
+     * 
+     * @param object api_data
+     */
+    private void detectGimmick(JsonObject object) {
+        if (object.containsKey("api_event_object")) {
+            JsonObject eventObject = object.getJsonObject("api_event_object");
+            if (eventObject.containsKey("api_m_flag2")) {
+                if (JsonHelper.toInteger(eventObject.get("api_m_flag2")) > 0) {
+                    Platform.runLater(
+                            () -> Tools.Conrtols.showNotify(null, "ギミック解除", "ギミックの達成を確認しました。",
+                                    javafx.util.Duration.seconds(15)));
+                    // 通知音再生
+                    if (AppConfig.get().isUseSound()) {
+                        Platform.runLater(Audios.playDefaultNotifySound());
+                    }
+                    // 棒読みちゃん連携
+                    if (AppBouyomiConfig.get().isEnable()) {
+                        BouyomiChanUtils.speak(Type.AchievementGimmick2);
+                    }
+                }
+            }
         }
     }
 }

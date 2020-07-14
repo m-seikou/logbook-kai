@@ -1,13 +1,11 @@
 package logbook.internal.gui;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +14,8 @@ import java.util.stream.Collectors;
 
 import org.controlsfx.control.CheckListView;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,13 +24,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import logbook.bean.AppConfig;
 import logbook.internal.ThreadManager;
 import logbook.internal.gui.ScreenCapture.ImageData;
@@ -44,15 +45,8 @@ public class CaptureSaveController extends WindowController {
     /** ファイル名日付書式 */
     static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss.SSS");
 
-    private static final String JPEG = "jpg";
-
-    private static final String GIF = "gif";
-
     @FXML
-    private ChoiceBox<String> type;
-
-    @FXML
-    private TextField fps;
+    private SplitPane splitPane;
 
     @FXML
     private CheckBox tile;
@@ -74,9 +68,12 @@ public class CaptureSaveController extends WindowController {
 
     @FXML
     void initialize() {
-        this.type.setItems(FXCollections.observableArrayList(JPEG, GIF));
-        this.type.getSelectionModel().selectFirst();
-
+        // SplitPaneの分割サイズ
+        Timeline x = new Timeline();
+        x.getKeyFrames().add(new KeyFrame(Duration.millis(1), (e) -> {
+            Tools.Conrtols.setSplitWidth(this.splitPane, this.getClass() + "#" + "splitPane");
+        }));
+        x.play();
         this.image.fitWidthProperty().bind(this.imageParent.widthProperty());
         this.image.fitHeightProperty().bind(this.imageParent.heightProperty());
     }
@@ -115,13 +112,7 @@ public class CaptureSaveController extends WindowController {
                 Task<Void> task = new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
-                        if (GIF.equals(CaptureSaveController.this.type.getSelectionModel().getSelectedItem())) {
-                            // GIFが選ばれている時
-                            CaptureSaveController.this.saveGif(selections, path);
-                        } else {
-                            // GIF以外
-                            CaptureSaveController.this.saveJpeg(selections, path);
-                        }
+                        CaptureSaveController.this.saveJpeg(selections, path);
                         return null;
                     }
 
@@ -153,28 +144,6 @@ public class CaptureSaveController extends WindowController {
     }
 
     /**
-     * アニメーションGIFファイルとして保存します
-     *
-     * @param selections 画像ファイル
-     * @param dir ディレクトリ
-     * @throws IOException 入出力例外
-     */
-    private void saveGif(List<ImageData> selections, Path dir) throws IOException {
-        Duration delay = Duration.ofMillis(1000 / Math.max(Integer.parseInt(this.fps.getText()), 1));
-
-        String fname = DATE_FORMAT.format(selections.get(0).getDateTime()) + ".gif";
-        Path to = dir.resolve(fname);
-        List<byte[]> bytes = selections.stream()
-                .map(ImageData::getImage)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-        try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(to))) {
-            ScreenCapture.createAnimetedGIF(out, bytes, delay);
-        }
-    }
-
-    /**
      * JPEGファイルとして保存します
      *
      * @param selections 画像ファイル
@@ -185,20 +154,21 @@ public class CaptureSaveController extends WindowController {
         if (this.tile.isSelected()) {
             // 並べる場合
             int column = Math.max(Integer.parseInt(this.tileCount.getText()), 1);
-            Path to = dir.resolve(DATE_FORMAT.format(selections.get(0).getDateTime()) + ".jpg");
+            ImageData top = selections.get(0);
+            Path to = dir.resolve(DATE_FORMAT.format(top.getDateTime()) + "." + top.getFormat());
             List<byte[]> bytes = selections.stream()
                     .map(ImageData::getImage)
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
             try (OutputStream out = Files.newOutputStream(to)) {
-                out.write(ScreenCapture.encodeJpeg(ScreenCapture.tileImage(bytes, column)));
+                out.write(ScreenCapture.encode(ScreenCapture.tileImage(bytes, column), top.getFormat()));
             }
         } else {
             // 並べない場合個別にファイル保存する
             for (ImageData image : selections) {
                 byte[] data = image.getImage();
                 if (data != null) {
-                    Path to = dir.resolve(DATE_FORMAT.format(image.getDateTime()) + ".jpg");
+                    Path to = dir.resolve(DATE_FORMAT.format(image.getDateTime()) + "." + image.getFormat());
                     try (OutputStream out = Files.newOutputStream(to)) {
                         out.write(data);
                     }
@@ -221,7 +191,7 @@ public class CaptureSaveController extends WindowController {
     /**
      * キャプチャプレビュー
      *
-     * @param image 画像データ
+     * @param value 画像データ
      */
     private void viewImage(ObservableValue<? extends ImageData> observable, ImageData oldValue, ImageData value) {
         if (value != null) {

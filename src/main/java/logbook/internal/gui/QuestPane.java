@@ -5,20 +5,24 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Arc;
+import javafx.stage.Stage;
 import logbook.bean.AppQuest;
 import logbook.bean.AppQuestCollection;
 import logbook.bean.QuestList.Quest;
+import logbook.internal.LoggerHolder;
+import logbook.internal.ThreadManager;
+import logbook.plugin.PluginServices;
 
 /**
  * 任務
@@ -33,6 +37,9 @@ public class QuestPane extends HBox {
 
     @FXML
     private Hyperlink name;
+
+    @FXML
+    private Hyperlink condition;
 
     @FXML
     private VBox detailView;
@@ -56,7 +63,7 @@ public class QuestPane extends HBox {
             loader.setController(this);
             loader.load();
         } catch (IOException e) {
-            LoggerHolder.LOG.error("FXMLのロードに失敗しました", e);
+            LoggerHolder.get().error("FXMLのロードに失敗しました", e);
         }
     }
 
@@ -74,6 +81,8 @@ public class QuestPane extends HBox {
                 this.getStyleClass().add("deck");
                 break;
             case 2:
+            case 8:
+            case 9:
                 this.getStyleClass().add("sortie");
                 break;
             case 3:
@@ -90,9 +99,6 @@ public class QuestPane extends HBox {
                 break;
             case 7:
                 this.getStyleClass().add("kaisou");
-                break;
-            case 8:
-                this.getStyleClass().add("sortie");
                 break;
             default:
                 break;
@@ -119,8 +125,13 @@ public class QuestPane extends HBox {
             }
             this.name.setText(quest.getTitle());
             this.detail.setText(quest.getDetail().replaceAll("<br>", ""));
+            this.setOnContextMenuRequested(this::showContextMenu);
+
+            if (PluginServices.getResource("logbook/quest/" + quest.getNo() + ".json") == null) {
+                this.condition.setVisible(false);
+            }
         } catch (Exception e) {
-            LoggerHolder.LOG.error("FXMLの初期化に失敗しました", e);
+            LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
     }
 
@@ -132,13 +143,24 @@ public class QuestPane extends HBox {
     }
 
     @FXML
+    void removeAll(ActionEvent event) {
+        AppQuestCollection.get()
+                .getQuest()
+                .clear();
+    }
+
+    @FXML
     void search(ActionEvent event) {
         try {
-            Desktop.getDesktop()
-                    .browse(URI.create("https://www.google.co.jp/search?q="
-                            + URLEncoder.encode(this.quest.getQuest().getTitle(), "UTF-8")));
+            ThreadManager.getExecutorService()
+                    .submit(() -> {
+                        Desktop.getDesktop()
+                                .browse(URI.create("https://www.google.co.jp/search?q="
+                                        + URLEncoder.encode(this.quest.getQuest().getTitle(), "UTF-8")));
+                        return null;
+                    });
         } catch (Exception e) {
-            LoggerHolder.LOG.warn("ブラウザを開けませんでした", e);
+            LoggerHolder.get().warn("ブラウザを開けませんでした", e);
         }
     }
 
@@ -153,8 +175,22 @@ public class QuestPane extends HBox {
         }
     }
 
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(QuestPane.class);
+    @FXML
+    void condition(ActionEvent event) {
+        try {
+            InternalFXMLLoader.showWindow("logbook/gui/quest_progress.fxml", (Stage) this.getScene().getWindow(),
+                    this.quest.getQuest().getTitle(), c -> {
+                        ((QuestProgress) c).setQuest(this.quest);
+                    }, null);
+        } catch (IOException e) {
+            LoggerHolder.get().warn("進捗を開けませんでした", e);
+        }
+    }
+
+    private void showContextMenu(ContextMenuEvent event) {
+        MenuItem item = new MenuItem("全て除去");
+        item.setOnAction(this::removeAll);
+        ContextMenu contextMenu = new ContextMenu(item);
+        contextMenu.show(this.getScene().getWindow(), event.getScreenX(), event.getScreenY());
     }
 }

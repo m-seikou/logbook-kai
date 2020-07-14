@@ -1,6 +1,6 @@
 package logbook.api;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.json.JsonObject;
@@ -21,25 +21,31 @@ public class ApiReqKousyouDestroyship implements APIListenerSpi {
 
     @Override
     public void accept(JsonObject json, RequestMetaData req, ResponseMetaData res) {
-        List<String> apiShipId = req.getParameterMap()
-                .get("api_ship_id");
+        String apiShipId = req.getParameter("api_ship_id");
+        String apiSlotDestFlag = req.getParameter("api_slot_dest_flag");
+
         if (apiShipId != null) {
-            Integer shipId = Integer.valueOf(apiShipId.get(0));
-            // 艦娘を外す
-            Ship ship = ShipCollection.get()
-                    .getShipMap()
-                    .remove(shipId);
-            if (ship != null) {
-                Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                        .getSlotitemMap();
-                // 持っている装備を廃棄する
-                for (Integer itemId : ship.getSlot()) {
-                    itemMap.remove(itemId);
-                }
-                // 補強増設
-                itemMap.remove(ship.getSlotEx());
-            }
+            boolean slotDest = "1".equals(apiSlotDestFlag);
+            Arrays.stream(apiShipId.split(","))
+                    .map(Integer::parseInt)
+                    .forEach(id -> this.destroyShip(id, slotDest));
         }
     }
 
+    private void destroyShip(Integer shipId, boolean slotDest) {
+        // 艦娘を外す
+        Ship ship = ShipCollection.get()
+                .getShipMap()
+                .remove(shipId);
+        if (slotDest && ship != null) {
+            Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
+                    .getSlotitemMap();
+            // 持っている装備を廃棄する
+            for (Integer itemId : ship.getSlot()) {
+                itemMap.remove(itemId);
+            }
+            // 補強増設
+            itemMap.remove(ship.getSlotEx());
+        }
+    }
 }

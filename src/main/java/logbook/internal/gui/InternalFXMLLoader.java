@@ -9,18 +9,31 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import logbook.plugin.PluginContainer;
+import logbook.bean.AppConfig;
+import logbook.plugin.PluginServices;
 
-final class InternalFXMLLoader {
+public final class InternalFXMLLoader {
 
-    static FXMLLoader load(String name) throws IOException {
-        URL url = PluginContainer.getInstance().getClassLoader().getResource(name);
+    public static FXMLLoader load(String name) throws IOException {
+        URL url = PluginServices.getResource(name);
         return load(url);
     }
 
-    static FXMLLoader load(URL url) throws IOException {
+    public static FXMLLoader load(URL url) throws IOException {
         FXMLLoader loader = new FXMLLoader(url);
+        loader.setClassLoader(PluginServices.getClassLoader());
         return loader;
+    }
+
+    public static Parent setGlobal(Parent root) {
+        String fontSize = AppConfig.get().getFontSize();
+        if (fontSize != null && !"default".equals(fontSize)) {
+            URL url = PluginServices.getResource("logbook/gui/application_" + fontSize + ".css");
+            if (url != null) {
+                root.getStylesheets().add(url.toString());
+            }
+        }
+        return root;
     }
 
     /**
@@ -41,13 +54,13 @@ final class InternalFXMLLoader {
      * @param name リソース
      * @param parent 親ウインドウ
      * @param title ウインドウタイトル
-     * @param controllerFunction コントローラーを操作するConsumer
-     * @param windowFunction ウインドウを操作するConsumer
+     * @param controllerConsumer コントローラーを操作するConsumer
+     * @param windowConsumer ウインドウを操作するConsumer
      * @throws IOException 入出力例外が発生した場合
      */
-    static void showWindow(String name, Stage parent, String title, Consumer<WindowController> controllerFunction,
-            Consumer<Stage> windowFunction) throws IOException {
-        showWindow(name, parent, title, null, controllerFunction, windowFunction);
+    static void showWindow(String name, Stage parent, String title, Consumer<WindowController> controllerConsumer,
+            Consumer<Stage> windowConsumer) throws IOException {
+        showWindow(name, parent, title, null, controllerConsumer, windowConsumer);
     }
 
     /**
@@ -57,8 +70,8 @@ final class InternalFXMLLoader {
      * @param parent 親ウインドウ
      * @param title ウインドウタイトル
      * @param sceneFunction シーン・グラフを操作するFunction
-     * @param controllerFunction コントローラーを操作するConsumer
-     * @param windowFunction ウインドウを操作するConsumer
+     * @param controllerConsumer コントローラーを操作するConsumer
+     * @param windowConsumer ウインドウを操作するConsumer
      * @throws IOException 入出力例外が発生した場合
      */
     static void showWindow(String name, Stage parent, String title, Function<Parent, Scene> sceneFunction,
@@ -67,7 +80,7 @@ final class InternalFXMLLoader {
 
         FXMLLoader loader = load(name);
         Stage stage = new Stage();
-        Parent root = loader.load();
+        Parent root = setGlobal(loader.load());
         if (sceneFunction != null) {
             stage.setScene(sceneFunction.apply(root));
         } else {
@@ -75,7 +88,7 @@ final class InternalFXMLLoader {
         }
 
         WindowController controller = loader.getController();
-        controller.setWindow(stage);
+        controller.initWindow(stage);
 
         if (windowConsumer != null) {
             windowConsumer.accept(stage);

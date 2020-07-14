@@ -3,32 +3,32 @@ package logbook.api;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 import javax.json.JsonObject;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
 import logbook.Messages;
+import logbook.bean.AppBouyomiConfig;
 import logbook.bean.AppCondition;
 import logbook.bean.AppConfig;
 import logbook.bean.BattleLog;
 import logbook.bean.BattleTypes.CombinedType;
-import logbook.bean.DeckPort;
 import logbook.bean.DeckPortCollection;
 import logbook.bean.MapStartNext;
 import logbook.bean.Ship;
-import logbook.bean.ShipCollection;
 import logbook.bean.ShipMst;
 import logbook.internal.Audios;
+import logbook.internal.BouyomiChanUtils;
+import logbook.internal.BouyomiChanUtils.Type;
+import logbook.internal.LoggerHolder;
 import logbook.internal.Ships;
+import logbook.internal.Tuple;
 import logbook.internal.gui.Tools;
 import logbook.proxy.RequestMetaData;
 import logbook.proxy.ResponseMetaData;
@@ -45,31 +45,66 @@ public class ApiReqMapNext implements APIListenerSpi {
 
         JsonObject data = json.getJsonObject("api_data");
         if (data != null) {
-            BattleLog log = AppCondition.get()
-                    .getBattleResult();
+            MapStartNext next = MapStartNext.toMapStartNext(data);
+
+            AppCondition condition = AppCondition.get();
+            BattleLog log = condition.getBattleResult();
             if (log == null) {
                 log = new BattleLog();
-                AppCondition.get()
-                        .setBattleResult(log);
+                condition.setBattleResult(log);
             }
-            log.setCombinedType(CombinedType.toCombinedType(AppCondition.get().getCombinedType()));
-            log.getNext().add(MapStartNext.toMapStartNext(data));
+            log.setCombinedType(CombinedType.toCombinedType(condition.getCombinedType()));
+            log.getNext().add(next);
+            // ルート情報
+            condition.getRoute().add(new StringJoiner("-")
+                    .add(data.getJsonNumber("api_maparea_id").toString())
+                    .add(data.getJsonNumber("api_mapinfo_no").toString())
+                    .add(data.getJsonNumber("api_no").toString())
+                    .toString());
 
-            // 大破した艦娘
-            List<Ship> badlyShips = badlyShips(DeckPortCollection.get()
-                    .getDeckPortMap()
-                    .get(AppCondition.get()
-                            .getDeckId()));
-
-            // 連合艦隊時は第2艦隊も見る
-            if (AppCondition.get().isCombinedFlag()) {
-                badlyShips.addAll(badlyShips(DeckPortCollection.get()
+            if (AppConfig.get().isAlertBadlyNext() || AppBouyomiConfig.get().isEnable()) {
+                // 大破した艦娘
+                List<Ship> badlyShips = DeckPortCollection.get()
                         .getDeckPortMap()
-                        .get(2)));
-            }
+                        .get(condition.getDeckId())
+                        .getBadlyShips();
 
-            if (!badlyShips.isEmpty()) {
-                Platform.runLater(() -> displayAlert(badlyShips));
+                // 連合艦隊時は第2艦隊も見る
+                if (condition.isCombinedFlag()) {
+                    badlyShips.addAll(DeckPortCollection.get()
+                            .getDeckPortMap()
+                            .get(2).getBadlyShips());
+                }
+
+                if (!badlyShips.isEmpty()) {
+                    Platform.runLater(() -> displayAlert(badlyShips));
+                    // 棒読みちゃん連携
+                    sendBouyomi(badlyShips);
+                }
+            }
+            if (next.achievementGimmick1()) {
+                Platform.runLater(
+                        () -> Tools.Conrtols.showNotify(null, "ギミック解除", "海域に変化が確認されました。", Duration.seconds(15)));
+                // 通知音再生
+                if (AppConfig.get().isUseSound()) {
+                    Platform.runLater(Audios.playDefaultNotifySound());
+                }
+                // 棒読みちゃん連携
+                if (AppBouyomiConfig.get().isEnable()) {
+                    BouyomiChanUtils.speak(Type.AchievementGimmick1);
+                }
+            }
+            if (next.achievementGimmick2()) {
+                Platform.runLater(
+                        () -> Tools.Conrtols.showNotify(null, "ギミック解除", "ギミックの達成を確認しました。", Duration.seconds(15)));
+                // 通知音再生
+                if (AppConfig.get().isUseSound()) {
+                    Platform.runLater(Audios.playDefaultNotifySound());
+                }
+                // 棒読みちゃん連携
+                if (AppBouyomiConfig.get().isEnable()) {
+                    BouyomiChanUtils.speak(Type.AchievementGimmick2);
+                }
             }
         }
     }
@@ -77,7 +112,7 @@ public class ApiReqMapNext implements APIListenerSpi {
     /**
      * 大破警告
      *
-     * @param badlyShips
+     * @param badlyShips 大破艦
      */
     private static void displayAlert(List<Ship> badlyShips) {
         try {
@@ -89,7 +124,7 @@ public class ApiReqMapNext implements APIListenerSpi {
                 clip.play();
             }
         } catch (Exception e) {
-            LoggerHolder.LOG.warn("サウンド通知に失敗しました", e);
+            LoggerHolder.get().warn("サウンド通知に失敗しました", e);
         }
         for (Ship ship : badlyShips) {
             ImageView node = new ImageView(Ships.shipWithItemImage(ship));
@@ -103,25 +138,28 @@ public class ApiReqMapNext implements APIListenerSpi {
     }
 
     /**
-     * 大破した艦娘を返します
+     * 棒読みちゃん連携
      *
-     * @param port 艦隊
-     * @return 大破した艦娘
+     * @param badlyShips 大破艦
      */
-    private static List<Ship> badlyShips(DeckPort port) {
-        Map<Integer, Ship> shipMap = ShipCollection.get()
-                .getShipMap();
-        return port.getShip()
-                .stream()
-                .map(shipMap::get)
-                .filter(Objects::nonNull)
-                .filter(Ships::isBadlyDamage)
-                .filter(s -> !Ships.isEscape(s))
-                .collect(Collectors.toList());
-    }
+    private static void sendBouyomi(List<Ship> badlyShips) {
+        if (AppBouyomiConfig.get().isEnable()) {
 
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(ApiReqMapNext.class);
+            List<ShipMst> shipMsts = badlyShips.stream()
+                    .map(ship -> Ships.shipMst(ship).orElse(null))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+
+            String hiragana = shipMsts.stream()
+                    .map(ShipMst::getYomi)
+                    .collect(Collectors.joining("、"));
+            String kanji = shipMsts.stream()
+                    .map(ShipMst::getName)
+                    .collect(Collectors.joining("、"));
+
+            BouyomiChanUtils.speak(Type.MapStartNextAlert,
+                    Tuple.of("${hiraganaNames}", hiragana),
+                    Tuple.of("${kanjiNames}", kanji));
+        }
     }
 }

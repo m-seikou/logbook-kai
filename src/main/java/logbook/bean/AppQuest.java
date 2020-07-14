@@ -1,12 +1,18 @@
 package logbook.bean;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
+import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import logbook.bean.QuestList.Quest;
+import logbook.internal.LoggerHolder;
 import logbook.internal.Logs;
+import logbook.plugin.PluginServices;
 import lombok.Data;
 
 /**
@@ -16,6 +22,17 @@ import lombok.Data;
 public class AppQuest implements Serializable {
 
     private static final long serialVersionUID = 4212109733911812553L;
+
+    /** デイリー */
+    private static final int DAILY = 1;
+    /** ウィークリー */
+    private static final int WEEKLY = 2;
+    /** マンスリー */
+    private static final int MONTHLY = 3;
+    /** 単発 */
+    private static final int ONECE = 4;
+    /** クォータリー */
+    private static final int QUARTRELY = 5;
 
     /** No */
     private Integer no;
@@ -40,28 +57,82 @@ public class AppQuest implements Serializable {
         ZonedDateTime base = ZonedDateTime.now(ZoneId.of("GMT+04:00"))
                 .truncatedTo(ChronoUnit.DAYS);
         ZonedDateTime expire = null;
-        if (quest.getType() == 1) {
+
+        int type = quest.getType();
+
+        InputStream is = PluginServices.getResourceAsStream("logbook/quest/" + quest.getNo() + ".json");
+        if (is != null) {
+            String resetType = null;
+            try {
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+                    mapper.enable(Feature.ALLOW_COMMENTS);
+                    AppQuestCondition condition = mapper.readValue(is, AppQuestCondition.class);
+                    resetType = condition.getResetType();
+                } finally {
+                    is.close();
+                }
+            } catch (Exception e) {
+                LoggerHolder.get().info("任務設定ファイルが読み込めませんでした。", e);
+            }
+            if (resetType != null) {
+                switch (resetType) {
+                case "デイリー":
+                    type = DAILY;
+                    break;
+                case "ウィークリー":
+                    type = WEEKLY;
+                    break;
+                case "マンスリー":
+                    type = MONTHLY;
+                    break;
+                case "単発":
+                    type = ONECE;
+                    break;
+                case "クオータリー":
+                case "クォータリー":
+                    type = QUARTRELY;
+                    break;
+                }
+            }
+        }
+
+        if (type == DAILY) {
             // 1=デイリー
             // 1日加算
             expire = base.plusDays(1)
                     .withZoneSameInstant(ZoneId.of("Asia/Tokyo"));
-        } else if (quest.getType() == 2) {
+        } else if (type == WEEKLY) {
             // 2=ウィークリー
             // 7日加算して曜日(1(月曜日)から7(日曜日))-1を減算する
             expire = base.plusWeeks(1)
                     .minusDays(base.getDayOfWeek().getValue() - 1)
                     .withZoneSameInstant(ZoneId.of("Asia/Tokyo"));
-        } else if (quest.getType() == 3) {
+        } else if (type == MONTHLY) {
             // 3=マンスリー
-            // 1ヶ月加算して1日にする
-            expire = base.plusMonths(1)
+            // 翌月1日にする
+            expire = base
                     .withDayOfMonth(1)
+                    .plusMonths(1)
                     .withZoneSameInstant(ZoneId.of("Asia/Tokyo"));
-        } else if (quest.getType() == 4) {
+        } else if (type == ONECE) {
             // 4=単発
-        } else if (quest.getType() == 5) {
+            // 期限なし、とりあえず9999年12月31日
+            expire = base
+                    // XXXX年1月1日
+                    .withDayOfYear(1)
+                    // 10000年1月1日
+                    .withYear(10000)
+                    // 9999年12月31日
+                    .minusDays(1)
+                    .withZoneSameInstant(ZoneId.of("Asia/Tokyo"));
+        } else if (type == QUARTRELY) {
             // 5=他
-            expire = base.plusDays(1)
+            // クオータリー最終月を求める
+            int addMonth = (base.getMonthValue() / 3 * 3) - base.getMonthValue() + 3;
+            // クオータリー最終月の翌月1日
+            expire = base.withDayOfMonth(1)
+                    .plusMonths(addMonth)
                     .withZoneSameInstant(ZoneId.of("Asia/Tokyo"));
         }
         if (expire != null) {

@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" styleClass="itemWindow" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.BattleLogController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.232-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.BattleLogController">
    <children>
-      <SplitPane dividerPositions="0.35" VBox.vgrow="ALWAYS">
+      <SplitPane fx:id="splitPane1" dividerPositions="0.35" VBox.vgrow="ALWAYS">
          <items>
             <VBox>
                <children>
                   <TreeTableView fx:id="collect" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TreeTableColumn fx:id="unit" prefWidth="130.0" text="集計" />
+                      <TreeTableColumn fx:id="unit" prefWidth="170.0" text="集計" />
                       <TreeTableColumn fx:id="start" prefWidth="40.0" text="出撃" />
                         <TreeTableColumn fx:id="win" prefWidth="40.0" text="勝利" />
                         <TreeTableColumn fx:id="s" prefWidth="40.0" text="S勝利" />
@@ -22,11 +38,32 @@
                         <TreeTableColumn fx:id="c" prefWidth="40.0" text="C敗北" />
                         <TreeTableColumn fx:id="d" prefWidth="40.0" text="D敗北" />
                     </columns>
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                              <MenuItem mnemonicParsing="false" onAction="#addUnitAction" text="集計の追加" />
+                              <MenuItem mnemonicParsing="false" onAction="#reloadAction" text="更新">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="F5" control="UP" meta="UP" shift="UP" shortcut="ANY" />
+                                 </accelerator>
+                              </MenuItem>
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
                   </TreeTableView>
+                   <ToolBar>
+                     <Button mnemonicParsing="false" onAction="#addUnitAction" text="集計の追加" />
+                       <Button mnemonicParsing="false" onAction="#reloadAction" text="更新(F5)" />
+                   </ToolBar>
                </children>
             </VBox>
             <VBox>
                <children>
+                  <TitledPane animated="false" expanded="false" text="フィルター">
+                  <content>
+                    <FlowPane fx:id="filterPane" styleClass="filter" />
+                  </content>
+                  </TitledPane>
                   <TableView fx:id="detail" VBox.vgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="date" prefWidth="150.0" text="日付" />
@@ -43,6 +80,9 @@
                         <TableColumn fx:id="efleet" prefWidth="100.0" text="敵艦隊" />
                         <TableColumn fx:id="dropType" prefWidth="75.0" text="ドロップ艦種" />
                         <TableColumn fx:id="dropShip" prefWidth="75.0" text="ドロップ艦娘" />
+                        <TableColumn fx:id="dropItem" prefWidth="75.0" text="アイテム" />
+                        <TableColumn fx:id="shipExp" prefWidth="75.0" text="艦娘経験値" />
+                        <TableColumn fx:id="exp" prefWidth="75.0" text="提督経験値" />
                     </columns>
                     <contextMenu>
                        <ContextMenu>
@@ -55,9 +95,55 @@
                        </ContextMenu>
                     </contextMenu>
                   </TableView>
+                  <TitledPane animated="false" expanded="false" text="集計">
+                     <content>
+                        <VBox styleClass="aggregate">
+                           <children>
+                              <HBox alignment="CENTER_LEFT">
+                                 <children>
+                                    <Label text="集計の種類" />
+                                    <ChoiceBox fx:id="aggregateType" prefWidth="150.0" />
+                                    <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                                    <Button mnemonicParsing="false" onAction="#script" text="高度な集計" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <SplitPane fx:id="splitPane2" dividerPositions="0.45">
+                                       <items>
+                                          <TableView fx:id="aggregate">
+                                             <columns>
+                                                <TableColumn fx:id="type" prefWidth="200.0" text="種類" />
+                                                <TableColumn fx:id="count" prefWidth="50.0" text="合計" />
+                                                <TableColumn fx:id="ratio" prefWidth="50.0" text="割合" />
+                                             </columns>
+                                             <contextMenu>
+                                                <ContextMenu>
+                                                   <items>
+                                                      <MenuItem mnemonicParsing="false" onAction="#copyAggregate" text="クリップボードにコピー" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#selectAllAggregate" text="すべてを選択" />
+                                                      <SeparatorMenuItem mnemonicParsing="false" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#columnVisibleAggregate" text="列の表示・非表示" />
+                                                   </items>
+                                                </ContextMenu>
+                                             </contextMenu>
+                                          </TableView>
+                                          <PieChart fx:id="chart" />
+                                       </items>
+                                    </SplitPane>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </content>
+                  </TitledPane>
                </children>
             </VBox>
          </items>
       </SplitPane>
    </children>
+   <stylesheets>
+      <URL value="@application.css" />
+      <URL value="@battlelog.css" />
+   </stylesheets>
 </VBox>

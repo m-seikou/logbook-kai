@@ -20,12 +20,16 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = InternalFXMLLoader.load("logbook/gui/main.fxml"); //$NON-NLS-1$
-        Parent root = loader.load();
+        String fxmlName = "main";
+        if (AppConfig.get().getWindowStyle() != null) {
+            fxmlName = AppConfig.get().getWindowStyle();
+        }
+        FXMLLoader loader = InternalFXMLLoader.load("logbook/gui/" + fxmlName + ".fxml"); //$NON-NLS-1$
+        Parent root = InternalFXMLLoader.setGlobal(loader.load());
         stage.setScene(new Scene(root));
 
         WindowController controller = loader.getController();
-        controller.setWindow(stage);
+        controller.initWindow(stage);
         // アイコンの設定
         Tools.Windows.setIcon(stage);
         // 最前面に表示する
@@ -36,6 +40,8 @@ public class Main extends Application {
         stage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, e -> {
             if (AppConfig.get().isCheckDoit()) {
                 Alert alert = new Alert(AlertType.INFORMATION);
+                alert.getDialogPane().getStylesheets().add("logbook/gui/application.css");
+                InternalFXMLLoader.setGlobal(alert.getDialogPane());
                 alert.initOwner(stage);
                 alert.setTitle("終了の確認");
                 alert.setHeaderText("終了の確認");

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.json.JsonObject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import logbook.internal.JsonHelper;
@@ -44,16 +45,28 @@ public class BattleTypes {
         List<Integer> getShipLv();
 
         /**
-         * api_nowhpsを取得します。
-         * @return api_nowhps
+         * api_f_nowhpsを取得します。
+         * @return api_f_nowhps
          */
-        List<Integer> getNowhps();
+        List<Integer> getFNowhps();
 
         /**
-         * api_maxhpsを取得します。
-         * @return api_maxhps
+         * api_f_maxhpsを取得します。
+         * @return api_f_maxhps
          */
-        List<Integer> getMaxhps();
+        List<Integer> getFMaxhps();
+
+        /**
+         * api_e_nowhpsを取得します。
+         * @return api_e_nowhps
+         */
+        List<Integer> getENowhps();
+
+        /**
+         * api_e_maxhpsを取得します。
+         * @return api_e_maxhps
+         */
+        List<Integer> getEMaxhps();
 
         /**
          * api_eSlotを取得します。
@@ -72,6 +85,156 @@ public class BattleTypes {
          * @return api_eParam
          */
         List<List<Integer>> getEParam();
+
+        @JsonIgnore
+        default boolean isIAirBaseAttack() {
+            return false;
+        }
+
+        @JsonIgnore
+        default IAirBaseAttack asIAirBaseAttack() {
+            throw new IllegalStateException(this + " is not an AirBaseAttack");
+        }
+
+        @JsonIgnore
+        default boolean isIAirbattle() {
+            return false;
+        }
+
+        @JsonIgnore
+        default IAirbattle asIAirbattle() {
+            throw new IllegalStateException(this + " is not an IAirbattle");
+        }
+
+        @JsonIgnore
+        default boolean isICombinedBattle() {
+            return false;
+        }
+
+        @JsonIgnore
+        default ICombinedBattle asICombinedBattle() {
+            throw new IllegalStateException(this + " is not an ICombinedBattle");
+        }
+
+        @JsonIgnore
+        default boolean isICombinedEcBattle() {
+            return false;
+        }
+
+        @JsonIgnore
+        default ICombinedEcBattle asICombinedEcBattle() {
+            throw new IllegalStateException(this + " is not an ICombinedEcBattle");
+        }
+
+        @JsonIgnore
+        default boolean isICombinedEcMidnightBattle() {
+            return false;
+        }
+
+        @JsonIgnore
+        default ICombinedEcMidnightBattle asICombinedEcMidnightBattle() {
+            throw new IllegalStateException(this + " is not an ICombinedEcMidnightBattle");
+        }
+
+        @JsonIgnore
+        default boolean isIFormation() {
+            return false;
+        }
+
+        @JsonIgnore
+        default IFormation asIFormation() {
+            throw new IllegalStateException(this + " is not an IFormation");
+        }
+
+        @JsonIgnore
+        default boolean isIKouku() {
+            return false;
+        }
+
+        @JsonIgnore
+        default IKouku asIKouku() {
+            throw new IllegalStateException(this + " is not an IKouku");
+        }
+
+        @JsonIgnore
+        default boolean isILdAirbattle() {
+            return false;
+        }
+
+        @JsonIgnore
+        default ILdAirbattle asILdAirbattle() {
+            throw new IllegalStateException(this + " is not an ILdAirbattle");
+        }
+
+        @JsonIgnore
+        default boolean isILdShooting() {
+            return false;
+        }
+
+        @JsonIgnore
+        default ILdShooting asILdShooting() {
+            throw new IllegalStateException(this + " is not an ILdShooting");
+        }
+
+        @JsonIgnore
+        default boolean isIMidnightBattle() {
+            return false;
+        }
+
+        @JsonIgnore
+        default IMidnightBattle asIMidnightBattle() {
+            throw new IllegalStateException(this + " is not an IMidnightBattle");
+        }
+
+        @JsonIgnore
+        default boolean isINSupport() {
+            return false;
+        }
+
+        @JsonIgnore
+        default INSupport asINSupport() {
+            throw new IllegalStateException(this + " is not an INSupport");
+        }
+
+        @JsonIgnore
+        default boolean isINightToDayBattle() {
+            return false;
+        }
+
+        @JsonIgnore
+        default INightToDayBattle asINightToDayBattle() {
+            throw new IllegalStateException(this + " is not an INightToDayBattle");
+        }
+
+        @JsonIgnore
+        default boolean isISortieBattle() {
+            return false;
+        }
+
+        @JsonIgnore
+        default ISortieBattle asISortieBattle() {
+            throw new IllegalStateException(this + " is not an ISortieBattle");
+        }
+
+        @JsonIgnore
+        default boolean isISortieHougeki() {
+            return false;
+        }
+
+        @JsonIgnore
+        default ISortieHougeki asISortieHougeki() {
+            throw new IllegalStateException(this + " is not an ISortieHougeki");
+        }
+
+        @JsonIgnore
+        default boolean isISupport() {
+            return false;
+        }
+
+        @JsonIgnore
+        default ISupport asISupport() {
+            throw new IllegalStateException(this + " is not an ISupport");
+        }
     }
 
     /**
@@ -80,28 +243,50 @@ public class BattleTypes {
     public interface ICombinedBattle extends IBattle {
 
         /**
-         * api_nowhps_combinedを取得します。
-         * @return api_nowhps_combined
+         * api_f_nowhps_combinedを取得します。
+         * @return api_f_nowhps_combined
          */
-        List<Integer> getNowhpsCombined();
+        List<Integer> getFNowhpsCombined();
 
         /**
-         * api_maxhps_combinedを取得します。
-         * @return api_maxhps_combined
+         * api_f_maxhps_combinedを取得します。
+         * @return api_f_maxhps_combined
          */
-        List<Integer> getMaxhpsCombined();
+        List<Integer> getFMaxhpsCombined();
 
         /**
          * api_fParam_combinedを取得します。
          * @return api_fParam_combined
          */
         List<List<Integer>> getFParamCombined();
+
+        @Override
+        default boolean isICombinedBattle() {
+            return true;
+        }
+
+        @Override
+        default ICombinedBattle asICombinedBattle() {
+            return this;
+        }
     }
 
     /**
      * 連合艦隊での戦闘を表します
      */
     public interface ICombinedEcBattle extends IBattle {
+
+        /**
+         * api_e_nowhps_combinedを取得します。
+         * @return api_e_nowhps_combined
+         */
+        List<Integer> getENowhpsCombined();
+
+        /**
+         * api_e_maxhps_combinedを取得します。
+         * @return api_e_maxhps_combined
+         */
+        List<Integer> getEMaxhpsCombined();
 
         /**
          * api_ship_ke_combinedを取得します。
@@ -116,18 +301,6 @@ public class BattleTypes {
         List<Integer> getShipLvCombined();
 
         /**
-         * api_nowhps_combinedを取得します。
-         * @return api_nowhps_combined
-         */
-        List<Integer> getNowhpsCombined();
-
-        /**
-         * api_maxhps_combinedを取得します。
-         * @return api_maxhps_combined
-         */
-        List<Integer> getMaxhpsCombined();
-
-        /**
          * api_eSlot_combinedを取得します。
          * @return api_eSlot_combined
          */
@@ -138,6 +311,16 @@ public class BattleTypes {
          * @return api_eParam_combined
          */
         List<List<Integer>> getEParamCombined();
+
+        @Override
+        default boolean isICombinedEcBattle() {
+            return true;
+        }
+
+        @Override
+        default ICombinedEcBattle asICombinedEcBattle() {
+            return this;
+        }
     }
 
     /**
@@ -150,6 +333,16 @@ public class BattleTypes {
          * @return api_active_deck
          */
         List<Integer> getActiveDeck();
+
+        @Override
+        default boolean isICombinedEcMidnightBattle() {
+            return true;
+        }
+
+        @Override
+        default ICombinedEcMidnightBattle asICombinedEcMidnightBattle() {
+            return this;
+        }
     }
 
     /**
@@ -174,6 +367,16 @@ public class BattleTypes {
          * @return api_stage_flag
          */
         List<Integer> getStageFlag();
+
+        @Override
+        default boolean isISortieBattle() {
+            return true;
+        }
+
+        @Override
+        default ISortieBattle asISortieBattle() {
+            return this;
+        }
     }
 
     /**
@@ -234,6 +437,16 @@ public class BattleTypes {
          * @return api_raigeki
          */
         BattleTypes.Raigeki getRaigeki();
+
+        @Override
+        default boolean isISortieHougeki() {
+            return true;
+        }
+
+        @Override
+        default ISortieHougeki asISortieHougeki() {
+            return this;
+        }
     }
 
     /**
@@ -254,10 +467,78 @@ public class BattleTypes {
         List<Integer> getFlarePos();
 
         /**
+         * api_friendly_infoを取得します。
+         * @return api_friendly_info
+         */
+        FriendlyInfo getFriendlyInfo();
+
+        /**
+         * api_friendly_battleを取得します。
+         * @return api_friendly_battle
+         */
+        BattleTypes.FriendlyBattle getFriendlyBattle();
+
+        /**
          * api_hougekiを取得します。
          * @return api_hougeki
          */
         BattleTypes.MidnightHougeki getHougeki();
+
+        @Override
+        default boolean isIMidnightBattle() {
+            return true;
+        }
+
+        @Override
+        default IMidnightBattle asIMidnightBattle() {
+            return this;
+        }
+    }
+
+    /**
+     * 夜戦→昼戦を表します
+     */
+    public interface INightToDayBattle extends IBattle, ISortieBattle {
+
+        /**
+         * api_touch_planeを取得します。
+         * @return api_touch_plane
+         */
+        List<Integer> getTouchPlane();
+
+        /**
+         * api_flare_posを取得します。
+         * @return api_flare_pos
+         */
+        List<Integer> getFlarePos();
+
+        /**
+         * api_n_hougeki1を取得します。
+         * @return api_n_hougeki1
+         */
+        BattleTypes.MidnightHougeki getNHougeki1();
+
+        /**
+         * api_n_hougeki2を取得します。
+         * @return api_n_hougeki2
+         */
+        BattleTypes.MidnightHougeki getNHougeki2();
+
+        /**
+         * api_day_flagを取得します。
+         * @return api_day_flag
+         */
+        Boolean getDayFlag();
+
+        @Override
+        default boolean isINightToDayBattle() {
+            return true;
+        }
+
+        @Override
+        default INightToDayBattle asINightToDayBattle() {
+            return this;
+        }
     }
 
     /**
@@ -270,6 +551,16 @@ public class BattleTypes {
          * @return api_formation
          */
         List<Integer> getFormation();
+
+        @Override
+        default boolean isIFormation() {
+            return true;
+        }
+
+        @Override
+        default IFormation asIFormation() {
+            return this;
+        }
     }
 
     /**
@@ -288,6 +579,16 @@ public class BattleTypes {
          * @return api_kouku
          */
         BattleTypes.Kouku getKouku();
+
+        @Override
+        default boolean isIKouku() {
+            return true;
+        }
+
+        @Override
+        default IKouku asIKouku() {
+            return this;
+        }
     }
 
     /**
@@ -300,6 +601,16 @@ public class BattleTypes {
          * @return api_kouku2
          */
         BattleTypes.Kouku getKouku2();
+
+        @Override
+        default boolean isIAirbattle() {
+            return true;
+        }
+
+        @Override
+        default IAirbattle asIAirbattle() {
+            return this;
+        }
     }
 
     /**
@@ -311,13 +622,111 @@ public class BattleTypes {
          * api_support_flagを取得します。
          * @return api_support_flag
          */
-        Boolean getSupportFlag();
+        Integer getSupportFlag();
 
         /**
          * api_support_infoを取得します。
          * @return api_support_info
          */
         BattleTypes.SupportInfo getSupportInfo();
+
+        @Override
+        default boolean isISupport() {
+            return true;
+        }
+
+        @Override
+        default ISupport asISupport() {
+            return this;
+        }
+    }
+
+    /**
+     * 支援フェイズ(夜戦)
+     */
+    public interface INSupport extends IBattle {
+
+        /**
+         * api_n_support_flagを取得します。
+         * @return api_n_support_flag
+         */
+        Integer getNSupportFlag();
+
+        /**
+         * api_n_support_infoを取得します。
+         * @return api_n_support_info
+         */
+        BattleTypes.SupportInfo getNSupportInfo();
+
+        @Override
+        default boolean isINSupport() {
+            return true;
+        }
+
+        @Override
+        default INSupport asINSupport() {
+            return this;
+        }
+    }
+
+    /**
+     * 長距離空襲戦(マーカーインターフェイス)
+     */
+    public interface ILdAirbattle extends IBattle {
+
+        @Override
+        default boolean isILdAirbattle() {
+            return true;
+        }
+
+        @Override
+        default ILdAirbattle asILdAirbattle() {
+            return this;
+        }
+    }
+
+    /**
+     * レーダー射撃(マーカーインターフェイス)
+     */
+    public interface ILdShooting extends IBattle {
+
+        @Override
+        default boolean isILdShooting() {
+            return true;
+        }
+
+        @Override
+        default ILdShooting asILdShooting() {
+            return this;
+        }
+    }
+
+    /**
+     * 基地航空隊
+     */
+    public interface IAirBaseAttack extends IBattle {
+
+        /**
+         * api_air_base_injectionを取得します。
+         * @return api_air_base_injection
+         */
+        AirBaseAttack getAirBaseInjection();
+
+        /**
+         * api_air_base_attackを取得します。
+         * @return api_air_base_attack
+         */
+        List<AirBaseAttack> getAirBaseAttack();
+
+        @Override
+        default boolean isIAirBaseAttack() {
+            return true;
+        }
+
+        @Override
+        default IAirBaseAttack asIAirBaseAttack() {
+            return this;
+        }
     }
 
     /**
@@ -330,6 +739,12 @@ public class BattleTypes {
          * @return api_at_list
          */
         List<Integer> getAtList();
+
+        /**
+         * api_at_typeを取得します。
+         * @return api_at_type
+         */
+        List<Integer> getAtType();
 
         /**
          * api_df_listを取得します。
@@ -357,26 +772,9 @@ public class BattleTypes {
 
         /**
          * api_at_eflagを取得します。
+         * @return api_at_eflag
          */
         List<Integer> getAtEflag();
-    }
-
-    /**
-     * 基地航空隊
-     */
-    public interface IAirBaseAttack {
-
-        /**
-         * api_air_base_injectionを取得します。
-         * @return api_air_base_injection
-         */
-        AirBaseAttack getAirBaseInjection();
-
-        /**
-         * api_air_base_attackを取得します。
-         * @return api_air_base_attack
-         */
-        List<AirBaseAttack> getAirBaseAttack();
     }
 
     /**
@@ -460,7 +858,7 @@ public class BattleTypes {
                     .setInteger("api_e_count", bean::setECount)
                     .setInteger("api_e_lostcount", bean::setELostcount)
                     .setInteger("api_disp_seiku", bean::setDispSeiku)
-                    .set("api_touch_plane", bean::setTouchPlane, JsonHelper::toIntegerList);
+                    .setIntegerList("api_touch_plane", bean::setTouchPlane);
             return bean;
         }
     }
@@ -534,7 +932,7 @@ public class BattleTypes {
             JsonHelper.bind(json)
                     .setInteger("api_idx", bean::setIdx)
                     .setInteger("api_kind", bean::setKind)
-                    .set("api_use_items", bean::setUseItems, JsonHelper::toIntegerList);
+                    .setIntegerList("api_use_items", bean::setUseItems);
             return bean;
         }
     }
@@ -580,14 +978,14 @@ public class BattleTypes {
         public static Stage3 toStage3(JsonObject json) {
             Stage3 bean = new Stage3();
             JsonHelper.bind(json)
-                    .set("api_frai_flag", bean::setFraiFlag, JsonHelper::toIntegerList)
-                    .set("api_erai_flag", bean::setEraiFlag, JsonHelper::toIntegerList)
-                    .set("api_fbak_flag", bean::setFbakFlag, JsonHelper::toIntegerList)
-                    .set("api_ebak_flag", bean::setEbakFlag, JsonHelper::toIntegerList)
-                    .set("api_fcl_flag", bean::setFclFlag, JsonHelper::toIntegerList)
-                    .set("api_ecl_flag", bean::setEclFlag, JsonHelper::toIntegerList)
-                    .set("api_fdam", bean::setFdam, JsonHelper::toDoubleList)
-                    .set("api_edam", bean::setEdam, JsonHelper::toDoubleList);
+                    .setIntegerList("api_frai_flag", bean::setFraiFlag)
+                    .setIntegerList("api_erai_flag", bean::setEraiFlag)
+                    .setIntegerList("api_fbak_flag", bean::setFbakFlag)
+                    .setIntegerList("api_ebak_flag", bean::setEbakFlag)
+                    .setIntegerList("api_fcl_flag", bean::setFclFlag)
+                    .setIntegerList("api_ecl_flag", bean::setEclFlag)
+                    .setDoubleList("api_fdam", bean::setFdam)
+                    .setDoubleList("api_edam", bean::setEdam);
             return bean;
         }
     }
@@ -663,9 +1061,9 @@ public class BattleTypes {
             SupportAiratack bean = new SupportAiratack();
             JsonHelper.bind(json)
                     .setInteger("api_deck_id", bean::setDeckId)
-                    .set("api_ship_id", bean::setShipId, JsonHelper::toIntegerList)
-                    .set("api_undressing_flag", bean::setUndressingFlag, JsonHelper::toIntegerList)
-                    .set("api_stage_flag", bean::setStageFlag, JsonHelper::toIntegerList)
+                    .setIntegerList("api_ship_id", bean::setShipId)
+                    .setIntegerList("api_undressing_flag", bean::setUndressingFlag)
+                    .setIntegerList("api_stage_flag", bean::setStageFlag)
                     .set("api_plane_from", bean::setPlaneFrom, JsonHelper.toList(JsonHelper::toIntegerList))
                     .set("api_stage1", bean::setStage1, Stage1::toStage1)
                     .set("api_stage2", bean::setStage2, Stage2::toStage2)
@@ -707,10 +1105,10 @@ public class BattleTypes {
             SupportHourai bean = new SupportHourai();
             JsonHelper.bind(json)
                     .setInteger("api_deck_id", bean::setDeckId)
-                    .set("api_ship_id", bean::setShipId, JsonHelper::toIntegerList)
-                    .set("api_undressing_flag", bean::setUndressingFlag, JsonHelper::toIntegerList)
-                    .set("api_cl_list", bean::setClList, JsonHelper::toIntegerList)
-                    .set("api_damage", bean::setDamage, JsonHelper::toDoubleList);
+                    .setIntegerList("api_ship_id", bean::setShipId)
+                    .setIntegerList("api_undressing_flag", bean::setUndressingFlag)
+                    .setIntegerList("api_cl_list", bean::setClList)
+                    .setDoubleList("api_damage", bean::setDamage);
             return bean;
         }
     }
@@ -756,14 +1154,14 @@ public class BattleTypes {
         public static Raigeki toRaigeki(JsonObject json) {
             Raigeki bean = new Raigeki();
             JsonHelper.bind(json)
-                    .set("api_frai", bean::setFrai, JsonHelper::toIntegerList)
-                    .set("api_erai", bean::setErai, JsonHelper::toIntegerList)
-                    .set("api_fdam", bean::setFdam, JsonHelper::toDoubleList)
-                    .set("api_edam", bean::setEdam, JsonHelper::toDoubleList)
-                    .set("api_fydam", bean::setFydam, JsonHelper::toDoubleList)
-                    .set("api_eydam", bean::setEydam, JsonHelper::toDoubleList)
-                    .set("api_fcl", bean::setFcl, JsonHelper::toIntegerList)
-                    .set("api_ecl", bean::setEcl, JsonHelper::toIntegerList);
+                    .setIntegerList("api_frai", bean::setFrai)
+                    .setIntegerList("api_erai", bean::setErai)
+                    .setDoubleList("api_fdam", bean::setFdam)
+                    .setDoubleList("api_edam", bean::setEdam)
+                    .setDoubleList("api_fydam", bean::setFydam)
+                    .setDoubleList("api_eydam", bean::setEydam)
+                    .setIntegerList("api_fcl", bean::setFcl)
+                    .setIntegerList("api_ecl", bean::setEcl);
             return bean;
         }
     }
@@ -806,13 +1204,13 @@ public class BattleTypes {
         public static Hougeki toHougeki(JsonObject json) {
             Hougeki bean = new Hougeki();
             JsonHelper.bind(json)
-                    .set("api_at_list", bean::setAtList, JsonHelper::toIntegerList)
-                    .set("api_at_type", bean::setAtType, JsonHelper::toIntegerList)
+                    .setIntegerList("api_at_list", bean::setAtList)
+                    .setIntegerList("api_at_type", bean::setAtType)
                     .set("api_df_list", bean::setDfList, JsonHelper.toList(JsonHelper::checkedToIntegerList))
                     .set("api_si_list", bean::setSiList, JsonHelper.toList(JsonHelper::checkedToIntegerList))
                     .set("api_cl_list", bean::setClList, JsonHelper.toList(JsonHelper::checkedToIntegerList))
                     .set("api_damage", bean::setDamage, JsonHelper.toList(JsonHelper::checkedToDoubleList))
-                    .set("api_at_eflag", bean::setAtEflag, JsonHelper::toIntegerList);
+                    .setIntegerList("api_at_eflag", bean::setAtEflag);
             return bean;
         }
     }
@@ -827,6 +1225,12 @@ public class BattleTypes {
 
         /** api_at_list */
         private List<Integer> atList;
+
+        /** api_at_type */
+        private List<Integer> atType;
+
+        /** api_n_mother_list */
+        private List<Integer> nMotherList;
 
         /** api_df_list */
         private List<List<Integer>> dfList;
@@ -855,13 +1259,15 @@ public class BattleTypes {
         public static MidnightHougeki toMidnightHougeki(JsonObject json) {
             MidnightHougeki bean = new MidnightHougeki();
             JsonHelper.bind(json)
-                    .set("api_at_list", bean::setAtList, JsonHelper::toIntegerList)
+                    .setIntegerList("api_at_list", bean::setAtList)
+                    .setIntegerList("api_at_type", bean::setAtType)
+                    .setIntegerList("api_n_mother_list", bean::setNMotherList)
                     .set("api_df_list", bean::setDfList, JsonHelper.toList(JsonHelper::checkedToIntegerList))
                     .set("api_si_list", bean::setSiList, JsonHelper.toList(JsonHelper::checkedToIntegerList))
                     .set("api_cl_list", bean::setClList, JsonHelper.toList(JsonHelper::checkedToIntegerList))
-                    .set("api_sp_list", bean::setSpList, JsonHelper::toIntegerList)
+                    .setIntegerList("api_sp_list", bean::setSpList)
                     .set("api_damage", bean::setDamage, JsonHelper.toList(JsonHelper::checkedToDoubleList))
-                    .set("api_at_eflag", bean::setAtEflag, JsonHelper::toIntegerList);
+                    .setIntegerList("api_at_eflag", bean::setAtEflag);
             return bean;
         }
     }
@@ -917,7 +1323,7 @@ public class BattleTypes {
                     .set("api_stage2", bean::setStage2, Stage2::toStage2)
                     .set("api_stage3", bean::setStage3, Stage3::toStage3)
                     .set("api_stage3_combined", bean::setStage3Combined, Stage3::toStage3)
-                    .set("api_stage_flag", bean::setStageFlag, JsonHelper::toIntegerList);
+                    .setIntegerList("api_stage_flag", bean::setStageFlag);
             return bean;
         }
     }
@@ -952,10 +1358,97 @@ public class BattleTypes {
     }
 
     /**
+     * api_friendly_info
+     */
+    @Data
+    public static class FriendlyInfo implements Serializable {
+
+        private static final long serialVersionUID = 6082076344715211541L;
+
+        /** api_production_type */
+        private Integer productionType;
+
+        /** api_ship_id */
+        private List<Integer> shipId;
+
+        /** api_ship_lv */
+        private List<Integer> shipLv;
+
+        /** api_nowhps */
+        private List<Integer> nowhps;
+
+        /** api_maxhps */
+        private List<Integer> maxhps;
+
+        /** api_Slot */
+        private List<List<Integer>> slot;
+
+        /** api_Param */
+        private List<List<Integer>> param;
+
+        /**
+         * JsonObjectから{@link FriendlyInfo}を構築します
+         *
+         * @param json JsonObject
+         * @return {@link FriendlyInfo}
+         */
+        public static FriendlyInfo toFriendlyInfo(JsonObject json) {
+            FriendlyInfo bean = new FriendlyInfo();
+            JsonHelper.bind(json)
+                    .setInteger("api_production_type", bean::setProductionType)
+                    .setIntegerList("api_ship_id", bean::setShipId)
+                    .setIntegerList("api_ship_lv", bean::setShipLv)
+                    .setIntegerList("api_nowhps", bean::setNowhps)
+                    .setIntegerList("api_maxhps", bean::setMaxhps)
+                    .set("api_Slot", bean::setSlot, JsonHelper.toList(JsonHelper::toIntegerList))
+                    .set("api_Param", bean::setParam, JsonHelper.toList(JsonHelper::toIntegerList));
+            return bean;
+        }
+    }
+
+    /**
+     * api_friendly_battle
+     */
+    @Data
+    public static class FriendlyBattle implements Serializable {
+
+        private static final long serialVersionUID = 8663372068066994366L;
+
+        /** api_flare_pos */
+        private List<Integer> flarePos;
+
+        /** api_hougeki */
+        private BattleTypes.MidnightHougeki hougeki;
+
+        /**
+         * JsonObjectから{@link FriendlyBattle}を構築します
+         *
+         * @param json JsonObject
+         * @return {@link FriendlyInfo}
+         */
+        public static FriendlyBattle toFriendlyBattle(JsonObject json) {
+            FriendlyBattle bean = new FriendlyBattle();
+            JsonHelper.bind(json)
+                    .setIntegerList("api_flare_pos", bean::setFlarePos)
+                    .set("api_hougeki", bean::setHougeki, BattleTypes.MidnightHougeki::toMidnightHougeki);
+            return bean;
+        }
+    }
+
+    /**
      * 陣形
      */
     public enum Formation {
-        単縦陣, 複縦陣, 輪形陣, 梯形陣, 単横陣, 第一警戒航行序列, 第二警戒航行序列, 第三警戒航行序列, 第四警戒航行序列;
+        単縦陣,
+        複縦陣,
+        輪形陣,
+        梯形陣,
+        単横陣,
+        警戒陣,
+        第一警戒航行序列,
+        第二警戒航行序列,
+        第三警戒航行序列,
+        第四警戒航行序列;
 
         /**
          * 陣形を取得します
@@ -974,6 +1467,8 @@ public class BattleTypes {
                 return 梯形陣;
             case 5:
                 return 単横陣;
+            case 6:
+                return 警戒陣;
             case 11:
                 return 第一警戒航行序列;
             case 12:
@@ -1048,10 +1543,10 @@ public class BattleTypes {
 
     /**
      * 連合艦隊
-     * 0=未結成, 1=機動部隊, 2=水上部隊, 3=輸送部隊
+     * 0=未結成, 1=機動部隊, 2=水上部隊, 3=輸送部隊, (4, 5 - 念のため定義のみ）
      */
     public enum CombinedType {
-        未結成, 機動部隊, 水上部隊, 輸送部隊;
+        未結成, 機動部隊, 水上部隊, 輸送部隊, 連合艦隊タイプ4, 連合艦隊タイプ5;
 
         public static CombinedType toCombinedType(int i) {
             switch (i) {
@@ -1063,8 +1558,146 @@ public class BattleTypes {
                 return 水上部隊;
             case 3:
                 return 輸送部隊;
+            case 4:
+                return 連合艦隊タイプ4;
+            case 5:
+                return 連合艦隊タイプ5;
             default:
                 return 未結成;
+            }
+        }
+    }
+
+    /**
+     * 攻撃種別
+     *
+     */
+    public interface AtType {
+    }
+
+    /**
+     * 攻撃種別
+     *
+     */
+    public enum SortieAtType implements AtType {
+        通常攻撃("通常攻撃"),
+        レーザー攻撃("レーザー攻撃"),
+        連撃("連撃"),
+        主砲副砲CI("主砲副砲CI"),
+        主砲電探CI("主砲電探CI"),
+        主砲徹甲弾CI("主砲徹甲弾CI"),
+        主砲主砲CI("主砲主砲CI"),
+        戦爆連合CI("戦爆連合CI"),
+        NelsonTouch("NelsonTouch"),
+        胸熱CI("一斉射かッ…胸が熱いな！"),
+        陸奥タッチ("長門、いい？ いくわよ！ 主砲一斉射ッ！");
+
+        private String name;
+
+        private SortieAtType(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return this.name;
+        }
+
+        public static SortieAtType toSortieAtType(int i) {
+            switch (i) {
+            case 0:
+                return 通常攻撃;
+            case 1:
+                return レーザー攻撃;
+            case 2:
+                return 連撃;
+            case 3:
+                return 主砲副砲CI;
+            case 4:
+                return 主砲電探CI;
+            case 5:
+                return 主砲徹甲弾CI;
+            case 6:
+                return 主砲主砲CI;
+            case 7:
+                return 戦爆連合CI;
+            case 100:
+                return NelsonTouch;
+            case 101:
+                return 胸熱CI;
+            case 102:
+                return 陸奥タッチ;
+            default:
+                return 通常攻撃;
+            }
+        }
+    }
+
+    /**
+     * 攻撃種別
+     *
+     */
+    public enum SortieAtTypeRaigeki implements AtType {
+        通常雷撃;
+    }
+
+    /**
+     * 攻撃種別
+     *
+     */
+    public enum MidnightSpList implements AtType {
+        通常攻撃("通常攻撃"),
+        連撃("連撃"),
+        主砲魚雷CI("主砲魚雷CI"),
+        魚雷魚雷CI("魚雷魚雷CI"),
+        主砲副砲CI("主砲副砲CI"),
+        主砲主砲CI("主砲主砲CI"),
+        夜襲CI("夜襲CI"),
+        主砲魚雷電探CI("主砲魚雷電探CI"),
+        魚雷見張員電探CI("魚雷見張員電探CI"),
+        NelsonTouch("NelsonTouch"),
+        胸熱CI("一斉射かッ…胸が熱いな！"),
+        陸奥タッチ("長門、いい？ いくわよ！ 主砲一斉射ッ！");
+
+        private String name;
+
+        private MidnightSpList(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return this.name;
+        }
+
+        public static MidnightSpList toMidnightSpList(int i) {
+            switch (i) {
+            case 0:
+                return 通常攻撃;
+            case 1:
+                return 連撃;
+            case 2:
+                return 主砲魚雷CI;
+            case 3:
+                return 魚雷魚雷CI;
+            case 4:
+                return 主砲副砲CI;
+            case 5:
+                return 主砲主砲CI;
+            case 6:
+                return 夜襲CI;
+            case 7:
+                return 主砲魚雷電探CI;
+            case 8:
+                return 魚雷見張員電探CI;
+            case 100:
+                return NelsonTouch;
+            case 101:
+                return 胸熱CI;
+            case 102:
+                return 陸奥タッチ;
+            default:
+                return 通常攻撃;
             }
         }
     }

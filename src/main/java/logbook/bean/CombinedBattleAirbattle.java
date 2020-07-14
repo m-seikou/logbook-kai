@@ -39,17 +39,23 @@ public class CombinedBattleAirbattle
     /** api_ship_lv */
     private List<Integer> shipLv;
 
-    /** api_nowhps */
-    private List<Integer> nowhps;
+    /** api_f_nowhps */
+    private List<Integer> fNowhps;
 
-    /** api_maxhps */
-    private List<Integer> maxhps;
+    /** api_f_maxhps */
+    private List<Integer> fMaxhps;
 
-    /** api_nowhps_combined */
-    private List<Integer> nowhpsCombined;
+    /** api_e_nowhps */
+    private List<Integer> eNowhps;
 
-    /** api_maxhps_combined */
-    private List<Integer> maxhpsCombined;
+    /** api_e_maxhps */
+    private List<Integer> eMaxhps;
+
+    /** api_f_nowhps_combined */
+    private List<Integer> fNowhpsCombined;
+
+    /** api_f_maxhps_combined */
+    private List<Integer> fMaxhpsCombined;
 
     /** api_midnight_flag */
     private Boolean midnightFlag;
@@ -82,7 +88,7 @@ public class CombinedBattleAirbattle
     private BattleTypes.Kouku kouku;
 
     /** api_support_flag */
-    private Boolean supportFlag;
+    private Integer supportFlag;
 
     /** api_support_info */
     private BattleTypes.SupportInfo supportInfo;
@@ -108,25 +114,27 @@ public class CombinedBattleAirbattle
                         JsonHelper.toList(BattleTypes.AirBaseAttack::toAirBaseAttack))
                 .setInteger("api_dock_id", bean::setDockId)
                 .setInteger("api_deck_id", bean::setDockId)
-                .set("api_ship_ke", bean::setShipKe, JsonHelper::toIntegerList)
-                .set("api_ship_lv", bean::setShipLv, JsonHelper::toIntegerList)
-                .set("api_nowhps", bean::setNowhps, JsonHelper::toIntegerList)
-                .set("api_maxhps", bean::setMaxhps, JsonHelper::toIntegerList)
-                .set("api_nowhps_combined", bean::setNowhpsCombined, JsonHelper::toIntegerList)
-                .set("api_maxhps_combined", bean::setMaxhpsCombined, JsonHelper::toIntegerList)
+                .setIntegerList("api_ship_ke", bean::setShipKe)
+                .setIntegerList("api_ship_lv", bean::setShipLv)
+                .setIntegerList("api_f_nowhps", bean::setFNowhps)
+                .setIntegerList("api_f_maxhps", bean::setFMaxhps)
+                .setIntegerList("api_e_nowhps", bean::setENowhps)
+                .setIntegerList("api_e_maxhps", bean::setEMaxhps)
+                .setIntegerList("api_f_nowhps_combined", bean::setFNowhpsCombined)
+                .setIntegerList("api_f_maxhps_combined", bean::setFMaxhpsCombined)
                 .setBoolean("api_midnight_flag", bean::setMidnightFlag)
                 .set("api_eSlot", bean::setESlot, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_fParam", bean::setFParam, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_eParam", bean::setEParam, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_fParam_combined", bean::setFParamCombined, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_search", bean::setSearch, JsonHelper::toIntegerList)
-                .set("api_formation", bean::setFormation, JsonHelper::toIntegerList)
-                .set("api_stage_flag", bean::setStageFlag, JsonHelper::toIntegerList)
+                .setIntegerList("api_search", bean::setSearch)
+                .setIntegerList("api_formation", bean::setFormation)
+                .setIntegerList("api_stage_flag", bean::setStageFlag)
                 .set("api_injection_kouku", bean::setInjectionKouku, BattleTypes.Kouku::toKouku)
                 .set("api_kouku", bean::setKouku, BattleTypes.Kouku::toKouku)
-                .setBoolean("api_support_flag", bean::setSupportFlag)
+                .setInteger("api_support_flag", bean::setSupportFlag)
                 .set("api_support_info", bean::setSupportInfo, BattleTypes.SupportInfo::toSupportInfo)
-                .set("api_stage_flag2", bean::setStageFlag2, JsonHelper::toIntegerList)
+                .setIntegerList("api_stage_flag2", bean::setStageFlag2)
                 .set("api_kouku2", bean::setKouku2, BattleTypes.Kouku::toKouku);
         return bean;
     }

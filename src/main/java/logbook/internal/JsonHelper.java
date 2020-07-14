@@ -93,12 +93,10 @@ public final class JsonHelper {
      * @return String
      */
     public static String toString(JsonValue val) {
-        return toObject(val, v -> {
-            if (v instanceof JsonString) {
-                return ((JsonString) v).getString();
-            }
-            return v.toString();
-        });
+        if (val instanceof JsonString) {
+            return ((JsonString) val).getString();
+        }
+        return toObject(val, Object::toString);
     }
 
     /**
@@ -391,20 +389,31 @@ public final class JsonHelper {
     }
 
     /**
-     * JsonArrayをCollectionに変換します
+     * JsonArrayまたはJsonObjectをCollectionに変換します<br>
+     * JsonObjectの場合は単一のオブジェクトだけを格納しているCollectionを返します
      *
      * @param <T> JsonArrayの内容の型
      * @param <R> functionの戻り値の型
-     * @param array 変換するJsonArray
+     * @param <C> 変換後のCollectionの型
+     * @param value 変換するJsonArrayまたはJsonObject
      * @param function JsonValueを受け取って変換するFunction
      * @param supplier Collectionインスタンスを供給するSupplier
      * @return 変換後のCollection
      */
     @SuppressWarnings("unchecked")
-    public static <T extends JsonValue, C extends Collection<R>, R> C toCollection(JsonArray array, Function<T, R> function, Supplier<C> supplier) {
+    public static <T extends JsonValue, C extends Collection<R>, R> C toCollection(JsonValue value,
+            Function<T, R> function, Supplier<C> supplier) {
         C collection = supplier.get();
-        for (JsonValue val : array) {
-            collection.add(function.apply((T) val));
+        if (value instanceof JsonArray) {
+            for (JsonValue val : (JsonArray) value) {
+                if (val == null || val == JsonValue.NULL) {
+                    collection.add(null);
+                } else {
+                    collection.add(function.apply((T) val));
+                }
+            }
+        } else {
+            collection.add(function.apply((T) value));
         }
         return collection;
     }
@@ -414,12 +423,12 @@ public final class JsonHelper {
      *
      * @param <T> JsonArrayの内容の型
      * @param <R> functionの戻り値の型
-     * @param array 変換するJsonArray
+     * @param value 変換するJsonArrayまたはJsonObject
      * @param function JsonValueを受け取って変換するFunction
      * @return 変換後のList
      */
-    public static <T extends JsonValue, R> List<R> toList(JsonArray array, Function<T, R> function) {
-        return toCollection(array, function, ArrayList::new);
+    public static <T extends JsonValue, R> List<R> toList(JsonValue value, Function<T, R> function) {
+        return toCollection(value, function, ArrayList::new);
     }
 
     /**
@@ -430,7 +439,7 @@ public final class JsonHelper {
      * @param function JsonValueを受け取って変換するFunction
      * @return Listに変換する関数
      */
-    public static <T extends JsonValue, R> Function<JsonArray, List<R>> toList(Function<T, R> function) {
+    public static <T extends JsonValue, R> Function<JsonValue, List<R>> toList(Function<T, R> function) {
         return val -> JsonHelper.toList(val, function);
     }
 
@@ -439,12 +448,12 @@ public final class JsonHelper {
      *
      * @param <T> JsonArrayの内容の型
      * @param <R> functionの戻り値の型
-     * @param array 変換するJsonArray
+     * @param value 変換するJsonArrayまたはJsonObject
      * @param function JsonValueを受け取って変換するFunction
      * @return 変換後のSet
      */
-    public static <T extends JsonValue, R> Set<R> toSet(JsonArray array, Function<T, R> function) {
-        return toCollection(array, function, LinkedHashSet::new);
+    public static <T extends JsonValue, R> Set<R> toSet(JsonValue value, Function<T, R> function) {
+        return toCollection(value, function, LinkedHashSet::new);
     }
 
     /**
@@ -455,7 +464,7 @@ public final class JsonHelper {
      * @param function JsonValueを受け取って変換するFunction
      * @return Setに変換する関数
      */
-    public static <T extends JsonValue, R> Function<JsonArray, Set<R>> toSet(Function<T, R> function) {
+    public static <T extends JsonValue, R> Function<JsonValue, Set<R>> toSet(Function<T, R> function) {
         return val -> JsonHelper.toSet(val, function);
     }
 
@@ -524,11 +533,33 @@ public final class JsonHelper {
 
     /**
      * JsonObjectから別のオブジェクトへの単方向バインディングを提供します。<br>
+     * <br>
+     * 次の例はbeanにJSONからの値を設定する例です。<br>
+     * JSON例<br>
+     * <pre><code>{"api_id" : 558, "api_name" : "深海復讐艦攻改", "api_type" : [ 3, 5, 8, 8 ]}</code></pre>
+     * Javaコード例<br>
+     * <pre><code>JsonHelper.bind(json)
+     *      .set("api_id", bean::setId, JsonHelper::toInteger)
+     *      .set("api_name", bean::setName, JsonHelper::toString)
+     *      .set("api_type", bean::setType, JsonHelper::toIntegerList);</code></pre>
+     *
+     * @param json JsonObject
+     * @param listener BindListener
+     * @return {@link Bind}
+     */
+    public static Bind bind(JsonObject json, BindListener listener) {
+        return new Bind(json, listener);
+    }
+
+    /**
+     * JsonObjectから別のオブジェクトへの単方向バインディングを提供します。<br>
      *
      */
     public static class Bind {
 
         private JsonObject json;
+
+        private BindListener listener;
 
         /**
          * コンストラクター
@@ -537,6 +568,17 @@ public final class JsonHelper {
          */
         private Bind(JsonObject json) {
             this.json = json;
+        }
+
+        /**
+         * コンストラクター
+         *
+         * @param json JsonObject
+         * @param listener BindListener
+         */
+        private Bind(JsonObject json, BindListener listener) {
+            this.json = json;
+            this.listener = listener;
         }
 
         /**
@@ -553,81 +595,142 @@ public final class JsonHelper {
         public <T extends JsonValue, R> Bind set(String key, Consumer<R> consumer, Function<T, R> converter) {
             JsonValue val = this.json.get(key);
             if (val != null && JsonValue.NULL != val) {
-                consumer.accept(converter.apply((T) val));
+                R obj = converter.apply((T) val);
+                consumer.accept(obj);
+                if (this.listener != null) {
+                    this.listener.apply(key, val, obj);
+                }
             }
             return this;
         }
 
         /**
-         * keyで取得したJsonValueをStringに変換しconsumerへ設定します<br>
+         * keyで取得したJsonValueをList<Integer>に変換したものをconsumerへ設定します<br>
          *
          * @param <T> JsonObject#get(Object) の戻り値の型
+         * @param key JsonObjectから取得するキー
+         * @param consumer List<Integer>を消費するConsumer
+         * @return {@link Bind}
+         */
+        public <T extends JsonArray> Bind setIntegerList(String key, Consumer<List<Integer>> consumer) {
+            return this.set(key, consumer, JsonHelper::toIntegerList);
+        }
+
+        /**
+         * keyで取得したJsonValueをList<Long>に変換したものをconsumerへ設定します<br>
+         *
+         * @param <T> JsonObject#get(Object) の戻り値の型
+         * @param key JsonObjectから取得するキー
+         * @param consumer List<Long>を消費するConsumer
+         * @return {@link Bind}
+         */
+        public <T extends JsonArray> Bind setLongList(String key, Consumer<List<Long>> consumer) {
+            return this.set(key, consumer, JsonHelper::toLongList);
+        }
+
+        /**
+         * keyで取得したJsonValueをList<Double>に変換したものをconsumerへ設定します<br>
+         *
+         * @param <T> JsonObject#get(Object) の戻り値の型
+         * @param key JsonObjectから取得するキー
+         * @param consumer List<Double>を消費するConsumer
+         * @return {@link Bind}
+         */
+        public <T extends JsonArray> Bind setDoubleList(String key, Consumer<List<Double>> consumer) {
+            return this.set(key, consumer, JsonHelper::toDoubleList);
+        }
+
+        /**
+         * keyで取得したJsonValueをList<String>に変換したものをconsumerへ設定します<br>
+         *
+         * @param <T> JsonObject#get(Object) の戻り値の型
+         * @param key JsonObjectから取得するキー
+         * @param consumer List<Integer>を消費するConsumer
+         * @return {@link Bind}
+         */
+        public <T extends JsonArray> Bind setStringList(String key, Consumer<List<String>> consumer) {
+            return this.set(key, consumer, JsonHelper::toStringList);
+        }
+
+        /**
+         * keyで取得したJsonValueをStringに変換しconsumerへ設定します<br>
+         *
          * @param key JsonObjectから取得するキー
          * @param consumer converterの戻り値を消費するConsumer
          * @return {@link Bind}
          */
-        public <T extends JsonValue> Bind setString(String key, Consumer<String> consumer) {
+        public Bind setString(String key, Consumer<String> consumer) {
             return this.set(key, consumer, JsonHelper::toString);
         }
 
         /**
          * keyで取得したJsonValueをIntegerに変換しconsumerへ設定します<br>
          *
-         * @param <T> JsonObject#get(Object) の戻り値の型
          * @param key JsonObjectから取得するキー
          * @param consumer converterの戻り値を消費するConsumer
          * @return {@link Bind}
          */
-        public <T extends JsonValue> Bind setInteger(String key, Consumer<Integer> consumer) {
+        public Bind setInteger(String key, Consumer<Integer> consumer) {
             return this.set(key, consumer, JsonHelper::toInteger);
         }
 
         /**
          * keyで取得したJsonValueをLongに変換しconsumerへ設定します<br>
          *
-         * @param <T> JsonObject#get(Object) の戻り値の型
          * @param key JsonObjectから取得するキー
          * @param consumer converterの戻り値を消費するConsumer
          * @return {@link Bind}
          */
-        public <T extends JsonValue> Bind setLong(String key, Consumer<Long> consumer) {
+        public Bind setLong(String key, Consumer<Long> consumer) {
             return this.set(key, consumer, JsonHelper::toLong);
         }
 
         /**
          * keyで取得したJsonValueをDoubleに変換しconsumerへ設定します<br>
          *
-         * @param <T> JsonObject#get(Object) の戻り値の型
          * @param key JsonObjectから取得するキー
          * @param consumer converterの戻り値を消費するConsumer
          * @return {@link Bind}
          */
-        public <T extends JsonValue> Bind setDouble(String key, Consumer<Double> consumer) {
+        public Bind setDouble(String key, Consumer<Double> consumer) {
             return this.set(key, consumer, JsonHelper::toDouble);
         }
 
         /**
          * keyで取得したJsonValueをBigDecimalに変換しconsumerへ設定します<br>
          *
-         * @param <T> JsonObject#get(Object) の戻り値の型
          * @param key JsonObjectから取得するキー
          * @param consumer converterの戻り値を消費するConsumer
          * @return {@link Bind}
          */
-        public <T extends JsonValue> Bind setBigDecimal(String key, Consumer<BigDecimal> consumer) {
+        public Bind setBigDecimal(String key, Consumer<BigDecimal> consumer) {
             return this.set(key, consumer, JsonHelper::toBigDecimal);
         }
 
         /**
          * keyで取得したJsonValueをBooleanに変換しconsumerへ設定します<br>
          *
-         * @param <T> JsonObject#get(Object) の戻り値の型
          * @param key JsonObjectから取得するキー
          * @param consumer converterの戻り値を消費するConsumer
          * @return {@link Bind}
          */
-        public <T extends JsonValue> Bind setBoolean(String key, Consumer<Boolean> consumer) {
+        public Bind setBoolean(String key, Consumer<Boolean> consumer) {
             return this.set(key, consumer, JsonHelper::toBoolean);
         }
+    }
+
+    /**
+     * {@link Bind}によって設定される値を監視するためのリスナー
+     */
+    public static interface BindListener {
+
+        /**
+         * 設定される値を監視します
+         *
+         * @param key JsonObjectのキー
+         * @param val JsonObjectの値
+         * @param obj converterより返された値
+         */
+        void apply(String key, JsonValue val, Object obj);
     }
 }

@@ -1,8 +1,6 @@
 package logbook.proxy;
 
 import java.io.InputStream;
-import java.util.Collection;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -22,13 +20,6 @@ public interface ResponseMetaData {
      * @return コンテントタイプ
      */
     String getContentType();
-
-    /**
-     * レスポンスヘッダを取得します
-     * @return レスポンスヘッダのMap
-     */
-    @Deprecated
-    Map<String, Collection<String>> getHeaders();
 
     /**
      * レスポンスに含まれるメッセージボディを返します

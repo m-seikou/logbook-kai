@@ -1,13 +1,14 @@
 package logbook.internal;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.ToDoubleFunction;
@@ -22,6 +23,8 @@ import logbook.Messages;
 import logbook.bean.AppCondition;
 import logbook.bean.Basic;
 import logbook.bean.Chara;
+import logbook.bean.DeckPort;
+import logbook.bean.DeckPortCollection;
 import logbook.bean.Ship;
 import logbook.bean.ShipMst;
 import logbook.bean.ShipMstCollection;
@@ -31,6 +34,9 @@ import logbook.bean.SlotitemMst;
 import logbook.bean.SlotitemMstCollection;
 import logbook.bean.Stype;
 import logbook.bean.StypeCollection;
+import logbook.internal.Tuple.Pair;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 /**
  * 艦娘に関するメソッドを集めたクラス
@@ -57,9 +63,17 @@ public class Ships {
     private static final Map<SlotItemType, Double> VIEW_COEFFICIENT = new EnumMap<>(SlotItemType.class);
     /** 改修係数 */
     private static final Map<SlotItemType, Double> LV_COEFFICIENT = new EnumMap<>(SlotItemType.class);
+    /** 対空係数 */
+    private static final Map<SlotItemType, Double> AA_COEFFICIENT = new EnumMap<>(SlotItemType.class);
+    /** 対空改修係数 */
+    private static final Map<SlotItemType, Double> AALV_COEFFICIENT = new EnumMap<>(SlotItemType.class);
 
     static {
         // 索敵係数
+        // 小口径主砲：0.6
+        VIEW_COEFFICIENT.put(SlotItemType.小口径主砲, 0.6D);
+        // 中口径主砲 : 0.6
+        VIEW_COEFFICIENT.put(SlotItemType.中口径主砲, 0.6D);
         // 艦上戦闘機：0.6
         VIEW_COEFFICIENT.put(SlotItemType.艦上戦闘機, 0.6D);
         // 艦上爆撃機：0.6
@@ -76,10 +90,18 @@ public class Ships {
         VIEW_COEFFICIENT.put(SlotItemType.小型電探, 0.6D);
         // 大型電探：0.6
         VIEW_COEFFICIENT.put(SlotItemType.大型電探, 0.6D);
+        // ソナー：0.6
+        VIEW_COEFFICIENT.put(SlotItemType.ソナー,  0.6D);
+        // 特殊潜航艇：0.6
+        VIEW_COEFFICIENT.put(SlotItemType.特殊潜航艇, 0.6D);
+        // オートジャイロ：0.6
+        VIEW_COEFFICIENT.put(SlotItemType.オートジャイロ, 0.6D);
         // 対潜哨戒機：0.6
         VIEW_COEFFICIENT.put(SlotItemType.対潜哨戒機, 0.6D);
         // 探照灯：0.6
         VIEW_COEFFICIENT.put(SlotItemType.探照灯, 0.6D);
+        // 潜水艦魚雷：0.6
+        VIEW_COEFFICIENT.put(SlotItemType.潜水艦魚雷, 0.6D);
         // 司令部施設：0.6
         VIEW_COEFFICIENT.put(SlotItemType.司令部施設, 0.6D);
         // 航空要員(熟練艦載機整備員)：0.6
@@ -98,6 +120,8 @@ public class Ships {
         VIEW_COEFFICIENT.put(SlotItemType.艦上偵察機II, 1.0D);
         // 噴式戦闘爆撃機：0.6
         VIEW_COEFFICIENT.put(SlotItemType.噴式戦闘爆撃機, 0.6D);
+        // 潜水艦装備：0.6
+        VIEW_COEFFICIENT.put(SlotItemType.潜水艦装備, 0.6D);
 
         // 改修係数
         // 小型電探：1.25
@@ -106,9 +130,44 @@ public class Ships {
         LV_COEFFICIENT.put(SlotItemType.大型電探, 1.25D);
         // 水上偵察機：1.2
         LV_COEFFICIENT.put(SlotItemType.水上偵察機, 1.2D);
+
+        // 対空係数
+        // 対空機銃：6
+        AA_COEFFICIENT.put(SlotItemType.対空機銃, 6D);
+        // 高角砲・高射装置：4
+        AA_COEFFICIENT.put(SlotItemType.小口径主砲, 4D);
+        AA_COEFFICIENT.put(SlotItemType.副砲, 4D);
+        AA_COEFFICIENT.put(SlotItemType.高射装置, 4D);
+        // 対空電探：3
+        AA_COEFFICIENT.put(SlotItemType.小型電探, 3D);
+        AA_COEFFICIENT.put(SlotItemType.大型電探, 3D);
+        AA_COEFFICIENT.put(SlotItemType.大型電探II, 3D);
+
+        // 対空改修係数
+        // 機銃：4
+        AALV_COEFFICIENT.put(SlotItemType.対空機銃, 4D);
+        // 高角砲・高射装置：2
+        AALV_COEFFICIENT.put(SlotItemType.小口径主砲, 2D);
+        AALV_COEFFICIENT.put(SlotItemType.副砲, 2D);
+        AALV_COEFFICIENT.put(SlotItemType.高射装置, 2D);
     }
 
     private Ships() {
+    }
+
+    /**
+     * 所属している艦隊を取得します。
+     *
+     * @param ship 艦娘
+     * @return 所属している艦隊
+     */
+    public static Optional<DeckPort> deckPort(Ship ship) {
+        for (Entry<Integer, DeckPort> entry : DeckPortCollection.get().getDeckPortMap().entrySet()) {
+            if (entry.getValue().getShip().contains(ship.getId())) {
+                return Optional.of(entry.getValue());
+            }
+        }
+        return Optional.empty();
     }
 
     /**
@@ -168,11 +227,24 @@ public class Ships {
      * 艦娘が退避状態か判定します
      *
      * @param ship 退避
+     * @param escape 退避艦ID
+     * @return 退避状態の場合true
+     */
+    public static boolean isEscape(Ship ship, Set<Integer> escape) {
+        if (escape != null) {
+            return escape.contains(ship.getId());
+        }
+        return false;
+    }
+
+    /**
+     * 艦娘が退避状態か判定します
+     *
+     * @param ship 退避
      * @return 退避状態の場合true
      */
     public static boolean isEscape(Ship ship) {
-        return AppCondition.get()
-                .getEscape().contains(ship.getId());
+        return isEscape(ship, AppCondition.get().getEscape());
     }
 
     /**
@@ -222,10 +294,30 @@ public class Ships {
      *
      * @param chara キャラクター
      * @return 艦娘の画像
+     */
+    public static Path shipImagePath(Chara chara) {
+        return ShipImage.getPath(chara);
+    }
+
+    /**
+     * キャラクターの画像を取得します(立ち絵)
+     *
+     * @param chara キャラクター
+     * @return 艦娘の画像(立ち絵)
+     */
+    public static Path shipStandingPoseImagePath(Chara chara) {
+        return ShipImage.getStandingPosePath(chara);
+    }
+
+    /**
+     * キャラクターの画像を取得します
+     *
+     * @param chara キャラクター
+     * @return 艦娘の画像
      * @throws IllegalStateException このメソッドがJavaFXアプリケーション・スレッド以外のスレッドで呼び出された場合
      */
     public static Image shipImage(Chara chara) throws IllegalStateException {
-        return ShipImage.get(chara, false, true);
+        return ShipImage.get(chara, false, true, null, null);
     }
 
     /**
@@ -236,7 +328,21 @@ public class Ships {
      * @throws IllegalStateException このメソッドがJavaFXアプリケーション・スレッド以外のスレッドで呼び出された場合
      */
     public static Image shipWithItemImage(Chara chara) throws IllegalStateException {
-        return ShipImage.get(chara, true, true);
+        return shipWithItemImage(chara, SlotItemCollection.get().getSlotitemMap(), AppCondition.get().getEscape());
+    }
+
+    /**
+     * キャラクターの画像を取得します(装備画像付き)
+     *
+     * @param chara キャラクター
+     * @param itemMap 装備Map
+     * @param escape 退避艦ID
+     * @return 艦娘の画像
+     * @throws IllegalStateException このメソッドがJavaFXアプリケーション・スレッド以外のスレッドで呼び出された場合
+     */
+    public static Image shipWithItemImage(Chara chara,
+            Map<Integer, SlotItem> itemMap, Set<Integer> escape) throws IllegalStateException {
+        return ShipImage.get(chara, true, true, itemMap, escape);
     }
 
     /**
@@ -247,7 +353,22 @@ public class Ships {
      * @throws IllegalStateException このメソッドがJavaFXアプリケーション・スレッド以外のスレッドで呼び出された場合
      */
     public static Image shipWithItemWithoutStateBannerImage(Chara chara) throws IllegalStateException {
-        return ShipImage.get(chara, true, false);
+        return shipWithItemWithoutStateBannerImage(chara,
+                SlotItemCollection.get().getSlotitemMap(), AppCondition.get().getEscape());
+    }
+
+    /**
+     * キャラクターの画像を取得します(装備画像付き、状態バナー無し)
+     *
+     * @param chara キャラクター
+     * @param itemMap 装備Map
+     * @param escape 退避艦ID
+     * @return 艦娘の画像
+     * @throws IllegalStateException このメソッドがJavaFXアプリケーション・スレッド以外のスレッドで呼び出された場合
+     */
+    public static Image shipWithItemWithoutStateBannerImage(Chara chara,
+            Map<Integer, SlotItem> itemMap, Set<Integer> escape) throws IllegalStateException {
+        return ShipImage.get(chara, true, false, itemMap, escape);
     }
 
     /**
@@ -322,20 +443,13 @@ public class Ships {
         List<SlotitemMst> items = getSlotitemMst(ship).collect(Collectors.toList());
         // 艦攻艦爆搭載艦
         boolean isPasedoCarrier = items.stream()
-                .filter(e -> SlotItemType.艦上攻撃機.equals(e)
-                        || SlotItemType.艦上爆撃機.equals(e))
+                .filter(i -> i.is(SlotItemType.艦上攻撃機, SlotItemType.艦上爆撃機))
                 .findAny()
                 .isPresent();
-        // 艦種
-        Integer stype = Ships.shipMst(ship)
-                .map(ShipMst::getStype)
-                .orElse(0);
         // 火力
         int karyoku = ship.getKaryoku().get(0);
 
-        if (isPasedoCarrier
-                || ShipType.正規空母.equals(stype)
-                || ShipType.装甲空母.equals(stype)) {
+        if (isPasedoCarrier || ship.is(ShipType.軽空母, ShipType.正規空母, ShipType.装甲空母)) {
             // 空母(または空母扱い)の場合
             // (火力 + 雷装) × 1.5 + 爆装 × 2 + 55
             int raig = items.stream()
@@ -405,18 +519,18 @@ public class Ships {
             double local = 0;
 
             int onslot = ship.getOnslot().get(i);
+            if (onslot <= 0)
+                continue;
             SlotItem item = itemMap.get(ship.getSlot().get(i));
             if (item == null)
                 continue;
             SlotitemMst itemMst = itemMstMap.get(item.getSlotitemId());
+            if (itemMst == null)
+                continue;
 
             // 制空状態に関係するのは対空値を持つ艦戦、艦攻、艦爆、水爆、水戦のみ
-            if (SlotItemType.艦上戦闘機.equals(itemMst)
-                    || SlotItemType.艦上攻撃機.equals(itemMst)
-                    || SlotItemType.艦上爆撃機.equals(itemMst)
-                    || SlotItemType.水上爆撃機.equals(itemMst)
-                    || SlotItemType.水上戦闘機.equals(itemMst)
-                    || SlotItemType.噴式戦闘爆撃機.equals(itemMst)) {
+            if (itemMst.is(SlotItemType.艦上戦闘機, SlotItemType.艦上攻撃機, SlotItemType.艦上爆撃機, SlotItemType.水上爆撃機,
+                    SlotItemType.水上戦闘機, SlotItemType.噴式戦闘爆撃機)) {
                 // 対空値
                 double tyku = itemMst.getTyku();
                 tyku += airSuperiorityTykuAdditional(itemMst, item);
@@ -439,12 +553,12 @@ public class Ships {
      * @return 加算される制空値
      */
     public static double airSuperiorityTykuAdditional(SlotitemMst itemMst, SlotItem item) {
-        if (SlotItemType.艦上戦闘機.equals(itemMst) || SlotItemType.水上戦闘機.equals(itemMst)) {
+        if (itemMst.is(SlotItemType.艦上戦闘機, SlotItemType.水上戦闘機, SlotItemType.局地戦闘機)) {
             return Optional.ofNullable(item.getLevel())
                     .map(level -> 0.2D * level)
                     .orElse(0D);
         }
-        if (SlotItemType.艦上爆撃機.equals(itemMst)) {
+        if (itemMst.is(SlotItemType.艦上爆撃機)) {
             return Optional.ofNullable(item.getLevel())
                     .map(level -> 0.25D * level)
                     .orElse(0D);
@@ -467,11 +581,9 @@ public class Ships {
             // 熟練ボーナス
             double bonus = Math.sqrt(skillLevel(item.getAlv()) / 10D);
             // 制空ボーナス
-            if (SlotItemType.艦上戦闘機.equals(itemMst)
-                    || SlotItemType.水上戦闘機.equals(itemMst)
-                    || SlotItemType.局地戦闘機.equals(itemMst)) {
+            if (itemMst.is(SlotItemType.艦上戦闘機, SlotItemType.水上戦闘機, SlotItemType.局地戦闘機)) {
                 bonus += skillBonus1(item.getAlv());
-            } else if (SlotItemType.水上爆撃機.equals(itemMst)) {
+            } else if (itemMst.is(SlotItemType.水上爆撃機)) {
                 bonus += skillBonus2(item.getAlv());
             }
             return bonus;
@@ -480,75 +592,103 @@ public class Ships {
     }
 
     /**
-     * 索敵値(2-5式秋)
+     * 加重対空値
      *
-     * @param ships 艦娘達
-     * @return 索敵値(2-5式秋)
+     * @param ship 艦娘
+     * @return 加重対空値
      */
-    @Deprecated
-    public static double viewRange(List<Ship> ships) {
-        // 索敵スコア
-        // = 艦上爆撃機 × (1.04)
-        // + 艦上攻撃機 × (1.37)
-        // + 艦上偵察機 × (1.66)
-        // + 水上偵察機 × (2.00)
-        // + 水上爆撃機 × (1.78)
-        // + 小型電探 × (1.00)
-        // + 大型電探 × (0.99)
-        // + 探照灯 × (0.91)
-        // + √(各艦毎の素索敵) × (1.69)
-        // + (司令部レベルを5の倍数に切り上げ) × (-0.61)
-        ToDoubleFunction<SlotitemMst> mapper = item -> {
-            double itemScore = item.getSaku();
-            if (SlotItemType.艦上爆撃機.equals(item)) {
-                itemScore *= 1.04D;
-            } else if (SlotItemType.艦上攻撃機.equals(item)) {
-                itemScore *= 1.37D;
-            } else if (SlotItemType.艦上偵察機.equals(item) || SlotItemType.艦上偵察機II.equals(item)) {
-                itemScore *= 1.66D;
-            } else if (SlotItemType.水上偵察機.equals(item)) {
-                itemScore *= 2.00D;
-            } else if (SlotItemType.水上爆撃機.equals(item)) {
-                itemScore *= 1.78D;
-            } else if (SlotItemType.小型電探.equals(item)) {
-                itemScore *= 1.00D;
-            } else if (SlotItemType.大型電探.equals(item) || SlotItemType.大型電探II.equals(item)) {
-                itemScore *= 0.99D;
-            } else if (SlotItemType.探照灯.equals(item)) {
-                itemScore *= 0.91D;
-            } else {
-                itemScore *= 0;
-            }
-            return itemScore;
-        };
-        // 装備索敵スコア
-        double itemScore = ships.stream()
-                .flatMap(e -> getSlotitemMst(e))
-                .mapToDouble(mapper)
-                .sum();
-        // 艦娘索敵スコア
-        double shipScore = ships.stream()
-                .mapToDouble(e -> e.getSakuteki().get(0) - getSlotitemMst(e)
-                        .mapToInt(SlotitemMst::getSaku)
-                        .sum())
-                .map(Math::sqrt)
-                .sum() * 1.69D;
-        // レベルスコア
-        double levelScore = ((Basic.get().getLevel() + 4) / 5) * 5 * -0.61D;
+    public static double weightAntiAircraft(Ship ship) {
+        // 装備マスタ
+        Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get()
+                .getSlotitemMap();
+        // 装備
+        Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
+                .getSlotitemMap();
 
-        return BigDecimal.valueOf(itemScore + shipScore + levelScore)
-                .setScale(2, RoundingMode.HALF_UP)
-                .doubleValue();
+        // 装備から加重対空値を取り出すFunction
+        ToDoubleFunction<SlotItem> weightAA = item -> {
+            SlotitemMst mst = itemMstMap.get(item.getSlotitemId());
+            if (mst == null)
+                return 0D;
+
+            boolean isGun = Optional.ofNullable(mst)
+                    .map(type -> type.is(SlotItemType.小口径主砲, SlotItemType.副砲))
+                    .orElse(false);
+            if (mst.getType().get(3) != 16 && isGun)
+                return 0D;
+
+            SlotItemType type = SlotItemType.toSlotItemType(mst);
+            int taikuu = mst.getTyku();
+
+            // 装備係数× 装備対空値
+            double ic = AA_COEFFICIENT.getOrDefault(type, 0D) * taikuu;
+            // 改修係数(索敵)
+            double aalvCoefficient = AALV_COEFFICIENT.getOrDefault(type, 0D);
+            if (aalvCoefficient == 2D && taikuu > 7) {
+                aalvCoefficient = 3D;
+            }
+            // 改修係数(索敵)×√★
+            double v = aalvCoefficient * Math.sqrt(item.getLevel());
+
+            return ic + v;
+        };
+
+        // 装備加重対空値＝装備係数(対空)×装備対空値+改修係数(対空)×√★
+        double itemWeightAA = Stream.concat(ship.getSlot().stream(), Stream.of(ship.getSlotEx()))
+                .map(itemMap::get)
+                .filter(Objects::nonNull)
+                .mapToDouble(weightAA)
+                .sum();
+
+        int itemTyku = getSlotitemMst(ship).mapToInt(SlotitemMst::getTyku).sum();
+
+        int shipAA = ship.getTaiku().get(0) - itemTyku;
+        return itemWeightAA + shipAA;
     }
 
     /**
-     * 判定式(33)
+     * 対空噴進弾幕発動率
      *
-     * @param ships 艦娘達
-     * @return 判定式(33)
+     * @param ship 艦娘
+     * @return 噴進弾幕発動率
      */
-    public static double decision33(List<Ship> ships) {
-        return decision33(ships, 1);
+    public static double rocketBarrageActivationRate(Ship ship) {
+        List<SlotitemMst> items = getSlotitemMst(ship).collect(Collectors.toList());
+        long rocketCount = items.stream()
+                .filter(e -> e.getId() == 274) // 噴進砲改二
+                .count();
+        if (rocketCount == 0)
+            return 0D;
+
+        boolean canRocketBarrage = ship.is(ShipType.水上機母艦,
+                ShipType.航空巡洋艦,
+                ShipType.航空戦艦,
+                ShipType.軽空母,
+                ShipType.正規空母,
+                ShipType.装甲空母);
+        if (!canRocketBarrage)
+            return 0D;
+
+        double bonus = 0D;
+
+        if (rocketCount > 1)
+            bonus += 15D;
+
+        if (shipMst(ship)
+                .map(ShipMst::getName)
+                .filter(name -> name.contains("伊勢") || name.contains("日向"))
+                .isPresent()) {
+            bonus += 25D;
+        }
+
+        int antiAircraft = (int) Math.floor(weightAntiAircraft(ship));
+        if (antiAircraft % 2 != 0)
+            antiAircraft -= 1;
+
+        double baseActivationRate = (antiAircraft + ship.getLucky().get(0)) / 282D;
+        double activationRate = Math.floor(baseActivationRate * 1000) / 10;
+
+        return activationRate + bonus;
     }
 
     /**
@@ -558,7 +698,7 @@ public class Ships {
      * @param branchCoefficient 分岐点係数
      * @return 判定式(33)
      */
-    public static double decision33(List<Ship> ships, double branchCoefficient) {
+    public static Decision33 decision33(List<Ship> ships, double branchCoefficient) {
         // 装備マスタ
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get()
                 .getSlotitemMap();
@@ -567,15 +707,14 @@ public class Ships {
                 .getSlotitemMap();
         // 艦娘から装備を取り出すFunction
         Function<Ship, Stream<SlotItem>> toSlotItem = ship -> {
-            return ship.getSlot()
-                    .stream()
+            return Stream.concat(ship.getSlot().stream(), Stream.of(ship.getSlotEx()))
                     .map(itemMap::get)
                     .filter(Objects::nonNull);
         };
 
         //  索敵スコア＝(装備倍率×装備索敵値)の和＋√(各艦娘の素索敵)の和－[0.4×司令部レベル(端数切り上げ)]＋2×(6－出撃艦数)
 
-        // (裝備係数(索敵)×(裝備索敵値+改修係数(索敵)×√★))の和
+        // (装備係数(索敵)×(装備索敵値+改修係数(索敵)×√★))の和
         double itemView = ships.stream()
                 .flatMap(toSlotItem)
                 .mapToDouble(e -> {
@@ -584,7 +723,7 @@ public class Ships {
                         SlotItemType type = SlotItemType.toSlotItemType(mst);
                         // 装備係数
                         double ic = VIEW_COEFFICIENT.getOrDefault(type, 0D);
-                        // (裝備索敵値+改修係数(索敵)×√★)
+                        // (装備索敵値+改修係数(索敵)×√★)
                         double v = mst.getSaku() + LV_COEFFICIENT.getOrDefault(type, 0D) * Math.sqrt(e.getLevel());
 
                         return ic * v;
@@ -604,7 +743,7 @@ public class Ships {
         // 2×(6－出撃艦数)
         double fleetScore = 2 * (6 - ships.size());
 
-        return (branchCoefficient * itemView) + shipView - levelScore + fleetScore;
+        return new Decision33(branchCoefficient, itemView, shipView, levelScore, fleetScore);
     }
 
     /**
@@ -629,7 +768,7 @@ public class Ships {
                 if (item != null) {
                     SlotitemMst mst = itemMstMap.get(item.getSlotitemId());
                     if (mst != null) {
-                        pair.add(new Pair<>(mst, onslot.get(i)));
+                        pair.add(Tuple.of(mst, onslot.get(i)));
                     }
                 }
             }
@@ -638,10 +777,7 @@ public class Ships {
         // 対象となる艦載機は水上偵察機(水偵)・艦上偵察機(艦偵)・大型飛行艇(二式大艇)の3種
         Predicate<Pair<SlotitemMst, Integer>> filter = pair -> {
             SlotitemMst mst = pair.getKey();
-            return SlotItemType.艦上偵察機.equals(mst)
-                    || SlotItemType.艦上偵察機II.equals(mst)
-                    || SlotItemType.水上偵察機.equals(mst)
-                    || SlotItemType.大型飛行艇.equals(mst);
+            return mst.is(SlotItemType.艦上偵察機, SlotItemType.艦上偵察機II, SlotItemType.水上偵察機, SlotItemType.大型飛行艇);
         };
         // 各スロットごとの{0.04 × 艦載機の索敵値 × √(搭載数)}を計算
         ToDoubleFunction<Pair<SlotitemMst, Integer>> calc = pair -> 0.04D * pair.getKey().getSaku()
@@ -670,7 +806,7 @@ public class Ships {
                     return 1.12D;
                 case 2:
                     return 1.17D;
-                case 3:
+                default:
                     return 1.2D;
                 }
             }
@@ -688,7 +824,7 @@ public class Ships {
         if (chara == null) {
             return "";
         }
-        if (chara instanceof Ship) {
+        if (chara.isShip() || chara.isFriend()) {
             // 艦娘
             return Messages.getString("ship.name", shipMst(chara)
                     .map(ShipMst::getName)
@@ -698,7 +834,7 @@ public class Ships {
             return Messages.getString("ship.name", shipMst(chara)
                     .map(mst -> {
                         String yomi = mst.getYomi();
-                        if (yomi == null || "-".equals(yomi) || yomi.isEmpty()) {
+                        if (yomi == null || "-".equals(yomi) || yomi.isEmpty() || chara.isPractice()) {
                             return mst.getName();
                         } else {
                             return mst.getName() + yomi;
@@ -706,6 +842,52 @@ public class Ships {
                     })
                     .orElse(""), chara.getLv());
         }
+    }
+
+    /**
+     * 速力のテキスト表記
+     *
+     * @param soku soku
+     * @return 速力
+     */
+    public static String sokuText(Integer soku) {
+        if (soku == null)
+            return "";
+        switch (soku) {
+        case 0:
+            return "基地";
+        case 5:
+            return "低速";
+        case 10:
+            return "高速";
+        case 15:
+            return "高速+";
+        case 20:
+            return "最速";
+        }
+        return "";
+    }
+
+    /**
+     * 射程のテキスト表記
+     *
+     * @param leng leng
+     * @return
+     */
+    public static String lengText(Integer leng) {
+        if (leng == null)
+            return "";
+        switch (leng) {
+        case 1:
+            return "短";
+        case 2:
+            return "中";
+        case 3:
+            return "長";
+        case 4:
+            return "超長";
+        }
+        return "";
     }
 
     /**
@@ -793,9 +975,11 @@ public class Ships {
                 .getSlotitemMap();
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get()
                 .getSlotitemMap();
-        return chara.getSlot()
-                .stream()
-                .map(itemMap::get)
+        Stream<Integer> stream = chara.getSlot().stream();
+        if (chara.isShip()) {
+            stream = Stream.concat(stream, Stream.of(chara.asShip().getSlotEx()));
+        }
+        return stream.map(itemMap::get)
                 .filter(Objects::nonNull)
                 .map(SlotItem::getSlotitemId)
                 .map(itemMstMap::get)
@@ -812,28 +996,29 @@ public class Ships {
     }
 
     /**
-     * Key-Value Pair
-     *
-     * @param <K> Key Type
-     * @param <V> Value Type
+     * 判定式(33)
      */
-    private static final class Pair<K, V> {
+    @Data
+    @AllArgsConstructor
+    public static class Decision33 {
 
-        private K key;
+        /** 分岐点係数 */
+        private double branchCoefficient;
 
-        private V value;
+        /** 装備索敵 */
+        private double itemView;
 
-        private Pair(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
+        /** 艦娘索敵 */
+        private double shipView;
 
-        private K getKey() {
-            return this.key;
-        }
+        /** 司令部スコア */
+        private double levelScore;
 
-        private V getValue() {
-            return this.value;
+        /** 艦隊スコア */
+        private double fleetScore;
+
+        public double get() {
+            return (this.branchCoefficient * this.itemView) + this.shipView - this.levelScore + this.fleetScore;
         }
     }
 }

@@ -12,11 +12,11 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.text.MessageFormat;
 import java.util.Locale;
-import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
-import logbook.plugin.PluginContainer;
+import logbook.internal.LoggerHolder;
+import logbook.plugin.PluginServices;
 
 /**
  * 国際化対応
@@ -29,7 +29,7 @@ public class Messages {
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(
             BUNDLE_NAME,
             Locale.getDefault(),
-            PluginContainer.getInstance().getClassLoader(),
+            PluginServices.getClassLoader(),
             new UTF8Control());
 
     private Messages() {
@@ -44,7 +44,8 @@ public class Messages {
     public static String getString(String key) {
         try {
             return RESOURCE_BUNDLE.getString(key);
-        } catch (MissingResourceException e) {
+        } catch (Exception e) {
+            LoggerHolder.get().warn("リソース・バンドルから値の取得に失敗しました", e);
             return '!' + key + '!';
         }
     }
@@ -85,7 +86,7 @@ public class Messages {
                 String format,
                 ClassLoader loader,
                 boolean reload)
-                        throws IOException {
+                throws IOException {
 
             String bundleName = this.toBundleName(baseName, locale);
             String resourceName = this.toResourceName(bundleName, "properties"); //$NON-NLS-1$

@@ -2,23 +2,33 @@ package logbook.internal.gui;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.TitledPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextFlow;
 import javafx.util.StringConverter;
 import logbook.bean.AppDeck.AppDeckShip;
 import logbook.bean.Ship;
@@ -28,7 +38,12 @@ import logbook.bean.SlotItemCollection;
 import logbook.bean.SlotitemMst;
 import logbook.bean.SlotitemMstCollection;
 import logbook.internal.Items;
+import logbook.internal.LoggerHolder;
+import logbook.internal.ShipFilter;
+import logbook.internal.ShipTypeGroup;
 import logbook.internal.Ships;
+import logbook.internal.ToStringConverter;
+import logbook.internal.gui.PopupSelectbox.SelectboxCell;
 import lombok.Getter;
 
 /**
@@ -36,6 +51,9 @@ import lombok.Getter;
  *
  */
 public class DeckShipPane extends VBox {
+
+    /** 装備のStringConverter */
+    private static StringConverter<SlotitemMst> itemNameStringConverter = ToStringConverter.of(SlotitemMst::getName);
 
     /** 艦娘画像 */
     @FXML
@@ -45,9 +63,9 @@ public class DeckShipPane extends VBox {
     @FXML
     private Label shipLv;
 
-    /** 艦娘選択コンボボックス */
+    /** 艦娘選択 */
     @FXML
-    private ComboBox<Integer> shipList;
+    private Button shipButton;
 
     /** 装備1画像 */
     @FXML
@@ -149,6 +167,29 @@ public class DeckShipPane extends VBox {
     @FXML
     private ComboBox<Integer> itemLvList5;
 
+    /** 装備Ex画像 */
+    @FXML
+    private ImageView itemImage6;
+
+    /** 装備Ex名前 */
+    @FXML
+    private Label itemName6;
+
+    /** 装備Ex改修レベル */
+    @FXML
+    private Label itemLv6;
+
+    /** 装備Ex選択肢 */
+    @FXML
+    private ComboBox<SlotitemMst> itemList6;
+
+    /** 装備Ex改修レベル選択肢 */
+    @FXML
+    private ComboBox<Integer> itemLvList6;
+
+    /** 選択した艦娘 */
+    private ObjectProperty<Integer> selectedShip = new SimpleObjectProperty<>(0);
+
     /** 艦娘 */
     private AppDeckShip ship = new AppDeckShip();
 
@@ -171,7 +212,7 @@ public class DeckShipPane extends VBox {
             loader.setController(this);
             loader.load();
         } catch (IOException e) {
-            LoggerHolder.LOG.error("FXMLのロードに失敗しました", e);
+            LoggerHolder.get().error("FXMLのロードに失敗しました", e);
         }
     }
 
@@ -182,7 +223,7 @@ public class DeckShipPane extends VBox {
      */
     public AppDeckShip getBean() {
         if (this.modified.get()) {
-            this.ship.setShipId(this.shipList.getValue());
+            this.ship.setShipId(this.selectedShip.get());
 
             this.ship.getItems().clear();
             this.ship.getItems().add(Optional.ofNullable(this.itemList1.getValue())
@@ -193,8 +234,9 @@ public class DeckShipPane extends VBox {
                     .map(SlotitemMst::getId).orElse(null));
             this.ship.getItems().add(Optional.ofNullable(this.itemList4.getValue())
                     .map(SlotitemMst::getId).orElse(null));
-            this.ship.getItems().add(null);
             this.ship.getItems().add(Optional.ofNullable(this.itemList5.getValue())
+                    .map(SlotitemMst::getId).orElse(null));
+            this.ship.getItems().add(Optional.ofNullable(this.itemList6.getValue())
                     .map(SlotitemMst::getId).orElse(null));
 
             this.ship.getItemLvs().clear();
@@ -202,8 +244,8 @@ public class DeckShipPane extends VBox {
             this.ship.getItemLvs().add(this.itemLvList2.getValue());
             this.ship.getItemLvs().add(this.itemLvList3.getValue());
             this.ship.getItemLvs().add(this.itemLvList4.getValue());
-            this.ship.getItemLvs().add(null);
             this.ship.getItemLvs().add(this.itemLvList5.getValue());
+            this.ship.getItemLvs().add(this.itemLvList6.getValue());
         }
         this.modified.set(false);
         return this.ship;
@@ -211,52 +253,94 @@ public class DeckShipPane extends VBox {
 
     @FXML
     void initialize() {
-        this.installShip();
+        this.selectedShip.addListener(this::shipChangeListener);
+        this.selectedShip.set(this.ship.getShipId());
+
         this.installItemName(this.itemList1, this.itemImage1, this.itemName1);
         this.installItemName(this.itemList2, this.itemImage2, this.itemName2);
         this.installItemName(this.itemList3, this.itemImage3, this.itemName3);
         this.installItemName(this.itemList4, this.itemImage4, this.itemName4);
         this.installItemName(this.itemList5, this.itemImage5, this.itemName5);
+        this.installItemName(this.itemList6, this.itemImage6, this.itemName6);
         this.installItemLevel(this.itemLvList1, this.itemLv1);
         this.installItemLevel(this.itemLvList2, this.itemLv2);
         this.installItemLevel(this.itemLvList3, this.itemLv3);
         this.installItemLevel(this.itemLvList4, this.itemLv4);
         this.installItemLevel(this.itemLvList5, this.itemLv5);
+        this.installItemLevel(this.itemLvList6, this.itemLv6);
 
-        this.shipList.getSelectionModel().select(this.ship.getShipId());
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get().getSlotitemMap();
         this.itemList1.getSelectionModel().select(itemMstMap.get(this.ship.getItems().get(0)));
         this.itemList2.getSelectionModel().select(itemMstMap.get(this.ship.getItems().get(1)));
         this.itemList3.getSelectionModel().select(itemMstMap.get(this.ship.getItems().get(2)));
         this.itemList4.getSelectionModel().select(itemMstMap.get(this.ship.getItems().get(3)));
-        this.itemList5.getSelectionModel().select(itemMstMap.get(this.ship.getItems().get(5)));
+        this.itemList5.getSelectionModel().select(itemMstMap.get(this.ship.getItems().get(4)));
+        this.itemList6.getSelectionModel().select(itemMstMap.get(this.ship.getItems().get(5)));
         this.itemLvList1.getSelectionModel().select(this.ship.getItemLvs().get(0));
         this.itemLvList2.getSelectionModel().select(this.ship.getItemLvs().get(1));
         this.itemLvList3.getSelectionModel().select(this.ship.getItemLvs().get(2));
         this.itemLvList4.getSelectionModel().select(this.ship.getItemLvs().get(3));
-        this.itemLvList5.getSelectionModel().select(this.ship.getItemLvs().get(5));
+        this.itemLvList5.getSelectionModel().select(this.ship.getItemLvs().get(4));
+        this.itemLvList6.getSelectionModel().select(this.ship.getItemLvs().get(5));
 
         this.initialized = true;
     }
 
     /**
-     * 艦娘の初期設定
+     * 艦娘選択
+     *
+     * @param event
      */
-    private void installShip() {
-        // 艦娘選択コンボボックスに艦娘を設定
-        this.shipList.getItems().add(0);
-        this.shipList.getItems().addAll(ShipCollection.get()
+    @FXML
+    void shipChange(ActionEvent event) {
+        PopupSelectbox<ShipItem> box = new PopupSelectbox<>();
+
+        ObservableList<ShipItem> ships = FXCollections.observableArrayList();
+        ships.add(new ShipItem());
+        ships.addAll(ShipCollection.get()
                 .getShipMap()
                 .values()
                 .stream()
                 .sorted(Comparator.comparing(Ship::getShipId))
                 .sorted(Comparator.comparing(Ship::getLv).reversed())
-                .map(Ship::getId)
+                .map(ShipItem::toShipItem)
                 .collect(Collectors.toList()));
-        this.shipList.setCellFactory(e -> new ShipCell());
 
-        // 選ばれたときのリスナー
-        this.shipList.getSelectionModel().selectedItemProperty().addListener(this::shipChangeListener);
+        FilteredList<ShipItem> filtered = new FilteredList<>(ships);
+        TextFlow textFlow = new TextFlow();
+        textFlow.setPrefWidth(260);
+        for (ShipTypeGroup group : ShipTypeGroup.values()) {
+            CheckBox checkBox = new CheckBox(group.name());
+            checkBox.selectedProperty().addListener((ov, o, n) -> {
+                Set<String> types = new HashSet<>();
+                textFlow.getChildrenUnmodifiable()
+                        .stream()
+                        .filter(node -> node instanceof CheckBox)
+                        .map(node -> (CheckBox) node)
+                        .filter(CheckBox::isSelected)
+                        .map(CheckBox::getText)
+                        .map(ShipTypeGroup::valueOf)
+                        .map(ShipTypeGroup::shipTypes)
+                        .forEach(types::addAll);
+
+                filtered.setPredicate(ShipFilter.TypeFilter.builder()
+                        .types(types)
+                        .build());
+            });
+            textFlow.getChildren().add(checkBox);
+        }
+        TitledPane titledPane = new TitledPane("フィルター", new VBox(textFlow));
+        titledPane.setAnimated(false);
+        Accordion accordion = new Accordion(titledPane);
+
+        box.getHeaderContents().add(accordion);
+        box.setItems(filtered);
+        box.setCellFactory(new ShipCell());
+        box.selectedItemProperty().addListener((ov, o, n) -> {
+            this.selectedShip.setValue(n != null && n.idProperty() != null ? n.getId() : 0);
+        });
+        box.getStylesheets().add("logbook/gui/deck.css");
+        box.show(this.shipButton);
     }
 
     /**
@@ -278,11 +362,13 @@ public class DeckShipPane extends VBox {
         this.itemList3.getSelectionModel().clearSelection();
         this.itemList4.getSelectionModel().clearSelection();
         this.itemList5.getSelectionModel().clearSelection();
+        this.itemList6.getSelectionModel().clearSelection();
         this.itemLvList1.getSelectionModel().clearSelection();
         this.itemLvList2.getSelectionModel().clearSelection();
         this.itemLvList3.getSelectionModel().clearSelection();
         this.itemLvList4.getSelectionModel().clearSelection();
         this.itemLvList5.getSelectionModel().clearSelection();
+        this.itemLvList6.getSelectionModel().clearSelection();
 
         if (ship != null) {
             // 艦娘が変わった
@@ -294,7 +380,8 @@ public class DeckShipPane extends VBox {
                 this.presetItem(itemMap.get(ship.getSlot().get(1)), this.itemList2, this.itemLvList2);
                 this.presetItem(itemMap.get(ship.getSlot().get(2)), this.itemList3, this.itemLvList3);
                 this.presetItem(itemMap.get(ship.getSlot().get(3)), this.itemList4, this.itemLvList4);
-                this.presetItem(itemMap.get(ship.getSlotEx()), this.itemList5, this.itemLvList5);
+                this.presetItem(itemMap.get(ship.getSlot().get(4)), this.itemList5, this.itemLvList5);
+                this.presetItem(itemMap.get(ship.getSlotEx()), this.itemList6, this.itemLvList6);
             }
         } else {
             // 艦娘の選択なしに変更
@@ -326,7 +413,7 @@ public class DeckShipPane extends VBox {
      * @param label
      */
     private void installItemName(ComboBox<SlotitemMst> list, ImageView image, Label label) {
-        list.setConverter(ItemNameStringConverter.instance);
+        list.setConverter(itemNameStringConverter);
         list.setCellFactory(e -> new ItemNameCell());
         // 装備が選ばれた時のリスナー
         list.getSelectionModel().selectedItemProperty().addListener((ov, o, n) -> {
@@ -335,7 +422,7 @@ public class DeckShipPane extends VBox {
                 this.modified.set(true);
             }
             image.setImage(Items.itemImage(n));
-            label.setText(ItemNameStringConverter.instance.toString(n));
+            label.setText(itemNameStringConverter.toString(n));
         });
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get().getSlotitemMap();
         list.getItems().addAll(SlotItemCollection.get()
@@ -367,13 +454,13 @@ public class DeckShipPane extends VBox {
     /**
      * 艦娘を表示するセル
      */
-    static class ShipCell extends ListCell<Integer> {
+    static class ShipCell extends SelectboxCell<ShipItem> {
         @Override
-        protected void updateItem(Integer shipid, boolean empty) {
-            super.updateItem(shipid, empty);
+        protected void updateItem(ShipItem shipItem, boolean empty) {
+            super.updateItem(shipItem, empty);
             if (!empty) {
-                Ship ship = ShipCollection.get().getShipMap().get(shipid);
-                if (ship != null) {
+                if (shipItem != null && shipItem.shipProperty() != null) {
+                    Ship ship = shipItem.getShip();
                     ImageView view = new ImageView(Ships.getBackgroundLoading(ship));
                     view.setFitWidth(160);
                     view.setFitHeight(40);
@@ -407,7 +494,7 @@ public class DeckShipPane extends VBox {
                     view.setFitHeight(24);
                     view.setFitWidth(24);
                     this.setGraphic(view);
-                    this.setText(ItemNameStringConverter.instance.toString(item));
+                    this.setText(itemNameStringConverter.toString(item));
                 } else {
                     this.setGraphic(null);
                     this.setText(null);
@@ -416,28 +503,6 @@ public class DeckShipPane extends VBox {
                 this.setGraphic(null);
                 this.setText(null);
             }
-        }
-    }
-
-    /**
-     * 装備のStringConverter
-     *
-     */
-    static class ItemNameStringConverter extends StringConverter<SlotitemMst> {
-
-        static final StringConverter<SlotitemMst> instance = new ItemNameStringConverter();
-
-        @Override
-        public String toString(SlotitemMst object) {
-            if (object != null) {
-                return object.getName();
-            }
-            return "";
-        }
-
-        @Override
-        public SlotitemMst fromString(String string) {
-            return null;
         }
     }
 
@@ -464,10 +529,5 @@ public class DeckShipPane extends VBox {
         public Integer fromString(String string) {
             return null;
         }
-    }
-
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(DeckFleetPane.class);
     }
 }

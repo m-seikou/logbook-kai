@@ -1,7 +1,9 @@
 package logbook.internal.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -9,6 +11,7 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,26 +20,22 @@ import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageTypeSpecifier;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageOutputStream;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
+import logbook.internal.BiImage;
+import logbook.internal.LoggerHolder;
 import logbook.internal.ThreadManager;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,11 +46,20 @@ import lombok.Setter;
  */
 class ScreenCapture {
 
+    private static final int SCREEN_WIDTH = 1200;
+
+    private static final int SCREEN_HEIGHT = 720;
+
     /** Jpeg品質 */
     private static final float QUALITY = 0.9f;
 
-    private static final int WHITE = Color.WHITE.getRGB();
+    /** ゲーム画面サイズ */
+    private static final Dimension[] sizes = IntStream.rangeClosed(600, 1500)
+            .mapToObj(w -> new Dimension(w, (int) (((float) w) / SCREEN_WIDTH * SCREEN_HEIGHT)))
+            .toArray(Dimension[]::new);
 
+    @Setter
+    @Getter
     private Robot robot;
 
     /** キャプチャ範囲 */
@@ -64,6 +72,11 @@ class ScreenCapture {
     @Getter
     private Rectangle cutRect;
 
+    /** 形式 */
+    @Setter
+    @Getter
+    private String type = "jpg";
+
     private int size = 200;
 
     private ObservableList<ImageData> list;
@@ -75,9 +88,9 @@ class ScreenCapture {
         /** 切り取らない */
         NONE(null),
         /** 改装一覧の範囲(艦娘除く) */
-        UNIT_WITHOUT_SHIP(new Rectangle(327, 103, 230, 365)),
+        UNIT_WITHOUT_SHIP(new Rectangle(490, 154, 345, 547)),
         /** 改装一覧の範囲 */
-        UNIT(new Rectangle(327, 103, 460, 365));
+        UNIT(new Rectangle(490, 154, 690, 547));
 
         private Rectangle angle;
 
@@ -127,12 +140,13 @@ class ScreenCapture {
         try {
             ImageData image = new ImageData();
             image.setDateTime(ZonedDateTime.now());
+            image.setFormat(this.type);
 
             byte[] data;
             if (this.cutRect != null) {
-                data = encodeJpeg(this.robot.createScreenCapture(this.rectangle), this.cutRect);
+                data = encode(cut(this.robot.createScreenCapture(this.rectangle), this.cutRect), image.getFormat());
             } else {
-                data = encodeJpeg(this.robot.createScreenCapture(this.rectangle));
+                data = encode(this.robot.createScreenCapture(this.rectangle), image.getFormat());
             }
             image.setImage(data);
 
@@ -144,7 +158,7 @@ class ScreenCapture {
                 }
             });
         } catch (IOException e) {
-            LoggerHolder.LOG.warn("キャプチャ処理で例外", e);
+            LoggerHolder.get().warn("キャプチャ処理で例外", e);
         }
     }
 
@@ -152,17 +166,19 @@ class ScreenCapture {
         try {
             ImageData image = new ImageData();
             image.setDateTime(ZonedDateTime.now());
+            image.setFormat(this.type);
 
             byte[] data;
             if (this.cutRect != null) {
-                data = encodeJpeg(this.robot.createScreenCapture(this.rectangle), this.cutRect);
+                data = encode(cut(this.robot.createScreenCapture(this.rectangle), this.cutRect), image.getFormat());
             } else {
-                data = encodeJpeg(this.robot.createScreenCapture(this.rectangle));
+                data = encode(this.robot.createScreenCapture(this.rectangle), image.getFormat());
             }
             image.setImage(data);
 
             if (data != null) {
-                Path to = dir.resolve(CaptureSaveController.DATE_FORMAT.format(ZonedDateTime.now()) + ".jpg");
+                String fname = CaptureSaveController.DATE_FORMAT.format(image.getDateTime()) + "." + image.getFormat();
+                Path to = dir.resolve(fname);
                 try (OutputStream out = Files.newOutputStream(to)) {
                     out.write(data);
                 }
@@ -172,7 +188,7 @@ class ScreenCapture {
                 this.current.set(image);
             });
         } catch (IOException e) {
-            LoggerHolder.LOG.warn("キャプチャ処理で例外", e);
+            LoggerHolder.get().warn("キャプチャ処理で例外", e);
         }
     }
 
@@ -203,57 +219,73 @@ class ScreenCapture {
      * イメージからゲーム画面を検索します
      *
      * @param image イメージ
-     * @param width 画面の幅
-     * @param height 画面の高さ
      * @return 画面の座標
      */
-    static Rectangle detectGameScreen(BufferedImage image, int width, int height) {
-        int searchX = image.getWidth() - width - 2;
-        int searchY = image.getHeight() - height - 2;
-
-        for (int x = 0; x <= searchX; x++) {
-            for (int y = 0; y <= searchY; y++) {
-                // 左上
-                if ((image.getRGB(x, y) & WHITE) != WHITE)
+    static Rectangle detectGameScreen(BufferedImage image) {
+        BiImage biImage = new BiImage(image, Color.WHITE) {
+            @Override
+            protected boolean test(int a, int b) {
+                return (a & 0xf0f0f0) == (b & 0xf0f0f0);
+            }
+        };
+        int height = image.getHeight() - sizes[0].height;
+        int width = image.getWidth() - sizes[0].width;
+        int sizelen = sizes.length;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // 最初の1パターンをテスト
+                // x,yから縦方向(height+2)が全て白かテスト(「全てが白」ではない場合スキップ)
+                if (!biImage.allH(x, y, sizes[0].height + 2))
                     continue;
-                if ((image.getRGB(x + 1, y) & WHITE) != WHITE)
-                    continue;
-                if ((image.getRGB(x, y + 1) & WHITE) != WHITE)
-                    continue;
-                if ((image.getRGB(x + 1, y + 1) & WHITE) == WHITE)
-                    continue;
-                // 右上
-                if ((image.getRGB(x + width, y) & WHITE) != WHITE)
-                    continue;
-                if ((image.getRGB(x + width + 1, y) & WHITE) != WHITE)
-                    continue;
-                if ((image.getRGB(x + width, y + 1) & WHITE) == WHITE)
-                    continue;
-                if ((image.getRGB(x + width + 1, y + 1) & WHITE) != WHITE)
-                    continue;
-                // 左下
-                if ((image.getRGB(x, y + height) & WHITE) != WHITE)
-                    continue;
-                if ((image.getRGB(x + 1, y + height) & WHITE) == WHITE)
-                    continue;
-                if ((image.getRGB(x, y + height + 1) & WHITE) != WHITE)
-                    continue;
-                if ((image.getRGB(x + 1, y + height + 1) & WHITE) != WHITE)
-                    continue;
-                // 右下
-                if ((image.getRGB(x + width, y + height) & WHITE) == WHITE)
-                    continue;
-                if ((image.getRGB(x + width + 1, y + height) & WHITE) != WHITE)
-                    continue;
-                if ((image.getRGB(x + width, y + height + 1) & WHITE) != WHITE)
-                    continue;
-                if ((image.getRGB(x + width + 1, y + height + 1) & WHITE) != WHITE)
+                // x+1,y+1から縦方向(height)が全て白かテスト(「全てが白」の場合スキップ)
+                if (biImage.allH(x + 1, y + 1, sizes[0].height))
                     continue;
 
-                return new Rectangle(x + 1, y + 1, width, height);
+                for (int i = 0; i < sizelen; i++) {
+                    Dimension size = sizes[i];
+                    // x,yから縦方向(height+2)が全て白かテスト(「全てが白」ではない場合break) (左辺)
+                    if (!biImage.allH(x, y, size.height + 2))
+                        break;
+                    // x,yから横方向(width+2)が全て白かテスト(「全てが白」ではない場合break) (上辺)
+                    if (!biImage.allW(x, y, size.width + 2))
+                        break;
+                    // x+width+1,yから縦方向(height+2)が全て白かテスト(「全てが白」ではない場合別の矩形をテストする) (右辺)
+                    if (!biImage.allH(x + size.width + 1, y, size.height + 2))
+                        continue;
+                    // x,y+height+1から横方向(width+2)が全て白かテスト(「全てが白」ではない場合別の矩形をテストする) (下辺)
+                    if (!biImage.allW(x, y + size.height + 1, size.width + 2))
+                        continue;
+                    // x+1,y+1から縦方向(height)が全て白かテスト(「全てが白」の場合別の矩形をテストする)
+                    if (biImage.allH(x + 1, y + 1, size.height))
+                        continue;
+                    // x+width,y+1から縦方向(height)が全て白かテスト(「全てが白」の場合別の矩形をテストする)
+                    if (biImage.allH(x + size.width, y + 1, size.height))
+                        continue;
+                    // x+1,y+1から縦方向(height)の白の数を数える(白の数が50%より多ければ別の矩形をテストする)
+                    if (biImage.countH(x + 1, y + 1, size.height) > size.height / 2)
+                        continue;
+                    // x+width,y+1から縦方向(height)の白の数を数える(白の数が50%より多ければ別の矩形をテストする)
+                    if (biImage.countH(x + size.width, y + 1, size.height) > size.height / 2)
+                        continue;
+                    return new Rectangle(x + 1, y + 1, size.width, size.height);
+                }
             }
         }
         return null;
+    }
+
+    /**
+     * BufferedImageをエンコードします
+     *
+     * @param image BufferedImage
+     * @param format 画像形式
+     * @return エンコードされた画像
+     * @throws IOException 入出力例外
+     */
+    static byte[] encode(BufferedImage image, String format) throws IOException {
+        if ("jpg".equals(format))
+            return encodeJpeg(image);
+        return encodeOther(image, format);
     }
 
     /**
@@ -283,40 +315,31 @@ class ScreenCapture {
     }
 
     /**
-     * BufferedImageをJPEG形式にエンコードします
+     * BufferedImageを指定された形式にエンコードします
      *
      * @param image BufferedImage
-     * @param rect 画像の範囲
-     * @return JPEG形式の画像
+     * @param format 画像形式
+     * @return 指定された形式の画像
      * @throws IOException 入出力例外
      */
-    static byte[] encodeJpeg(BufferedImage image, Rectangle rect) throws IOException {
+    static byte[] encodeOther(BufferedImage image, String format) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+        if ("png".equals(format)) {
+            int width = image.getWidth(), height = image.getHeight();
+            BufferedImage newImg = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+            Graphics2D gd = newImg.createGraphics();
+            gd.drawImage(image, 0, 0, null);
+            gd.dispose();
+            WritableRaster r = newImg.getAlphaRaster();
+            int[] alpha = new int[] { 0xfe };
+            r.setPixel(0, 0, alpha);
+            image = newImg;
+        }
         try (ImageOutputStream ios = ImageIO.createImageOutputStream(out)) {
-            ImageWriter writer = ImageIO.getImageWritersByFormatName("jpg").next();
+            ImageWriter writer = ImageIO.getImageWritersByFormatName(format).next();
             try {
-                ImageWriteParam iwp = writer.getDefaultWriteParam();
-                if (iwp.canWriteCompressed()) {
-                    iwp.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-                    iwp.setCompressionQuality(QUALITY);
-                }
                 writer.setOutput(ios);
-                int x;
-                int y;
-                int w;
-                int h;
-                if (image.getWidth() == 800 && image.getHeight() == 480) {
-                    x = rect.x;
-                    y = rect.y;
-                    w = rect.width;
-                    h = rect.height;
-                } else {
-                    x = (int) (rect.x * ((double) image.getWidth() / 800));
-                    y = (int) (rect.y * ((double) image.getHeight() / 480));
-                    w = (int) (rect.width * ((double) image.getWidth() / 800));
-                    h = (int) (rect.height * ((double) image.getHeight() / 480));
-                }
-                writer.write(null, new IIOImage(image.getSubimage(x, y, w, h), null, null), iwp);
+                writer.write(null, new IIOImage(image, null, null), null);
             } finally {
                 writer.dispose();
             }
@@ -325,46 +348,29 @@ class ScreenCapture {
     }
 
     /**
-     * アニメーションGIFを作成します
+     * BufferedImageを{@code rect}で指定された範囲で切り取ります
      *
-     * @param out 出力先
-     * @param images JPEG形式などにエンコード済みの画像ファイルのバイト配列
-     * @param delay 表示する際の遅延時間
-     * @throws IOException 入出力例外
+     * @param image BufferedImage
+     * @param rect 画像の範囲
+     * @return BufferedImage
      */
-    static void createAnimetedGIF(OutputStream out, List<byte[]> images, Duration delay) throws IOException {
-        try (ImageOutputStream iout = ImageIO.createImageOutputStream(out)) {
-            ImageWriter writer = ImageIO.getImageWritersByFormatName("gif").next();
-            try {
-                ImageWriteParam param = writer.getDefaultWriteParam();
-
-                writer.setOutput(iout);
-                writer.prepareWriteSequence(writer.getDefaultStreamMetadata(param));
-
-                for (byte[] image : images) {
-                    BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(image));
-
-                    // Delay timeを設定する
-                    // 参考: https://docs.oracle.com/javase/jp/8/docs/api/javax/imageio/metadata/doc-files/gif_metadata.html
-                    IIOMetadata metadata = writer.getDefaultImageMetadata(new ImageTypeSpecifier(bufferedImage), param);
-                    IIOMetadataNode root = new IIOMetadataNode("javax_imageio_gif_image_1.0");
-                    IIOMetadataNode gce = new IIOMetadataNode("GraphicControlExtension");
-                    gce.setAttribute("disposalMethod", "none");
-                    gce.setAttribute("userInputFlag", "FALSE");
-                    gce.setAttribute("transparentColorFlag", "FALSE");
-                    gce.setAttribute("transparentColorIndex", "0");
-                    // 100分の1秒単位なので10で割る
-                    gce.setAttribute("delayTime", Long.toString(delay.toMillis() / 10));
-                    root.appendChild(gce);
-                    metadata.mergeTree("javax_imageio_gif_image_1.0", root);
-
-                    writer.writeToSequence(new IIOImage(bufferedImage, null, metadata), param);
-                }
-                writer.endWriteSequence();
-            } finally {
-                writer.dispose();
-            }
+    static BufferedImage cut(BufferedImage image, Rectangle rect) {
+        int x;
+        int y;
+        int w;
+        int h;
+        if (image.getWidth() == SCREEN_WIDTH && image.getHeight() == SCREEN_HEIGHT) {
+            x = rect.x;
+            y = rect.y;
+            w = rect.width;
+            h = rect.height;
+        } else {
+            x = (int) (rect.x * ((double) image.getWidth() / SCREEN_WIDTH));
+            y = (int) (rect.y * ((double) image.getHeight() / SCREEN_HEIGHT));
+            w = (int) (rect.width * ((double) image.getWidth() / SCREEN_WIDTH));
+            h = (int) (rect.height * ((double) image.getHeight() / SCREEN_HEIGHT));
         }
+        return image.getSubimage(x, y, w, h);
     }
 
     /**
@@ -411,11 +417,30 @@ class ScreenCapture {
         /** 日付書式 */
         private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
+        /** 画像フォーマット */
+        private String format;
+
         /** 日付 */
         private ZonedDateTime dateTime;
 
         /** 画像データ */
         private Reference<byte[]> image;
+
+        /**
+         * 画像フォーマットを取得します。
+         * @return 画像フォーマット
+         */
+        String getFormat() {
+            return this.format;
+        }
+
+        /**
+         * 画像フォーマットを設定します。
+         * @param format 画像フォーマット
+         */
+        void setFormat(String format) {
+            this.format = format;
+        }
 
         /**
          * 日付を取得します。
@@ -453,10 +478,5 @@ class ScreenCapture {
         public String toString() {
             return DATE_FORMAT.format(this.dateTime);
         }
-    }
-
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(ScreenCapture.class);
     }
 }

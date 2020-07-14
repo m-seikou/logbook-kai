@@ -1,0 +1,9 @@
+/*警備任務*/
+{
+    "operator": "AND",
+    "conditions": [
+        {"type": "艦娘", "level": 3, "order": 1},
+        {"type": "艦娘"},
+        {"type": "艦娘"}
+    ]
+}

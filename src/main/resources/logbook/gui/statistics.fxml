@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BubbleChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<fx:root prefHeight="600.0" prefWidth="800.0" stylesheets="@statistics.css" type="VBox" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextFlow textAlignment="RIGHT">
+         <children>
+            <Button mnemonicParsing="false" onAction="#storeImageAction" text="画像ファイルに保存..." />
+         </children>
+      </TextFlow>
+      <ScrollPane>
+         <content>
+            <VBox fx:id="content" styleClass="content">
+               <children>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="total-title" text="艦娘総経験値" />
+                        <Text fx:id="total" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="total-value" text="999.99M" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <VBox HBox.hgrow="ALWAYS">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="section-title" text="経験値比率" />
+                              <PieChart fx:id="ratio" styleClass="ratio" />
+                           </children>
+                        </VBox>
+                        <VBox HBox.hgrow="ALWAYS">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="section-title" text="平均レベル" />
+                              <StackedBarChart fx:id="average" styleClass="average">
+                                <xAxis>
+                                  <NumberAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <CategoryAxis fx:id="averageCategory" side="LEFT" />
+                                </yAxis>
+                              </StackedBarChart>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="section-title" text="レベル分布" />
+                  <HBox>
+                     <children>
+                        <VBox HBox.hgrow="ALWAYS">
+                           <children>
+                              <StackedBarChart fx:id="spectrum" styleClass="spectrum">
+                                <xAxis>
+                                  <NumberAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <CategoryAxis fx:id="spectrumCategory" label="レベル" side="LEFT" />
+                                </yAxis>
+                              </StackedBarChart>
+                           </children>
+                        </VBox>
+                        <VBox HBox.hgrow="ALWAYS">
+                           <children>
+                              <BubbleChart fx:id="bubble" styleClass="bubble">
+                                <xAxis>
+                                  <NumberAxis label="平均レベル" side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis label="中央レベル" side="LEFT" />
+                                </yAxis>
+                              </BubbleChart>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </children>
+</fx:root>

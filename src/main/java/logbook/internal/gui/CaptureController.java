@@ -20,10 +20,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.animation.Animation;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
@@ -50,6 +46,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
@@ -62,8 +59,11 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 import logbook.bean.AppConfig;
+import logbook.internal.LoggerHolder;
 import logbook.internal.ThreadManager;
 import logbook.internal.gui.ScreenCapture.ImageData;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 
 /**
@@ -87,6 +87,18 @@ public class CaptureController extends WindowController {
     /** ラジオボタングループ */
     @FXML
     private ToggleGroup cut;
+
+    /** 画像形式jpeg */
+    @FXML
+    private RadioMenuItem jpeg;
+
+    /** 画像形式png */
+    @FXML
+    private RadioMenuItem png;
+
+    /** 画像形式ボタングループ */
+    @FXML
+    private ToggleGroup type;
 
     /** キャプチャ */
     @FXML
@@ -165,6 +177,8 @@ public class CaptureController extends WindowController {
                 }
             }
         });
+        this.jpeg.setSelected("jpg".equals(AppConfig.get().getCaptureFormat()));
+        this.png.setSelected("png".equals(AppConfig.get().getCaptureFormat()));
     }
 
     @FXML
@@ -193,6 +207,22 @@ public class CaptureController extends WindowController {
     }
 
     @FXML
+    void input(ActionEvent event) {
+        if (this.sc != null) {
+            Rectangle rectangle = this.sc.getRectangle();
+            RectangleBean bean = new RectangleBean(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+            new PropertyDialog<>(this.getWindow(), bean, "範囲を編集").showAndWait();
+            rectangle.x = bean.getX();
+            rectangle.y = bean.getY();
+            rectangle.width = bean.getWidth();
+            rectangle.height = bean.getHeight();
+            this.setBounds(this.sc.getRobot(), rectangle);
+        } else {
+            Tools.Conrtols.alert(AlertType.INFORMATION, "範囲を編集", "範囲を編集するには自動または手動で範囲を設定してください", this.getWindow());
+        }
+    }
+
+    @FXML
     void cyclic(ActionEvent event) {
         // キャプチャ中であれば止める
         this.stopTimeLine();
@@ -215,9 +245,9 @@ public class CaptureController extends WindowController {
         // 連写モード解除
         this.cyclic.setSelected(false);
 
-        if (StringUtils.isEmpty(AppConfig.get().getFfmpegPath())
-                || StringUtils.isEmpty(AppConfig.get().getFfmpegArgs())
-                || StringUtils.isEmpty(AppConfig.get().getFfmpegExt())) {
+        if ((AppConfig.get().getFfmpegPath() == null || AppConfig.get().getFfmpegPath().isEmpty())
+                || (AppConfig.get().getFfmpegArgs() == null || AppConfig.get().getFfmpegArgs().isEmpty())
+                || (AppConfig.get().getFfmpegExt() == null || AppConfig.get().getFfmpegExt().isEmpty())) {
             Tools.Conrtols.alert(AlertType.INFORMATION, "設定が必要です", "[設定]メニューの[キャプチャ]タブから"
                     + "FFmpegパスおよび引数を設定してください。", this.getWindow());
             this.movie.setSelected(false);
@@ -288,16 +318,26 @@ public class CaptureController extends WindowController {
                 ((CaptureSaveController) controller).setItems(this.images);
             }, null);
         } catch (Exception ex) {
-            LoggerHolder.LOG.error("キャプチャの保存に失敗しました", ex);
+            LoggerHolder.get().error("キャプチャの保存に失敗しました", ex);
         }
+    }
+
+    @FXML
+    void setJpeg(ActionEvent event) {
+        this.sc.setType("jpg");
+        AppConfig.get().setCaptureFormat("jpg");
+    }
+
+    @FXML
+    void setPng(ActionEvent event) {
+        this.sc.setType("png");
+        AppConfig.get().setCaptureFormat("png");
     }
 
     @Override
     public void setWindow(Stage window) {
         super.setWindow(window);
         this.detectAction();
-        // 閉じる時に止める
-        this.getWindow().addEventHandler(WindowEvent.WINDOW_HIDDEN, this::onclose);
     }
 
     /**
@@ -308,11 +348,11 @@ public class CaptureController extends WindowController {
             GraphicsConfiguration gc = this.currentGraphicsConfiguration();
             Robot robot = new Robot(gc.getDevice());
             BufferedImage image = robot.createScreenCapture(gc.getBounds());
-            Rectangle relative = ScreenCapture.detectGameScreen(image, 800, 480);
+            Rectangle relative = ScreenCapture.detectGameScreen(image);
             Rectangle screenBounds = gc.getBounds();
             this.setBounds(robot, relative, screenBounds);
         } catch (Exception e) {
-            LoggerHolder.LOG.error("座標取得に失敗しました", e);
+            LoggerHolder.get().error("座標取得に失敗しました", e);
         }
     }
 
@@ -395,6 +435,8 @@ public class CaptureController extends WindowController {
             root.getChildren().addAll(new ImageView(image), canvas);
 
             stage.setScene(new Scene(root));
+            stage.setX(gcnf.getBounds().getX());
+            stage.setY(gcnf.getBounds().getY());
             stage.setTitle("座標取得");
             stage.setFullScreenExitHint("キャプチャする領域をマウスでドラッグして下さい。 [Esc]キーでキャンセル");
             stage.setFullScreen(true);
@@ -405,7 +447,7 @@ public class CaptureController extends WindowController {
             stage.setAlwaysOnTop(true);
             stage.show();
         } catch (Exception e) {
-            LoggerHolder.LOG.error("座標取得に失敗しました", e);
+            LoggerHolder.get().error("座標取得に失敗しました", e);
         }
     }
 
@@ -415,6 +457,11 @@ public class CaptureController extends WindowController {
     private void captureAction(ActionEvent event) {
         try {
             if (this.sc != null) {
+                if (this.jpeg.isSelected())
+                    this.sc.setType("jpg");
+                if (this.png.isSelected())
+                    this.sc.setType("png");
+
                 boolean isDirect = this.direct.isSelected() && this.directPath != null;
                 if (isDirect) {
                     this.sc.captureDirect(this.directPath);
@@ -423,7 +470,7 @@ public class CaptureController extends WindowController {
                 }
             }
         } catch (Exception e) {
-            LoggerHolder.LOG.error("キャプチャに失敗しました", e);
+            LoggerHolder.get().error("キャプチャに失敗しました", e);
         }
     }
 
@@ -432,7 +479,8 @@ public class CaptureController extends WindowController {
      *
      * @param event WindowEvent
      */
-    private void onclose(WindowEvent event) {
+    @Override
+    protected void onWindowHidden(WindowEvent e) {
         this.images.clear();
         this.timeline.stop();
         this.stopProcess();
@@ -529,15 +577,7 @@ public class CaptureController extends WindowController {
         this.capture.getStyleClass().add(state.getClassName());
     }
 
-    private static final int WHITE = java.awt.Color.WHITE.getRGB();
-
-    /**
-     * トリムサイズを返します
-     *
-     * @param image
-     * @return
-     */
-    public static Rectangle getTrimSize(BufferedImage image) {
+    private static Rectangle getTrimSize(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
         int startwidth = width / 2;
@@ -549,44 +589,46 @@ public class CaptureController extends WindowController {
         int w = 0;
         int h = 0;
 
+        int color = image.getRGB(0, 0);
+
         // 左トリム(上)
         for (int i = 0; i < width; i++) {
-            if (image.getRGB(i, startheightTop) != WHITE) {
+            if (image.getRGB(i, startheightTop) != color) {
                 x = i;
                 break;
             }
         }
         // 左トリム(下)
         for (int i = 0; i < width; i++) {
-            if (image.getRGB(i, startheightButton) != WHITE) {
+            if (image.getRGB(i, startheightButton) != color) {
                 x = Math.min(x, i);
                 break;
             }
         }
         // 上トリム
         for (int i = 0; i < height; i++) {
-            if (image.getRGB(startwidth, i) != WHITE) {
+            if (image.getRGB(startwidth, i) != color) {
                 y = i;
                 break;
             }
         }
         // 右トリム(上)
         for (int i = width - 1; i >= 0; i--) {
-            if (image.getRGB(i, startheightTop) != WHITE) {
+            if (image.getRGB(i, startheightTop) != color) {
                 w = (i - x) + 1;
                 break;
             }
         }
         // 右トリム(下)
         for (int i = width - 1; i >= 0; i--) {
-            if (image.getRGB(i, startheightButton) != WHITE) {
+            if (image.getRGB(i, startheightButton) != color) {
                 w = Math.max(w, (i - x) + 1);
                 break;
             }
         }
         // 下トリム
         for (int i = height - 1; i >= 0; i--) {
-            if (image.getRGB(startwidth, i) != WHITE) {
+            if (image.getRGB(startwidth, i) != color) {
                 h = (i - y) + 1;
                 break;
             }
@@ -603,20 +645,23 @@ public class CaptureController extends WindowController {
         if (relative != null) {
             Rectangle fixed = new Rectangle(relative.x + screenBounds.x, relative.y + screenBounds.y,
                     relative.width, relative.height);
-
-            String text = "(" + (int) fixed.getMinX() + "," + (int) fixed.getMinY() + ")";
-            this.message.setText(text);
-            this.capture.setDisable(false);
-            this.config.setDisable(false);
-            this.sc = new ScreenCapture(robot, fixed);
-            this.sc.setItems(this.images);
-            this.sc.setCurrent(this.preview);
+            this.setBounds(robot, fixed);
         } else {
             this.message.setText("座標未設定");
             this.capture.setDisable(true);
             this.config.setDisable(true);
             this.sc = null;
         }
+    }
+
+    private void setBounds(Robot robot, Rectangle fixed) {
+        String text = "(" + (int) fixed.getMinX() + "," + (int) fixed.getMinY() + ")";
+        this.message.setText(text);
+        this.capture.setDisable(false);
+        this.config.setDisable(false);
+        this.sc = new ScreenCapture(robot, fixed);
+        this.sc.setItems(this.images);
+        this.sc.setCurrent(this.preview);
     }
 
     private GraphicsConfiguration currentGraphicsConfiguration() {
@@ -644,8 +689,16 @@ public class CaptureController extends WindowController {
         }
     }
 
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(CaptureController.class);
+    @Data
+    @AllArgsConstructor
+    public static class RectangleBean {
+
+        private int x;
+
+        private int y;
+
+        private int width;
+
+        private int height;
     }
 }

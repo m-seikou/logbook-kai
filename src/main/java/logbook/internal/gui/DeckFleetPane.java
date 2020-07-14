@@ -2,12 +2,8 @@ package logbook.internal.gui;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -16,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import logbook.bean.AppDeck.AppDeckFleet;
+import logbook.internal.LoggerHolder;
 import lombok.Getter;
 
 /**
@@ -57,7 +54,7 @@ public class DeckFleetPane extends VBox {
             loader.setController(this);
             loader.load();
         } catch (IOException e) {
-            LoggerHolder.LOG.error("FXMLのロードに失敗しました", e);
+            LoggerHolder.get().error("FXMLのロードに失敗しました", e);
         }
     }
 
@@ -95,18 +92,5 @@ public class DeckFleetPane extends VBox {
         this.fleetName.textProperty().addListener((ob, o, n) -> this.modified.set(true));
         // メモの変更を検知
         this.fleetDescription.textProperty().addListener((ob, o, n) -> this.modified.set(true));
-    }
-
-    /**
-     * 艦隊名のリスナー
-     * @param listener
-     */
-    public void setNameListener(ChangeListener<? super String> listener) {
-        this.fleetName.textProperty().addListener(listener);
-    }
-
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(DeckFleetPane.class);
     }
 }

@@ -6,12 +6,8 @@ import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -20,29 +16,23 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
-import javafx.scene.paint.Color;
-import javafx.stage.StageStyle;
 import logbook.Messages;
+import logbook.bean.AppBouyomiConfig;
 import logbook.bean.AppCondition;
 import logbook.bean.AppConfig;
 import logbook.bean.AppQuest;
 import logbook.bean.AppQuestCollection;
 import logbook.bean.Basic;
-import logbook.bean.BattleLog;
-import logbook.bean.BattleTypes.CombinedType;
-import logbook.bean.BattleTypes.IFormation;
-import logbook.bean.BattleTypes.IMidnightBattle;
 import logbook.bean.DeckPort;
 import logbook.bean.DeckPortCollection;
+import logbook.bean.Mission;
+import logbook.bean.MissionCollection;
 import logbook.bean.Ndock;
 import logbook.bean.NdockCollection;
 import logbook.bean.Ship;
@@ -50,13 +40,13 @@ import logbook.bean.ShipCollection;
 import logbook.bean.ShipMst;
 import logbook.bean.SlotItemCollection;
 import logbook.internal.Audios;
+import logbook.internal.BouyomiChanUtils;
+import logbook.internal.BouyomiChanUtils.Type;
+import logbook.internal.LoggerHolder;
 import logbook.internal.Ships;
+import logbook.internal.Tuple;
 import logbook.internal.proxy.ProxyHolder;
 import logbook.plugin.PluginServices;
-import logbook.plugin.gui.MainCalcMenu;
-import logbook.plugin.gui.MainCommandMenu;
-import logbook.plugin.gui.MainExtMenu;
-import logbook.plugin.gui.Plugin;
 import logbook.plugin.lifecycle.StartUp;
 
 /**
@@ -90,17 +80,8 @@ public class MainController extends WindowController {
     /** 入渠通知のタイムスタンプ */
     private Map<Integer, Long> timeStampNdock = new HashMap<>();
 
-    /** コマンドメニュー */
     @FXML
-    private Menu command;
-
-    /** 計算機 */
-    @FXML
-    private Menu calc;
-
-    /** その他 */
-    @FXML
-    private Menu ext;
+    private MainMenuController mainMenuController;
 
     @FXML
     private Button item;
@@ -134,13 +115,8 @@ public class MainController extends WindowController {
             this.itemFormat = this.item.getText();
             this.shipFormat = this.ship.getText();
 
-            // プラグインによるメニューの追加
-            Plugin.getContent(MainCommandMenu.class)
-                    .forEach(this.command.getItems()::add);
-            Plugin.getContent(MainCalcMenu.class)
-                    .forEach(this.calc.getItems()::add);
-            Plugin.getContent(MainExtMenu.class)
-                    .forEach(this.ext.getItems()::add);
+            // メニューにメイン画面のコントローラを渡す
+            this.mainMenuController.setParentController(this);
 
             Timeline timeline = new Timeline(1);
             timeline.setCycleCount(Animation.INDEFINITE);
@@ -160,92 +136,7 @@ public class MainController extends WindowController {
                     .peek(t -> t.setDaemon(true))
                     .forEach(Thread::start);
         } catch (Exception e) {
-            LoggerHolder.LOG.error("FXMLの初期化に失敗しました", e);
-        }
-    }
-
-    /**
-     * キャプチャ
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void capture(ActionEvent e) {
-        try {
-            InternalFXMLLoader.showWindow("logbook/gui/capture.fxml", this.getWindow(), "キャプチャ");
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("キャプチャの初期化に失敗しました", ex);
-        }
-    }
-
-    /**
-     * 直近の戦闘
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void battleStatus(ActionEvent event) {
-        try {
-            BattleLog log = AppCondition.get()
-                    .getBattleResult();
-
-            if (log != null && log.getBattle() != null) {
-                CombinedType combinedType = log.getCombinedType();
-                Map<Integer, List<Ship>> deckMap = log.getDeckMap();
-                IFormation battle = log.getBattle();
-                IMidnightBattle midnight = log.getMidnight();
-
-                InternalFXMLLoader.showWindow("logbook/gui/battle_detail.fxml", this.getWindow(),
-                        "直近の戦闘", c -> {
-                            ((BattleDetail) c).setData(combinedType, deckMap, battle, midnight);
-                        }, null);
-            } else {
-                Tools.Conrtols.alert(AlertType.INFORMATION, "直近の戦闘", "戦闘中ではありません", this.getWindow());
-            }
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("詳細の表示に失敗しました", ex);
-        }
-    }
-
-    /**
-     * 戦闘ログ
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void battlelog(ActionEvent e) {
-        try {
-            InternalFXMLLoader.showWindow("logbook/gui/battlelog.fxml", this.getWindow(), "戦闘ログ");
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("戦闘ログの初期化に失敗しました", ex);
-        }
-    }
-
-    /**
-     * 遠征ログ
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void missionlog(ActionEvent e) {
-        try {
-            InternalFXMLLoader.showWindow("logbook/gui/missionlog.fxml", this.getWindow(), "遠征ログ");
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("遠征ログの初期化に失敗しました", ex);
-        }
-    }
-
-    /**
-     * 基地航空隊
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void airBase(ActionEvent e) {
-        try {
-            InternalFXMLLoader.showWindow("logbook/gui/airbase.fxml", this.getWindow(), "基地航空隊");
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("基地航空隊の初期化に失敗しました", ex);
+            LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
     }
 
@@ -259,7 +150,7 @@ public class MainController extends WindowController {
         try {
             InternalFXMLLoader.showWindow("logbook/gui/item.fxml", this.getWindow(), "所有装備一覧");
         } catch (Exception ex) {
-            LoggerHolder.LOG.error("所有装備一覧の初期化に失敗しました", ex);
+            LoggerHolder.get().error("所有装備一覧の初期化に失敗しました", ex);
         }
     }
 
@@ -273,115 +164,7 @@ public class MainController extends WindowController {
         try {
             InternalFXMLLoader.showWindow("logbook/gui/ship.fxml", this.getWindow(), "所有艦娘一覧");
         } catch (Exception ex) {
-            LoggerHolder.LOG.error("所有艦娘一覧の初期化に失敗しました", ex);
-        }
-    }
-
-    /**
-     * お風呂に入りたい艦娘
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void ndock(ActionEvent e) {
-        try {
-            InternalFXMLLoader.showWindow("logbook/gui/require_ndock.fxml", this.getWindow(), "お風呂に入りたい艦娘");
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("お風呂に入りたい艦娘の初期化に失敗しました", ex);
-        }
-    }
-
-    /**
-     * 経験値計算機
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void calcExp(ActionEvent event) {
-        try {
-            InternalFXMLLoader.showWindow("logbook/gui/calc_exp.fxml", this.getWindow(), "経験値計算機");
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("経験値計算機の初期化に失敗しました", ex);
-        }
-    }
-
-    /**
-     * 資材チャート
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void resourceChart(ActionEvent event) {
-        try {
-            InternalFXMLLoader.showWindow("logbook/gui/resource_chart.fxml", this.getWindow(), "資材チャート");
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("資材チャートの初期化に失敗しました", ex);
-        }
-    }
-
-    /**
-     * 編成記録
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void deck(ActionEvent event) {
-        try {
-            InternalFXMLLoader.showWindow("logbook/gui/deck.fxml", this.getWindow(), "編成記録");
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("編成記録の初期化に失敗しました", ex);
-        }
-    }
-
-    /**
-     * 自動プロキシ構成スクリプトファイル生成
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void createPacFile(ActionEvent e) {
-        try {
-            InternalFXMLLoader.showWindow("logbook/gui/create_pac_file.fxml", this.getWindow(), "自動プロキシ構成スクリプトファイル生成");
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("自動プロキシ構成スクリプトファイル生成の初期化に失敗しました", ex);
-        }
-    }
-
-    /**
-     * 設定
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void config(ActionEvent e) {
-        try {
-            InternalFXMLLoader.showWindow("logbook/gui/config.fxml", this.getWindow(), "設定");
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("設定の初期化に失敗しました", ex);
-        }
-    }
-
-    /**
-     * バージョン情報
-     *
-     * @param e ActionEvent
-     */
-    @FXML
-    void version(ActionEvent e) {
-        try {
-            InternalFXMLLoader.showWindow("logbook/gui/version.fxml", this.getWindow(), "バージョン情報",
-                    root -> new Scene(root, Color.TRANSPARENT),
-                    null,
-                    stage -> {
-                        stage.initStyle(StageStyle.TRANSPARENT);
-                        stage.focusedProperty().addListener((ob, o, n) -> {
-                            if (!n) {
-                                stage.close();
-                            }
-                        });
-                    });
-        } catch (Exception ex) {
-            LoggerHolder.LOG.error("設定の初期化に失敗しました", ex);
+            LoggerHolder.get().error("所有艦娘一覧の初期化に失敗しました", ex);
         }
     }
 
@@ -411,7 +194,7 @@ public class MainController extends WindowController {
                 this.checkNotifyNdock();
             }
         } catch (Exception ex) {
-            LoggerHolder.LOG.error("設定の初期化に失敗しました", ex);
+            LoggerHolder.get().error("設定の初期化に失敗しました", ex);
         }
     }
 
@@ -478,32 +261,39 @@ public class MainController extends WindowController {
                 .getDeckPortMap();
         ObservableList<Tab> tabs = this.fleetTab.getTabs();
         if (change) {
-            if (ports.size() != tabs.size() - 1) {
-                for (int i = tabs.size() - 1; i > 0; i--) {
-                    tabs.remove(i);
-                }
+            int tabsize = (int) tabs.stream()
+                    .map(Tab::getContent)
+                    .filter(e -> e instanceof FleetTabPane)
+                    .count();
+            if (ports.size() != tabsize) {
+                tabs.removeIf(e -> e.getContent() instanceof FleetTabPane);
                 for (DeckPort port : ports.values()) {
                     FleetTabPane pane = new FleetTabPane(port);
                     Tab tab = new Tab(port.getName(), pane);
                     tab.setClosable(false);
                     tab.getStyleClass().removeIf(s -> !s.equals("tab"));
-                    Optional.ofNullable(pane.tabCssClass())
-                            .ifPresent(tab.getStyleClass()::add);
+                    Optional.ofNullable(pane.tabStyle())
+                            .ifPresent(tab::setStyle);
                     tabs.add(tab);
                 }
             } else {
-                Iterator<DeckPort> ite = ports.values().iterator();
-                for (int i = 0; ite.hasNext(); i++) {
-                    DeckPort port = ite.next();
-                    Tab tab = tabs.get(i + 1);
-                    tab.setText(port.getName());
-                    Node node = tab.getContent();
-                    if (node instanceof FleetTabPane) {
-                        FleetTabPane pane = (FleetTabPane) node;
+                Iterator<DeckPort> portIte = ports.values().iterator();
+                Iterator<Tab> tabIte = tabs.iterator();
+                while (portIte.hasNext()) {
+                    DeckPort port = portIte.next();
+                    Tab tab = null;
+                    while (tabIte.hasNext()) {
+                        tab = tabIte.next();
+                        if (tab.getContent() instanceof FleetTabPane)
+                            break;
+                    }
+                    if (tab != null) {
+                        tab.setText(port.getName());
+                        FleetTabPane pane = (FleetTabPane) tab.getContent();
                         pane.update(port);
                         tab.getStyleClass().removeIf(s -> !s.equals("tab"));
-                        Optional.ofNullable(pane.tabCssClass())
-                                .ifPresent(tab.getStyleClass()::add);
+                        Optional.ofNullable(pane.tabStyle())
+                                .ifPresent(tab::setStyle);
                     }
                 }
             }
@@ -514,8 +304,8 @@ public class MainController extends WindowController {
                     FleetTabPane pane = (FleetTabPane) node;
                     pane.update();
                     tab.getStyleClass().removeIf(s -> !s.equals("tab"));
-                    Optional.ofNullable(pane.tabCssClass())
-                            .ifPresent(tab.getStyleClass()::add);
+                    Optional.ofNullable(pane.tabStyle())
+                            .ifPresent(tab::setStyle);
                 }
             }
         }
@@ -652,6 +442,10 @@ public class MainController extends WindowController {
         if (AppConfig.get().isUseSound()) {
             this.soundNotify(Paths.get(AppConfig.get().getMissionSoundDir()));
         }
+        // 棒読みちゃん連携
+        if (AppBouyomiConfig.get().isEnable()) {
+            this.sendBouyomiMissionComplete(port);
+        }
     }
 
     /**
@@ -703,6 +497,10 @@ public class MainController extends WindowController {
         if (AppConfig.get().isUseSound()) {
             this.soundNotify(Paths.get(AppConfig.get().getNdockSoundDir()));
         }
+        // 棒読みちゃん連携
+        if (AppBouyomiConfig.get().isEnable()) {
+            this.sendBouyomiNdockComplete(ndock);
+        }
     }
 
     /**
@@ -740,9 +538,49 @@ public class MainController extends WindowController {
                     this.clip.play();
                 }
             } catch (Exception e) {
-                LoggerHolder.LOG.warn("サウンド通知に失敗しました", e);
+                LoggerHolder.get().warn("サウンド通知に失敗しました", e);
             }
         }
+    }
+
+    /**
+     * 棒読みちゃん連携
+     *
+     * @param port 艦隊
+     */
+    private void sendBouyomiMissionComplete(DeckPort port) {
+        int target = port.getMission().get(1).intValue();
+        Optional<Mission> mission = Optional.ofNullable(MissionCollection.get()
+                .getMissionMap()
+                .get(target));
+        String missionName = mission.map(Mission::getName).orElse("");
+
+        BouyomiChanUtils.speak(Type.MissionComplete,
+                Tuple.of("${fleetName}", port.getName()),
+                Tuple.of("${fleetNumber}", String.valueOf(port.getId())),
+                Tuple.of("${missionName}", missionName));
+    }
+
+    /**
+     * 棒読みちゃん連携
+     *
+     * @param ndock 入渠ドック
+     */
+    private void sendBouyomiNdockComplete(Ndock ndock) {
+        Ship ship = ShipCollection.get()
+                .getShipMap()
+                .get(ndock.getShipId());
+
+        String hiragana = Ships.shipMst(ship)
+                .map(ShipMst::getYomi)
+                .orElse("");
+        String kanji = Ships.shipMst(ship)
+                .map(ShipMst::getName)
+                .orElse("");
+
+        BouyomiChanUtils.speak(Type.NdockComplete,
+                Tuple.of("${hiraganaName}", hiragana),
+                Tuple.of("${kanjiName}", kanji));
     }
 
     private static long hashCode(Map<?, ?> map) {
@@ -753,10 +591,5 @@ public class MainController extends WindowController {
             h += i.next().hashCode();
         }
         return h;
-    }
-
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(MainController.class);
     }
 }

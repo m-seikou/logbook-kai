@@ -29,6 +29,22 @@ public class Enemy implements Chara, Serializable, Cloneable {
     /** 装備 */
     private List<Integer> slot;
 
+    /** 序列 */
+    private Integer order;
+
+    /** 演習相手かどうか */
+    private boolean practice;
+
+    @Override
+    public boolean isEnemy() {
+        return true;
+    }
+
+    @Override
+    public Enemy asEnemy() {
+        return this;
+    }
+
     @Override
     public Enemy clone() {
         try {

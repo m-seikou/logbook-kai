@@ -3,7 +3,6 @@ package logbook.api;
 import java.util.List;
 import java.util.Map;
 
-import javax.json.JsonNumber;
 import javax.json.JsonObject;
 
 import logbook.bean.Mapinfo;
@@ -24,8 +23,8 @@ public class ApiReqAirCorpsSetPlane implements APIListenerSpi {
     public void accept(JsonObject json, RequestMetaData req, ResponseMetaData res) {
         JsonObject object = json.getJsonObject("api_data");
         if (object != null) {
-            int areaId = Integer.parseInt(req.getParameterMap().get("api_area_id").get(0));
-            int baseId = Integer.parseInt(req.getParameterMap().get("api_base_id").get(0));
+            int areaId = Integer.parseInt(req.getParameter("api_area_id"));
+            int baseId = Integer.parseInt(req.getParameter("api_base_id"));
 
             AirBase airBase = Mapinfo.get()
                     .getAirBase()
@@ -44,10 +43,7 @@ public class ApiReqAirCorpsSetPlane implements APIListenerSpi {
                         infos.set(i, newPlane);
                     }
                 }
-                JsonNumber distance = object.getJsonNumber("api_distance");
-                if (distance != null) {
-                    airBase.setDistance(distance.intValue());
-                }
+                airBase.setDistance(Mapinfo.Distance.toDistance(object.getJsonObject("api_distance")));
             }
         }
     }

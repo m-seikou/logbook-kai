@@ -9,6 +9,7 @@ import logbook.bean.BattleTypes.IAirBaseAttack;
 import logbook.bean.BattleTypes.ICombinedBattle;
 import logbook.bean.BattleTypes.IFormation;
 import logbook.bean.BattleTypes.IKouku;
+import logbook.bean.BattleTypes.ILdAirbattle;
 import logbook.bean.BattleTypes.ISortieBattle;
 import logbook.internal.JsonHelper;
 import lombok.Data;
@@ -19,7 +20,7 @@ import lombok.Data;
  */
 @Data
 public class CombinedBattleLdAirbattle
-        implements ICombinedBattle, ISortieBattle, IFormation, IKouku, IAirBaseAttack, Serializable {
+        implements ICombinedBattle, ISortieBattle, IFormation, IKouku, IAirBaseAttack, ILdAirbattle, Serializable {
 
     private static final long serialVersionUID = 6539186077635769896L;
 
@@ -38,17 +39,23 @@ public class CombinedBattleLdAirbattle
     /** api_ship_lv */
     private List<Integer> shipLv;
 
-    /** api_nowhps */
-    private List<Integer> nowhps;
+    /** api_f_nowhps */
+    private List<Integer> fNowhps;
 
-    /** api_maxhps */
-    private List<Integer> maxhps;
+    /** api_f_maxhps */
+    private List<Integer> fMaxhps;
 
-    /** api_nowhps_combined */
-    private List<Integer> nowhpsCombined;
+    /** api_e_nowhps */
+    private List<Integer> eNowhps;
 
-    /** api_maxhps_combined */
-    private List<Integer> maxhpsCombined;
+    /** api_e_maxhps */
+    private List<Integer> eMaxhps;
+
+    /** api_f_nowhps_combined */
+    private List<Integer> fNowhpsCombined;
+
+    /** api_f_maxhps_combined */
+    private List<Integer> fMaxhpsCombined;
 
     /** api_midnight_flag */
     private Boolean midnightFlag;
@@ -95,20 +102,22 @@ public class CombinedBattleLdAirbattle
                         JsonHelper.toList(BattleTypes.AirBaseAttack::toAirBaseAttack))
                 .setInteger("api_dock_id", bean::setDockId)
                 .setInteger("api_deck_id", bean::setDockId)
-                .set("api_ship_ke", bean::setShipKe, JsonHelper::toIntegerList)
-                .set("api_ship_lv", bean::setShipLv, JsonHelper::toIntegerList)
-                .set("api_nowhps", bean::setNowhps, JsonHelper::toIntegerList)
-                .set("api_maxhps", bean::setMaxhps, JsonHelper::toIntegerList)
-                .set("api_nowhps_combined", bean::setNowhpsCombined, JsonHelper::toIntegerList)
-                .set("api_maxhps_combined", bean::setMaxhpsCombined, JsonHelper::toIntegerList)
+                .setIntegerList("api_ship_ke", bean::setShipKe)
+                .setIntegerList("api_ship_lv", bean::setShipLv)
+                .setIntegerList("api_f_nowhps", bean::setFNowhps)
+                .setIntegerList("api_f_maxhps", bean::setFMaxhps)
+                .setIntegerList("api_e_nowhps", bean::setENowhps)
+                .setIntegerList("api_e_maxhps", bean::setEMaxhps)
+                .setIntegerList("api_f_nowhps_combined", bean::setFNowhpsCombined)
+                .setIntegerList("api_f_maxhps_combined", bean::setFMaxhpsCombined)
                 .setBoolean("api_midnight_flag", bean::setMidnightFlag)
                 .set("api_eSlot", bean::setESlot, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_fParam", bean::setFParam, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_eParam", bean::setEParam, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_fParam_combined", bean::setFParamCombined, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_search", bean::setSearch, JsonHelper::toIntegerList)
-                .set("api_formation", bean::setFormation, JsonHelper::toIntegerList)
-                .set("api_stage_flag", bean::setStageFlag, JsonHelper::toIntegerList)
+                .setIntegerList("api_search", bean::setSearch)
+                .setIntegerList("api_formation", bean::setFormation)
+                .setIntegerList("api_stage_flag", bean::setStageFlag)
                 .set("api_injection_kouku", bean::setInjectionKouku, BattleTypes.Kouku::toKouku)
                 .set("api_kouku", bean::setKouku, BattleTypes.Kouku::toKouku);
         return bean;

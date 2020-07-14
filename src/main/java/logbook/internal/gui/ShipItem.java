@@ -16,7 +16,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
-import logbook.Messages;
+import logbook.bean.DeckPort;
 import logbook.bean.Ship;
 import logbook.bean.ShipLabelCollection;
 import logbook.bean.ShipMst;
@@ -35,82 +35,97 @@ import logbook.internal.Ships;
 public class ShipItem {
 
     /** ID */
-    private IntegerProperty id;
+    private IntegerProperty id = new SimpleIntegerProperty();
+
+    /** 艦隊 */
+    private StringProperty fleet = new SimpleStringProperty();
 
     /** 艦娘 */
-    private ObjectProperty<Ship> ship;
+    private ObjectProperty<Ship> ship = new SimpleObjectProperty<>();
 
     /** 艦種 */
-    private StringProperty type;
+    private StringProperty type = new SimpleStringProperty();
 
     /** Lv */
-    private IntegerProperty lv;
+    private IntegerProperty lv = new SimpleIntegerProperty();
 
     /** 経験値 */
-    private IntegerProperty exp;
-    
+    private IntegerProperty exp = new SimpleIntegerProperty();
+
     /** Next */
-    private IntegerProperty next;
+    private IntegerProperty next = new SimpleIntegerProperty();
 
     /** cond */
-    private IntegerProperty cond;
+    private IntegerProperty cond = new SimpleIntegerProperty();
 
     /** ラベル */
-    private ObjectProperty<Set<String>> label;
+    private ObjectProperty<Set<String>> label = new SimpleObjectProperty<>();
 
     /** 制空 */
-    private IntegerProperty seiku;
+    private IntegerProperty seiku = new SimpleIntegerProperty();
 
     /** 砲戦火力 */
-    private IntegerProperty hPower;
+    private IntegerProperty hPower = new SimpleIntegerProperty();
 
     /** 雷戦火力 */
-    private IntegerProperty rPower;
+    private IntegerProperty rPower = new SimpleIntegerProperty();
 
     /** 夜戦火力 */
-    private IntegerProperty yPower;
+    private IntegerProperty yPower = new SimpleIntegerProperty();
 
     /** 対潜火力 */
-    private IntegerProperty tPower;
+    private IntegerProperty tPower = new SimpleIntegerProperty();
 
     /** 火力 */
-    private IntegerProperty karyoku;
-    
+    private IntegerProperty karyoku = new SimpleIntegerProperty();
+
     /** 雷装 */
-    private IntegerProperty raisou;
-    
+    private IntegerProperty raisou = new SimpleIntegerProperty();
+
     /** 対空 */
-    private IntegerProperty taiku;
-    
-    /** 装甲 */
-    private IntegerProperty soukou;
-    
-    /** 回避 */
-    private IntegerProperty kaihi;
-    
-    /** 対潜(素) */
-    private IntegerProperty tais;
+    private IntegerProperty taiku = new SimpleIntegerProperty();
+
+    /** 対潜 */
+    private IntegerProperty tais = new SimpleIntegerProperty();
 
     /** 索敵 */
-    private IntegerProperty sakuteki;
-    
+    private IntegerProperty sakuteki = new SimpleIntegerProperty();
+
     /** 運 */
-    private IntegerProperty lucky;
+    private IntegerProperty lucky = new SimpleIntegerProperty();
+
+    /** 耐久 */
+    private IntegerProperty maxhp = new SimpleIntegerProperty();
+
+    /** 装甲 */
+    private IntegerProperty soukou = new SimpleIntegerProperty();
+
+    /** 回避 */
+    private IntegerProperty kaihi = new SimpleIntegerProperty();
+
+    /** 速力 */
+    private IntegerProperty soku = new SimpleIntegerProperty();
+
+    /** 射程 */
+    private IntegerProperty leng = new SimpleIntegerProperty();
 
     /** 装備1 */
-    private IntegerProperty slot1;
+    private IntegerProperty slot1 = new SimpleIntegerProperty();
 
     /** 装備2 */
-    private IntegerProperty slot2;
+    private IntegerProperty slot2 = new SimpleIntegerProperty();
 
     /** 装備3 */
-    private IntegerProperty slot3;
+    private IntegerProperty slot3 = new SimpleIntegerProperty();
 
     /** 装備4 */
-    private IntegerProperty slot4;
+    private IntegerProperty slot4 = new SimpleIntegerProperty();
+
+    /** 装備5 */
+    private IntegerProperty slot5 = new SimpleIntegerProperty();
 
     /** 補強 */
-    private IntegerProperty slotEx;
+    private IntegerProperty slotEx = new SimpleIntegerProperty();
 
     /**
      * IDを取得します。
@@ -124,7 +139,7 @@ public class ShipItem {
      * IDを取得します。
      * @return ID
      */
-    public int getId() {
+    public Integer getId() {
         return this.id.get();
     }
 
@@ -132,8 +147,32 @@ public class ShipItem {
      * IDを設定します。
      * @param id ID
      */
-    public void setId(int id) {
-        this.id = new SimpleIntegerProperty(id);
+    public void setId(Integer id) {
+        this.id.set(id);
+    }
+
+    /**
+     * 艦隊を取得します。
+     * @return 艦隊
+     */
+    public StringProperty fleetProperty() {
+        return this.fleet;
+    }
+
+    /**
+     * 艦隊を取得します。
+     * @return 艦隊
+     */
+    public String getFleet() {
+        return this.fleet.get();
+    }
+
+    /**
+     * 艦隊を設定します。
+     * @param fleet 艦隊
+     */
+    public void setFleet(String fleet) {
+        this.fleet.set(fleet);
     }
 
     /**
@@ -157,7 +196,7 @@ public class ShipItem {
      * @param ship 艦娘
      */
     public void setShip(Ship ship) {
-        this.ship = new SimpleObjectProperty<>(ship);
+        this.ship.set(ship);
     }
 
     /**
@@ -181,7 +220,7 @@ public class ShipItem {
      * @param type 艦種
      */
     public void setType(String type) {
-        this.type = new SimpleStringProperty(type);
+        this.type.set(type);
     }
 
     /**
@@ -196,7 +235,7 @@ public class ShipItem {
      * Lvを取得します。
      * @return Lv
      */
-    public int getLv() {
+    public Integer getLv() {
         return this.lv.get();
     }
 
@@ -204,34 +243,34 @@ public class ShipItem {
      * Lvを設定します。
      * @param lv Lv
      */
-    public void setLv(int lv) {
-        this.lv = new SimpleIntegerProperty(lv);
+    public void setLv(Integer lv) {
+        this.lv.set(lv);
     }
 
     /**
-     * Expを取得します。
-     * @return Exp
+     * 経験値を取得します。
+     * @return 経験値
      */
     public IntegerProperty expProperty() {
         return this.exp;
     }
 
     /**
-     * Expを取得します。
-     * @return Exp
+     * 経験値を取得します。
+     * @return 経験値
      */
-    public int getExp() {
+    public Integer getExp() {
         return this.exp.get();
     }
 
     /**
-     * Expを設定します。
-     * @param exp Exp
+     * 経験値を設定します。
+     * @param exp 経験値
      */
-    public void setExp(int exp) {
-        this.exp = new SimpleIntegerProperty(exp);
+    public void setExp(Integer exp) {
+        this.exp.set(exp);
     }
-    
+
     /**
      * Nextを取得します。
      * @return Next
@@ -244,7 +283,7 @@ public class ShipItem {
      * Nextを取得します。
      * @return Next
      */
-    public int getNext() {
+    public Integer getNext() {
         return this.next.get();
     }
 
@@ -252,8 +291,8 @@ public class ShipItem {
      * Nextを設定します。
      * @param next Next
      */
-    public void setNext(int next) {
-        this.next = new SimpleIntegerProperty(next);
+    public void setNext(Integer next) {
+        this.next.set(next);
     }
 
     /**
@@ -268,7 +307,7 @@ public class ShipItem {
      * condを取得します。
      * @return cond
      */
-    public int getCond() {
+    public Integer getCond() {
         return this.cond.get();
     }
 
@@ -276,8 +315,8 @@ public class ShipItem {
      * condを設定します。
      * @param cond cond
      */
-    public void setCond(int cond) {
-        this.cond = new SimpleIntegerProperty(cond);
+    public void setCond(Integer cond) {
+        this.cond.set(cond);
     }
 
     /**
@@ -298,10 +337,10 @@ public class ShipItem {
 
     /**
      * ラベルを設定します。
-     * @param area ラベル
+     * @param label ラベル
      */
     public void setLabel(Set<String> label) {
-        this.label = new SimpleObjectProperty<>(label);
+        this.label.set(label);
     }
 
     /**
@@ -316,7 +355,7 @@ public class ShipItem {
      * 制空を取得します。
      * @return 制空
      */
-    public int getSeiku() {
+    public Integer getSeiku() {
         return this.seiku.get();
     }
 
@@ -324,8 +363,8 @@ public class ShipItem {
      * 制空を設定します。
      * @param seiku 制空
      */
-    public void setSeiku(int seiku) {
-        this.seiku = new SimpleIntegerProperty(seiku);
+    public void setSeiku(Integer seiku) {
+        this.seiku.set(seiku);
     }
 
     /**
@@ -340,7 +379,7 @@ public class ShipItem {
      * 砲戦火力を取得します。
      * @return 砲戦火力
      */
-    public int gethPower() {
+    public Integer getHPower() {
         return this.hPower.get();
     }
 
@@ -348,8 +387,8 @@ public class ShipItem {
      * 砲戦火力を設定します。
      * @param hPower 砲戦火力
      */
-    public void sethPower(int hPower) {
-        this.hPower = new SimpleIntegerProperty(hPower);
+    public void setHPower(Integer hPower) {
+        this.hPower.set(hPower);
     }
 
     /**
@@ -364,7 +403,7 @@ public class ShipItem {
      * 雷戦火力を取得します。
      * @return 雷戦火力
      */
-    public int getrPower() {
+    public Integer getRPower() {
         return this.rPower.get();
     }
 
@@ -372,8 +411,8 @@ public class ShipItem {
      * 雷戦火力を設定します。
      * @param rPower 雷戦火力
      */
-    public void setrPower(int rPower) {
-        this.rPower = new SimpleIntegerProperty(rPower);
+    public void setRPower(Integer rPower) {
+        this.rPower.set(rPower);
     }
 
     /**
@@ -388,7 +427,7 @@ public class ShipItem {
      * 夜戦火力を取得します。
      * @return 夜戦火力
      */
-    public int getyPower() {
+    public Integer getYPower() {
         return this.yPower.get();
     }
 
@@ -396,8 +435,8 @@ public class ShipItem {
      * 夜戦火力を設定します。
      * @param yPower 夜戦火力
      */
-    public void setyPower(int yPower) {
-        this.yPower = new SimpleIntegerProperty(yPower);
+    public void setYPower(Integer yPower) {
+        this.yPower.set(yPower);
     }
 
     /**
@@ -412,7 +451,7 @@ public class ShipItem {
      * 対潜火力を取得します。
      * @return 対潜火力
      */
-    public int gettPower() {
+    public Integer getTPower() {
         return this.tPower.get();
     }
 
@@ -420,200 +459,272 @@ public class ShipItem {
      * 対潜火力を設定します。
      * @param tPower 対潜火力
      */
-    public void settPower(int tPower) {
-        this.tPower = new SimpleIntegerProperty(tPower);
+    public void setTPower(Integer tPower) {
+        this.tPower.set(tPower);
     }
 
     /**
-     * 火力(素)を取得します。
-     * @return 火力(素)
+     * 火力を取得します。
+     * @return 火力
      */
     public IntegerProperty karyokuProperty() {
         return this.karyoku;
     }
 
     /**
-     * 火力(素)を取得します。
-     * @return 火力(素)
+     * 火力を取得します。
+     * @return 火力
      */
-    public int getKaryoku() {
+    public Integer getKaryoku() {
         return this.karyoku.get();
     }
 
     /**
-     * 火力(素)を設定します。
-     * @param karyoku 火力(素)
+     * 火力を設定します。
+     * @param karyoku 火力
      */
-    public void setKaryoku(int karyoku) {
-        this.karyoku = new SimpleIntegerProperty(karyoku);
+    public void setKaryoku(Integer karyoku) {
+        this.karyoku.set(karyoku);
     }
-    
+
     /**
-     * 雷装(素)を取得します。
-     * @return 雷装(素)
+     * 雷装を取得します。
+     * @return 雷装
      */
     public IntegerProperty raisouProperty() {
         return this.raisou;
     }
 
     /**
-     * 雷装(素)を取得します。
-     * @return 雷装(素)
+     * 雷装を取得します。
+     * @return 雷装
      */
-    public int getRaisou() {
+    public Integer getRaisou() {
         return this.raisou.get();
     }
 
     /**
-     * 雷装(素)を設定します。
-     * @param raisou 雷装(素)
+     * 雷装を設定します。
+     * @param raisou 雷装
      */
-    public void setRaisou(int raisou) {
-        this.raisou = new SimpleIntegerProperty(raisou);
+    public void setRaisou(Integer raisou) {
+        this.raisou.set(raisou);
     }
 
     /**
-     * 対空(素)を取得します。
-     * @return 対空(素)
+     * 対空を取得します。
+     * @return 対空
      */
     public IntegerProperty taikuProperty() {
         return this.taiku;
     }
 
     /**
-     * 対空(素)を取得します。
-     * @return 対空(素)
+     * 対空を取得します。
+     * @return 対空
      */
-    public int getTaiku() {
+    public Integer getTaiku() {
         return this.taiku.get();
     }
 
     /**
-     * 対空(素)を設定します。
-     * @param taiku 対空(素)
+     * 対空を設定します。
+     * @param taiku 対空
      */
-    public void setTaiku(int taiku) {
-        this.taiku = new SimpleIntegerProperty(taiku);
+    public void setTaiku(Integer taiku) {
+        this.taiku.set(taiku);
     }
 
     /**
-     * 装甲(素)を取得します。
-     * @return 装甲(素)
-     */
-    public IntegerProperty soukouProperty() {
-        return this.soukou;
-    }
-
-    /**
-     * 装甲(素)を取得します。
-     * @return 装甲(素)
-     */
-    public int getSoukou() {
-        return this.soukou.get();
-    }
-
-    /**
-     * 装甲(素)を設定します。
-     * @param soukou 装甲(素)
-     */
-    public void setSoukou(int soukou) {
-        this.soukou = new SimpleIntegerProperty(soukou);
-    }
-
-    /**
-     * 回避(素)を取得します。
-     * @return 回避(素)
-     */
-    public IntegerProperty kaihiProperty() {
-        return this.kaihi;
-    }
-
-    /**
-     * 回避(素)を取得します。
-     * @return 回避(素)
-     */
-    public int getKaihi() {
-        return this.kaihi.get();
-    }
-
-    /**
-     * 回避(素)を設定します。
-     * @param kaihi 回避(素)
-     */
-    public void setKaihi(int kaihi) {
-        this.kaihi = new SimpleIntegerProperty(kaihi);
-    }
-
-    /**
-     * 対潜(素)を取得します。
-     * @return 対潜(素)
+     * 対潜を取得します。
+     * @return 対潜
      */
     public IntegerProperty taisProperty() {
         return this.tais;
     }
 
     /**
-     * 対潜(素)を取得します。
-     * @return 対潜(素)
+     * 対潜を取得します。
+     * @return 対潜
      */
-    public int getTais() {
+    public Integer getTais() {
         return this.tais.get();
     }
 
     /**
-     * 対潜(素)を設定します。
-     * @param tPower 対潜(素)
+     * 対潜を設定します。
+     * @param tais 対潜
      */
-    public void setTais(int tais) {
-        this.tais = new SimpleIntegerProperty(tais);
+    public void setTais(Integer tais) {
+        this.tais.set(tais);
     }
 
     /**
-     * 索敵(素)を取得します。
-     * @return 索敵(素)
+     * 索敵を取得します。
+     * @return 索敵
      */
     public IntegerProperty sakutekiProperty() {
         return this.sakuteki;
     }
 
     /**
-     * 索敵(素)を取得します。
-     * @return 索敵(素)
+     * 索敵を取得します。
+     * @return 索敵
      */
-    public int getSakuteki() {
+    public Integer getSakuteki() {
         return this.sakuteki.get();
     }
 
     /**
-     * 索敵(素)を設定します。
-     * @param sakuteki 索敵(素)
+     * 索敵を設定します。
+     * @param sakuteki 索敵
      */
-    public void setSakuteki(int sakuteki) {
-        this.sakuteki = new SimpleIntegerProperty(sakuteki);
+    public void setSakuteki(Integer sakuteki) {
+        this.sakuteki.set(sakuteki);
     }
 
     /**
-     * 運(素)を取得します。
-     * @return 運(素)
+     * 運を取得します。
+     * @return 運
      */
     public IntegerProperty luckyProperty() {
         return this.lucky;
     }
 
     /**
-     * 運(素)を取得します。
-     * @return 運(素)
+     * 運を取得します。
+     * @return 運
      */
-    public int getLucky() {
+    public Integer getLucky() {
         return this.lucky.get();
     }
 
     /**
-     * 運(素)を設定します。
-     * @param lucky 運(素)
+     * 運を設定します。
+     * @param lucky 運
      */
-    public void setLucky(int luckey) {
-        this.lucky = new SimpleIntegerProperty(luckey);
+    public void setLucky(Integer lucky) {
+        this.lucky.set(lucky);
+    }
+
+    /**
+     * 耐久を取得します。
+     * @return 耐久
+     */
+    public IntegerProperty maxhpProperty() {
+        return this.maxhp;
+    }
+
+    /**
+     * 耐久を取得します。
+     * @return 耐久
+     */
+    public Integer getMaxhp() {
+        return this.maxhp.get();
+    }
+
+    /**
+     * 耐久を設定します。
+     * @param maxhp 耐久
+     */
+    public void setMaxhp(Integer maxhp) {
+        this.maxhp.set(maxhp);
+    }
+
+    /**
+     * 装甲を取得します。
+     * @return 装甲
+     */
+    public IntegerProperty soukouProperty() {
+        return this.soukou;
+    }
+
+    /**
+     * 装甲を取得します。
+     * @return 装甲
+     */
+    public Integer getSoukou() {
+        return this.soukou.get();
+    }
+
+    /**
+     * 装甲を設定します。
+     * @param soukou 装甲
+     */
+    public void setSoukou(Integer soukou) {
+        this.soukou.set(soukou);
+    }
+
+    /**
+     * 回避を取得します。
+     * @return 回避
+     */
+    public IntegerProperty kaihiProperty() {
+        return this.kaihi;
+    }
+
+    /**
+     * 回避を取得します。
+     * @return 回避
+     */
+    public Integer getKaihi() {
+        return this.kaihi.get();
+    }
+
+    /**
+     * 回避を設定します。
+     * @param kaihi 回避
+     */
+    public void setKaihi(Integer kaihi) {
+        this.kaihi.set(kaihi);
+    }
+
+    /**
+     * 速力を取得します。
+     * @return 速力
+     */
+    public IntegerProperty sokuProperty() {
+        return this.soku;
+    }
+
+    /**
+     * 速力を取得します。
+     * @return 速力
+     */
+    public Integer getSoku() {
+        return this.soku.get();
+    }
+
+    /**
+     * 速力を設定します。
+     * @param soku 速力
+     */
+    public void setSoku(Integer soku) {
+        this.soku.set(soku);
+    }
+
+    /**
+     * 射程を取得します。
+     * @return 射程
+     */
+    public IntegerProperty lengProperty() {
+        return this.leng;
+    }
+
+    /**
+     * 射程を取得します。
+     * @return 射程
+     */
+    public Integer getLeng() {
+        return this.leng.get();
+    }
+
+    /**
+     * 射程を設定します。
+     * @param leng 射程
+     */
+    public void setLeng(Integer leng) {
+        this.leng.set(leng);
     }
 
     /**
@@ -628,7 +739,7 @@ public class ShipItem {
      * 装備1を取得します。
      * @return 装備1
      */
-    public int getSlot1() {
+    public Integer getSlot1() {
         return this.slot1.get();
     }
 
@@ -636,8 +747,8 @@ public class ShipItem {
      * 装備1を設定します。
      * @param slot1 装備1
      */
-    public void setSlot1(int slot1) {
-        this.slot1 = new SimpleIntegerProperty(slot1);
+    public void setSlot1(Integer slot1) {
+        this.slot1.set(slot1);
     }
 
     /**
@@ -652,7 +763,7 @@ public class ShipItem {
      * 装備2を取得します。
      * @return 装備2
      */
-    public int getSlot2() {
+    public Integer getSlot2() {
         return this.slot2.get();
     }
 
@@ -660,8 +771,8 @@ public class ShipItem {
      * 装備2を設定します。
      * @param slot2 装備2
      */
-    public void setSlot2(int slot2) {
-        this.slot2 = new SimpleIntegerProperty(slot2);
+    public void setSlot2(Integer slot2) {
+        this.slot2.set(slot2);
     }
 
     /**
@@ -676,7 +787,7 @@ public class ShipItem {
      * 装備3を取得します。
      * @return 装備3
      */
-    public int getSlot3() {
+    public Integer getSlot3() {
         return this.slot3.get();
     }
 
@@ -684,8 +795,8 @@ public class ShipItem {
      * 装備3を設定します。
      * @param slot3 装備3
      */
-    public void setSlot3(int slot3) {
-        this.slot3 = new SimpleIntegerProperty(slot3);
+    public void setSlot3(Integer slot3) {
+        this.slot3.set(slot3);
     }
 
     /**
@@ -700,7 +811,7 @@ public class ShipItem {
      * 装備4を取得します。
      * @return 装備4
      */
-    public int getSlot4() {
+    public Integer getSlot4() {
         return this.slot4.get();
     }
 
@@ -708,8 +819,32 @@ public class ShipItem {
      * 装備4を設定します。
      * @param slot4 装備4
      */
-    public void setSlot4(int slot4) {
-        this.slot4 = new SimpleIntegerProperty(slot4);
+    public void setSlot4(Integer slot4) {
+        this.slot4.set(slot4);
+    }
+
+    /**
+     * 装備5を取得します。
+     * @return 装備5
+     */
+    public IntegerProperty slot5Property() {
+        return this.slot5;
+    }
+
+    /**
+     * 装備5を取得します。
+     * @return 装備5
+     */
+    public Integer getSlot5() {
+        return this.slot5.get();
+    }
+
+    /**
+     * 装備5を設定します。
+     * @param slot5 装備5
+     */
+    public void setSlot5(Integer slot5) {
+        this.slot5.set(slot5);
     }
 
     /**
@@ -724,7 +859,7 @@ public class ShipItem {
      * 補強を取得します。
      * @return 補強
      */
-    public int getSlotEx() {
+    public Integer getSlotEx() {
         return this.slotEx.get();
     }
 
@@ -732,8 +867,8 @@ public class ShipItem {
      * 補強を設定します。
      * @param slotEx 補強
      */
-    public void setSlotEx(int slotEx) {
-        this.slotEx = new SimpleIntegerProperty(slotEx);
+    public void setSlotEx(Integer slotEx) {
+        this.slotEx.set(slotEx);
     }
 
     @Override
@@ -743,25 +878,12 @@ public class ShipItem {
 
         // 装備の名前
         Function<Integer, String> slotItemName = itemId -> {
-            SlotItem item = itemMap.get(itemId);
-            return Items.slotitemMst(item)
-                    .map(mst -> {
-
-                        StringBuilder text = new StringBuilder(mst.getName());
-
-                        text.append(Optional.ofNullable(item.getAlv())
-                                .map(alv -> Messages.getString("item.alv", alv)) //$NON-NLS-1$
-                                .orElse(""));
-                        text.append(Optional.ofNullable(item.getLevel())
-                                .filter(lv -> lv > 0)
-                                .map(lv -> Messages.getString("item.level", lv)) //$NON-NLS-1$
-                                .orElse(""));
-                        return text.toString();
-                    }).orElse("");
+            return Items.name(itemMap.get(itemId));
         };
 
         return new StringJoiner("\t")
                 .add(Integer.toString(this.id.get()))
+                .add(this.fleet.get())
                 .add(Optional.ofNullable(this.ship.get())
                         .map(s -> Ships.shipMst(s).map(ShipMst::getName).orElse(""))
                         .orElse(""))
@@ -770,7 +892,7 @@ public class ShipItem {
                 .add(Integer.toString(this.exp.get()))
                 .add(Integer.toString(this.next.get()))
                 .add(Integer.toString(this.cond.get()))
-                .add(this.label.get().stream().collect(Collectors.joining(",")))
+                .add(this.label.get().stream().collect(Collectors.joining(" ")))
                 .add(Integer.toString(this.seiku.get()))
                 .add(Integer.toString(this.hPower.get()))
                 .add(Integer.toString(this.rPower.get()))
@@ -779,15 +901,19 @@ public class ShipItem {
                 .add(Integer.toString(this.karyoku.get()))
                 .add(Integer.toString(this.raisou.get()))
                 .add(Integer.toString(this.taiku.get()))
-                .add(Integer.toString(this.soukou.get()))
-                .add(Integer.toString(this.kaihi.get()))
                 .add(Integer.toString(this.tais.get()))
                 .add(Integer.toString(this.sakuteki.get()))
                 .add(Integer.toString(this.lucky.get()))
+                .add(Integer.toString(this.maxhp.get()))
+                .add(Integer.toString(this.soukou.get()))
+                .add(Integer.toString(this.kaihi.get()))
+                .add(Ships.sokuText(this.soku.get()))
+                .add(Ships.lengText(this.leng.get()))
                 .add(slotItemName.apply(this.slot1.get()))
                 .add(slotItemName.apply(this.slot2.get()))
                 .add(slotItemName.apply(this.slot3.get()))
                 .add(slotItemName.apply(this.slot4.get()))
+                .add(slotItemName.apply(this.slot5.get()))
                 .add(slotItemName.apply(this.slotEx.get()))
                 .toString();
     }
@@ -804,6 +930,7 @@ public class ShipItem {
                 .orElse("");
         ShipItem shipItem = new ShipItem();
         shipItem.setId(ship.getId());
+        shipItem.setFleet(Ships.deckPort(ship).map(DeckPort::getId).map(Object::toString).orElse(""));
         shipItem.setShip(ship);
         shipItem.setType(type);
         shipItem.setLv(ship.getLv());
@@ -824,42 +951,47 @@ public class ShipItem {
 
         shipItem.setLabel(FXCollections.observableSet(label));
         shipItem.setSeiku(Ships.airSuperiority(ship));
-        shipItem.sethPower(Ships.hPower(ship));
-        shipItem.setrPower(Ships.rPower(ship));
-        shipItem.setyPower(Ships.yPower(ship));
-        shipItem.settPower(Ships.tPower(ship));
+        shipItem.setHPower(Ships.hPower(ship));
+        shipItem.setRPower(Ships.rPower(ship));
+        shipItem.setYPower(Ships.yPower(ship));
+        shipItem.setTPower(Ships.tPower(ship));
 
-        shipItem.setKaryoku(ship.getKaryoku().get(0) - sumItemParam(ship, i -> i.getHoug()));
-        shipItem.setRaisou(ship.getRaisou().get(0) - sumItemParam(ship, i -> i.getRaig()));
-        shipItem.setTaiku(ship.getTaiku().get(0) - sumItemParam(ship, i -> i.getTyku()));
-        shipItem.setSoukou(ship.getSoukou().get(0) - sumItemParam(ship, i -> i.getSouk()));
-        shipItem.setKaihi(ship.getKaihi().get(0) - sumItemParam(ship, i -> i.getHouk()));
-        shipItem.setTais(ship.getTaisen().get(0) - sumItemParam(ship, i -> i.getTais()));
-        shipItem.setSakuteki(ship.getSakuteki().get(0) - sumItemParam(ship, i -> i.getSaku()));
-        shipItem.setLucky(ship.getLucky().get(0) - sumItemParam(ship, i -> i.getLuck()));
+        shipItem.setKaryoku(ship.getKaryoku().get(0) - sumItemParam(ship, SlotitemMst::getHoug));
+        shipItem.setRaisou(ship.getRaisou().get(0) - sumItemParam(ship, SlotitemMst::getRaig));
+        shipItem.setTaiku(ship.getTaiku().get(0) - sumItemParam(ship, SlotitemMst::getTyku));
+        shipItem.setTais(ship.getTaisen().get(0) - sumItemParam(ship, SlotitemMst::getTais));
+        shipItem.setSakuteki(ship.getSakuteki().get(0) - sumItemParam(ship, SlotitemMst::getSaku));
+        shipItem.setLucky(ship.getLucky().get(0) - sumItemParam(ship, SlotitemMst::getLuck));
+        shipItem.setMaxhp(ship.getMaxhp());
+        shipItem.setSoukou(ship.getSoukou().get(0) - sumItemParam(ship, SlotitemMst::getSouk));
+        shipItem.setKaihi(ship.getKaihi().get(0) - sumItemParam(ship, SlotitemMst::getHouk));
+        if (ship.getSoku() != null)
+            shipItem.setSoku(ship.getSoku());
+        shipItem.setLeng(ship.getLeng());
 
         int slotNum = ship.getSlotnum();
         shipItem.setSlot1(ship.getSlot().get(0) == -1 && slotNum <= 0 ? 0 : ship.getSlot().get(0));
         shipItem.setSlot2(ship.getSlot().get(1) == -1 && slotNum <= 1 ? 0 : ship.getSlot().get(1));
         shipItem.setSlot3(ship.getSlot().get(2) == -1 && slotNum <= 2 ? 0 : ship.getSlot().get(2));
         shipItem.setSlot4(ship.getSlot().get(3) == -1 && slotNum <= 3 ? 0 : ship.getSlot().get(3));
+        shipItem.setSlot5(ship.getSlot().get(4) == -1 && slotNum <= 4 ? 0 : ship.getSlot().get(4));
         shipItem.setSlotEx(ship.getSlotEx());
 
         return shipItem;
     }
-    
+
     /**
      * 装備のパラメータを合計する
      * @param ship 艦娘
      * @param mapper 合計するパラメータを返す mapper
      * @return
      */
-    private static int sumItemParam(Ship ship, Function<? super SlotitemMst, Integer> mapper) {
+    private static int sumItemParam(Ship ship, Function<SlotitemMst, Integer> mapper) {
         Map<Integer, SlotItem> items = SlotItemCollection.get().getSlotitemMap();
         return Stream.concat(ship.getSlot().stream(), Stream.of(ship.getSlotEx()))
-        .map(items::get)
-        .map(Items::slotitemMst)
-        .mapToInt(e -> e.map(mapper).orElse(0))
-        .sum();
+                .map(items::get)
+                .map(Items::slotitemMst)
+                .mapToInt(e -> e.map(mapper).orElse(0))
+                .sum();
     }
 }

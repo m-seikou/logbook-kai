@@ -1,7 +1,6 @@
 package logbook.internal.gui;
 
 import java.io.IOException;
-import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -9,22 +8,19 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.controlsfx.control.PopOver;
-import org.controlsfx.control.PopOver.ArrowLocation;
-
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
+import logbook.bean.AppCondition;
+import logbook.bean.BattleTypes.CombinedType;
 import logbook.bean.DeckPort;
 import logbook.bean.Mission;
 import logbook.bean.MissionCollection;
+import logbook.internal.LoggerHolder;
 import logbook.internal.Time;
-import logbook.plugin.PluginContainer;
 
 /**
  * 艦隊
@@ -35,8 +31,6 @@ public class MissionPane extends AnchorPane {
     /** 艦隊 */
     private final DeckPort port;
 
-    private PopOver pop;
-
     /** 色変化1段階目 */
     private final Duration stage1 = Duration.ofMinutes(20);
 
@@ -44,7 +38,7 @@ public class MissionPane extends AnchorPane {
     private final Duration stage2 = Duration.ofMinutes(10);
 
     /** 色変化3段階目 */
-    private final Duration stage3 = Duration.ofMinutes(5);
+    private final Duration stage3 = Duration.ofMinutes(1);
 
     @FXML
     private ProgressBar progress;
@@ -71,7 +65,7 @@ public class MissionPane extends AnchorPane {
             loader.setController(this);
             loader.load();
         } catch (IOException e) {
-            LoggerHolder.LOG.error("FXMLのロードに失敗しました", e);
+            LoggerHolder.get().error("FXMLのロードに失敗しました", e);
         }
     }
 
@@ -79,8 +73,29 @@ public class MissionPane extends AnchorPane {
     void initialize() {
         try {
             this.update();
+            // マウスオーバーでのポップアップ
+            PopOver<DeckPort> popover = new PopOver<>((node, port) -> {
+                String message;
+                // 帰還時間
+                long time = this.port.getMission().get(2);
+                if (time > 0) {
+                    ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(time),
+                            ZoneOffset.systemDefault());
+                    if (dateTime.toLocalDate().equals(ZonedDateTime.now().toLocalDate())) {
+                        message = "今日 " + DateTimeFormatter.ofPattern("H時m分s秒").format(dateTime)
+                                + " 頃に帰投します";
+                    } else {
+                        message = DateTimeFormatter.ofPattern("M月d日 H時m分s秒").format(dateTime)
+                                + " 頃に帰投します";
+                    }
+                } else {
+                    message = "任務がありません";
+                }
+                return new PopOverPane(port.getName(), message);
+            });
+            popover.install(this, this.port);
         } catch (Exception e) {
-            LoggerHolder.LOG.error("FXMLの初期化に失敗しました", e);
+            LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
     }
 
@@ -105,12 +120,23 @@ public class MissionPane extends AnchorPane {
             this.progress.setVisible(false);
             // 艦隊名
             this.fleet.setText(this.port.getName());
-            // 遠征先
-            this.name.setText("<未出撃>");
-            // 残り時間
-            this.time.setText("");
-
-            styleClass.add("empty");
+            if (AppCondition.get().isCombinedFlag() && this.port.getId() == 2) {
+                // 連合編成中
+                this.name.setText("(連合艦隊)");
+                this.time.setText(
+                        Optional.of(AppCondition.get().getCombinedType())
+                            .map(CombinedType::toCombinedType)
+                            .filter(type -> type != CombinedType.未結成)
+                            .map(CombinedType::toString)
+                            .orElse("<不明な連合艦隊タイプ>")
+                 );
+            } else {
+                // 遠征先
+                this.name.setText("<未出撃>");
+                styleClass.add("empty");
+                // 残り時間
+                this.time.setText("");
+            }
         } else {
             // 出撃(遠征中・遠征帰還・遠征中止)
             Optional<Mission> mission = Optional.ofNullable(MissionCollection.get()
@@ -146,47 +172,5 @@ public class MissionPane extends AnchorPane {
                 styleClass.add("stage1");
             }
         }
-
-        // マウスオーバーでのポップアップ
-        this.setOnMouseEntered(e -> {
-            if (this.pop != null) {
-                this.pop.hide();
-            }
-            if (time > 0) {
-                ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(time),
-                        ZoneOffset.systemDefault());
-                String message;
-                if (dateTime.toLocalDate().equals(ZonedDateTime.now().toLocalDate())) {
-                    message = "今日 " + DateTimeFormatter.ofPattern("H時m分s秒").format(dateTime)
-                            + " 頃に帰投します";
-                } else {
-                    message = DateTimeFormatter.ofPattern("M月d日 H時m分s秒").format(dateTime)
-                            + " 頃に帰投します";
-                }
-                this.pop = new PopOver(new Label(message));
-                this.pop.setOpacity(0.95D);
-                this.pop.setDetached(true);
-                this.pop.setCornerRadius(0);
-                this.pop.setTitle(this.port.getName());
-                this.pop.setArrowLocation(ArrowLocation.TOP_LEFT);
-                URL url = PluginContainer.getInstance()
-                        .getClassLoader()
-                        .getResource("logbook/gui/popup.css");
-                this.pop.getRoot()
-                        .getStylesheets()
-                        .add(url.toString());
-                this.pop.show(this);
-            }
-        });
-        this.setOnMouseExited(e -> {
-            if (this.pop != null) {
-                this.pop.hide();
-            }
-        });
-    }
-
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(MissionPane.class);
     }
 }

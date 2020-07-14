@@ -1,6 +1,7 @@
 package logbook.internal.gui;
 
 import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -11,6 +12,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import logbook.bean.DeckPort;
 import logbook.bean.Ship;
 import logbook.bean.ShipMst;
 import logbook.internal.Logs;
@@ -23,49 +25,49 @@ import logbook.internal.Time;
  */
 public class RequireNdock {
 
-    /** ID */
-    private IntegerProperty id;
+    /** 艦隊 */
+    private StringProperty deck = new SimpleStringProperty();
 
     /** 艦娘 */
-    private ObjectProperty<Ship> ship;
+    private ObjectProperty<Ship> ship = new SimpleObjectProperty<Ship>();
 
     /** Lv */
-    private IntegerProperty lv;
+    private IntegerProperty lv = new SimpleIntegerProperty();
 
     /** 時間 */
-    private ObjectProperty<Duration> time;
+    private ObjectProperty<Duration> time = new SimpleObjectProperty<Duration>();
 
     /** 今から */
-    private StringProperty end;
+    private StringProperty end = new SimpleStringProperty();
 
     /** 燃料 */
-    private IntegerProperty fuel;
+    private IntegerProperty fuel = new SimpleIntegerProperty();
 
     /** 鋼材 */
-    private IntegerProperty metal;
+    private IntegerProperty metal = new SimpleIntegerProperty();
 
     /**
-     * IDを取得します。
-     * @return ID
+     * 艦隊を取得します。
+     * @return 艦隊
      */
-    public IntegerProperty idProperty() {
-        return this.id;
+    public StringProperty deckProperty() {
+        return this.deck;
     }
 
     /**
-     * IDを取得します。
-     * @return ID
+     * 艦隊を取得します。
+     * @return 艦隊
      */
-    public int getId() {
-        return this.id.get();
+    public String getDeck() {
+        return this.deck.get();
     }
 
     /**
-     * IDを設定します。
-     * @param id ID
+     * 艦隊を設定します。
+     * @param deck 艦隊
      */
-    public void setId(int id) {
-        this.id = new SimpleIntegerProperty(id);
+    public void setDeck(String deck) {
+        this.deck.set(deck);
     }
 
     /**
@@ -89,7 +91,7 @@ public class RequireNdock {
      * @param ship 艦娘
      */
     public void setShip(Ship ship) {
-        this.ship = new SimpleObjectProperty<>(ship);
+        this.ship.set(ship);
     }
 
     /**
@@ -104,7 +106,7 @@ public class RequireNdock {
      * Lvを取得します。
      * @return Lv
      */
-    public int getLv() {
+    public Integer getLv() {
         return this.lv.get();
     }
 
@@ -112,13 +114,13 @@ public class RequireNdock {
      * Lvを設定します。
      * @param lv Lv
      */
-    public void setLv(int lv) {
-        this.lv = new SimpleIntegerProperty(lv);
+    public void setLv(Integer lv) {
+        this.lv.set(lv);
     }
 
     /**
      * 時間を取得します。
-     * @return time
+     * @return 時間
      */
     public ObjectProperty<Duration> timeProperty() {
         return this.time;
@@ -137,12 +139,12 @@ public class RequireNdock {
      * @param time 時間
      */
     public void setTime(Duration time) {
-        this.time = new SimpleObjectProperty<>(time);
+        this.time.set(time);
     }
 
     /**
      * 今からを取得します。
-     * @return end
+     * @return 今から
      */
     public StringProperty endProperty() {
         return this.end;
@@ -161,12 +163,12 @@ public class RequireNdock {
      * @param end 今から
      */
     public void setEnd(String end) {
-        this.end = new SimpleStringProperty(end);
+        this.end.set(end);
     }
 
     /**
      * 燃料を取得します。
-     * @return fuel
+     * @return 燃料
      */
     public IntegerProperty fuelProperty() {
         return this.fuel;
@@ -174,9 +176,9 @@ public class RequireNdock {
 
     /**
      * 燃料を取得します。
-     * @return fuel
+     * @return 燃料
      */
-    public int getFuel() {
+    public Integer getFuel() {
         return this.fuel.get();
     }
 
@@ -184,13 +186,13 @@ public class RequireNdock {
      * 燃料を設定します。
      * @param fuel 燃料
      */
-    public void setFuel(int fuel) {
-        this.fuel = new SimpleIntegerProperty(fuel);
+    public void setFuel(Integer fuel) {
+        this.fuel.set(fuel);
     }
 
     /**
      * 鋼材を取得します。
-     * @return metal
+     * @return 鋼材
      */
     public IntegerProperty metalProperty() {
         return this.metal;
@@ -198,9 +200,9 @@ public class RequireNdock {
 
     /**
      * 鋼材を取得します。
-     * @return metal
+     * @return 鋼材
      */
-    public int getMetal() {
+    public Integer getMetal() {
         return this.metal.get();
     }
 
@@ -208,14 +210,14 @@ public class RequireNdock {
      * 鋼材を設定します。
      * @param metal 鋼材
      */
-    public void setMetal(int metal) {
-        this.metal = new SimpleIntegerProperty(metal);
+    public void setMetal(Integer metal) {
+        this.metal.set(metal);
     }
 
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(Integer.toString(this.id.get()))
+                .add(this.deck.get())
                 .add(Optional.ofNullable(this.ship.get())
                         .map(s -> Ships.shipMst(s).map(ShipMst::getName).orElse(""))
                         .orElse(""))
@@ -234,18 +236,24 @@ public class RequireNdock {
      * @return お風呂に入りたい艦娘
      */
     public static RequireNdock toRequireNdock(Ship ship) {
-        Duration d = Duration.ofMillis(ship.getNdockTime());
-
         RequireNdock ndock = new RequireNdock();
-        ndock.setId(ship.getId());
         ndock.setShip(ship);
-        ndock.setLv(ship.getLv());
-        ndock.setTime(d);
-        ndock.setEnd(endText(d));
-        ndock.setFuel(ship.getNdockItem().get(0));
-        ndock.setMetal(ship.getNdockItem().get(1));
-
+        ndock.update();
         return ndock;
+    }
+
+    /**
+     * お風呂に入りたい艦娘を更新します
+     */
+    public void update() {
+        Ship ship = this.getShip();
+        Duration d = Duration.ofMillis(ship.getNdockTime());
+        this.setDeck(Ships.deckPort(ship).map(DeckPort::getId).map(Object::toString).orElse(""));
+        this.setLv(ship.getLv());
+        this.setTime(d);
+        this.setEnd(endText(d));
+        this.setFuel(ship.getNdockItem().get(0));
+        this.setMetal(ship.getNdockItem().get(1));
     }
 
     /**
@@ -255,6 +263,7 @@ public class RequireNdock {
      * @return 今からのテキスト表現
      */
     private static String endText(Duration d) {
-        return DateTimeFormatter.ofPattern("HH:mm:ss").format(Logs.now().plus(d));
+        ZonedDateTime dateTime = Logs.now().plus(d);
+        return DateTimeFormatter.ofPattern("H時m分s秒").format(dateTime);
     }
 }

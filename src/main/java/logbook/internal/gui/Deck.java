@@ -1,5 +1,7 @@
 package logbook.internal.gui;
 
+import java.util.List;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -17,18 +19,19 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 import logbook.bean.AppDeck;
 import logbook.bean.AppDeck.AppDeckFleet;
 import logbook.bean.AppDeckCollection;
 import logbook.bean.DeckPort;
 import logbook.bean.DeckPortCollection;
+import logbook.internal.ToStringConverter;
 
 /**
  * 編成記録
@@ -40,6 +43,14 @@ public class Deck extends WindowController {
     @FXML
     private VBox left;
 
+    /** 編成↑ */
+    @FXML
+    private Button deckUp;
+
+    /** 編成↓ */
+    @FXML
+    private Button deckDown;
+    
     /** 編成リスト */
     @FXML
     private ListView<AppDeck> deckList;
@@ -60,6 +71,10 @@ public class Deck extends WindowController {
     @FXML
     private ComboBox<DeckPort> preFleetList;
 
+    /** 編成テンプレートから追加 */
+    @FXML
+    private Button addPreFleet;
+    
     /** 編成 */
     @FXML
     private VBox deck;
@@ -72,6 +87,10 @@ public class Deck extends WindowController {
     @FXML
     private TilePane fleets;
 
+    /** 右ペインのスクロールペイン */
+    @FXML
+    private ScrollPane decksPane;
+    
     /** 選択している編成 */
     private ObjectProperty<AppDeck> currentDeck = new SimpleObjectProperty<>();
 
@@ -88,6 +107,8 @@ public class Deck extends WindowController {
         this.deckList.getSelectionModel().selectedItemProperty()
                 .addListener((ov) -> {
                     this.currentDeck.set(this.deckList.getSelectionModel().getSelectedItem());
+                    this.deckUp.setDisable(this.deckList.getSelectionModel().getSelectedIndex() == 0);
+                    this.deckDown.setDisable(this.deckList.getSelectionModel().getSelectedIndex() == this.deckList.getItems().size()-1);
                 });
         this.deckList.getItems().addListener(this::changeDeckList);
         this.deckList.setCellFactory(e -> new DeckCell());
@@ -95,13 +116,25 @@ public class Deck extends WindowController {
         this.fleetList.setCellFactory(e -> new DeckFleetCell());
         // テンプレート
         this.preFleetList.getItems().addAll(DeckPortCollection.get().getDeckPortMap().values());
-        this.preFleetList.setConverter(new PreFleet());
+        this.preFleetList.setConverter(ToStringConverter.of(DeckPort::getName));
+        this.preFleetList.getSelectionModel().selectedIndexProperty().addListener((ob, o, n) -> this.addPreFleet.setDisable(n == null));
         // 艦隊が変更された時のリスナー
         this.fleets.getChildren().addListener(this::changeDeckFleet);
         // 編成記録が変更された時のリスナー
         this.currentDeck.addListener(this::changeCurrent);
         // 名前が変更された時のリスナー
         this.deckName.textProperty().addListener((ov, o, n) -> this.modified.set(true));
+        this.fleetList.getSelectionModel().selectedIndexProperty().addListener((ob, o, n) -> {
+            if (n != null && n.intValue() >= 0) {
+                double maxX = this.deck.getWidth()-this.decksPane.getViewportBounds().getWidth();
+                double targetX = this.fleets.getChildren().get(n.intValue()).getBoundsInParent().getMinX();
+                this.decksPane.setHvalue(Math.min(targetX/maxX, 1.0));
+                
+                double maxY = this.deck.getHeight()-this.decksPane.getViewportBounds().getHeight();
+                double targetY = this.fleets.getBoundsInParent().getMinY()+this.fleets.getChildren().get(n.intValue()).getBoundsInParent().getMinY();
+                this.decksPane.setVvalue(Math.min(targetY/maxY, 1.0));
+            }
+        });
     }
 
     @FXML
@@ -139,6 +172,38 @@ public class Deck extends WindowController {
         }
     }
 
+    @FXML
+    void up(ActionEvent event) {
+        AppDeck selectedDeck = this.deckList.getSelectionModel()
+                .getSelectedItem();
+        if (selectedDeck != null) {
+            List<AppDeck> decks = this.deckList.getItems();
+            int index = decks.indexOf(selectedDeck);
+            if (index > 0) {
+                decks.remove(index);
+                decks.add(index - 1, selectedDeck);
+                this.deckList.getSelectionModel().select(selectedDeck);
+                this.deckList.requestFocus();
+            }
+        }
+    }
+
+    @FXML
+    void down(ActionEvent event) {
+        AppDeck selectedDeck = this.deckList.getSelectionModel()
+                .getSelectedItem();
+        if (selectedDeck != null) {
+            List<AppDeck> decks = this.deckList.getItems();
+            int index = decks.indexOf(selectedDeck);
+            if (index > -1 && (decks.size() - 1) > index) {
+                decks.remove(index);
+                decks.add(index + 1, selectedDeck);
+                this.deckList.getSelectionModel().select(selectedDeck);
+                this.deckList.requestFocus();
+            }
+        }
+    }
+
     /**
      * 編成記録の保存
      *
@@ -170,6 +235,8 @@ public class Deck extends WindowController {
         // 編成記録が保存されていない場合に確認する
         if (oldValue != null && this.modified.get()) {
             Alert alert = new Alert(AlertType.INFORMATION);
+            alert.getDialogPane().getStylesheets().add("logbook/gui/application.css");
+            InternalFXMLLoader.setGlobal(alert.getDialogPane());
             alert.initOwner(this.deckList.getScene().getWindow());
             alert.setTitle("編成記録の保存");
             alert.setContentText("保存されていない編成記録「" + this.deckName.getText() + "」を保存しますか?");
@@ -249,6 +316,8 @@ public class Deck extends WindowController {
                     del.getStyleClass().add("delete");
                     del.setOnAction(e -> {
                         Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.getDialogPane().getStylesheets().add("logbook/gui/application.css");
+                        InternalFXMLLoader.setGlobal(alert.getDialogPane());
                         alert.initOwner(Deck.this.deckList.getScene().getWindow());
                         alert.setTitle("編成記録の除去");
                         alert.setContentText("「" + item.getName() + "」を除去しますか?");
@@ -285,13 +354,30 @@ public class Deck extends WindowController {
                     Label text = new Label();
                     text.textProperty().bind(item.getFleetName().textProperty());
                     Pane pane = new Pane();
+                    
+                    Button up = new Button("↑");
+                    up.setOnAction(e -> {
+                        int index = Deck.this.fleetList.getItems().indexOf(item);
+                        Deck.this.fleetList.getItems().add(index-1, Deck.this.fleetList.getItems().remove(index));
+                        Deck.this.fleets.getChildren().add(index-1, Deck.this.fleets.getChildren().remove(index));
+                    });
+                    up.setDisable(Deck.this.fleetList.getItems().indexOf(item) == 0);
+                            
+                    Button down = new Button("↓");
+                    down.setOnAction(e -> {
+                        int index = Deck.this.fleetList.getItems().indexOf(item);
+                        Deck.this.fleetList.getItems().add(index+1, Deck.this.fleetList.getItems().remove(index));
+                        Deck.this.fleets.getChildren().add(index+1, Deck.this.fleets.getChildren().remove(index));
+                    });
+                    down.setDisable(Deck.this.fleetList.getItems().indexOf(item)+1 == Deck.this.fleetList.getItems().size());
+                    
                     Button del = new Button("除去");
                     del.getStyleClass().add("delete");
                     del.setOnAction(e -> {
                         Deck.this.fleetList.getItems().remove(item);
                         Deck.this.fleets.getChildren().removeIf(node -> node == item);
                     });
-                    HBox box = new HBox(text, pane, del);
+                    HBox box = new HBox(text, pane, up, down, del);
                     HBox.setHgrow(pane, Priority.ALWAYS);
 
                     this.setGraphic(box);
@@ -301,26 +387,6 @@ public class Deck extends WindowController {
             } else {
                 this.setGraphic(null);
             }
-        }
-    }
-
-    /**
-     * DeckPortを文字列に変換する
-     *
-     */
-    private static class PreFleet extends StringConverter<DeckPort> {
-        @Override
-        public String toString(DeckPort object) {
-            if (object != null) {
-                return object.getName();
-            } else {
-                return "";
-            }
-        }
-
-        @Override
-        public DeckPort fromString(String string) {
-            return null;
         }
     }
 }

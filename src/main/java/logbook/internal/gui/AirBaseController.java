@@ -11,9 +11,6 @@ import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
@@ -30,6 +27,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -42,9 +40,8 @@ import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import logbook.Messages;
+import javafx.util.Duration;
 import logbook.bean.Maparea;
 import logbook.bean.MapareaCollection;
 import logbook.bean.Mapinfo;
@@ -52,16 +49,19 @@ import logbook.bean.Mapinfo.AirBase;
 import logbook.bean.Mapinfo.PlaneInfo;
 import logbook.bean.SlotItem;
 import logbook.bean.SlotItemCollection;
-import logbook.bean.SlotitemMst;
 import logbook.internal.AirBases;
 import logbook.internal.Items;
-import logbook.plugin.PluginContainer;
+import logbook.internal.LoggerHolder;
+import logbook.plugin.PluginServices;
 
 /**
  * 基地航空隊
  *
  */
 public class AirBaseController extends WindowController {
+
+    @FXML
+    private SplitPane splitPane;
 
     /** 基地航空隊 テーブル */
     @FXML
@@ -139,7 +139,12 @@ public class AirBaseController extends WindowController {
     void initialize() {
         try {
             TableTool.setVisible(this.planeTable, this.getClass() + "#" + "planeTable");
-
+            // SplitPaneの分割サイズ
+            Timeline x = new Timeline();
+            x.getKeyFrames().add(new KeyFrame(Duration.millis(1), (e) -> {
+                Tools.Conrtols.setSplitWidth(this.splitPane, this.getClass() + "#" + "splitPane");
+            }));
+            x.play();
             this.areaTable.setShowRoot(false);
             this.airBase.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
             this.actionKind.setCellValueFactory(new TreeItemPropertyValueFactory<>("actionKind"));
@@ -170,10 +175,9 @@ public class AirBaseController extends WindowController {
                     javafx.util.Duration.seconds(1),
                     this::update));
             this.timeline.play();
-
             this.setAirBase();
         } catch (Exception e) {
-            LoggerHolder.LOG.error("FXMLの初期化に失敗しました", e);
+            LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
     }
 
@@ -202,7 +206,7 @@ public class AirBaseController extends WindowController {
             TableTool.showVisibleSetting(this.planeTable, this.getClass().toString() + "#" + "planeTable",
                     this.getWindow());
         } catch (Exception e) {
-            LoggerHolder.LOG.error("FXMLの初期化に失敗しました", e);
+            LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
     }
 
@@ -269,7 +273,9 @@ public class AirBaseController extends WindowController {
                     baseRow.setName(airBase.getName());
                     baseRow.setActionKind(this.actionKind(airBase.getActionKind()));
                     baseRow.setSeiku(Integer.toString(AirBases.airSuperiority(airBase)));
-                    baseRow.setDistance(Integer.toString(airBase.getDistance()));
+
+                    Mapinfo.Distance distance = airBase.getDistance();
+                    baseRow.setDistance(Integer.toString(distance.getBase() + distance.getBonus()));
 
                     for (PlaneInfo planeInfo : airBase.getPlaneInfo()) {
                         Plane plane = new Plane();
@@ -377,10 +383,16 @@ public class AirBaseController extends WindowController {
         }
     }
 
+    /**
+     * ウインドウを閉じる時のアクション
+     *
+     * @param e WindowEvent
+     */
     @Override
-    public void setWindow(Stage window) {
-        super.setWindow(window);
-        window.addEventHandler(WindowEvent.WINDOW_HIDDEN, e -> this.timeline.stop());
+    protected void onWindowHidden(WindowEvent e) {
+        if (this.timeline != null) {
+            this.timeline.stop();
+        }
     }
 
     /**
@@ -612,23 +624,8 @@ public class AirBaseController extends WindowController {
         public String toString() {
             Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
                     .getSlotitemMap();
-            SlotItem item = itemMap.get(this.slot.get());
-            Optional<SlotitemMst> mst = Items.slotitemMst(item);
-
-            String itemName = "";
-            if (mst.isPresent()) {
-                StringBuilder text = new StringBuilder(mst.get().getName());
-                text.append(Optional.ofNullable(item.getAlv())
-                        .map(alv -> Messages.getString("item.alv", alv)) //$NON-NLS-1$
-                        .orElse(""));
-                text.append(Optional.ofNullable(item.getLevel())
-                        .filter(lv -> lv > 0)
-                        .map(lv -> Messages.getString("item.level", lv)) //$NON-NLS-1$
-                        .orElse(""));
-                itemName = text.toString();
-            }
             return new StringJoiner("\t")
-                    .add(itemName)
+                    .add(Items.name(itemMap.get(this.slot.get())))
                     .add(Optional.ofNullable(this.count).map(IntegerProperty::get).map(String::valueOf).orElse(""))
                     .add(Optional.ofNullable(this.maxCount).map(IntegerProperty::get).map(String::valueOf).orElse(""))
                     .add(Optional.ofNullable(this.cond).map(IntegerProperty::get).map(String::valueOf).orElse(""))
@@ -652,20 +649,10 @@ public class AirBaseController extends WindowController {
                         .getSlotitemMap();
 
                 SlotItem item = itemMap.get(itemId);
-                Optional<SlotitemMst> mst = Items.slotitemMst(item);
 
-                if (mst.isPresent()) {
-                    StringBuilder text = new StringBuilder(mst.get().getName());
-
-                    text.append(Optional.ofNullable(item.getAlv())
-                            .map(alv -> Messages.getString("item.alv", alv)) //$NON-NLS-1$
-                            .orElse(""));
-                    text.append(Optional.ofNullable(item.getLevel())
-                            .filter(lv -> lv > 0)
-                            .map(lv -> Messages.getString("item.level", lv)) //$NON-NLS-1$
-                            .orElse(""));
-                    this.setGraphic(new ImageView(Items.itemImage(mst.get())));
-                    this.setText(text.toString());
+                if (item != null) {
+                    this.setGraphic(new ImageView(Items.itemImage(item)));
+                    this.setText(Items.name(item));
                 } else {
                     this.setGraphic(null);
                     this.setText("未配備");
@@ -740,13 +727,9 @@ public class AirBaseController extends WindowController {
                 if (cond != null) {
                     URL url = null;
                     if (cond == 2) {
-                        url = PluginContainer.getInstance()
-                                .getClassLoader()
-                                .getResource("logbook/gui/cond_orange.png");
+                        url = PluginServices.getResource("logbook/gui/cond_orange.png");
                     } else if (cond == 3) {
-                        url = PluginContainer.getInstance()
-                                .getClassLoader()
-                                .getResource("logbook/gui/cond_red.png");
+                        url = PluginServices.getResource("logbook/gui/cond_red.png");
                     }
                     if (url != null) {
                         this.setGraphic(new ImageView(new Image(url.toString())));
@@ -762,10 +745,5 @@ public class AirBaseController extends WindowController {
                 this.setText(null);
             }
         }
-    }
-
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(AirBaseController.class);
     }
 }

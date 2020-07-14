@@ -6,6 +6,8 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+import logbook.internal.LoggerHolder;
+
 /**
  * プラグインを管理します
  *
@@ -39,6 +41,11 @@ public class PluginContainer {
         }
     }
 
+    /**
+     * プラグインコンテナを閉じます
+     *
+     * @throws IOException {@link URLClassLoader#close()}
+     */
     public void close() throws IOException {
         this.classLoader.close();
     }
@@ -60,7 +67,8 @@ public class PluginContainer {
      */
     public ClassLoader getClassLoader() {
         if (!this.initialized) {
-            throw new IllegalStateException("PluginContainer not initialized"); //$NON-NLS-1$
+            LoggerHolder.get().warn("PluginContainer not initialized", new IllegalStateException()); //$NON-NLS-1$
+            return PluginContainer.class.getClassLoader();
         }
         return this.classLoader;
     }

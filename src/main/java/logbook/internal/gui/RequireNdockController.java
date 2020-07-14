@@ -2,9 +2,8 @@ package logbook.internal.gui;
 
 import java.time.Duration;
 import java.util.Comparator;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -20,11 +20,12 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import logbook.bean.NdockCollection;
 import logbook.bean.Ship;
 import logbook.bean.ShipCollection;
 import logbook.bean.ShipMst;
+import logbook.internal.LoggerHolder;
 import logbook.internal.Ships;
 import logbook.internal.Time;
 
@@ -34,6 +35,18 @@ import logbook.internal.Time;
  */
 public class RequireNdockController extends WindowController {
 
+    /** 入渠中 */
+    @FXML
+    private CheckBox includeNdock;
+
+    /** 小破以下 */
+    @FXML
+    private CheckBox slightDamage;
+
+    /** 中破・大破 */
+    @FXML
+    private CheckBox damage;
+
     @FXML
     private TableView<RequireNdock> table;
 
@@ -41,9 +54,9 @@ public class RequireNdockController extends WindowController {
     @FXML
     private TableColumn<RequireNdock, Integer> row;
 
-    /** ID */
+    /** 艦隊 */
     @FXML
-    private TableColumn<RequireNdock, Integer> id;
+    private TableColumn<RequireNdock, Integer> deck;
 
     /** 艦娘 */
     @FXML
@@ -71,6 +84,8 @@ public class RequireNdockController extends WindowController {
 
     private ObservableList<RequireNdock> ndocks = FXCollections.observableArrayList();
 
+    private int ndocksHashCode;
+
     private Timeline timeline;
 
     @FXML
@@ -93,7 +108,7 @@ public class RequireNdockController extends WindowController {
             };
             return cell;
         });
-        this.id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        this.deck.setCellValueFactory(new PropertyValueFactory<>("deck"));
         this.ship.setCellValueFactory(new PropertyValueFactory<>("ship"));
         this.ship.setCellFactory(p -> new ShipImageCell());
         this.lv.setCellValueFactory(new PropertyValueFactory<>("lv"));
@@ -124,16 +139,24 @@ public class RequireNdockController extends WindowController {
      *
      * @param e ActionEvent
      */
+    @FXML
     void update(ActionEvent e) {
-        this.ndocks.clear();
-        ShipCollection.get()
+        List<Ship> ndockList = ShipCollection.get()
                 .getShipMap()
                 .values()
                 .stream()
-                .filter(s -> s.getNdockTime() > 0)
-                .sorted(Comparator.comparing(Ship::getNdockTime, Comparator.reverseOrder()))
-                .map(RequireNdock::toRequireNdock)
-                .forEach(this.ndocks::add);
+                .filter(this::filter)
+                .collect(Collectors.toList());
+        if (this.ndocksHashCode == ndockList.hashCode()) {
+            this.ndocks.forEach(RequireNdock::update);
+        } else {
+            this.ndocks.clear();
+            ndockList.stream()
+                    .sorted(Comparator.comparing(Ship::getNdockTime, Comparator.reverseOrder()))
+                    .map(RequireNdock::toRequireNdock)
+                    .forEach(this.ndocks::add);
+            this.ndocksHashCode = ndockList.hashCode();
+        }
     }
 
     /**
@@ -161,8 +184,28 @@ public class RequireNdockController extends WindowController {
             TableTool.showVisibleSetting(this.table, this.getClass().toString() + "#" + "table",
                     this.getWindow());
         } catch (Exception e) {
-            LoggerHolder.LOG.error("FXMLの初期化に失敗しました", e);
+            LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
+    }
+
+    /**
+     * フィルター
+     * @param ship 艦娘
+     * @return フィルタ結果
+     */
+    private boolean filter(Ship ship) {
+        boolean result = ship.getNdockTime() > 0;
+
+        if (result && !this.includeNdock.isSelected()) {
+            result &= !NdockCollection.get().getNdockSet().contains(ship.getId());
+        }
+        if (result && !this.slightDamage.isSelected()) {
+            result &= !Ships.isSlightDamage(ship) && !Ships.isLessThanSlightDamage(ship);
+        }
+        if (result && !this.damage.isSelected()) {
+            result &= !Ships.isHalfDamage(ship) && !Ships.isBadlyDamage(ship) && !Ships.isLost(ship);
+        }
+        return result;
     }
 
     /**
@@ -204,13 +247,9 @@ public class RequireNdockController extends WindowController {
     }
 
     @Override
-    public void setWindow(Stage window) {
-        super.setWindow(window);
-        window.addEventHandler(WindowEvent.WINDOW_HIDDEN, e -> this.timeline.stop());
-    }
-
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(RequireNdockController.class);
+    protected void onWindowHidden(WindowEvent e) {
+        if (this.timeline != null) {
+            this.timeline.stop();
+        }
     }
 }

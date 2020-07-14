@@ -1,7 +1,6 @@
 package logbook.proxy;
 
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,13 +18,6 @@ public interface RequestMetaData {
     String getContentType();
 
     /**
-     * リクエストヘッダを返します
-     * @return リクエストヘッダのMap
-     */
-    @Deprecated
-    Map<String, Collection<String>> getHeaders();
-
-    /**
      * このリクエストを生成した HTTP メソッドの名前を返します
      * @return HTTP メソッド
      */
@@ -38,11 +30,28 @@ public interface RequestMetaData {
     Map<String, List<String>> getParameterMap();
 
     /**
-     * リクエストのプロトコル名とバージョンを返します
-     * @return リクエストのプロトコル名とバージョン
+     * このリクエストから取得できるパラメータを返します
+     *
+     * @param key パラメータのキー
+     * @return パラメータのキーに対応する値、存在しない場合null
      */
-    @Deprecated
-    String getProtocol();
+    default String getParameter(String key) {
+        return this.getParameter(key, null);
+    }
+
+    /**
+     * このリクエストから取得できるパラメータを返します
+     *
+     * @param key パラメータのキー
+     * @param def 存在しない場合のデフォルト値
+     * @return パラメータのキーに対応する値
+     */
+    default String getParameter(String key, String def) {
+        List<String> v = this.getParameterMap().get(key);
+        if (v != null && !v.isEmpty())
+            return v.get(0);
+        return def;
+    }
 
     /**
      * リクエストされた URL のパスの後ろに含まれているクエリ文字列を返します
@@ -51,52 +60,10 @@ public interface RequestMetaData {
     String getQueryString();
 
     /**
-     * リクエストを送ってきたクライアントまたは最後のプロキシの IP アドレスを返します
-     * @return リクエストを送ってきたクライアントの IP アドレス
-     */
-    @Deprecated
-    String getRemoteAddr();
-
-    /**
-     * リクエストを送ったクライアントまたは最後のプロキシの送信元 IP ポートを返します
-     * @return リクエストを送ってきたクライアントの IP ポート
-     */
-    @Deprecated
-    int getRemotePort();
-
-    /**
      * この HTTP リクエストの最初の行にある、リクエストの URL のうちプロトコル名からクエリ文字列までの部分を返します
      * @return URI
      */
     String getRequestURI();
-
-    /**
-     * クライアントがこのリクエストを生成するのに使ったURLを返します
-     * @return URL
-     */
-    @Deprecated
-    String getRequestURL();
-
-    /**
-     * リクエストのスキーム名を返します
-     * @return リクエストのスキーム名
-     */
-    @Deprecated
-    String getScheme();
-
-    /**
-     * リクエストが送られたサーバのホスト名を返します
-     * @return リクエストが送られたサーバのホスト名
-     */
-    @Deprecated
-    String getServerName();
-
-    /**
-     * リクエストが送られたサーバのポート番号を返します
-     * @return リクエストが送られたサーバのポート番号
-     */
-    @Deprecated
-    int getServerPort();
 
     /**
      * リクエストに含まれるメッセージボディを返します

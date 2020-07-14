@@ -2,10 +2,16 @@ package logbook.bean;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.json.JsonObject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import logbook.internal.JsonHelper;
+import logbook.internal.Ships;
 import lombok.Data;
 
 /**
@@ -42,6 +48,23 @@ public class DeckPort implements Serializable, Cloneable {
     }
 
     /**
+     * 大破した艦娘を返します
+     *
+     * @return 大破した艦娘
+     */
+    @JsonIgnore
+    public List<Ship> getBadlyShips() {
+        Map<Integer, Ship> shipMap = ShipCollection.get().getShipMap();
+        return this.getShip()
+                .stream()
+                .map(shipMap::get)
+                .filter(Objects::nonNull)
+                .filter(Ships::isBadlyDamage)
+                .filter(s -> !Ships.isEscape(s))
+                .collect(Collectors.toList());
+    }
+
+    /**
      * JsonObjectから{@link DeckPort}を構築します
      *
      * @param json JsonObject
@@ -52,9 +75,10 @@ public class DeckPort implements Serializable, Cloneable {
         JsonHelper.bind(json)
                 .setInteger("api_flagship", bean::setFlagship)
                 .setInteger("api_id", bean::setId)
-                .set("api_mission", bean::setMission, JsonHelper::toLongList)
+                .setLongList("api_mission", bean::setMission)
                 .setString("api_name", bean::setName)
-                .set("api_ship", bean::setShip, JsonHelper::toIntegerList);
+                .setIntegerList("api_ship", bean::setShip);
         return bean;
     }
+
 }

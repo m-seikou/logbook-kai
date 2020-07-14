@@ -1,19 +1,29 @@
 package logbook.internal.gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import logbook.bean.Chara;
 import logbook.bean.Enemy;
+import logbook.bean.Friend;
 import logbook.bean.Ship;
+import logbook.internal.LoggerHolder;
 import logbook.internal.PhaseState;
+import logbook.internal.Ships;
 
 /**
  * 戦闘ログ詳細のフェーズ
@@ -23,6 +33,9 @@ public class BattleDetailPhase extends TitledPane {
 
     /** フェイズ */
     private PhaseState phase;
+
+    /** 詳細 */
+    private List<PhaseState.AttackDetail> attackDetails;
 
     /** 付加情報 */
     private List<? extends Node> nodes;
@@ -47,6 +60,13 @@ public class BattleDetailPhase extends TitledPane {
     @FXML
     private VBox afterEnemy;
 
+    /** 詳細 */
+    @FXML
+    private VBox detail;
+
+    /** 友軍艦隊フラグ */
+    private boolean isFriendlyBattle;
+
     /**
     * 戦闘ログ詳細のフェーズのコンストラクタ
     *
@@ -63,15 +83,28 @@ public class BattleDetailPhase extends TitledPane {
     * @param infomation 付加情報
     */
     public BattleDetailPhase(PhaseState phase, List<? extends Node> infomation) {
-        this.phase = phase;
+        this(phase, infomation, false);
+    }
+
+    /**
+    * 戦闘ログ詳細のフェーズのコンストラクタ
+    *
+    * @param phase フェイズ
+    * @param infomation 付加情報
+    * @param isFriendlyBattle 友軍艦隊フラグ
+    */
+    public BattleDetailPhase(PhaseState phase, List<? extends Node> infomation, boolean isFriendlyBattle) {
+        this.phase = new PhaseState(phase);
+        this.attackDetails = new ArrayList<>(phase.getAttackDetails());
         this.nodes = infomation;
+        this.isFriendlyBattle = isFriendlyBattle;
         try {
             FXMLLoader loader = InternalFXMLLoader.load("logbook/gui/battle_detail_phase.fxml");
             loader.setRoot(this);
             loader.setController(this);
             loader.load();
         } catch (IOException e) {
-            LoggerHolder.LOG.error("FXMLのロードに失敗しました", e);
+            LoggerHolder.get().error("FXMLのロードに失敗しました", e);
         }
     }
 
@@ -82,30 +115,141 @@ public class BattleDetailPhase extends TitledPane {
             this.infomation.getChildren().addAll(this.nodes);
         }
 
-        for (Ship ship : this.phase.getAfterFriend()) {
-            if (ship != null) {
-                this.afterFriend.getChildren().add(new BattleDetailPhaseShip(ship));
+        PopOver<Chara> popover = new PopOver<>((node, chara) -> {
+            VBox child = new VBox();
+            child.getChildren().add(new FleetTabShipPopup(chara));
+            List<PhaseState.AttackDetail> details = this.attackDetails.stream()
+                    .filter(e -> {
+                        if (chara.getClass() != e.getAttacker().getClass()) {
+                            return false;
+                        }
+                        if (chara.isShip()) {
+                            return chara.asShip().getId() == e.getAttacker().asShip().getId();
+                        }
+                        if (chara.isFriend()) {
+                            return chara.getShipId() == e.getAttacker().getShipId();
+                        }
+                        if (chara.isEnemy()) {
+                            return chara.asEnemy().getOrder() == e.getAttacker().asEnemy().getOrder();
+                        }
+                        return false;
+                    })
+                    .collect(Collectors.toList());
+            if (!details.isEmpty()) {
+                Label text = new Label("与ダメージ");
+                text.getStyleClass().add("title");
+                child.getChildren().add(text);
+                child.getChildren().add(this.detailNode(details));
             }
-        }
-        for (Ship ship : this.phase.getAfterFriendCombined()) {
-            if (ship != null) {
-                this.afterFriendCombined.getChildren().add(new BattleDetailPhaseShip(ship));
+            return new PopOverPane(Ships.toName(chara), child);
+        });
+
+        if (this.isFriendlyBattle) {
+            for (Friend friend : this.phase.getAfterFriendly()) {
+                if (friend != null) {
+                    BattleDetailPhaseShip phaseShip = new BattleDetailPhaseShip(friend, null, null);
+                    this.afterFriend.getChildren().add(phaseShip);
+                    // マウスオーバーでのポップアップ
+                    popover.install(phaseShip, friend);
+                }
+            }
+        } else {
+            for (Ship ship : this.phase.getAfterFriend()) {
+                if (ship != null) {
+                    BattleDetailPhaseShip phaseShip = new BattleDetailPhaseShip(ship,
+                            this.phase.getItemMap(), this.phase.getEscape());
+                    this.afterFriend.getChildren().add(phaseShip);
+                    // マウスオーバーでのポップアップ
+                    popover.install(phaseShip, ship);
+                }
+            }
+            for (Ship ship : this.phase.getAfterFriendCombined()) {
+                if (ship != null) {
+                    BattleDetailPhaseShip phaseShip = new BattleDetailPhaseShip(ship,
+                            this.phase.getItemMap(), this.phase.getEscape());
+                    this.afterFriendCombined.getChildren().add(phaseShip);
+                    // マウスオーバーでのポップアップ
+                    popover.install(phaseShip, ship);
+                }
             }
         }
         for (Enemy enemy : this.phase.getAfterEnemyCombined()) {
             if (enemy != null) {
-                this.afterEnemyCombined.getChildren().add(new BattleDetailPhaseShip(enemy));
+                BattleDetailPhaseShip phaseShip = new BattleDetailPhaseShip(enemy, null, null);
+                this.afterEnemyCombined.getChildren().add(phaseShip);
+                // マウスオーバーでのポップアップ
+                popover.install(phaseShip, enemy);
             }
         }
         for (Enemy enemy : this.phase.getAfterEnemy()) {
             if (enemy != null) {
-                this.afterEnemy.getChildren().add(new BattleDetailPhaseShip(enemy));
+                BattleDetailPhaseShip phaseShip = new BattleDetailPhaseShip(enemy, null, null);
+                this.afterEnemy.getChildren().add(phaseShip);
+                // マウスオーバーでのポップアップ
+                popover.install(phaseShip, enemy);
+            }
+        }
+
+        if (!this.attackDetails.isEmpty()) {
+            TitledPane pane = new TitledPane("詳細", new VBox());
+            pane.setAnimated(false);
+            pane.setExpanded(false);
+            pane.expandedProperty().addListener((ChangeListener<Boolean>) this::initializeDetail);
+
+            this.detail.getChildren().add(pane);
+        }
+    }
+
+    private void initializeDetail(ObservableValue<? extends Boolean> ob, Boolean o, Boolean n) {
+        if (!n)
+            return;
+        for (Node node : this.detail.getChildren()) {
+            if (node instanceof TitledPane) {
+                Parent content = this.detailNode(this.attackDetails);
+                ((TitledPane) node).setContent(content);
             }
         }
     }
 
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(BattleDetailPhase.class);
+    private Parent detailNode(List<PhaseState.AttackDetail> details) {
+        VBox content = new VBox();
+        for (PhaseState.AttackDetail detail : details) {
+            Chara attacker = detail.getAttacker();
+            Chara defender = detail.getDefender();
+
+            StringBuilder sb = new StringBuilder();
+            if (attacker != null)
+                sb.append(Ships.toName(attacker)).append("が");
+            sb.append(Ships.toName(defender)).append("に");
+            sb.append(detail.getDamage()).append("ダメージ");
+            sb.append("(").append(detail.getAtType()).append(")");
+            content.getChildren().add(new Label(sb.toString()));
+
+            StringJoiner sj = new StringJoiner("/");
+            for (int i = 0; i < detail.getDamages().size(); i++) {
+                if (detail.getDamages().get(i) > -1) {
+                    StringBuilder sb2 = new StringBuilder();
+                    sb2.append((i + 1) + "回目");
+                    sb2.append(detail.getDamages().get(i) + "ダメージ");
+                    sb2.append("");
+                    switch (detail.getCritical().get(i)) {
+                    case 2:
+                        sb2.append("(クリティカル)");
+                        break;
+                    }
+                    sj.add(sb2);
+                }
+            }
+            content.getChildren().add(new Label(sj.toString()));
+
+            HBox graphic = new HBox();
+            graphic.getChildren().add(new BattleDetailPhaseShip(attacker,
+                    this.phase.getItemMap(), this.phase.getEscape()));
+            graphic.getChildren().add(new BattleDetailPhaseShip(defender,
+                    this.phase.getItemMap(), this.phase.getEscape()));
+            content.getChildren().add(graphic);
+            content.getChildren().add(new Separator());
+        }
+        return content;
     }
 }

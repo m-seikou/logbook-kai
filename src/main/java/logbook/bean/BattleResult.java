@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.json.JsonObject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import logbook.internal.JsonHelper;
 import lombok.Data;
 
@@ -68,6 +70,9 @@ public class BattleResult implements Serializable {
     /** api_get_flag */
     private List<Integer> getFlag;
 
+    /** api_get_useitem */
+    private Useitem getUseitem;
+
     /** api_get_ship */
     private BattleResult.GetShip getShip;
 
@@ -100,6 +105,30 @@ public class BattleResult implements Serializable {
 
     /** api_landing_hp */
     private BattleResult.LandingHp landingHp;
+
+    /** api_m1 */
+    private Integer m1;
+
+    /** api_m2 */
+    private Integer m2;
+
+    /**
+     * ギミック1が達成されたかを返します
+     * @return
+     */
+    @JsonIgnore
+    public boolean achievementGimmick1() {
+        return (this.m1 != null && this.m1 > 0);
+    }
+
+    /**
+     * ギミック2が達成されたかを返します
+     * @return
+     */
+    @JsonIgnore
+    public boolean achievementGimmick2() {
+        return (this.m2 != null && this.m2 > 0);
+    }
 
     /**
      * 敵艦隊情報
@@ -227,8 +256,8 @@ public class BattleResult implements Serializable {
         public static Escape toEscape(JsonObject json) {
             Escape bean = new Escape();
             JsonHelper.bind(json)
-                    .set("api_escape_idx", bean::setEscapeIdx, JsonHelper::toIntegerList)
-                    .set("api_tow_idx", bean::setTowIdx, JsonHelper::toIntegerList);
+                    .setIntegerList("api_escape_idx", bean::setEscapeIdx)
+                    .setIntegerList("api_tow_idx", bean::setTowIdx);
             return bean;
         }
     }
@@ -267,6 +296,35 @@ public class BattleResult implements Serializable {
     }
 
     /**
+     * ドロップアイテム
+     */
+    @Data
+    public static class Useitem implements Serializable {
+
+        private static final long serialVersionUID = 3453865997555376359L;
+
+        /** api_useitem_id*/
+        private Integer useitemId;
+
+        /** api_useitem_name */
+        private String useitemName;
+
+        /**
+         * JsonObjectから{@link Useitem}を構築します
+         *
+         * @param json JsonObject
+         * @return {@link Useitem}
+         */
+        public static Useitem toUseitem(JsonObject json) {
+            Useitem bean = new Useitem();
+            JsonHelper.bind(json)
+                    .setInteger("api_useitem_id", bean::setUseitemId)
+                    .setString("api_useitem_name", bean::setUseitemName);
+            return bean;
+        }
+    }
+
+    /**
      * JsonObjectから{@link BattleResult}を構築します
      *
      * @param json JsonObject
@@ -281,7 +339,7 @@ public class BattleResult implements Serializable {
                 .setInteger("api_member_lv", bean::setMemberLv)
                 .setInteger("api_member_exp", bean::setMemberExp)
                 .setInteger("api_get_base_exp", bean::setGetBaseExp)
-                .set("api_get_ship_exp", bean::setGetShipExp, JsonHelper::toIntegerList)
+                .setIntegerList("api_get_ship_exp", bean::setGetShipExp)
                 .set("api_get_exp_lvup", bean::setGetExpLvup, JsonHelper.toList(JsonHelper::toIntegerList))
                 .setInteger("api_dests", bean::setDests)
                 .setInteger("api_destsf", bean::setDestsf)
@@ -290,19 +348,21 @@ public class BattleResult implements Serializable {
                 .set("api_enemy_info", bean::setEnemyInfo, EnemyInfo::toEnemyInfo)
                 .setInteger("api_first_clear", bean::setFirstClear)
                 .setBoolean("api_mapcell_incentive", bean::setMapcellIncentive)
-                .set("api_get_flag", bean::setGetFlag, JsonHelper::toIntegerList)
+                .setIntegerList("api_get_flag", bean::setGetFlag)
+                .set("api_get_useitem", bean::setGetUseitem, Useitem::toUseitem)
                 .set("api_get_ship", bean::setGetShip, GetShip::toGetShip)
                 .set("api_get_eventitem", bean::setGetEventitem, JsonHelper.toList(GetEventitem::toGetEventitem))
                 .setInteger("api_get_exmap_rate", bean::setGetExmapRate)
                 .setInteger("api_get_exmap_useitem_id", bean::setGetExmapUseitemId)
                 .setInteger("api_mvp_combined", bean::setMvpCombined)
-                .set("api_get_ship_exp_combined", bean::setGetShipExpCombined, JsonHelper::toIntegerList)
+                .setIntegerList("api_get_ship_exp_combined", bean::setGetShipExpCombined)
                 .set("api_get_exp_lvup_combined", bean::setGetExpLvupCombined,
                         JsonHelper.toList(JsonHelper::toIntegerList))
                 .setInteger("api_get_eventflag", bean::setGetEventflag)
                 .setBoolean("api_escape_flag", bean::setEscapeFlag)
                 .set("api_escape", bean::setEscape, Escape::toEscape)
-                .set("api_landing_hp", bean::setLandingHp, LandingHp::toLandingHp);
+                .set("api_landing_hp", bean::setLandingHp, LandingHp::toLandingHp)
+                .setInteger("api_m1", bean::setM1);
         return bean;
     }
 }

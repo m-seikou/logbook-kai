@@ -1,17 +1,11 @@
 package logbook.internal.gui;
 
 import java.io.IOException;
-import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.controlsfx.control.PopOver;
-import org.controlsfx.control.PopOver.ArrowLocation;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,9 +16,9 @@ import javafx.scene.layout.HBox;
 import logbook.bean.Ndock;
 import logbook.bean.Ship;
 import logbook.bean.ShipCollection;
+import logbook.internal.LoggerHolder;
 import logbook.internal.Ships;
 import logbook.internal.Time;
-import logbook.plugin.PluginContainer;
 
 /**
  * 入渠ドック
@@ -34,8 +28,6 @@ public class NdockPane extends HBox {
 
     /** 入渠ドック */
     private final Ndock ndock;
-
-    private PopOver pop;
 
     /** 色変化1段階目 */
     private final Duration stage1 = Duration.ofMinutes(40);
@@ -68,7 +60,7 @@ public class NdockPane extends HBox {
             loader.setController(this);
             loader.load();
         } catch (IOException e) {
-            LoggerHolder.LOG.error("FXMLのロードに失敗しました", e);
+            LoggerHolder.get().error("FXMLのロードに失敗しました", e);
         }
     }
 
@@ -84,9 +76,23 @@ public class NdockPane extends HBox {
             // 名前
             this.name.setText(Ships.toName(ship));
             this.update();
-
+            // マウスオーバーでのポップアップ
+            PopOver<Ndock> popover = new PopOver<>((node, ndock) -> {
+                ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(this.ndock.getCompleteTime()),
+                        ZoneOffset.systemDefault());
+                String message;
+                if (dateTime.toLocalDate().equals(ZonedDateTime.now().toLocalDate())) {
+                    message = "今日 " + DateTimeFormatter.ofPattern("H時m分s秒").format(dateTime)
+                            + " 頃にお風呂からあがります";
+                } else {
+                    message = DateTimeFormatter.ofPattern("M月d日 H時m分s秒").format(dateTime)
+                            + " 頃にお風呂からあがります";
+                }
+                return new PopOverPane(this.name.getText(), message);
+            });
+            popover.install(this, this.ndock);
         } catch (Exception e) {
-            LoggerHolder.LOG.error("FXMLの初期化に失敗しました", e);
+            LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
     }
 
@@ -111,45 +117,5 @@ public class NdockPane extends HBox {
         } else if (d.compareTo(this.stage1) < 0) {
             styleClass.add("stage1");
         }
-
-        // マウスオーバーでのポップアップ
-        this.setOnMouseEntered(e -> {
-            if (this.pop != null) {
-                this.pop.hide();
-            }
-            ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(this.ndock.getCompleteTime()),
-                    ZoneOffset.systemDefault());
-            String message;
-            if (dateTime.toLocalDate().equals(ZonedDateTime.now().toLocalDate())) {
-                message = "今日 " + DateTimeFormatter.ofPattern("H時m分s秒").format(dateTime)
-                        + " 頃にお風呂からあがります";
-            } else {
-                message = DateTimeFormatter.ofPattern("M月d日 H時m分s秒").format(dateTime)
-                        + " 頃にお風呂からあがります";
-            }
-            this.pop = new PopOver(new Label(message));
-            this.pop.setOpacity(0.95D);
-            this.pop.setDetached(true);
-            this.pop.setCornerRadius(0);
-            this.pop.setTitle(this.name.getText());
-            this.pop.setArrowLocation(ArrowLocation.TOP_LEFT);
-            URL url = PluginContainer.getInstance()
-                    .getClassLoader()
-                    .getResource("logbook/gui/popup.css");
-            this.pop.getRoot()
-                    .getStylesheets()
-                    .add(url.toString());
-            this.pop.show(this);
-        });
-        this.setOnMouseExited(e -> {
-            if (this.pop != null) {
-                this.pop.hide();
-            }
-        });
-    }
-
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(NdockPane.class);
     }
 }

@@ -4,8 +4,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,23 +23,31 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.util.Duration;
 import logbook.bean.AppConfig;
+import logbook.bean.AppSeaAreaExp;
+import logbook.bean.AppSeaAreaExpCollection;
 import logbook.bean.DeckPortCollection;
 import logbook.bean.Ship;
 import logbook.bean.ShipCollection;
 import logbook.bean.ShipMst;
 import logbook.internal.ExpTable;
+import logbook.internal.LoggerHolder;
 import logbook.internal.Rank;
-import logbook.internal.SeaArea;
 import logbook.internal.Ships;
 
 public class CalcExpController extends WindowController {
+
+    @FXML
+    private SplitPane splitPane;
 
     @FXML
     private ComboBox<ShipWrapper> shipList;
@@ -54,7 +65,10 @@ public class CalcExpController extends WindowController {
     private TextField goalExp;
 
     @FXML
-    private ChoiceBox<SeaArea> sea;
+    private ChoiceBox<AppSeaAreaExp> sea;
+
+    @FXML
+    private TextField baseExp;
 
     @FXML
     private ChoiceBox<Rank> rank;
@@ -116,20 +130,20 @@ public class CalcExpController extends WindowController {
 
     @FXML
     void initialize() {
+        // SplitPaneの分割サイズ
+        Timeline x = new Timeline();
+        x.getKeyFrames().add(new KeyFrame(Duration.millis(1), (e) -> {
+            Tools.Conrtols.setSplitWidth(this.splitPane, this.getClass() + "#" + "splitPane");
+        }));
+        x.play();
         // Spinnerに最小値最大値現在値を設定
-        this.nowLv.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 155, 1, 1));
-        this.goalLv.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 155, 100, 1));
+        this.nowLv.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, ExpTable.maxLv(), 1, 1));
+        this.goalLv.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, ExpTable.maxLv(), 1, 1));
         // コンボボックス
         this.shipList.setItems(this.ships);
         this.shipList();
-
         // 海域
-        this.sea.setItems(FXCollections.observableArrayList(
-                Arrays.stream(SeaArea.values())
-                        .filter(s -> s.getSeaExp() > 0)
-                        .collect(Collectors.toList())));
-        this.sea.getSelectionModel().select(AppConfig.get().getBattleSeaArea());
-
+        this.seaAreaList();
         // 評価
         this.rank.setItems(FXCollections.observableArrayList(Rank.values()));
         this.rank.getSelectionModel().select(AppConfig.get().getResultRank());
@@ -157,7 +171,7 @@ public class CalcExpController extends WindowController {
                 .addListener((ChangeListener<Integer>) this::changeGoalLv);
         this.sea.getSelectionModel()
                 .selectedItemProperty()
-                .addListener((ChangeListener<SeaArea>) (ov, o, n) -> this.update());
+                .addListener((ChangeListener<AppSeaAreaExp>) (ov, o, n) -> this.changeSeaArea());
         this.rank.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((ChangeListener<Rank>) (ov, o, n) -> this.update());
@@ -177,6 +191,7 @@ public class CalcExpController extends WindowController {
                 .findAny()
                 .get();
         // 発火させるためにここでselect
+        this.sea.getSelectionModel().select(AppConfig.get().getSeaAreaIndex());
         this.shipList.getSelectionModel().select(flagShip);
     }
 
@@ -201,6 +216,32 @@ public class CalcExpController extends WindowController {
     }
 
     /**
+     * 海域Exp変更
+     *
+     * @param event KeyEvent
+     */
+    @FXML
+    void changeExp(KeyEvent event) {
+        this.update();
+    }
+
+    /**
+     * 海域編集
+     *
+     * @param event ActionEvent
+     */
+    @FXML
+    void edit(ActionEvent event) {
+        try {
+            InternalFXMLLoader.showWindow("logbook/gui/calc_exp_area.fxml", this.getWindow(), "海域編集", c -> {
+                ((CalcExpSeaAreaEditorController) c).setApply(this::seaAreaList);
+            }, null);
+        } catch (Exception ex) {
+            LoggerHolder.get().error("資材チャートの初期化に失敗しました", ex);
+        }
+    }
+
+    /**
      * 計算
      *
      * @param event ActionEvent
@@ -213,16 +254,25 @@ public class CalcExpController extends WindowController {
     /**
      * 艦娘を変えたとき
      */
-    private void changeShip(Ship ship) {
-        this.nowLv.getValueFactory().setValue(ship.getLv());
+    private void changeShip(Ship oldShip, Ship newShip) {
+        if (newShip == null) {
+            return;
+        }
+        this.nowLv.getValueFactory().setValue(newShip.getLv());
 
-        this.nowExpValue = ship.getExp().get(0);
+        this.nowExpValue = newShip.getExp().get(0);
         this.nowExp.setText(Integer.toString(this.nowExpValue));
 
-        int afterLv = Ships.shipMst(ship)
+        int afterLv = Ships.shipMst(newShip)
                 .map(ShipMst::getAfterlv)
                 .orElse(0);
-        int goal = Math.min(Math.max(afterLv, ship.getLv() + 1), ExpTable.maxLv());
+        int goal;
+        if ((oldShip != null && !oldShip.getId().equals(newShip.getId())) || afterLv > newShip.getLv()) {
+            goal = Math.min(Math.max(afterLv, newShip.getLv() + 1), ExpTable.maxLv());
+        } else {
+            int nowGoalLv = Optional.ofNullable(this.goalLv.getValue()).orElse(0);
+            goal = Math.min(Math.max(Math.max(afterLv, newShip.getLv() + 1), nowGoalLv), ExpTable.maxLv());
+        }
 
         this.goalExpValue = ExpTable.get().get(goal);
         this.goalLv.getValueFactory().setValue(goal);
@@ -236,8 +286,9 @@ public class CalcExpController extends WindowController {
     private void changeShip(ObservableValue<? extends ShipWrapper> observable, ShipWrapper oldValue,
             ShipWrapper value) {
         if (value != null) {
+            Ship oldShip = Optional.ofNullable(oldValue).map(ShipWrapper::getShip).orElse(null);
             Ship ship = value.getShip();
-            this.changeShip(ship);
+            this.changeShip(oldShip, ship);
             // Table の同じものを選択
             for (ShortageShipItem ss : this.item.filtered(ss -> ss.shipProperty().get().equals(ship))) {
                 ShortageShipItem selected = this.shortageShip.getSelectionModel().getSelectedItem();
@@ -256,10 +307,12 @@ public class CalcExpController extends WindowController {
     private void changeShip(ObservableValue<? extends ShortageShipItem> observable, ShortageShipItem oldValue,
             ShortageShipItem value) {
         if (value != null) {
-            Ship ship = value.shipProperty().get();
-            this.changeShip(ship);
+            Ship oldShip = Optional.ofNullable(oldValue).map(ShortageShipItem::getShip).orElse(null);
+            Ship ship = value.getShip();
+            this.changeShip(oldShip, ship);
             // Combo の同じものを選択
-            this.ships.filtered(sw -> sw.getShip().equals(ship)).forEach(this.shipList.getSelectionModel()::select);
+            this.ships.filtered(sw -> sw.getShip().equals(ship))
+                    .forEach(this.shipList.getSelectionModel()::select);
         }
     }
 
@@ -286,11 +339,28 @@ public class CalcExpController extends WindowController {
     }
 
     /**
+     * 海域Expを変えた時
+     */
+    private void changeSeaArea() {
+        if (this.sea.getValue() != null) {
+            this.baseExp.setText(Integer.toString(this.sea.getValue().getExp()));
+            this.update();
+        }
+    }
+
+    /**
      * 計算する
      */
     private void update() {
-        // 海域経験値
-        int base = this.sea.getValue().getSeaExp();
+        // 海域Exp
+        int base;
+        try {
+            base = Integer.parseInt(this.baseExp.getText());
+        } catch (Exception e) {
+            base = 0;
+        }
+        base = Math.max(1, base);
+
         // 評価
         double eval = this.rank.getValue().getRatio();
         // 1回あたり
@@ -304,8 +374,18 @@ public class CalcExpController extends WindowController {
 
         this.chart();
 
-        AppConfig.get().setBattleSeaArea(this.sea.getValue());
+        AppConfig.get().setSeaAreaIndex(this.sea.getSelectionModel().getSelectedIndex());
         AppConfig.get().setResultRank(this.rank.getValue());
+    }
+
+    /**
+     * 海域のコンボボックスを作る
+     */
+    private void seaAreaList() {
+        int index = this.sea.getSelectionModel().getSelectedIndex();
+        this.sea.setItems(FXCollections.observableArrayList(AppSeaAreaExpCollection.get().getList()));
+        index = Math.min(this.sea.getItems().size() - 1, index);
+        this.sea.getSelectionModel().select(index);
     }
 
     /**

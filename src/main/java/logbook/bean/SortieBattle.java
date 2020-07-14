@@ -39,11 +39,17 @@ public class SortieBattle
     /** api_ship_lv */
     private List<Integer> shipLv;
 
-    /** api_nowhps */
-    private List<Integer> nowhps;
+    /** api_f_nowhps */
+    private List<Integer> fNowhps;
 
-    /** api_maxhps */
-    private List<Integer> maxhps;
+    /** api_f_maxhps */
+    private List<Integer> fMaxhps;
+
+    /** api_e_nowhps */
+    private List<Integer> eNowhps;
+
+    /** api_e_maxhps */
+    private List<Integer> eMaxhps;
 
     /** api_midnight_flag */
     private Boolean midnightFlag;
@@ -73,7 +79,7 @@ public class SortieBattle
     private BattleTypes.Kouku kouku;
 
     /** api_support_flag */
-    private Boolean supportFlag;
+    private Integer supportFlag;
 
     /** api_support_info */
     private BattleTypes.SupportInfo supportInfo;
@@ -120,26 +126,28 @@ public class SortieBattle
                         JsonHelper.toList(BattleTypes.AirBaseAttack::toAirBaseAttack))
                 .setInteger("api_dock_id", bean::setDockId)
                 .setInteger("api_deck_id", bean::setDockId)
-                .set("api_ship_ke", bean::setShipKe, JsonHelper::toIntegerList)
-                .set("api_ship_lv", bean::setShipLv, JsonHelper::toIntegerList)
-                .set("api_nowhps", bean::setNowhps, JsonHelper::toIntegerList)
-                .set("api_maxhps", bean::setMaxhps, JsonHelper::toIntegerList)
+                .setIntegerList("api_ship_ke", bean::setShipKe)
+                .setIntegerList("api_ship_lv", bean::setShipLv)
+                .setIntegerList("api_f_nowhps", bean::setFNowhps)
+                .setIntegerList("api_f_maxhps", bean::setFMaxhps)
+                .setIntegerList("api_e_nowhps", bean::setENowhps)
+                .setIntegerList("api_e_maxhps", bean::setEMaxhps)
                 .setBoolean("api_midnight_flag", bean::setMidnightFlag)
                 .set("api_eSlot", bean::setESlot, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_fParam", bean::setFParam, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_eParam", bean::setEParam, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_search", bean::setSearch, JsonHelper::toIntegerList)
-                .set("api_formation", bean::setFormation, JsonHelper::toIntegerList)
-                .set("api_stage_flag", bean::setStageFlag, JsonHelper::toIntegerList)
+                .setIntegerList("api_search", bean::setSearch)
+                .setIntegerList("api_formation", bean::setFormation)
+                .setIntegerList("api_stage_flag", bean::setStageFlag)
                 .set("api_injection_kouku", bean::setInjectionKouku, BattleTypes.Kouku::toKouku)
                 .set("api_kouku", bean::setKouku, BattleTypes.Kouku::toKouku)
-                .setBoolean("api_support_flag", bean::setSupportFlag)
+                .setInteger("api_support_flag", bean::setSupportFlag)
                 .set("api_support_info", bean::setSupportInfo, BattleTypes.SupportInfo::toSupportInfo)
                 .setBoolean("api_opening_flag", bean::setOpeningFlag)
                 .set("api_opening_atack", bean::setOpeningAtack, BattleTypes.Raigeki::toRaigeki)
                 .setBoolean("api_opening_taisen_flag", bean::setOpeningTaisenFlag)
                 .set("api_opening_taisen", bean::setOpeningTaisen, BattleTypes.Hougeki::toHougeki)
-                .set("api_hourai_flag", bean::setHouraiFlag, JsonHelper::toIntegerList)
+                .setIntegerList("api_hourai_flag", bean::setHouraiFlag)
                 .set("api_hougeki1", bean::setHougeki1, BattleTypes.Hougeki::toHougeki)
                 .set("api_raigeki", bean::setRaigeki, BattleTypes.Raigeki::toRaigeki)
                 .set("api_hougeki2", bean::setHougeki2, BattleTypes.Hougeki::toHougeki)

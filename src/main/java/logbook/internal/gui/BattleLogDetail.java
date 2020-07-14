@@ -3,6 +3,8 @@ package logbook.internal.gui;
 import java.time.ZoneId;
 import java.util.StringJoiner;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import logbook.internal.BattleLogs.SimpleBattleLog;
@@ -18,6 +20,8 @@ public class BattleLogDetail {
     private StringProperty date;
     /** 海域 */
     private StringProperty area;
+    /** 海域短縮名 */
+    private StringProperty areaShortName;
     /** マス */
     private StringProperty cell;
     /** ボス */
@@ -42,6 +46,12 @@ public class BattleLogDetail {
     private StringProperty dropType;
     /** ドロップ艦娘 */
     private StringProperty dropShip;
+    /** ドロップアイテム */
+    private StringProperty dropItem;
+    /** 艦娘経験値 */
+    private final IntegerProperty shipExp = new SimpleIntegerProperty();
+    /** 提督経験値 */
+    private final IntegerProperty exp = new SimpleIntegerProperty();
 
     /**
      * 日付を取得します。
@@ -89,6 +99,30 @@ public class BattleLogDetail {
      */
     public StringProperty areaProperty() {
         return this.area;
+    }
+
+    /**
+     * 海域短縮名を取得します。
+     * @return 海域短縮名
+     */
+    public String getAreaShortName() {
+        return this.areaShortName.get();
+    }
+
+    /**
+     * 海域短縮名を設定します。
+     * @param area 海域短縮名
+     */
+    public void setAreaShortName(String area) {
+        this.areaShortName = new SimpleStringProperty(area);
+    }
+
+    /**
+     * 海域短縮名を取得します。
+     * @return 海域短縮名
+     */
+    public StringProperty areaShortNameProperty() {
+        return this.areaShortName;
     }
 
     /**
@@ -379,6 +413,78 @@ public class BattleLogDetail {
         return this.dropShip;
     }
 
+    /**
+     * ドロップアイテムを取得します。
+     * @return ドロップアイテム
+     */
+    public String getDropItem() {
+        return this.dropItem.get();
+    }
+
+    /**
+     * ドロップアイテムを設定します。
+     * @param dropItem ドロップアイテム
+     */
+    public void setDropItem(String dropItem) {
+        this.dropItem = new SimpleStringProperty(dropItem);
+    }
+
+    /**
+     * ドロップアイテムを取得します。
+     * @return ドロップアイテム
+     */
+    public StringProperty dropItemProperty() {
+        return this.dropItem;
+    }
+
+    /**
+     * 艦娘経験値を取得します。
+     * @return 艦娘経験値
+     */
+    public int getShipExp() {
+        return this.shipExp.get();
+    }
+
+    /**
+     * 艦娘経験値を設定します。
+     * @param shipExp 艦娘経験値
+     */
+    public void setShipExp(int shipExp) {
+        this.shipExp.set(shipExp);
+    }
+
+    /**
+     * 艦娘経験値を取得します。
+     * @return 艦娘経験値
+     */
+    public IntegerProperty shipExpProperty() {
+        return this.shipExp;
+    }
+
+    /**
+     * 提督経験値を取得します。
+     * @return 提督経験値
+     */
+    public int getExp() {
+        return this.exp.get();
+    }
+
+    /**
+     * 提督経験値を設定します。
+     * @param exp 提督経験値
+     */
+    public void setExp(int exp) {
+        this.exp.set(exp);
+    }
+
+    /**
+     * 提督経験値を取得します。
+     * @return 提督経験値
+     */
+    public IntegerProperty expProperty() {
+        return this.exp;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner("\t")
@@ -396,6 +502,9 @@ public class BattleLogDetail {
                 .add(this.efleet.get())
                 .add(this.dropType.get())
                 .add(this.dropShip.get())
+                .add(this.dropItem.get())
+                .add(Integer.toString(this.shipExp.get()))
+                .add(Integer.toString(this.exp.get()))
                 .toString();
     }
 
@@ -411,6 +520,7 @@ public class BattleLogDetail {
         String date = Logs.DATE_FORMAT.format(log.getDate().withZoneSameInstant(ZoneId.of("Asia/Tokyo")));
         detail.setDate(date);
         detail.setArea(log.getArea());
+        detail.setAreaShortName(log.getAreaShortName());
         detail.setCell(log.getCell());
         detail.setBoss(log.getBoss());
         detail.setRank(log.getRank());
@@ -423,6 +533,9 @@ public class BattleLogDetail {
         detail.setEfleet(log.getEfleet());
         detail.setDropType(log.getDropType());
         detail.setDropShip(log.getDropShip());
+        detail.setDropItem(log.getDropItem());
+        detail.setShipExp(Integer.parseInt(log.getShipExp()));
+        detail.setExp(Integer.parseInt(log.getExp()));
         return detail;
     }
 }

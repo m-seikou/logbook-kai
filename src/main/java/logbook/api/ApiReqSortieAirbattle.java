@@ -29,15 +29,24 @@ public class ApiReqSortieAirbattle implements APIListenerSpi {
         JsonObject data = json.getJsonObject("api_data");
         if (data != null) {
 
-            BattleLog log = AppCondition.get().getBattleResult();
+            AppCondition condition = AppCondition.get();
+            BattleLog log = condition.getBattleResult();
             if (log != null) {
+                condition.setBattleCount(condition.getBattleCount() + 1);
+                log.setBattleCount(condition.getBattleCount());
+                log.setRoute(condition.getRoute());
+
                 log.setBattle(SortieAirbattle.toAirbattle(data));
+                // ローデータを設定する
+                if (AppConfig.get().isIncludeRawData()) {
+                    BattleLog.setRawData(log, BattleLog.RawData::setBattle, data, req);
+                }
                 // 出撃艦隊
                 Integer dockId = Optional.ofNullable(log.getBattle())
                         .map(IFormation::getDockId)
                         .orElse(1);
                 // 艦隊スナップショットを作る
-                log.setDeckMap(BattleLog.deckMap(dockId));
+                BattleLog.snapshot(log, dockId);
                 if (AppConfig.get().isApplyBattle()) {
                     // 艦隊を更新
                     PhaseState p = new PhaseState(log);

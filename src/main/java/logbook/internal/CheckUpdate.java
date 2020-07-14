@@ -1,84 +1,230 @@
 package logbook.internal;
 
 import java.awt.Desktop;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import logbook.bean.AppConfig;
-import logbook.plugin.lifecycle.StartUp;
+import javafx.stage.Stage;
+import logbook.internal.gui.InternalFXMLLoader;
+import logbook.internal.gui.Tools;
 
 /**
  * アップデートチェック
  *
  */
-public class CheckUpdate implements StartUp {
+public class CheckUpdate {
 
-    private static final String[] CHECK_SITES = {
-            "https://kancolle.sanaechan.net/logbook-kai.txt",
-            "http://kancolle.sanaechan.net/logbook-kai.txt"
-    };
+    /** 更新確認先 Github tags API */
+    private static final String TAGS = "https://api.github.com/repos/sanaehirotaka/logbook-kai/tags";
 
-    @Override
-    public void run() {
-        if (!AppConfig.get().isCheckUpdate()) {
-            return;
-        }
-        for (String checkSite : CHECK_SITES) {
-            URI uri = URI.create(checkSite);
+    /** 更新確認先 Github releases API */
+    private static final String RELEASES = "https://api.github.com/repos/sanaehirotaka/logbook-kai/releases/tags/";
 
-            try (InputStream in = uri.toURL().openStream()) {
-                byte[] b = new byte[1024];
-                int l = in.read(b, 0, b.length);
-                String str = new String(b, 0, l);
+    /** ダウンロードサイトを開くを選択したときに開くURL */
+    private static final String OPEN_URL = "https://github.com/sanaehirotaka/logbook-kai/releases";
 
-                Version newversion = new Version(str);
+    /** 検索するtagの名前 */
+    /* 例えばv20.1.1 の 20.1.1にマッチ */
+    static final Pattern TAG_REGIX = Pattern.compile("\\d+\\.\\d+(?:\\.\\d+)?$");
 
-                if (Version.getCurrent().compareTo(newversion) < 0) {
-                    Platform.runLater(() -> CheckUpdate.openInfo(Version.getCurrent(), newversion));
-                }
-                break;
-            } catch (Exception e) {
-                LoggerHolder.LOG.warn("アップデートチェックで例外", e);
-            }
+    public static void run(Stage stage) {
+        run(false, stage);
+    }
+
+    public static void run(boolean isStartUp) {
+        run(isStartUp, null);
+    }
+
+    private static void run(boolean isStartUp, Stage stage) {
+        Version remoteVersion = remoteVersion();
+
+        if (!Version.UNKNOWN.equals(remoteVersion) && Version.getCurrent().compareTo(remoteVersion) < 0) {
+            Platform.runLater(() -> CheckUpdate.openInfo(Version.getCurrent(), remoteVersion, isStartUp, stage));
+        } else if (!isStartUp) {
+            Tools.Conrtols.alert(AlertType.INFORMATION, "更新の確認", "最新のバージョンです。", stage);
         }
     }
 
-    private static void openInfo(Version o, Version n) {
+    /**
+     * 最新のバージョンを取得します。
+     * @return 最新のバージョン
+     */
+    private static Version remoteVersion() {
+        try {
+            JsonArray tags;
+            try (JsonReader r = Json.createReader(new ByteArrayInputStream(readURI(URI.create(TAGS))))) {
+                tags = r.readArray();
+            }
+            // Githubのtagsから一番新しいreleasesを取ってくる
+            // tagsを処理する
+            return tags.stream()
+                    //　tagの名前
+                    .map(val -> val.asJsonObject().getString("name"))
+                    // tagの名前にバージョンを含む?実行中のバージョンより新しい?
+                    .filter(tagname -> {
+                        Matcher m = TAG_REGIX.matcher(tagname);
+                        if (m.find()) {
+                            Version remote = new Version(m.group());
+                            return (!Version.UNKNOWN.equals(remote) && Version.getCurrent().compareTo(remote) < 0);
+                        }
+                        return false;
+                    })
+                    // tagがreleasesにある?
+                    .filter(name -> {
+                        try {
+                            JsonObject releases;
+                            try (JsonReader r = Json.createReader(new ByteArrayInputStream(readURI(URI.create(RELEASES + name))))) {
+                                releases = r.readObject();
+                            }
+                            // releasesにない場合は "message": "Not Found"
+                            if (releases.getString("message", null) != null)
+                                return false;
+                            // draftではない
+                            if (releases.getBoolean("draft", false))
+                                return false;
+                            // prereleaseではない
+                            if (releases.getBoolean("prerelease", false))
+                                return false;
+                            // assetsが1つ以上ある
+                            if (releases.getJsonArray("assets") == null || releases.getJsonArray("assets").size() == 0)
+                                return false;
+                            // 最新版が見つかった!
+                            return true;
+                        } catch (Exception e) {
+                            return false;
+                        }
+                    })
+                    .findFirst()
+                    .map(tagname -> {
+                        Matcher m = TAG_REGIX.matcher(tagname);
+                        m.find();
+                        return new Version(m.group());
+                    })
+                    .orElse(Version.UNKNOWN);
+        } catch (Exception e) {
+            LoggerHolder.get().warn("最新バージョンの取得に失敗しました", e);
+        }
+        return Version.UNKNOWN;
+    }
+
+    private static byte[] readURI(URI uri) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) uri.toURL().openConnection();
+        try {
+            // タイムアウトを設定
+            connection.setConnectTimeout((int) TimeUnit.SECONDS.toMillis(10));
+            connection.setReadTimeout((int) TimeUnit.SECONDS.toMillis(5));
+            // 200 OKの場合にURIを読み取る
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                try (InputStream in = connection.getInputStream()) {
+                    byte[] buffer = new byte[1024];
+                    int len;
+                    while ((len = in.read(buffer, 0, buffer.length)) > 0) {
+                        out.write(buffer, 0, len);
+                    }
+                }
+                return out.toByteArray();
+            }
+        } finally {
+            connection.disconnect();
+        }
+        return new byte[0];
+    }
+
+    private static void openInfo(Version o, Version n, boolean isStartUp, Stage stage) {
         String message = "新しいバージョンがあります。ダウンロードサイトを開きますか？\n"
                 + "現在のバージョン:" + o + "\n"
-                + "新しいバージョン:" + n + "\n"
-                + "※自動アップデートチェックは[その他]-[設定]からOFFに出来ます";
+                + "新しいバージョン:" + n;
+        if (isStartUp) {
+            message += "\n※自動アップデートチェックは[その他]-[設定]から無効に出来ます";
+        }
+
+        ButtonType update = new ButtonType("自動更新");
+        ButtonType visible = new ButtonType("ダウンロードサイトを開く");
+        ButtonType no = new ButtonType("後で");
 
         Alert alert = new Alert(AlertType.INFORMATION);
+        alert.getDialogPane().getStylesheets().add("logbook/gui/application.css");
+        InternalFXMLLoader.setGlobal(alert.getDialogPane());
         alert.setTitle("新しいバージョン");
         alert.setHeaderText("新しいバージョン");
         alert.setContentText(message);
+        alert.initOwner(stage);
         alert.getButtonTypes().clear();
-        alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
-        alert.showAndWait()
-                .filter(ButtonType.YES::equals)
-                .ifPresent(e -> openBrowser());
-
+        alert.getButtonTypes().addAll(update, visible, no);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent()) {
+            if (result.get() == update)
+                launchUpdate(n);
+            if (result.get() == visible)
+                openBrowser();
+        }
     }
 
     private static void openBrowser() {
         try {
-            Desktop.getDesktop()
-                    .browse(URI.create("https://github.com/sanaehirotaka/logbook-kai/releases"));
+            ThreadManager.getExecutorService()
+                    .submit(() -> {
+                        Desktop.getDesktop()
+                                .browse(URI.create(OPEN_URL));
+                        return null;
+                    });
         } catch (Exception e) {
-            LoggerHolder.LOG.warn("アップデートチェックで例外", e);
+            LoggerHolder.get().warn("アップデートチェックで例外", e);
         }
     }
 
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(CheckUpdate.class);
+    private static void launchUpdate(Version newversion) {
+        try {
+            // 航海日誌のインストールディレクトリ
+            Path dir = new File(Launcher.class.getProtectionDomain().getCodeSource().getLocation().toURI())
+                    .toPath()
+                    .getParent();
+            // 更新スクリプト
+            InputStream is = Launcher.class.getClassLoader().getResourceAsStream("logbook/update/update.js");
+            Path script = Files.createTempFile("logbook-kai-update-", ".js");
+            try {
+                // 更新スクリプトを一時ファイルにコピー
+                Files.copy(is, script, StandardCopyOption.REPLACE_EXISTING);
+                // 更新スクリプトを動かすコマンド (JAVA_HOME/bin/jjs)
+                Path command = Paths.get(System.getProperty("java.home"), "bin", "jjs");
+
+                new ProcessBuilder(command.toString(), script.toString(),
+                        "-fx",
+                        "-Dupdate_script=" + script,
+                        "-Dinstall_target=" + dir,
+                        "-Dinstall_version=" + newversion)
+                                .inheritIO()
+                                .start();
+            } catch (Exception e) {
+                // 何か起こったら一時ファイル削除
+                Files.deleteIfExists(script);
+                throw e;
+            }
+        } catch (Exception e) {
+            LoggerHolder.get().warn("アップデートチェックで例外", e);
+            openBrowser();
+        }
     }
 }

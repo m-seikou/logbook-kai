@@ -1,9 +1,5 @@
 package logbook.internal;
 
-import java.beans.ExceptionListener;
-import java.beans.XMLDecoder;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -17,12 +13,8 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import logbook.Messages;
 
 /**
  * アプリケーションの設定を読み書きします
@@ -38,7 +30,7 @@ public final class Config {
 
     private final Map<Class<?>, Object> map = new ConcurrentHashMap<>();
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper;
 
     /**
      * アプリケーション設定の読み書きを指定のディレクトリで行います
@@ -46,6 +38,8 @@ public final class Config {
      * @param dir アプリケーション設定ディレクトリ
      */
     public Config(Path dir) {
+        this.mapper = new ObjectMapper();
+        this.mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         this.dir = dir;
     }
 
@@ -75,7 +69,7 @@ public final class Config {
     /**
      * 読み込まれたすべてのインスタンスをファイルに書き込みます
      */
-    public void store() {
+    public synchronized void store() {
         this.map.entrySet()
                 .forEach(this::store);
     }
@@ -84,47 +78,33 @@ public final class Config {
         this.write(entry.getKey(), entry.getValue());
     }
 
-    @SuppressWarnings("unchecked")
     private <T> T read(Class<T> clazz) {
         T instance = null;
-        Path filepath;
-
-        // try read from JSON
-        filepath = this.jsonPath(clazz);
         try {
-            if (!Files.isReadable(filepath) || (Files.size(filepath) <= 0)) {
+            tryRead: {
+                Path filepath = this.jsonPath(clazz);
+                // 通常ファイル読み込み
+                if (Files.isReadable(filepath) && (Files.size(filepath) > 0)) {
+                    try (Reader reader = Files.newBufferedReader(filepath)) {
+                        instance = this.mapper.readValue(reader, clazz);
+                        break tryRead;
+                    } catch (Exception e) {
+                        instance = null;
+                        LoggerHolder.get().warn("アプリケーションの設定を読み込み中に例外が発生", e); //$NON-NLS-1$
+                    }
+                }
                 // ファイルが読み込めないまたはサイズがゼロの場合バックアップファイルを読み込む
                 filepath = this.backupPath(filepath);
-            }
-            if (Files.isReadable(filepath)) {
-                try (Reader reader = Files.newBufferedReader(filepath)) {
-                    instance = this.mapper.readValue(reader, clazz);
+                if (Files.isReadable(filepath) && (Files.size(filepath) > 0)) {
+                    try (Reader reader = Files.newBufferedReader(filepath)) {
+                        instance = this.mapper.readValue(reader, clazz);
+                        break tryRead;
+                    }
                 }
             }
         } catch (Exception e) {
             instance = null;
-            this.getListener().exceptionThrown(e);
-        }
-
-        // try read from XML
-        if (instance == null) {
-            filepath = this.xmlPath(clazz);
-            try {
-                if (!Files.isReadable(filepath) || (Files.size(filepath) <= 0)) {
-                    // ファイルが読み込めないまたはサイズがゼロの場合バックアップファイルを読み込む
-                    filepath = this.backupPath(filepath);
-                }
-                if (Files.isReadable(filepath)) {
-                    try (InputStream in = new BufferedInputStream(Files.newInputStream(filepath))) {
-                        try (XMLDecoder encoder = new XMLDecoder(in, this.getListener())) {
-                            instance = (T) encoder.readObject();
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                instance = null;
-                this.getListener().exceptionThrown(e);
-            }
+            LoggerHolder.get().warn("アプリケーションの設定を読み込み中に例外が発生", e); //$NON-NLS-1$
         }
         return instance;
     }
@@ -152,36 +132,17 @@ public final class Config {
             try (Writer writer = Files.newBufferedWriter(filepath, StandardOpenOption.CREATE)) {
                 this.mapper.writeValue(writer, instance);
             }
-
-            // XML形式の古い設定ファイルを削除する
-            // .backup ファイルを削除して、.xml ファイルを .backupにリネームする
-            Path xml = this.xmlPath(clazz);
-            Path xmlbackup = this.backupPath(xml);
-            if (Files.exists(xmlbackup)) {
-                Files.deleteIfExists(xmlbackup);
-            }
-            if (Files.exists(xml)) {
-                Files.move(xml, xmlbackup, StandardCopyOption.REPLACE_EXISTING);
-            }
         } catch (Exception e) {
-            this.getListener().exceptionThrown(e);
+            LoggerHolder.get().warn("アプリケーションの設定を読み込み中に例外が発生", e); //$NON-NLS-1$
         }
     }
 
-    private Path xmlPath(Class<?> clazz) {
-        return this.dir.resolve(clazz.getCanonicalName() + ".xml");
-    }
-
     private Path jsonPath(Class<?> clazz) {
-        return this.dir.resolve(clazz.getCanonicalName() + ".json");
+        return this.dir.resolve(clazz.getCanonicalName() + ".json"); //$NON-NLS-1$
     }
 
     private Path backupPath(Path filepath) {
         return filepath.resolveSibling(filepath.getFileName() + ".backup"); //$NON-NLS-1$
-    }
-
-    private ExceptionListener getListener() {
-        return e -> LoggerHolder.LOG.warn(Messages.getString("ConfigReader.1"), e); //$NON-NLS-1$
     }
 
     /**
@@ -191,10 +152,5 @@ public final class Config {
      */
     public static Config getDefault() {
         return DEFAULT;
-    }
-
-    private static class LoggerHolder {
-        /** ロガー */
-        private static final Logger LOG = LogManager.getLogger(Config.class);
     }
 }
