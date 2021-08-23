@@ -16,7 +16,7 @@ public class MissionResultLogFormat extends LogFormatBase<MissionResult> {
 
     @Override
     public String name() {
-        return "遠征報告書";
+        return "missionResultLog";
     }
 
     @Override

@@ -14,7 +14,7 @@ public class CreateshipLogFormat extends LogFormatBase<Createship> {
 
     @Override
     public String name() {
-        return "建造報告書";
+        return "createShipLog";
     }
 
     @Override

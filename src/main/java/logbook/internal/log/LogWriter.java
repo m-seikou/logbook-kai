@@ -27,7 +27,7 @@ public class LogWriter<T> {
     public static final String LF = "\n";
 
     /** デフォルトの文字コード  */
-    public static final Charset DEFAULT_CHARSET = Charset.forName("MS932");
+    public static final Charset DEFAULT_CHARSET = Charset.forName("UTF8");
 
     /** デフォルトのファイルを開く方法を指定するオプション */
     private static final OpenOption[] DEFAULT_OPTION = new OpenOption[] { StandardOpenOption.CREATE,
@@ -40,7 +40,7 @@ public class LogWriter<T> {
     private OpenOption[] options = DEFAULT_OPTION;
 
     /** 行の区切り文字 */
-    private String delimiter = CRLF;
+    private String delimiter = LF;
 
     /** ヘッダー */
     private String header;
