@@ -532,13 +532,72 @@ public class Ships {
      *
      * @param ship 艦娘
      * @return 対潜火力
+     * @see "https://wikiwiki.jp/kancolle/%E5%AF%BE%E6%BD%9C%E6%94%BB%E6%92%83#i3bc656d"
+     * @see "https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#AntiSubmarine"
      */
     public static int tPower(Ship ship) {
-        // [ 艦船の対潜 ÷ 5 ] + 装備の対潜 × 2 + 25
-        int tais = getSlotitemMst(ship)
-                .mapToInt(SlotitemMst::getTais)
-                .sum();
-        return (int) Math.round(Math.floor((ship.getTaisen().get(0) - tais) / 5D) + (tais * 2) + 25);
+        // 装備
+        Map<Integer, SlotItem> itemMap = SlotItemCollection.get().getSlotitemMap();
+        // 装備マスタ
+        Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get().getSlotitemMap();
+
+        // 艦種別定数
+        double shipTypeConst;
+        if (ship.is(ShipType.駆逐艦, ShipType.海防艦, ShipType.軽巡洋艦, ShipType.重雷装巡洋艦, ShipType.練習巡洋艦, ShipType.補給艦)) {
+            shipTypeConst = 13;
+        } else if (ship.is(ShipType.航空巡洋艦, ShipType.航空戦艦, ShipType.水上機母艦, ShipType.軽空母, ShipType.揚陸艦)) {
+            shipTypeConst = 8;
+        } else {
+            return 0;
+        }
+
+        //装備の対潜値(改修&装備ボーナス)
+        double antiSub = 0;
+        boolean hasSonar = false;
+        boolean hasMine = false;
+        boolean hasThrowerA = false;
+        boolean hasThrowerB = false;
+        for (int i = 0; i < ship.getSlot().size(); i++) {
+
+            SlotItem item = itemMap.get(ship.getSlot().get(i));
+            if (item == null)
+                // 装備していない
+                continue;
+
+            SlotitemMst itemMst = itemMstMap.get(item.getSlotitemId());
+            if (itemMst == null)
+                // マスターが存在しない。起こり得ない状態
+                continue;
+            if (itemMst.is(SlotItemType.ソナー)) {
+                hasSonar = true;
+            } else if (itemMst.getName().equals("九五式爆雷") || itemMst.getName().equals("二式爆雷")) {
+                hasMine = true;
+            } else if (itemMst.getName().equals("九四式爆雷投射機") || itemMst.getName().equals("三式爆雷投射機")) {
+                hasThrowerA = true;
+            } else if (itemMst.is(SlotItemType.爆雷)) {
+                hasThrowerB = true;
+            } else {
+                continue;
+            }
+            antiSub += itemMst.getTais().doubleValue() + Math.sqrt(item.getLevel()) * 2 / 3;
+        }
+
+        // 対潜シナジー倍率
+        double combineRate;
+        if(hasSonar && hasMine && hasThrowerA){
+            combineRate = 1.15 * 1.25;
+        }else if(hasSonar && (hasThrowerA || hasThrowerB || hasMine)){
+            combineRate = 1.15;
+        }else if(hasThrowerA && hasMine){
+            combineRate = 1.1;
+        }else{
+            combineRate = 1;
+        }
+        return (int) ((
+                Math.sqrt(getTaisen(ship)) * 2 // 地の対潜値
+                        + antiSub * 1.5 // 装備の対潜値(改修&装備ボーナス)
+                        + shipTypeConst // 艦種別定数(速吸はいい加減)
+        ) * combineRate);
     }
 
     /**
@@ -599,7 +658,7 @@ public class Ships {
     }
 
     /**
-     * 制空加算(改修効果)
+     * 制空値への改修ボーナス
      *
      * @param itemMst 装備定義
      * @param item 装備
@@ -620,7 +679,7 @@ public class Ships {
     }
 
     /**
-     * 制空ボーナス値
+     * 制空値への熟練度ボーナス
      *
      * @param itemMst 装備定義
      * @param item 装備
