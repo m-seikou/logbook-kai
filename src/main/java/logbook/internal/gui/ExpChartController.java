@@ -58,8 +58,8 @@ public class ExpChartController extends WindowController {
         // 選択肢を追加
         this.type.setItems(FXCollections.observableArrayList(TypeOption.values()));
         this.term.setItems(FXCollections.observableArrayList(ScaleOption.values()));
-        this.type.getSelectionModel().select(0);
-        this.term.getSelectionModel().select(2);
+        this.type.getSelectionModel().select(2);
+        this.term.getSelectionModel().select(4);
         this.type.getSelectionModel().selectedItemProperty().addListener(this::changed);
         this.term.getSelectionModel().selectedItemProperty().addListener(this::changed);
         this.change();
@@ -179,9 +179,9 @@ public class ExpChartController extends WindowController {
             }
         };
 
-        private String name;
+        private final String name;
 
-        private TypeOption(String name) {
+        TypeOption(String name) {
             this.name = name;
         }
 
@@ -317,9 +317,9 @@ public class ExpChartController extends WindowController {
             }
         };
 
-        private String name;
-        private DateTimeFormatter format;
-        private Duration tick;
+        private final String name;
+        private final DateTimeFormatter format;
+        private final Duration tick;
 
         ScaleOption(String name, String format, Duration tick) {
             this.name = name;
