@@ -570,9 +570,9 @@ public class Ships {
                 continue;
             if (itemMst.is(SlotItemType.ソナー)) {
                 hasSonar = true;
-            } else if (itemMst.getName().equals("九五式爆雷") || itemMst.getName().equals("二式爆雷")) {
+            } else if (isMine(itemMst)) {
                 hasMine = true;
-            } else if (itemMst.getName().equals("九四式爆雷投射機") || itemMst.getName().equals("三式爆雷投射機")) {
+            } else if (isThrower(itemMst)) {
                 hasThrowerA = true;
             } else if (itemMst.is(SlotItemType.爆雷)) {
                 hasThrowerB = true;
@@ -598,6 +598,34 @@ public class Ships {
                         + antiSub * 1.5 // 装備の対潜値(改修&装備ボーナス)
                         + shipTypeConst // 艦種別定数(速吸はいい加減)
         ) * combineRate);
+    }
+
+    private static boolean isMine(SlotitemMst itemMst){
+        if(itemMst.getName().equals("九四式爆雷投射機")
+                || itemMst.getName().equals("二式爆雷")
+                || itemMst.getName().equals("対潜短魚雷(試作初期型)")
+                || itemMst.getName().equals("Hedgehog(初期型)")
+        ){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param logbook.bean.SlotitemMst itemMst
+     * @return
+     */
+    private static boolean isThrower(SlotitemMst itemMst){
+        if(itemMst.getName().equals("九五式爆雷")
+                || itemMst.getName().equals("三式爆雷投射機")
+                || itemMst.getName().equals("三式爆雷投射機 集中配備")
+                || itemMst.getName().equals("試製15cm9連装対潜噴進砲")
+                || itemMst.getName().equals("RUR-4A Weapon Alpha改")
+        ){
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -824,7 +852,7 @@ public class Ships {
                     .filter(Objects::nonNull);
         };
 
-        //  索敵スコア＝(装備倍率×装備索敵値)の和＋√(各艦娘の素索敵)の和－[0.4×司令部レベル(端数切り上げ)]＋2×(6－出撃艦数)
+        //  索敵スコア＝(装備倍率×装備索敵値)の和＋√(各艦娘の素索敵)の和−[0.4×司令部レベル(端数切り上げ)]＋2×(6−出撃艦数)
 
         // (装備係数(索敵)×(装備索敵値+改修係数(索敵)×√★))の和
         double itemView = ships.stream()
@@ -852,7 +880,7 @@ public class Ships {
                 .sum();
         // [0.4×司令部レベル(端数切り上げ)]
         double levelScore = Math.ceil(Basic.get().getLevel() * 0.4D);
-        // 2×(6－出撃艦数)
+        // 2×(6−出撃艦数)
         double fleetScore = 2 * (6 - ships.size());
 
         return new Decision33(branchCoefficient, itemView, shipView, levelScore, fleetScore);
