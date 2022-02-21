@@ -31,29 +31,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
 import logbook.Messages;
-import logbook.bean.AppBouyomiConfig;
-import logbook.bean.AppCondition;
-import logbook.bean.AppConfig;
-import logbook.bean.AppExpRecords;
-import logbook.bean.AppQuest;
-import logbook.bean.AppQuestCollection;
-import logbook.bean.Basic;
-import logbook.bean.DeckPort;
-import logbook.bean.DeckPortCollection;
-import logbook.bean.Mission;
-import logbook.bean.MissionCollection;
-import logbook.bean.Ndock;
-import logbook.bean.NdockCollection;
-import logbook.bean.Ship;
-import logbook.bean.ShipCollection;
-import logbook.bean.ShipMst;
-import logbook.bean.SlotItemCollection;
-import logbook.internal.Audios;
-import logbook.internal.BouyomiChanUtils;
+import logbook.bean.*;
+import logbook.internal.*;
 import logbook.internal.BouyomiChanUtils.Type;
-import logbook.internal.LoggerHolder;
-import logbook.internal.Ships;
-import logbook.internal.Tuple;
 import logbook.internal.proxy.ProxyHolder;
 import logbook.plugin.PluginServices;
 import logbook.plugin.lifecycle.StartUp;
@@ -87,10 +67,10 @@ public class MainController extends WindowController {
     private long achievementHashCode;
 
     /** 遠征通知のタイムスタンプ */
-    private Map<Integer, Long> timeStampMission = new HashMap<>();
+    private final Map<Integer, Long> timeStampMission = new HashMap<>();
 
     /** 入渠通知のタイムスタンプ */
-    private Map<Integer, Long> timeStampNdock = new HashMap<>();
+    private final Map<Integer, Long> timeStampNDock = new HashMap<>();
 
     @FXML
     private MainMenuController mainMenuController;
@@ -253,14 +233,15 @@ public class MainController extends WindowController {
      */
     private void button() {
         // 装備
-        Integer slotitem = SlotItemCollection.get()
-                .getSlotitemMap()
-                .size();
-        Integer maxSlotitem = Basic.get()
+        Map<Integer, SlotitemMst> itemMst = SlotitemMstCollection.get().getSlotitemMap();
+        long slotItem = SlotItemCollection.get().getSlotitemMap().values().stream()
+                .filter(item -> !itemMst.get(item.getSlotitemId()).is(SlotItemType.応急修理要員, SlotItemType.補給物資, SlotItemType.戦闘糧食))
+                .count();
+        Integer maxSlotItem = Basic.get()
                 .getMaxSlotitem();
-        this.item.setText(MessageFormat.format(this.itemFormat, slotitem, maxSlotitem));
+        this.item.setText(MessageFormat.format(this.itemFormat, slotItem, maxSlotItem));
 
-        boolean itemFully = maxSlotitem - slotitem <= AppConfig.get().getItemFullyThreshold();
+        boolean itemFully = maxSlotItem - slotItem <= AppConfig.get().getItemFullyThreshold();
         if (itemFully) {
             if (!this.item.getStyleClass().contains(FULLY_CLASS)) {
                 this.item.getStyleClass().add(FULLY_CLASS);
@@ -563,15 +544,15 @@ public class MainController extends WindowController {
             long time = ndock.getCompleteTime();
 
             if (1 > time) {
-                this.timeStampNdock.put(ndock.getId(), 0L);
+                this.timeStampNDock.put(ndock.getId(), 0L);
             } else {
                 // 残り時間を計算
                 Duration now = Duration.ofMillis(time - System.currentTimeMillis());
                 // 前回の通知の時間
-                long timeStamp = this.timeStampNdock.getOrDefault(ndock.getId(), 0L);
+                long timeStamp = this.timeStampNDock.getOrDefault(ndock.getId(), 0L);
 
                 if (this.requireNotify(now, timeStamp, false)) {
-                    this.timeStampNdock.put(ndock.getId(), System.currentTimeMillis());
+                    this.timeStampNDock.put(ndock.getId(), System.currentTimeMillis());
                     this.pushNotifyNdock(ndock);
                 }
             }
