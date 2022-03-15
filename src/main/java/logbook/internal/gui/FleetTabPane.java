@@ -21,10 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import logbook.Messages;
@@ -75,7 +72,7 @@ public class FleetTabPane extends ScrollPane {
     private String tabStyle;
 
     /** 分岐点係数 */
-    private double branchCoefficient = 1;
+    private int branchCoefficient = 1;
 
     /** メッセージ */
     @FXML
@@ -202,6 +199,12 @@ public class FleetTabPane extends ScrollPane {
         this.updateRemarkPlugin(this.port);
     }
 
+    private final String[] choiceElement = new String[]{
+            "1.0 → 2-5",
+            "2.0",
+            "3.0 → 6-2,6-3",
+            "4.0 → 3-5,6-1"
+    };
     /**
      * 分岐点係数を変更する
      *
@@ -209,28 +212,32 @@ public class FleetTabPane extends ScrollPane {
      */
     @FXML
     void changeBranchCoefficient(ActionEvent event) {
-        TextInputDialog dialog = new TextInputDialog(Double.toString(this.branchCoefficient));
+        String selected = choiceElement[this.branchCoefficient + 1];
+        ChoiceDialog<String> dialog = new ChoiceDialog<String>(selected);
         dialog.getDialogPane().getStylesheets().add("logbook/gui/application.css");
         InternalFXMLLoader.setGlobal(dialog.getDialogPane());
         dialog.initOwner(this.getScene().getWindow());
         dialog.setTitle("分岐点係数を変更");
-        dialog.setHeaderText("分岐点係数を数値で入力してください 例)\n"
-                + "沖ノ島沖 G,I,Jマス 係数: 1.0\n"
-                + "北方AL海域 Gマス 係数: 4.0\n"
-                + "中部海域哨戒線 G,Hマス 係数: 4.0\n"
-                + "MS諸島沖 E,Iマス 係数: 3.0\n"
-                + "グアノ環礁沖海域 Hマス 係数: 3.0");
+
+        dialog.setHeaderText("分岐点係数を数値で入力してください");
+        for (String s : choiceElement) {
+            dialog.getItems().add(s);
+        }
 
         val result = dialog.showAndWait();
-        if (result.isPresent()) {
-            String value = result.get();
-            if (!value.isEmpty()) {
-                try {
-                    this.branchCoefficient = Double.parseDouble(value);
-                    this.setDecision33();
-                } catch (NumberFormatException e) {
-                }
-            }
+        if (!result.isPresent()) {
+            return;
+        }
+        String value = result.get();
+        if (value.isEmpty()) {
+            return;
+        }
+        try {
+            this.branchCoefficient = Integer.parseInt(value.substring(0, 1));
+            this.setDecision33();
+        } catch (NumberFormatException e) {
+            this.branchCoefficient = 1;
+            LoggerHolder.get().error(e.getMessage(), e);
         }
     }
 
