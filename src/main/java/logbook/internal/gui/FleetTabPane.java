@@ -15,9 +15,12 @@ import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
+import javafx.beans.Observable;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -108,7 +111,7 @@ public class FleetTabPane extends ScrollPane {
 
     /** 分岐点係数ボタン */
     @FXML
-    private Button branchCoefficientButton;
+    private ChoiceBox<String> branchCoefficientChoice;
 
     /** 艦娘レベル計アイコン */
     @FXML
@@ -197,43 +200,22 @@ public class FleetTabPane extends ScrollPane {
         this.setIcon();
         this.initializeRemarkPlugin();
         this.updateRemarkPlugin(this.port);
+        // 索敵係数変更時のイベント追加
+        branchCoefficientChoice.setValue(branchCoefficientChoice.getItems().get(0));
+        branchCoefficientChoice.getSelectionModel().selectedItemProperty().addListener(this::changeBranchCoefficientChoice);
     }
 
-    private final String[] choiceElement = new String[]{
-            "1.0 → 2-5",
-            "2.0",
-            "3.0 → 6-2,6-3",
-            "4.0 → 3-5,6-1"
-    };
     /**
      * 分岐点係数を変更する
      *
-     * @param event ActionEvent
+     * @param observable Observable
+     * @param oldValue String
+     * @param newValue String
      */
-    @FXML
-    void changeBranchCoefficient(ActionEvent event) {
-        String selected = choiceElement[this.branchCoefficient + 1];
-        ChoiceDialog<String> dialog = new ChoiceDialog<String>(selected);
-        dialog.getDialogPane().getStylesheets().add("logbook/gui/application.css");
-        InternalFXMLLoader.setGlobal(dialog.getDialogPane());
-        dialog.initOwner(this.getScene().getWindow());
-        dialog.setTitle("分岐点係数を変更");
-
-        dialog.setHeaderText("分岐点係数を数値で入力してください");
-        for (String s : choiceElement) {
-            dialog.getItems().add(s);
-        }
-
-        val result = dialog.showAndWait();
-        if (!result.isPresent()) {
-            return;
-        }
-        String value = result.get();
-        if (value.isEmpty()) {
-            return;
-        }
+    void changeBranchCoefficientChoice(Observable observable, String oldValue, String newValue) {
         try {
-            this.branchCoefficient = Integer.parseInt(value.substring(0, 1));
+            this.branchCoefficient = Integer.parseInt(newValue.substring(0, 1));
+            LoggerHolder.get().error("****** 索敵係数 " + branchCoefficient);
             this.setDecision33();
         } catch (NumberFormatException e) {
             this.branchCoefficient = 1;
@@ -297,16 +279,15 @@ public class FleetTabPane extends ScrollPane {
 
             Path path = Ships.shipStandingPoseImagePath(ship);
             if (path != null) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("-fx-background-image: url('" + path.toUri() + "');");
-                sb.append("-fx-background-position: ");
-                sb.append(Ships.shipMst(ship)
-                        .map(ShipMst::getId)
-                        .flatMap(id -> Optional.ofNullable(ShipgraphCollection.get().getShipgraphMap().get(id)))
-                        .map(g -> ((g.getWeda().get(0) * -1) + 100) + "px " + (g.getWeda().get(1) * -1) + "px")
-                        .orElse("center top"));
-                sb.append(";");
-                this.setStyle(sb.toString());
+                String sb = "-fx-background-image: url('" + path.toUri() + "');" +
+                        "-fx-background-position: " +
+                        Ships.shipMst(ship)
+                                .map(ShipMst::getId)
+                                .flatMap(id -> Optional.ofNullable(ShipgraphCollection.get().getShipgraphMap().get(id)))
+                                .map(g -> ((g.getWeda().get(0) * -1) + 100) + "px " + (g.getWeda().get(1) * -1) + "px")
+                                .orElse("center top") +
+                        ";";
+                this.setStyle(sb);
                 this.pseudoClassStateChanged(PseudoClass.getPseudoClass("enablebgimage"), true);
             } else {
                 this.setStyle("-fx-background-image: null");
@@ -345,7 +326,7 @@ public class FleetTabPane extends ScrollPane {
         this.sakutekisum.setText(Integer.toString(withoutEscape.stream().mapToInt(ship -> ship.getSakuteki().get(0)).sum()));
         // TP合計
         int tp = withoutEscape.stream().mapToInt(Ships::transportPoint).sum();
-        this.tpsum.setText(tp + "/" + (int)(tp*7/10));
+        this.tpsum.setText(tp + "/" + (tp*7/10));
 
         // 艦隊速度 - 各艦の速度のうち最低の速度を艦隊の速度とする
         String label;
@@ -366,14 +347,14 @@ public class FleetTabPane extends ScrollPane {
         }
         this.speed.setText(label);
 
-        ObservableList<Node> childs = this.ships.getChildren();
-        childs.clear();
+        ObservableList<Node> children = this.ships.getChildren();
+        children.clear();
         this.shipList.stream()
                 .map(FleetTabShipPane::new)
-                .forEach(childs::add);
+                .forEach(children::add);
 
-        String left = null;
-        String right = null;
+        String left;
+        String right;
         AppConfig conf = AppConfig.get();
         if (this.shipList.stream().anyMatch(Ships::isBadlyDamage)) {
             // 大破時
@@ -384,7 +365,7 @@ public class FleetTabPane extends ScrollPane {
         } else if (this.shipList.stream().anyMatch(Ships::isSlightDamage)) {
             // 小破時
             left = Optional.ofNullable(conf.getTabColorSlightDamage()).map(String::trim).filter(color -> color.length() > 0).orElse("#FFEB5C");
-        } else if (this.shipList.stream().anyMatch(s -> s.getNowhp() != s.getMaxhp())) {
+        } else if (this.shipList.stream().anyMatch(s -> s.getNowhp().equals(s.getMaxhp()))) {
             // 健在時
             left = Optional.ofNullable(conf.getTabColorLessThanSlightDamage()).map(String::trim).filter(color -> color.length() > 0).orElse("#D0EEFF");
         } else {
@@ -421,7 +402,7 @@ public class FleetTabPane extends ScrollPane {
 
             long cut = AppCondition.get().getCondUpdateTime();
             // 疲労抜け想定時刻(エポック秒)
-            long end = cut + (-Math.floorDiv(49 - minCond, -3) * 180);
+            long end = cut + (-Math.floorDiv(49 - minCond, -3) * 180L);
 
             // 現在時刻
             ZonedDateTime now = ZonedDateTime.now(ZoneId.systemDefault());
@@ -452,10 +433,9 @@ public class FleetTabPane extends ScrollPane {
      */
     private void setDecision33() {
         Ships.Decision33 decision33 = Ships.decision33(this.shipList, this.branchCoefficient);
+        LoggerHolder.get().error(String.format("艦隊:%d 係数:%d 索敵値：%3.3f", this.port.getId(), branchCoefficient, decision33.get()));
         // 判定式(33)
-        this.decision33.setText(BigDecimal.valueOf(decision33.get())
-                .setScale(3, RoundingMode.FLOOR)
-                .toPlainString());
+        this.decision33.setText(String.format("%03.3f",decision33.get()));
         PopOver<Ships.Decision33> popover = new PopOver<>((node, data) -> {
             String content = new StringJoiner("\n")
                     .add("判定式(33):" + data.get() + "(分岐点係数:" + data.getBranchCoefficient() + ")")
@@ -467,7 +447,6 @@ public class FleetTabPane extends ScrollPane {
             return new PopOverPane("判定式(33)", content);
         });
         popover.install(this.decision33, decision33);
-        this.branchCoefficientButton.setText("分岐点係数:" + this.branchCoefficient);
     }
 
     private void setIcon() {
@@ -517,7 +496,7 @@ public class FleetTabPane extends ScrollPane {
      */
     private static class RemarkLabel extends Label implements Updateable<DeckPort> {
 
-        private Updateable<DeckPort> plugin;
+        private final Updateable<DeckPort> plugin;
 
         public RemarkLabel(Updateable<DeckPort> plugin) {
             this.plugin = plugin;
