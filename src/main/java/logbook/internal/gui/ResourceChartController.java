@@ -55,116 +55,169 @@ import logbook.internal.log.MaterialLogFormat;
 
 /**
  * 資材ログ
- *
  */
 public class ResourceChartController extends WindowController {
 
-    /** 資材ログで使用するタイムゾーン */
+    /**
+     * 資材ログで使用するタイムゾーン
+     */
     private static final ZoneId TIME_ZONE = ZoneId.of("Asia/Tokyo");
 
-    /** 日付書式 */
+    /**
+     * 日付書式
+     */
     public static final DateTimeFormatter TABLE_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @FXML
     private SplitPane splitPane;
 
-    /** 期間 */
+    /**
+     * 期間
+     */
     @FXML
     private ChoiceBox<ScaleOption> term;
 
-    /** 開始 */
+    /**
+     * 開始
+     */
     @FXML
     private DatePicker from;
 
-    /** 終了 */
+    /**
+     * 終了
+     */
     @FXML
     private DatePicker to;
 
-    /** 燃料 */
+    /**
+     * 燃料
+     */
     @FXML
     private CheckBox fuel;
 
-    /** 弾薬 */
+    /**
+     * 弾薬
+     */
     @FXML
     private CheckBox ammo;
 
-    /** 鋼材 */
+    /**
+     * 鋼材
+     */
     @FXML
     private CheckBox metal;
 
-    /** ボーキサイト */
+    /**
+     * ボーキサイト
+     */
     @FXML
     private CheckBox bauxite;
 
-    /** 高速修復材 */
+    /**
+     * 高速修復材
+     */
     @FXML
     private CheckBox bucket;
 
-    /** 高速建造材 */
+    /**
+     * 高速建造材
+     */
     @FXML
     private CheckBox burner;
 
-    /** 開発資材 */
+    /**
+     * 開発資材
+     */
     @FXML
     private CheckBox research;
 
-    /** 改修資材 */
+    /**
+     * 改修資材
+     */
     @FXML
     private CheckBox improve;
 
-    /** ゼロを基準 */
+    /**
+     * ゼロを基準
+     */
     @FXML
     private CheckBox forceZero;
 
-    /** チャートx軸 */
+    /**
+     * チャートx軸
+     */
     @FXML
     private NumberAxis xAxis;
 
-    /** チャートy軸 */
+    /**
+     * チャートy軸
+     */
     @FXML
     private NumberAxis yAxis;
 
-    /** チャート */
+    /**
+     * チャート
+     */
     @FXML
     private LineChart<Number, Number> chart;
 
-    /** テーブル */
+    /**
+     * テーブル
+     */
     @FXML
     private TableView<ResourceTable> table;
 
-    /** 日付列 */
+    /**
+     * 日付列
+     */
     @FXML
     private TableColumn<ResourceTable, String> date;
 
-    /** 燃料列 */
+    /**
+     * 燃料列
+     */
     @FXML
     private TableColumn<ResourceTable, Pair<Integer, Integer>> fuelGap;
 
-    /** 弾薬列 */
+    /**
+     * 弾薬列
+     */
     @FXML
     private TableColumn<ResourceTable, Pair<Integer, Integer>> ammoGap;
 
-    /** 鋼材列 */
+    /**
+     * 鋼材列
+     */
     @FXML
     private TableColumn<ResourceTable, Pair<Integer, Integer>> metalGap;
 
-    /** ボーキ列 */
+    /**
+     * ボーキ列
+     */
     @FXML
     private TableColumn<ResourceTable, Pair<Integer, Integer>> bauxiteGap;
 
-    /** 高速修復材列 */
+    /**
+     * 高速修復材列
+     */
     @FXML
     private TableColumn<ResourceTable, Pair<Integer, Integer>> bucketGap;
 
-    /** 高速建造材列 */
+    /**
+     * 高速建造材列
+     */
     @FXML
     private TableColumn<ResourceTable, Pair<Integer, Integer>> burnerGap;
 
-    /** 開発資材列 */
+    /**
+     * 開発資材列
+     */
     @FXML
     private TableColumn<ResourceTable, Pair<Integer, Integer>> researchGap;
 
-    /** 改修資材列 */
+    /**
+     * 改修資材列
+     */
     @FXML
     private TableColumn<ResourceTable, Pair<Integer, Integer>> improveGap;
 
@@ -179,7 +232,7 @@ public class ResourceChartController extends WindowController {
         x.play();
         this.term.setItems(FXCollections.observableArrayList(ScaleOption.values()));
         loadConfig();
-        
+
         // 資材ログのテーブル列をバインド
         this.date.setCellValueFactory(new PropertyValueFactory<>("date"));
         this.fuelGap.setCellValueFactory(new PropertyValueFactory<>("fuel"));
@@ -461,12 +514,15 @@ public class ResourceChartController extends WindowController {
 
     /**
      * チャートの時間軸ラベルに表示するテキスト
-     *
      */
     private static class DateTimeConverter extends StringConverter<Number> {
-        /** チャートに設定する最小の時刻 */
+        /**
+         * チャートに設定する最小の時刻
+         */
         private final long from;
-        /** フォーマッター */
+        /**
+         * フォーマッター
+         */
         private final DateTimeFormatter format;
 
         /**
@@ -491,24 +547,39 @@ public class ResourceChartController extends WindowController {
 
     /**
      * スケールの選択肢
-     *
      */
     private enum ScaleOption {
-        /** 1日 */
+        /**
+         * 1日
+         */
         ONE_DAY("1日", "HH:mm", 1, TimeUnit.HOURS.toMillis(2)),
-        /** 1週間 */
+        /**
+         * 1週間
+         */
         ONE_WEEK("1週間", "M月d日", 7, TimeUnit.DAYS.toMillis(1)),
-        /** 2週間 */
+        /**
+         * 2週間
+         */
         TWO_WEEK("2週間", "M月d日", 14, TimeUnit.DAYS.toMillis(1)),
-        /** 1ヶ月 */
+        /**
+         * 1ヶ月
+         */
         ONE_MONTH("1ヶ月", "M月d日", 30, TimeUnit.DAYS.toMillis(2)),
-        /** 2ヶ月 */
+        /**
+         * 2ヶ月
+         */
         TWO_MONTH("2ヶ月", "M月d日", 60, TimeUnit.DAYS.toMillis(5)),
-        /** 3ヶ月 */
+        /**
+         * 3ヶ月
+         */
         THREE_MONTH("3ヶ月", "M月d日", 90, TimeUnit.DAYS.toMillis(10)),
-        /** 半年 */
+        /**
+         * 半年
+         */
         HALF_YEAR("半年", "M月d日", 180, TimeUnit.DAYS.toMillis(15)),
-        /** 1年 */
+        /**
+         * 1年
+         */
         ONE_YEAR("1年", "M月d日", 365, TimeUnit.DAYS.toMillis(30));
 
         private String name;
@@ -543,35 +614,52 @@ public class ResourceChartController extends WindowController {
 
     /**
      * 資材ログ
-     *
      */
     private static class ResourceLog {
 
-        /** 日付 */
+        /**
+         * 日付
+         */
         private ZonedDateTime date;
 
-        /** 燃料 */
+        /**
+         * 燃料
+         */
         private int fuel;
 
-        /** 弾薬 */
+        /**
+         * 弾薬
+         */
         private int ammo;
 
-        /** 鋼材 */
+        /**
+         * 鋼材
+         */
         private int metal;
 
-        /** ボーキ */
+        /**
+         * ボーキ
+         */
         private int bauxite;
 
-        /** 高速修復材 */
+        /**
+         * 高速修復材
+         */
         private int bucket;
 
-        /** 高速建造材 */
+        /**
+         * 高速建造材
+         */
         private int burner;
 
-        /** 開発資材 */
+        /**
+         * 開発資材
+         */
         private int research;
 
-        /** 改修資材 */
+        /**
+         * 改修資材
+         */
         private int improve;
 
         /**
@@ -609,6 +697,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 日付を取得します。
+         *
          * @return 日付
          */
         public ZonedDateTime getDate() {
@@ -617,6 +706,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 日付を設定します。
+         *
          * @param date 日付
          */
         public void setDate(ZonedDateTime date) {
@@ -625,6 +715,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 燃料を取得します。
+         *
          * @param from 開始日時
          * @return 燃料
          */
@@ -634,6 +725,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 燃料を取得します。
+         *
          * @return 燃料
          */
         public int getFuel() {
@@ -642,6 +734,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 燃料を設定します。
+         *
          * @param fuel 燃料
          */
         public void setFuel(int fuel) {
@@ -650,6 +743,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 弾薬を取得します。
+         *
          * @param from 開始日時
          * @return 弾薬
          */
@@ -659,6 +753,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 弾薬を取得します。
+         *
          * @return 弾薬
          */
         public int getAmmo() {
@@ -667,6 +762,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 弾薬を設定します。
+         *
          * @param ammo 弾薬
          */
         public void setAmmo(int ammo) {
@@ -675,6 +771,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 鋼材を取得します。
+         *
          * @param from 開始日時
          * @return 鋼材
          */
@@ -684,6 +781,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 鋼材を取得します。
+         *
          * @return 鋼材
          */
         public int getMetal() {
@@ -692,6 +790,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 鋼材を設定します。
+         *
          * @param metal 鋼材
          */
         public void setMetal(int metal) {
@@ -700,6 +799,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * ボーキサイトを取得します。
+         *
          * @param from 開始日時
          * @return ボーキサイト
          */
@@ -709,6 +809,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * ボーキを取得します。
+         *
          * @return ボーキ
          */
         public int getBauxite() {
@@ -717,6 +818,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * ボーキサイトを設定します。
+         *
          * @param bauxite ボーキサイト
          */
         public void setBauxite(int bauxite) {
@@ -725,6 +827,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 高速修復材を取得します。
+         *
          * @param from 開始日時
          * @return 高速修復材
          */
@@ -734,6 +837,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 高速修復材を取得します。
+         *
          * @return 高速修復材
          */
         public int getBucket() {
@@ -742,6 +846,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 高速修復材を設定します。
+         *
          * @param bucket 高速修復材
          */
         public void setBucket(int bucket) {
@@ -750,6 +855,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 高速建造材を取得します。
+         *
          * @param from 開始日時
          * @return 高速建造材
          */
@@ -759,6 +865,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 高速建造材を取得します。
+         *
          * @return 高速建造材
          */
         public int getBurner() {
@@ -767,6 +874,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 高速建造材を設定します。
+         *
          * @param burner 高速建造材
          */
         public void setBurner(int burner) {
@@ -775,6 +883,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 開発資材を取得します。
+         *
          * @param from 開始日時
          * @return 開発資材
          */
@@ -784,6 +893,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 開発資材を取得します。
+         *
          * @return 開発資材
          */
         public int getResearch() {
@@ -792,6 +902,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 開発資材を設定します。
+         *
          * @param research 開発資材
          */
         public void setResearch(int research) {
@@ -800,6 +911,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 改修資材を取得します。
+         *
          * @param from 開始日時
          * @return 改修資材
          */
@@ -809,6 +921,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 改修資材を取得します。
+         *
          * @return 改修資材
          */
         public int getImprove() {
@@ -817,6 +930,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 改修資材を設定します。
+         *
          * @param improve 改修資材
          */
         public void setImprove(int improve) {
@@ -826,32 +940,47 @@ public class ResourceChartController extends WindowController {
 
     /**
      * 資材ログのSeriesを纏めた物
-     *
      */
     private static class ResourceSeries {
 
-        /** 燃料 */
+        /**
+         * 燃料
+         */
         private XYChart.Series<Number, Number> fuel = new XYChart.Series<>();
 
-        /** 弾薬 */
+        /**
+         * 弾薬
+         */
         private XYChart.Series<Number, Number> ammo = new XYChart.Series<>();
 
-        /** 鋼材 */
+        /**
+         * 鋼材
+         */
         private XYChart.Series<Number, Number> metal = new XYChart.Series<>();
 
-        /** ボーキ */
+        /**
+         * ボーキ
+         */
         private XYChart.Series<Number, Number> bauxite = new XYChart.Series<>();
 
-        /** 高速修復材 */
+        /**
+         * 高速修復材
+         */
         private XYChart.Series<Number, Number> bucket = new XYChart.Series<>();
 
-        /** 高速建造材 */
+        /**
+         * 高速建造材
+         */
         private XYChart.Series<Number, Number> burner = new XYChart.Series<>();
 
-        /** 開発資材 */
+        /**
+         * 開発資材
+         */
         private XYChart.Series<Number, Number> research = new XYChart.Series<>();
 
-        /** 改修資材 */
+        /**
+         * 改修資材
+         */
         private XYChart.Series<Number, Number> improve = new XYChart.Series<>();
 
         /**
@@ -870,6 +999,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 燃料を取得します。
+         *
          * @return 燃料
          */
         public XYChart.Series<Number, Number> getFuel() {
@@ -878,6 +1008,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 燃料を設定します。
+         *
          * @param fuel 燃料
          */
         public void setFuel(Collection<XYChart.Data<Number, Number>> fuel) {
@@ -886,6 +1017,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 弾薬を取得します。
+         *
          * @return 弾薬
          */
         public XYChart.Series<Number, Number> getAmmo() {
@@ -894,6 +1026,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 弾薬を設定します。
+         *
          * @param ammo 弾薬
          */
         public void setAmmo(Collection<XYChart.Data<Number, Number>> ammo) {
@@ -902,6 +1035,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 鋼材を取得します。
+         *
          * @return 鋼材
          */
         public XYChart.Series<Number, Number> getMetal() {
@@ -910,6 +1044,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 鋼材を設定します。
+         *
          * @param metal 鋼材
          */
         public void setMetal(Collection<XYChart.Data<Number, Number>> metal) {
@@ -918,6 +1053,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * ボーキを取得します。
+         *
          * @return ボーキ
          */
         public XYChart.Series<Number, Number> getBauxite() {
@@ -926,6 +1062,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * ボーキを設定します。
+         *
          * @param bauxite ボーキ
          */
         public void setBauxite(Collection<XYChart.Data<Number, Number>> bauxite) {
@@ -934,6 +1071,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 高速修復材を取得します。
+         *
          * @return 高速修復材
          */
         public XYChart.Series<Number, Number> getBucket() {
@@ -942,6 +1080,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 高速修復材を設定します。
+         *
          * @param bucket 高速修復材
          */
         public void setBucket(Collection<XYChart.Data<Number, Number>> bucket) {
@@ -950,6 +1089,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 高速建造材を取得します。
+         *
          * @return 高速建造材
          */
         public XYChart.Series<Number, Number> getBurner() {
@@ -958,6 +1098,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 高速建造材を設定します。
+         *
          * @param burner 高速建造材
          */
         public void setBurner(Collection<XYChart.Data<Number, Number>> burner) {
@@ -966,6 +1107,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 開発資材を取得します。
+         *
          * @return 開発資材
          */
         public XYChart.Series<Number, Number> getResearch() {
@@ -974,6 +1116,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 開発資材を設定します。
+         *
          * @param research 開発資材
          */
         public void setResearch(Collection<XYChart.Data<Number, Number>> research) {
@@ -982,6 +1125,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 改修資材を取得します。
+         *
          * @return 改修資材
          */
         public XYChart.Series<Number, Number> getImprove() {
@@ -990,6 +1134,7 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 改修資材を設定します。
+         *
          * @param improve 改修資材
          */
         public void setImprove(Collection<XYChart.Data<Number, Number>> improve) {
