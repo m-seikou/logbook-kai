@@ -582,10 +582,10 @@ public class ResourceChartController extends WindowController {
          */
         ONE_YEAR("1年", "M月d日", 365, TimeUnit.DAYS.toMillis(30));
 
-        private String name;
-        private String format;
-        private int day;
-        private long tickUnit;
+        private final String name;
+        private final String format;
+        private final int day;
+        private final long tickUnit;
 
         ScaleOption(String name, String format, int day, long tickUnit) {
             this.name = name;
@@ -654,6 +654,8 @@ public class ResourceChartController extends WindowController {
 
         /**
          * 開発資材
+         *
+         * @todo developにする
          */
         private int research;
 
@@ -946,42 +948,42 @@ public class ResourceChartController extends WindowController {
         /**
          * 燃料
          */
-        private XYChart.Series<Number, Number> fuel = new XYChart.Series<>();
+        private final XYChart.Series<Number, Number> fuel = new XYChart.Series<>();
 
         /**
          * 弾薬
          */
-        private XYChart.Series<Number, Number> ammo = new XYChart.Series<>();
+        private final XYChart.Series<Number, Number> ammo = new XYChart.Series<>();
 
         /**
          * 鋼材
          */
-        private XYChart.Series<Number, Number> metal = new XYChart.Series<>();
+        private final XYChart.Series<Number, Number> metal = new XYChart.Series<>();
 
         /**
          * ボーキ
          */
-        private XYChart.Series<Number, Number> bauxite = new XYChart.Series<>();
+        private final XYChart.Series<Number, Number> bauxite = new XYChart.Series<>();
 
         /**
          * 高速修復材
          */
-        private XYChart.Series<Number, Number> bucket = new XYChart.Series<>();
+        private final XYChart.Series<Number, Number> bucket = new XYChart.Series<>();
 
         /**
          * 高速建造材
          */
-        private XYChart.Series<Number, Number> burner = new XYChart.Series<>();
+        private final XYChart.Series<Number, Number> burner = new XYChart.Series<>();
 
         /**
          * 開発資材
          */
-        private XYChart.Series<Number, Number> research = new XYChart.Series<>();
+        private final XYChart.Series<Number, Number> research = new XYChart.Series<>();
 
         /**
          * 改修資材
          */
-        private XYChart.Series<Number, Number> improve = new XYChart.Series<>();
+        private final XYChart.Series<Number, Number> improve = new XYChart.Series<>();
 
         /**
          * ラベルを設定する
