@@ -58,6 +58,9 @@ import logbook.internal.log.MaterialLogFormat;
  */
 public class ResourceChartController extends WindowController {
 
+    private static final double ppmBaseResource = 0.35; // 350000 / 1000000
+    private static final double ppmBaseMaterial = 0.003;// 3000 / 1000000
+
     /**
      * 資材ログで使用するタイムゾーン
      */
@@ -142,6 +145,12 @@ public class ResourceChartController extends WindowController {
      */
     @FXML
     private CheckBox forceZero;
+
+    /**
+     * 保有率(保有数/上限 ppm)
+     */
+    @FXML
+    private CheckBox ppm;
 
     /**
      * チャートx軸
@@ -276,6 +285,7 @@ public class ResourceChartController extends WindowController {
         config.setResearch(this.research.isSelected());
         config.setImprove(this.improve.isSelected());
         config.setForceZero(this.forceZero.isSelected());
+        config.setForceZero(this.ppm.isSelected());
         AppViewConfig.get().setResourceChartConfig(config);
     }
 
@@ -293,6 +303,7 @@ public class ResourceChartController extends WindowController {
         this.research.setSelected(config.isResearch());
         this.improve.setSelected(config.isImprove());
         this.forceZero.setSelected(config.isForceZero());
+        this.ppm.setSelected(config.isPpm());
         this.term.getSelectionModel().select(config.getTermIndex());
     }
 
@@ -357,44 +368,92 @@ public class ResourceChartController extends WindowController {
             ResourceSeries series = new ResourceSeries();
             // 燃料
             if (this.fuel.isSelected())
-                series.setFuel(log.stream()
-                        .map(r -> r.getFuelSeries(fromDateTime))
-                        .collect(Collectors.toList()));
+                if (this.ppm.isSelected()) {
+                    series.setFuel(log.stream()
+                            .map(r -> r.getFuelPpmSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                } else {
+                    series.setFuel(log.stream()
+                            .map(r -> r.getFuelSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                }
             // 弾薬
             if (this.ammo.isSelected())
-                series.setAmmo(log.stream()
-                        .map(r -> r.getAmmoSeries(fromDateTime))
-                        .collect(Collectors.toList()));
+                if (this.ppm.isSelected()) {
+                    series.setAmmo(log.stream()
+                            .map(r -> r.getAmmoPpmSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                } else {
+                    series.setAmmo(log.stream()
+                            .map(r -> r.getAmmoSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                }
             // 鋼材
             if (this.metal.isSelected())
-                series.setMetal(log.stream()
-                        .map(r -> r.getMetalSeries(fromDateTime))
-                        .collect(Collectors.toList()));
+                if (this.ppm.isSelected()) {
+                    series.setMetal(log.stream()
+                            .map(r -> r.getMetalPpmSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                } else {
+                    series.setMetal(log.stream()
+                            .map(r -> r.getMetalSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                }
             // ボーキ
             if (this.bauxite.isSelected())
-                series.setBauxite(log.stream()
-                        .map(r -> r.getBauxiteSeries(fromDateTime))
-                        .collect(Collectors.toList()));
+                if (this.ppm.isSelected()) {
+                    series.setBauxite(log.stream()
+                            .map(r -> r.getBauxitePpmSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                } else {
+                    series.setBauxite(log.stream()
+                            .map(r -> r.getBauxiteSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                }
             // 高速修復材
             if (this.bucket.isSelected())
-                series.setBucket(log.stream()
-                        .map(r -> r.getBucketSeries(fromDateTime))
-                        .collect(Collectors.toList()));
+                if (this.ppm.isSelected()) {
+                    series.setBucket(log.stream()
+                            .map(r -> r.getBucketPpmSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                } else {
+                    series.setBucket(log.stream()
+                            .map(r -> r.getBucketSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                }
             // 高速建造材
             if (this.burner.isSelected())
-                series.setBurner(log.stream()
-                        .map(r -> r.getBurnerSeries(fromDateTime))
-                        .collect(Collectors.toList()));
+                if (this.ppm.isSelected()) {
+                    series.setBurner(log.stream()
+                            .map(r -> r.getBurnerPpmSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                } else {
+                    series.setBurner(log.stream()
+                            .map(r -> r.getBurnerSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                }
             // 開発資材
             if (this.research.isSelected())
-                series.setResearch(log.stream()
-                        .map(r -> r.getResearchSeries(fromDateTime))
-                        .collect(Collectors.toList()));
+                if (this.ppm.isSelected()) {
+                    series.setResearch(log.stream()
+                            .map(r -> r.getResearchPpmSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                } else {
+                    series.setResearch(log.stream()
+                            .map(r -> r.getResearchSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                }
             // 改修資材
             if (this.improve.isSelected())
-                series.setImprove(log.stream()
-                        .map(r -> r.getImproveSeries(fromDateTime))
-                        .collect(Collectors.toList()));
+                if (this.ppm.isSelected()) {
+                    series.setImprove(log.stream()
+                            .map(r -> r.getImprovePpmSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                }else{
+                    series.setImprove(log.stream()
+                            .map(r -> r.getImproveSeries(fromDateTime))
+                            .collect(Collectors.toList()));
+                }
 
             this.chart.getData().clear();
             this.chart.getData().addAll(
@@ -726,6 +785,16 @@ public class ResourceChartController extends WindowController {
         }
 
         /**
+         * 燃料を百万分率で取得します。
+         *
+         * @param from 開始日時
+         * @return 燃料
+         */
+        public XYChart.Data<Number, Number> getFuelPpmSeries(ZonedDateTime from) {
+            return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.fuel / ppmBaseResource);
+        }
+
+        /**
          * 燃料を取得します。
          *
          * @return 燃料
@@ -751,6 +820,16 @@ public class ResourceChartController extends WindowController {
          */
         public XYChart.Data<Number, Number> getAmmoSeries(ZonedDateTime from) {
             return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.ammo);
+        }
+
+        /**
+         * 弾薬を百万分率で取得します。
+         *
+         * @param from 開始日時
+         * @return 弾薬
+         */
+        public XYChart.Data<Number, Number> getAmmoPpmSeries(ZonedDateTime from) {
+            return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.ammo / ppmBaseResource);
         }
 
         /**
@@ -782,6 +861,16 @@ public class ResourceChartController extends WindowController {
         }
 
         /**
+         * 鋼材を百万分率で取得します。
+         *
+         * @param from 開始日時
+         * @return 鋼材
+         */
+        public XYChart.Data<Number, Number> getMetalPpmSeries(ZonedDateTime from) {
+            return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.metal / ppmBaseResource);
+        }
+
+        /**
          * 鋼材を取得します。
          *
          * @return 鋼材
@@ -807,6 +896,16 @@ public class ResourceChartController extends WindowController {
          */
         public XYChart.Data<Number, Number> getBauxiteSeries(ZonedDateTime from) {
             return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.bauxite);
+        }
+
+        /**
+         * ボーキサイトを百万分率で取得します。
+         *
+         * @param from 開始日時
+         * @return ボーキサイト
+         */
+        public XYChart.Data<Number, Number> getBauxitePpmSeries(ZonedDateTime from) {
+            return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.bauxite / ppmBaseResource);
         }
 
         /**
@@ -838,6 +937,16 @@ public class ResourceChartController extends WindowController {
         }
 
         /**
+         * 高速修復材を百万分率で取得します。
+         *
+         * @param from 開始日時
+         * @return 高速修復材
+         */
+        public XYChart.Data<Number, Number> getBucketPpmSeries(ZonedDateTime from) {
+            return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.bucket / ppmBaseMaterial);
+        }
+
+        /**
          * 高速修復材を取得します。
          *
          * @return 高速修復材
@@ -863,6 +972,16 @@ public class ResourceChartController extends WindowController {
          */
         public XYChart.Data<Number, Number> getBurnerSeries(ZonedDateTime from) {
             return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.burner);
+        }
+
+        /**
+         * 高速建造材を百万分率で取得します。
+         *
+         * @param from 開始日時
+         * @return 高速建造材
+         */
+        public XYChart.Data<Number, Number> getBurnerPpmSeries(ZonedDateTime from) {
+            return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.burner / ppmBaseMaterial);
         }
 
         /**
@@ -894,6 +1013,16 @@ public class ResourceChartController extends WindowController {
         }
 
         /**
+         * 開発資材を百万分率で取得します。
+         *
+         * @param from 開始日時
+         * @return 開発資材
+         */
+        public XYChart.Data<Number, Number> getResearchPpmSeries(ZonedDateTime from) {
+            return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.research / ppmBaseMaterial);
+        }
+
+        /**
          * 開発資材を取得します。
          *
          * @return 開発資材
@@ -919,6 +1048,16 @@ public class ResourceChartController extends WindowController {
          */
         public XYChart.Data<Number, Number> getImproveSeries(ZonedDateTime from) {
             return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.improve);
+        }
+
+        /**
+         * 改修資材を百万分率で取得します。
+         *
+         * @param from 開始日時
+         * @return 改修資材
+         */
+        public XYChart.Data<Number, Number> getImprovePpmSeries(ZonedDateTime from) {
+            return new XYChart.Data<>(this.date.toEpochSecond() - from.toEpochSecond(), this.improve / ppmBaseMaterial);
         }
 
         /**

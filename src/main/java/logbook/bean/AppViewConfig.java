@@ -61,6 +61,7 @@ public class AppViewConfig {
         private boolean research;
         private boolean improve;
         private boolean forceZero;
+        private boolean ppm;
     }
 
     @Data
