@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,6 +26,7 @@ import logbook.internal.BattleLogs;
 import logbook.internal.CheckUpdate;
 import logbook.internal.LoggerHolder;
 import logbook.internal.log.BattleResultLogFormat;
+import logbook.internal.log.LogWriter;
 import logbook.plugin.gui.MainCalcMenu;
 import logbook.plugin.gui.MainCommandMenu;
 import logbook.plugin.gui.MainExtMenu;
@@ -97,10 +99,20 @@ public class MainMenuController extends WindowController {
             BattleLog log = AppCondition.get()
                     .getBattleResult();
             if (log == null || log.getBattle() == null) {
+                // 直近のログファイルからロード
                 Path dir = Paths.get(AppConfig.get().getReportPath());
                 Path path = dir.resolve(new BattleResultLogFormat().fileName());
                 if (Files.exists(path)) {
-                    log = BattleLogs.read(path);
+                    try (Stream<String> lines = Files.lines(path, LogWriter.DEFAULT_CHARSET)) {
+                        BattleLogs.SimpleBattleLog battleLog = lines.skip(1).reduce((first, second) -> second)
+                                .map(BattleLogs.SimpleBattleLog::new)
+                                .orElse(null);
+                        if (battleLog != null) {
+                            log = BattleLogs.readByDateString(BattleLogDetail.toBattleLogDetail(battleLog).getDate());
+                        }
+                    } catch (Exception ex) {
+                        log = null;
+                    }
                 }
             }
             if (log != null && log.getBattle() != null) {
