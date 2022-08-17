@@ -46,134 +46,201 @@ import lombok.val;
 
 /**
  * 艦隊タブ
- *
  */
 public class FleetTabPane extends ScrollPane {
 
-    /** 艦隊 */
+    /**
+     * 艦隊
+     */
     private DeckPort port;
 
-    /** 艦娘達 */
+    /**
+     * 艦娘達
+     */
     private List<Ship> shipList;
 
-    /** 艦隊のハッシュ・コード */
+    /**
+     * 艦隊のハッシュ・コード
+     */
     private int portHashCode;
 
-    /** 艦娘達のハッシュ・コード */
+    /**
+     * 艦娘達のハッシュ・コード
+     */
     private int shipsHashCode;
 
-    /** 入渠中の艦娘達のハッシュ・コード */
+    /**
+     * 入渠中の艦娘達のハッシュ・コード
+     */
     private int ndocksHashCode;
 
-    /** 疲労回復予想時刻 */
+    /**
+     * 疲労回復予想時刻
+     */
     private long condRecoverEpoch = Long.MAX_VALUE;
 
-    /** 連合艦隊フラグ */
+    /**
+     * 連合艦隊フラグ
+     */
     private boolean combinedFlag;
 
-    /** Tabのスタイル(タブ色を変えるのに使用) */
+    /**
+     * Tabのスタイル(タブ色を変えるのに使用)
+     */
     private String tabStyle;
 
-    /** 分岐点係数 */
+    /**
+     * 分岐点係数
+     */
     private int branchCoefficient = 1;
 
-    /** メッセージ */
+    /**
+     * メッセージ
+     */
     @FXML
     private Label message;
 
-    /** 艦娘達 */
+    /**
+     * 艦娘達
+     */
     @FXML
     private VBox ships;
 
-    /** 制空値アイコン */
+    /**
+     * 制空値アイコン
+     */
     @FXML
     private ImageView airSuperiorityImg;
 
-    /** 制空値 */
+    /**
+     * 制空値
+     */
     @FXML
     private Label airSuperiority;
 
-    /** 触接開始率アイコン */
+    /**
+     * 触接開始率アイコン
+     */
     @FXML
     private ImageView touchPlaneStartProbabilityImg;
 
-    /** 触接開始率 */
+    /**
+     * 触接開始率
+     */
     @FXML
     private Label touchPlaneStartProbability;
 
-    /** 判定式(33)アイコン */
+    /**
+     * 判定式(33)アイコン
+     */
     @FXML
     private ImageView decision33Img;
 
-    /** 判定式(33) */
+    /**
+     * 判定式(33)
+     */
     @FXML
     private Label decision33;
 
-    /** 分岐点係数ボタン */
+    /**
+     * 分岐点係数ボタン
+     */
     @FXML
     private ChoiceBox<String> branchCoefficientChoice;
 
-    /** 艦娘レベル計アイコン */
+    /**
+     * 艦娘レベル計アイコン
+     */
     @FXML
     private ImageView lvsumImg;
 
-    /** 艦娘レベル計 */
+    /**
+     * 艦娘レベル計
+     */
     @FXML
     private Label lvsum;
 
-    /** 疲労 */
+    /**
+     * 疲労
+     */
     @FXML
     private Label cond;
 
-    /** 火力合計アイコン */
+    /**
+     * 火力合計アイコン
+     */
     @FXML
     private ImageView karyokusumImg;
 
-    /** 火力合計 */
+    /**
+     * 火力合計
+     */
     @FXML
     private Label karyokusum;
 
-    /** 対空合計アイコン */
+    /**
+     * 対空合計アイコン
+     */
     @FXML
     private ImageView taikusumImg;
 
-    /** 対空合計 */
+    /**
+     * 対空合計
+     */
     @FXML
     private Label taikusum;
 
-    /** 対潜合計アイコン */
+    /**
+     * 対潜合計アイコン
+     */
     @FXML
     private ImageView taissumImg;
 
-    /** 対潜合計 */
+    /**
+     * 対潜合計
+     */
     @FXML
     private Label taissum;
 
-    /** 索敵合計アイコン */
+    /**
+     * 索敵合計アイコン
+     */
     @FXML
     private ImageView sakutekisumImg;
 
-    /** 索敵合計 */
+    /**
+     * 索敵合計
+     */
     @FXML
     private Label sakutekisum;
 
-    /** TP合計アイコン */
+    /**
+     * TP合計アイコン
+     */
     @FXML
     private ImageView tpsumImg;
 
-    /** TP合計 */
+    /**
+     * TP合計
+     */
     @FXML
     private Label tpsum;
 
-    /** 艦隊速度アイコン */
+    /**
+     * 艦隊速度アイコン
+     */
     @FXML
     private ImageView speedImg;
 
-    /** 艦隊速度 */
+    /**
+     * 艦隊速度
+     */
     @FXML
     private Label speed;
-    
-    /** 注釈 */
+
+    /**
+     * 注釈
+     */
     @FXML
     private VBox remark;
 
@@ -209,13 +276,12 @@ public class FleetTabPane extends ScrollPane {
      * 分岐点係数を変更する
      *
      * @param observable Observable
-     * @param oldValue String
-     * @param newValue String
+     * @param oldValue   String
+     * @param newValue   String
      */
     void changeBranchCoefficientChoice(Observable observable, String oldValue, String newValue) {
         try {
             this.branchCoefficient = Integer.parseInt(newValue.substring(0, 1));
-            LoggerHolder.get().error("****** 索敵係数 " + branchCoefficient);
             this.setDecision33();
         } catch (NumberFormatException e) {
             this.branchCoefficient = 1;
@@ -326,7 +392,7 @@ public class FleetTabPane extends ScrollPane {
         this.sakutekisum.setText(Integer.toString(withoutEscape.stream().mapToInt(ship -> ship.getSakuteki().get(0)).sum()));
         // TP合計
         int tp = withoutEscape.stream().mapToInt(Ships::transportPoint).sum();
-        this.tpsum.setText(tp + "/" + (tp*7/10));
+        this.tpsum.setText(tp + "/" + (tp * 7 / 10));
 
         // 艦隊速度 - 各艦の速度のうち最低の速度を艦隊の速度とする
         String label;
@@ -391,7 +457,7 @@ public class FleetTabPane extends ScrollPane {
             this.tabStyle = "-fx-background-color: -fx-outer-border, -fx-text-box-border, linear-gradient(from 40% 0% to 70% 100%, "
                     + l.orElse("-fx-color") + ", " + r.orElse("-fx-color") + ");";
         }
-        
+
         // 疲労
         int minCond = this.shipList.stream()
                 .mapToInt(Ship::getCond)
@@ -433,9 +499,8 @@ public class FleetTabPane extends ScrollPane {
      */
     private void setDecision33() {
         Ships.Decision33 decision33 = Ships.decision33(this.shipList, this.branchCoefficient);
-        LoggerHolder.get().error(String.format("艦隊:%d 係数:%d 索敵値：%3.3f", this.port.getId(), branchCoefficient, decision33.get()));
         // 判定式(33)
-        this.decision33.setText(String.format("%03.3f",decision33.get()));
+        this.decision33.setText(String.format("%03.3f", decision33.get()));
         PopOver<Ships.Decision33> popover = new PopOver<>((node, data) -> {
             String content = new StringJoiner("\n")
                     .add("判定式(33):" + data.get() + "(分岐点係数:" + data.getBranchCoefficient() + ")")
@@ -479,7 +544,7 @@ public class FleetTabPane extends ScrollPane {
 
     /**
      * 注釈プラグインを更新する
-     * 
+     *
      * @param port 艦隊
      */
     @SuppressWarnings("unchecked")
