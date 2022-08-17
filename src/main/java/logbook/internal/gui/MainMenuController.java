@@ -1,10 +1,10 @@
 package logbook.internal.gui;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,15 +16,14 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.paint.Color;
 import javafx.stage.StageStyle;
+import javafx.stage.FileChooser;
 import logbook.bean.AppCondition;
 import logbook.bean.AppConfig;
 import logbook.bean.BattleLog;
 import logbook.internal.BattleLogs;
-import logbook.internal.BattleLogs.SimpleBattleLog;
 import logbook.internal.CheckUpdate;
 import logbook.internal.LoggerHolder;
 import logbook.internal.log.BattleResultLogFormat;
-import logbook.internal.log.LogWriter;
 import logbook.plugin.gui.MainCalcMenu;
 import logbook.plugin.gui.MainCommandMenu;
 import logbook.plugin.gui.MainExtMenu;
@@ -32,22 +31,27 @@ import logbook.plugin.gui.Plugin;
 
 /**
  * UIコントローラー
- *
  */
 public class MainMenuController extends WindowController {
 
     // メイン画面のコントローラ
     private MainController parentController;
 
-    /** コマンドメニュー */
+    /**
+     * コマンドメニュー
+     */
     @FXML
     private Menu command;
 
-    /** 計算機 */
+    /**
+     * 計算機
+     */
     @FXML
     private Menu calc;
 
-    /** その他 */
+    /**
+     * その他
+     */
     @FXML
     private Menu ext;
 
@@ -95,24 +99,15 @@ public class MainMenuController extends WindowController {
                 Path dir = Paths.get(AppConfig.get().getReportPath());
                 Path path = dir.resolve(new BattleResultLogFormat().fileName());
                 if (Files.exists(path)) {
-                    try (Stream<String> lines = Files.lines(path, LogWriter.DEFAULT_CHARSET)) {
-                        SimpleBattleLog battleLog = lines.skip(1).reduce((first, second) -> second)
-                                .map(SimpleBattleLog::new)
-                                .orElse(null);
-                        if (battleLog != null) {
-                            log = BattleLogs.read(BattleLogDetail.toBattleLogDetail(battleLog).getDate());
-                        }
-                    } catch (Exception ex) {
-                        log = null;
-                    }
+                    log = BattleLogs.read(path);
                 }
             }
             if (log != null && log.getBattle() != null) {
-                BattleLog sendlog = log;
+                BattleLog sendLog = log;
                 InternalFXMLLoader.showWindow("logbook/gui/battle_detail.fxml", this.parentController.getWindow(),
                         "現在の戦闘", c -> {
                             ((BattleDetail) c).setInterval(() -> AppCondition.get().getBattleResult());
-                            ((BattleDetail) c).setData(sendlog);
+                            ((BattleDetail) c).setData(sendLog);
                         }, null);
             } else {
                 Tools.Controls.alert(AlertType.INFORMATION, "現在の戦闘", "戦闘のデータがありません", this.parentController.getWindow());
@@ -121,10 +116,47 @@ public class MainMenuController extends WindowController {
             LoggerHolder.get().error("詳細の表示に失敗しました", ex);
         }
     }
+    /**
+     * 過去の戦闘
+     *
+     * @param e ActionEvent
+     */
+    @FXML
+    void battleResult(ActionEvent e) {
+        FileChooser fileDialog = new FileChooser();
+        fileDialog.setInitialDirectory(Paths.get(AppConfig.get().getBattleLogDir()).toFile());
+        File file = fileDialog.showOpenDialog(this.parentController.getWindow());
+        if (file.exists()){
+            showBattleResult(file.toPath());
+        }else{
+            Tools.Controls.alert(AlertType.INFORMATION, "現在の戦闘", "戦闘のデータがありません 3", this.parentController.getWindow());
+        }
+    }
+
+    /**
+     *
+     * @param path 実存するファイルパス
+     */
+    void showBattleResult(Path path){
+        try {
+            BattleLog log = BattleLogs.read(path);
+            InternalFXMLLoader.showWindow(
+                    "logbook/gui/battle_detail.fxml",
+                    this.parentController.getWindow(),
+                    "現在の戦闘",
+                    c -> {
+                        ((BattleDetail) c).setInterval(() -> AppCondition.get().getBattleResult());
+                        ((BattleDetail) c).setData(log);
+                    },
+                    null);
+        } catch (Exception ex) {
+            LoggerHolder.get().error("詳細の表示に失敗しました", ex);
+        }
+    }
 
     /**
      * 現在の演習
-     * 
+     *
      * @param e ActionEvent
      */
     @FXML
@@ -132,11 +164,10 @@ public class MainMenuController extends WindowController {
         try {
             BattleLog log = AppCondition.get().getPracticeBattleResult();
             if (log != null && log.getBattle() != null) {
-                BattleLog sendlog = log;
                 InternalFXMLLoader.showWindow("logbook/gui/battle_detail.fxml", this.parentController.getWindow(),
                         "演習詳細", "practice", null, c -> {
                             ((BattleDetail) c).setInterval(() -> AppCondition.get().getPracticeBattleResult());
-                            ((BattleDetail) c).setData(sendlog);
+                            ((BattleDetail) c).setData(log);
                         }, null);
             } else {
                 Tools.Controls.alert(AlertType.INFORMATION, "演習詳細", "演習のデータがありません", this.parentController.getWindow());
@@ -152,7 +183,7 @@ public class MainMenuController extends WindowController {
      * @param e ActionEvent
      */
     @FXML
-    void battlelog(ActionEvent e) {
+    void battleLog(ActionEvent e) {
         try {
             InternalFXMLLoader.showWindow("logbook/gui/battlelog.fxml", this.parentController.getWindow(), "戦闘ログ");
         } catch (Exception ex) {
@@ -166,7 +197,7 @@ public class MainMenuController extends WindowController {
      * @param e ActionEvent
      */
     @FXML
-    void missionlog(ActionEvent e) {
+    void missionLog(ActionEvent e) {
         try {
             InternalFXMLLoader.showWindow("logbook/gui/missionlog.fxml", this.parentController.getWindow(), "遠征ログ");
         } catch (Exception ex) {
@@ -180,7 +211,7 @@ public class MainMenuController extends WindowController {
      * @param e ActionEvent
      */
     @FXML
-    void createitemlog(ActionEvent e) {
+    void createItemLog(ActionEvent e) {
         try {
             InternalFXMLLoader.showWindow("logbook/gui/createitemlog.fxml", this.parentController.getWindow(), "開発ログ");
         } catch (Exception ex) {
@@ -228,7 +259,7 @@ public class MainMenuController extends WindowController {
      * @param e ActionEvent
      */
     @FXML
-    void useitems(ActionEvent e) {
+    void useItems(ActionEvent e) {
         this.parentController.useitems(e);
     }
 
@@ -238,7 +269,7 @@ public class MainMenuController extends WindowController {
      * @param e ActionEvent
      */
     @FXML
-    void ndock(ActionEvent e) {
+    void nDock(ActionEvent e) {
         try {
             InternalFXMLLoader.showWindow("logbook/gui/require_ndock.fxml", this.parentController.getWindow(), "お風呂に入りたい艦娘");
         } catch (Exception ex) {
@@ -386,7 +417,7 @@ public class MainMenuController extends WindowController {
      * プラグインのMenuItemを追加します
      *
      * @param serviceClass サービスプロバイダインターフェイス
-     * @param items MenuItemの追加先
+     * @param items        MenuItemの追加先
      */
     private <S extends Plugin<MenuItem>> void addMenuItem(Class<S> serviceClass, ObservableList<MenuItem> items) {
         List<MenuItem> addItem = Plugin.getContent(serviceClass);

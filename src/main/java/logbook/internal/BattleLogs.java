@@ -1,10 +1,6 @@
 package logbook.internal;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
@@ -85,7 +81,7 @@ public class BattleLogs {
      * @param dateString 日付文字列
      * @return 戦闘ログ、存在しない又は入出力例外の場合null
      */
-    public static BattleLog read(String dateString) {
+    public static BattleLog readByDateString(String dateString) {
         try {
             List<Path> paths = tryReadPaths(dateString);
             for (Path path : paths) {
@@ -104,6 +100,32 @@ public class BattleLogs {
                         in.close();
                     }
                 }
+            }
+        } catch (Exception e) {
+            LoggerHolder.get().warn("戦闘ログの読み込み中に例外", e);
+        }
+        return null;
+    }
+    /**
+     * 戦闘ログを取得します。
+     *
+     * @param path ファイル
+     * @return 戦闘ログ、存在しない又は入出力例外の場合null
+     */
+    public static BattleLog read(Path path) {
+        try {
+            InputStream in = new BufferedInputStream(Files.newInputStream(path));
+            try {
+                // Check header
+                in.mark(1024);
+                int header = (in.read() | (in.read() << 8));
+                in.reset();
+                if (header == GZIPInputStream.GZIP_MAGIC) {
+                    in = new GZIPInputStream(in);
+                }
+                return mapper.readValue(in, BattleLog.class);
+            } finally {
+                in.close();
             }
         } catch (Exception e) {
             LoggerHolder.get().warn("戦闘ログの読み込み中に例外", e);
@@ -406,7 +428,7 @@ public class BattleLogs {
      * 集計します
      *
      * @param logs 出撃統計のベースになるリスト
-     * @param area 海域(nullの場合前開域)
+     * @param areaShortName 海域(nullの場合前開域)
      * @param bossOnly 集計対象をボスのみにする場合true
      * @return 出撃統計
      */

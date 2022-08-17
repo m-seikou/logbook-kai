@@ -204,7 +204,7 @@ public class BattleLogScriptController extends WindowController {
 
             Object result = initialValue;
             for (BattleLogDetail log : this.details) {
-                BattleLog battleLog = BattleLogs.read(log.getDate());
+                BattleLog battleLog = BattleLogs.readByDateString(log.getDate());
                 String json = mapper.writeValueAsString(battleLog);
                 Object obj = invocable.invokeMethod(parser, "parse", json);
                 result = ((JSObject) callback).call(null, result, obj);

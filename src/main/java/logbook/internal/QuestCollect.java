@@ -121,7 +121,7 @@ public class QuestCollect {
                     continue;
                 }
                 if (filter.getFleet() != null) {
-                    battleLog = BattleLogs.read(log.getDateString());
+                    battleLog = BattleLogs.readByDateString(log.getDateString());
                     p = new PhaseState(battleLog);
 
                     List<ShipMst> ships = p.getAfterFriend().stream()
@@ -139,7 +139,7 @@ public class QuestCollect {
 
             if (condition.isCollectStypeInternal()) {
                 if (battleLog == null)
-                    battleLog = BattleLogs.read(log.getDateString());
+                    battleLog = BattleLogs.readByDateString(log.getDateString());
                 if (p == null)
                     p = new PhaseState(battleLog);
 

@@ -279,7 +279,7 @@ public class BattleLogController extends WindowController {
                 r.setOnMouseClicked(e -> {
                     if (e.getClickCount() == 2 && (!r.isEmpty())) {
                         BattleLogDetail d = r.getItem();
-                        BattleLog log = BattleLogs.read(d.getDate());
+                        BattleLog log = BattleLogs.readByDateString(d.getDate());
                         if (log != null) {
                             try {
                                 InternalFXMLLoader.showWindow("logbook/gui/battle_detail.fxml", this.getWindow(),

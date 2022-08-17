@@ -13,16 +13,18 @@
             <MenuItem mnemonicParsing="false" onAction="#capture" text="キャプチャ" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#battleStatus" text="現在の戦闘" />
+            <MenuItem mnemonicParsing="false" onAction="#battleResult" text="過去の戦闘" />
             <MenuItem mnemonicParsing="false" onAction="#practiceStatus" text="現在の演習" />
-            <MenuItem mnemonicParsing="false" onAction="#battlelog" text="戦闘ログ">
+            <MenuItem mnemonicParsing="false" onAction="#battleLog" text="戦闘ログ">
                    <accelerator>
                       <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                   </accelerator></MenuItem>
-            <MenuItem mnemonicParsing="false" onAction="#missionlog" text="遠征ログ">
+                   </accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#missionLog" text="遠征ログ">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="M" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator></MenuItem>
-            <MenuItem mnemonicParsing="false" onAction="#createitemlog" text="開発ログ" />
+            <MenuItem mnemonicParsing="false" onAction="#createItemLog" text="開発ログ" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#airBase" text="基地航空隊">
                    <accelerator>
@@ -37,9 +39,9 @@
                    <accelerator>
                       <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                    </accelerator></MenuItem>
-            <MenuItem mnemonicParsing="false" onAction="#useitems" text="アイテム一覧" />
+            <MenuItem mnemonicParsing="false" onAction="#useItems" text="アイテム一覧" />
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" onAction="#ndock" text="お風呂に入りたい艦娘">
+            <MenuItem mnemonicParsing="false" onAction="#nDock" text="お風呂に入りたい艦娘">
                    <accelerator>
                       <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                    </accelerator></MenuItem>
