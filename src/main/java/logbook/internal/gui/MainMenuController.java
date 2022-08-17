@@ -15,6 +15,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.FileChooser;
 import logbook.bean.AppCondition;
@@ -127,7 +128,7 @@ public class MainMenuController extends WindowController {
         fileDialog.setInitialDirectory(Paths.get(AppConfig.get().getBattleLogDir()).toFile());
         File file = fileDialog.showOpenDialog(this.parentController.getWindow());
         if (file.exists()){
-            showBattleResult(file.toPath());
+            showBattleResult(file.toPath(),this.parentController.getWindow());
         }else{
             Tools.Controls.alert(AlertType.INFORMATION, "現在の戦闘", "戦闘のデータがありません 3", this.parentController.getWindow());
         }
@@ -137,12 +138,12 @@ public class MainMenuController extends WindowController {
      *
      * @param path 実存するファイルパス
      */
-    void showBattleResult(Path path){
+    static void showBattleResult(Path path, Stage parent){
         try {
             BattleLog log = BattleLogs.read(path);
             InternalFXMLLoader.showWindow(
                     "logbook/gui/battle_detail.fxml",
-                    this.parentController.getWindow(),
+                    parent,
                     "現在の戦闘",
                     c -> {
                         ((BattleDetail) c).setInterval(() -> AppCondition.get().getBattleResult());

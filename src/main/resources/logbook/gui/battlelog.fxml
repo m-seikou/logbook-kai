@@ -90,6 +90,7 @@
                     <contextMenu>
                        <ContextMenu>
                          <items>
+                           <MenuItem mnemonicParsing="false" onAction="#showResult" text="詳細" />
                            <MenuItem mnemonicParsing="false" onAction="#copyDetail" text="クリップボードにコピー" />
                            <MenuItem mnemonicParsing="false" onAction="#selectAllDetail" text="すべてを選択" />
                            <SeparatorMenuItem mnemonicParsing="false" />

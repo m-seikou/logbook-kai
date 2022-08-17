@@ -1,6 +1,8 @@
 package logbook.internal.gui;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import logbook.bean.AppConfig;
 import org.controlsfx.control.CheckComboBox;
 
 import javafx.animation.KeyFrame;
@@ -68,7 +71,6 @@ import logbook.internal.Tuple.Triplet;
 
 /**
  * 戦闘ログのUIコントローラー
- *
  */
 public class BattleLogController extends WindowController {
 
@@ -78,170 +80,256 @@ public class BattleLogController extends WindowController {
     @FXML
     private SplitPane splitPane2;
 
-    /** 統計 */
+    /**
+     * 統計
+     */
     @FXML
     private TreeTableView<BattleLogCollect> collect;
 
-    /** 集計の削除 */
+    /**
+     * 集計の削除
+     */
     @FXML
     private Button removeUnitButton;
 
-    /** 集計の削除 */
+    /**
+     * 集計の削除
+     */
     @FXML
     private MenuItem removeUnitMenu;
 
-    /** 集計 */
+    /**
+     * 集計
+     */
     @FXML
     private TreeTableColumn<BattleLogCollect, String> unit;
 
-    /** 出撃  */
+    /**
+     * 出撃
+     */
     @FXML
     private TreeTableColumn<BattleLogCollect, String> start;
 
-    /** 勝利  */
+    /**
+     * 勝利
+     */
     @FXML
     private TreeTableColumn<BattleLogCollect, String> win;
 
-    /** S勝利 */
+    /**
+     * S勝利
+     */
     @FXML
     private TreeTableColumn<BattleLogCollect, String> s;
 
-    /** A勝利 */
+    /**
+     * A勝利
+     */
     @FXML
     private TreeTableColumn<BattleLogCollect, String> a;
 
-    /** B勝利 */
+    /**
+     * B勝利
+     */
     @FXML
     private TreeTableColumn<BattleLogCollect, String> b;
 
-    /** C敗北 */
+    /**
+     * C敗北
+     */
     @FXML
     private TreeTableColumn<BattleLogCollect, String> c;
 
-    /** D敗北 */
+    /**
+     * D敗北
+     */
     @FXML
     private TreeTableColumn<BattleLogCollect, String> d;
 
-    /** フィルタ */
+    /**
+     * フィルタ
+     */
     @FXML
     private FlowPane filterPane;
 
-    /** 詳細 */
+    /**
+     * 詳細
+     */
     @FXML
     private TableView<BattleLogDetail> detail;
 
-    /** 行番号 */
+    /**
+     * 行番号
+     */
     @FXML
     private TableColumn<BattleLogDetail, Integer> row;
 
-    /** 日付 */
+    /**
+     * 日付
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> date;
 
-    /** 海域 */
+    /**
+     * 海域
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> area;
 
-    /** マス */
+    /**
+     * マス
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> cell;
 
-    /** ボス */
+    /**
+     * ボス
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> boss;
 
-    /** 評価 */
+    /**
+     * 評価
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> rank;
 
-    /** 艦隊行動 */
+    /**
+     * 艦隊行動
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> intercept;
 
-    /** 味方陣形 */
+    /**
+     * 味方陣形
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> fformation;
 
-    /** 敵陣形 */
+    /**
+     * 敵陣形
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> eformation;
 
-    /** 制空権 */
+    /**
+     * 制空権
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> dispseiku;
 
-    /** 味方触接 */
+    /**
+     * 味方触接
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> ftouch;
 
-    /** 敵触接 */
+    /**
+     * 敵触接
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> etouch;
 
-    /** 敵艦隊 */
+    /**
+     * 敵艦隊
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> efleet;
 
-    /** ドロップ艦種 */
+    /**
+     * ドロップ艦種
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> dropType;
 
-    /** ドロップ艦娘 */
+    /**
+     * ドロップ艦娘
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> dropShip;
 
-    /** ドロップアイテム */
+    /**
+     * ドロップアイテム
+     */
     @FXML
     private TableColumn<BattleLogDetail, String> dropItem;
 
-    /** 艦娘経験値 */
+    /**
+     * 艦娘経験値
+     */
     @FXML
     private TableColumn<BattleLogDetail, Integer> shipExp;
 
-    /** 提督経験値 */
+    /**
+     * 提督経験値
+     */
     @FXML
     private TableColumn<BattleLogDetail, Integer> exp;
 
-    /** 種類 */
+    /**
+     * 種類
+     */
     @FXML
     private ChoiceBox<String> aggregateType;
 
-    /** 集計 */
+    /**
+     * 集計
+     */
     @FXML
     private TableView<BattleLogDetailAggregate> aggregate;
 
-    /** 種類 */
+    /**
+     * 種類
+     */
     @FXML
     private TableColumn<BattleLogDetailAggregate, String> type;
 
-    /** 合計 */
+    /**
+     * 合計
+     */
     @FXML
     private TableColumn<BattleLogDetailAggregate, Long> count;
 
-    /** 割合 */
+    /**
+     * 割合
+     */
     @FXML
     private TableColumn<BattleLogDetailAggregate, Double> ratio;
 
-    /** 集計 */
+    /**
+     * 集計
+     */
     @FXML
     private PieChart chart;
 
-    /** ユーザー追加単位 */
-    private List<BattleLogs.CustomUnit> userUnit = new ArrayList<>();
+    /**
+     * ユーザー追加単位
+     */
+    private final List<BattleLogs.CustomUnit> userUnit = new ArrayList<>();
 
-    /** 戦闘ログ */
+    /**
+     * 戦闘ログ
+     */
     private Map<IUnit, List<SimpleBattleLog>> logMap;
 
-    /** 詳細(フィルタ前) */
-    private ObservableList<BattleLogDetail> detailsSource = FXCollections.observableArrayList();
+    /**
+     * 詳細(フィルタ前)
+     */
+    private final ObservableList<BattleLogDetail> detailsSource = FXCollections.observableArrayList();
 
-    /** 詳細(フィルタ済み) */
-    private FilteredList<BattleLogDetail> filteredDetails = new FilteredList<>(this.detailsSource);
+    /**
+     * 詳細(フィルタ済み)
+     */
+    private final FilteredList<BattleLogDetail> filteredDetails = new FilteredList<>(this.detailsSource);
 
-    /** 集計用Map */
-    private Map<String, Function<BattleLogDetail, ?>> aggregateTypeMap = new HashMap<>();
+    /**
+     * 集計用Map
+     */
+    private final Map<String, Function<BattleLogDetail, ?>> aggregateTypeMap = new HashMap<>();
 
-    /** 海域短縮名のパターン（1-2など） */
+    /**
+     * 海域短縮名のパターン（1-2など）
+     */
     private static final Pattern AREA_SHORTNAME_PATTERN = Pattern.compile("^([0-9]+)-([0-9]+)$");
 
     @FXML
@@ -417,23 +505,24 @@ public class BattleLogController extends WindowController {
 
     private static int getSortOrder(String areaShortName) {
         return Optional.ofNullable(areaShortName)
-            .map(AREA_SHORTNAME_PATTERN::matcher)
-            .filter(Matcher::matches)
-            .map(m -> {
-                try {
-                    int mapArea = Integer.parseInt(m.group(1));
-                    int mapNo = Integer.parseInt(m.group(2));
-                    return mapArea * 1000 + mapNo;
-                } catch (Throwable e) {
-                    // ignore parse error
-                    return null;
-                }
-            })
-            .orElse(Integer.MAX_VALUE);
+                .map(AREA_SHORTNAME_PATTERN::matcher)
+                .filter(Matcher::matches)
+                .map(m -> {
+                    try {
+                        int mapArea = Integer.parseInt(m.group(1));
+                        int mapNo = Integer.parseInt(m.group(2));
+                        return mapArea * 1000 + mapNo;
+                    } catch (Throwable e) {
+                        // ignore parse error
+                        return null;
+                    }
+                })
+                .orElse(Integer.MAX_VALUE);
     }
 
     /**
      * ログをセット
+     *
      * @param unit 集計単位
      */
     private void addTree(IUnit unit) {
@@ -479,7 +568,7 @@ public class BattleLogController extends WindowController {
             areaValue.setArea(area);
             areaValue.setAreaShortName(name.get2());
             areaValue.setAreaSortOrder(name.get3());
-            
+
             TreeItem<BattleLogCollect> areaRoot = new TreeItem<BattleLogCollect>(areaValue);
 
             // 海域ボス
@@ -576,16 +665,32 @@ public class BattleLogController extends WindowController {
     void removeUnitAction(ActionEvent event) {
         TreeItem<BattleLogCollect> item = this.collect.getSelectionModel().getSelectedItem();
         if (item != null && this.userUnit.contains(item.getValue().getCollectUnit()) && this.collect.getRoot().getChildren().contains(item)) {
-            Tools.Controls.alert(Alert.AlertType.CONFIRMATION, "削除", "集計("+item.getValue().getUnit()+")を削除してよろしいですか？", this.getWindow())
-                .filter(op -> op == ButtonType.OK)
-                .ifPresent(type -> {
-                    this.collect.getRoot().getChildren().remove(item);
-                    IUnit unit = item.getValue().getCollectUnit();
-                    this.userUnit.remove(unit);
-                    this.logMap.remove(unit);
-                    saveConfig();
-                });
+            Tools.Controls.alert(Alert.AlertType.CONFIRMATION, "削除", "集計(" + item.getValue().getUnit() + ")を削除してよろしいですか？", this.getWindow())
+                    .filter(op -> op == ButtonType.OK)
+                    .ifPresent(type -> {
+                        this.collect.getRoot().getChildren().remove(item);
+                        IUnit unit = item.getValue().getCollectUnit();
+                        this.userUnit.remove(unit);
+                        this.logMap.remove(unit);
+                        saveConfig();
+                    });
         }
+    }
+
+    /**
+     * 詳細を表示
+     */
+    public void showResult(){
+        Path dir = Paths.get(AppConfig.get().getBattleLogDir());
+        BattleLogDetail selected = this.detail.getSelectionModel().getSelectedItem();
+        String ym = selected.getDate().substring(0,7);
+        Path full = Paths.get(dir.toString(), ym, selected.getDate().replace(":","-") + ".json");
+        if(!full.toFile().exists()){
+            Tools.Controls.alert(Alert.AlertType.WARNING, "過去の戦闘", "戦闘の記録が見つかりません",this.getWindow());
+            return;
+        }
+        MainMenuController.showBattleResult(full,this.getWindow());
+
     }
 
     /**
@@ -664,11 +769,11 @@ public class BattleLogController extends WindowController {
      * 右ペインに詳細表示するリスナー
      *
      * @param observable 値が変更されたObservableValue
-     * @param oldValue 古い値
-     * @param value 新しい値
+     * @param oldValue   古い値
+     * @param value      新しい値
      */
     private void detail(ObservableValue<? extends TreeItem<BattleLogCollect>> observable,
-            TreeItem<BattleLogCollect> oldValue, TreeItem<BattleLogCollect> value) {
+                        TreeItem<BattleLogCollect> oldValue, TreeItem<BattleLogCollect> value) {
         this.detailsSource.clear();
         if (value != null) {
             BattleLogCollect collect = value.getValue();
@@ -679,7 +784,7 @@ public class BattleLogController extends WindowController {
             // 海域フィルタ
             Predicate<BattleLogDetail> areaFilter = areaShortName != null ? e -> areaShortName.equals(e.getAreaShortName()) : anyFilter;
             // ボスフィルタ
-            Predicate<BattleLogDetail> bossFilter = boss ? e -> e.getBoss().indexOf("ボス") != -1 : anyFilter;
+            Predicate<BattleLogDetail> bossFilter = boss ? e -> e.getBoss().contains("ボス") : anyFilter;
 
             List<BattleLogDetail> values = this.logMap.get(collect.getCollectUnit())
                     .stream()
@@ -736,7 +841,7 @@ public class BattleLogController extends WindowController {
      * 列をフィルターに追加する
      */
     private <S, T> Predicate<S> addFilterColumn(TableView<S> table, TableColumn<S, T> column,
-            ListChangeListener<Object> listener, Function<S, T> getter) {
+                                                ListChangeListener<Object> listener, Function<S, T> getter) {
         VBox box = new VBox();
         box.getChildren().add(new Label(Tools.Tables.getColumnName(column)));
         CheckComboBox<T> comboBox = new CheckComboBox<>();
