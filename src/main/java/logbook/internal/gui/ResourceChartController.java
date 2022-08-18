@@ -285,7 +285,7 @@ public class ResourceChartController extends WindowController {
         config.setResearch(this.research.isSelected());
         config.setImprove(this.improve.isSelected());
         config.setForceZero(this.forceZero.isSelected());
-        config.setForceZero(this.ppm.isSelected());
+        config.setPpm(this.ppm.isSelected());
         AppViewConfig.get().setResourceChartConfig(config);
     }
 
