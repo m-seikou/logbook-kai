@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import logbook.internal.JsonHelper;
+import logbook.internal.LoggerHolder;
 import lombok.Data;
 
 /**
@@ -1659,8 +1660,23 @@ public class BattleTypes {
         主砲副砲CI("主砲副砲CI"),
         主砲主砲CI("主砲主砲CI"),
         夜襲CI("夜襲CI"),
-        主砲魚雷電探CI("主砲魚雷電探CI"),
-        魚雷見張員電探CI("魚雷見張員電探CI"),
+        主砲魚雷電探CI("主砲魚雷電探CI 1hit"),
+        魚雷見張員電探CI("魚雷見張員電探CI 1hit"),
+        /*
+        https://twitter.com/CC_jabberwock/status/1391174067777007621
+        夜戦CI追加
+        .　　　主魚電　  魚見電　 魚魚水　 魚ド水
+        1Hit　　ID.07　　ID.08　　ID.09　　ID.10
+        2Hit　　ID.11　　ID.12　　ID.13　　ID.14
+         */
+        魚雷魚雷見張員CI("魚雷魚雷見張員CI 1hit"),
+        魚雷ドラム缶見張員CI("魚雷ドラム缶見張員CI 1hit"),
+        主砲魚雷電探CI2("主砲魚雷電探CI 2HIT"),
+        魚雷見張員電探CI2("魚雷見張員電探CI 2hit"),
+        魚雷魚雷見張員CI2("魚雷魚雷見張員CI 2hit"),
+        魚雷ドラム缶見張員CI2("魚雷ドラム缶見張員CI 2hit"),
+
+
         NelsonTouch("NelsonTouch"),
         胸熱CI("一斉射かッ…胸が熱いな！"),
         陸奥タッチ("長門、いい？ いくわよ！ 主砲一斉射ッ！"),
@@ -1698,6 +1714,18 @@ public class BattleTypes {
                 return 主砲魚雷電探CI;
             case 8:
                 return 魚雷見張員電探CI;
+            case 9:
+                return 魚雷魚雷見張員CI;
+            case 10:
+                return 魚雷ドラム缶見張員CI;
+            case 11:
+                return 主砲魚雷電探CI2;
+            case 12:
+                return 魚雷見張員電探CI2;
+            case 13:
+                return 魚雷魚雷見張員CI2;
+            case 14:
+                return 魚雷ドラム缶見張員CI2;
             case 100:
                 return NelsonTouch;
             case 101:
@@ -1709,6 +1737,7 @@ public class BattleTypes {
             case 104:
                 return 僚艦夜戦突撃;
             default:
+                LoggerHolder.get().error("***** unknown 夜戦CI id:" + i);
                 return 通常攻撃;
             }
         }
