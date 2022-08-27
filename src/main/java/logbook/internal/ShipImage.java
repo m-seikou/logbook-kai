@@ -270,8 +270,8 @@ class ShipImage {
             if (isShip) {
                 Ship ship = chara.asShip();
                 Integer sallyArea = ship.getSallyArea();
-                if (sallyArea != null && sallyArea.intValue() != 0) {
-                    Path p = Paths.get("common", JOIN_BANNER.replace("{0}", Integer.toString(sallyArea*2 + 2)));
+                if (sallyArea != null && sallyArea != 0) {
+                    Path p = Paths.get("common", JOIN_BANNER.replace("{0}", Integer.toString(SeaArea.fromArea(sallyArea).getImageIndex())));
                     layers.add(new Layer(50, -3, p));
                 }
             }
@@ -377,7 +377,7 @@ class ShipImage {
 
     /**
      * 経験値ゲージ
-     * @param chara キャラクター
+     * @param ship キャラクター
      * @param canvas Canvas
      * @param gc GraphicsContext
      */
