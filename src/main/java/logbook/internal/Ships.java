@@ -787,9 +787,21 @@ public class Ships {
             // 装備係数× 装備対空値
             double ic = AA_COEFFICIENT.getOrDefault(type, 0D) * taikuu;
             // 改修係数(索敵)
-            double aalvCoefficient = AALV_COEFFICIENT.getOrDefault(type, 0D);
-            if (aalvCoefficient == 2D && taikuu > 7) {
-                aalvCoefficient = 3D;
+            double aalvCoefficient;
+            /*
+             * 対空値によって係数が変化するが、7以下の場合を定数として設定したため、8以上のケースではここで直接置き換えている。
+             * 今後装備の追加などにより修正が必要になる可能性有り
+             */
+            if (taikuu <= 7) {
+                aalvCoefficient = AALV_COEFFICIENT.getOrDefault(type, 0D);
+            } else {
+                // 機銃
+                if (type.equals(SlotItemType.対空機銃)) {
+                    aalvCoefficient = 6D;
+                } else {
+                    // 小口径主砲,副砲,高射装置が該当。
+                    aalvCoefficient = 3D;
+                }
             }
             // 改修係数(索敵)×√★
             double v = aalvCoefficient * Math.sqrt(item.getLevel());
@@ -804,9 +816,9 @@ public class Ships {
                 .mapToDouble(weightAA)
                 .sum();
 
-        int itemTyku = getSlotItemMst(ship).mapToInt(SlotitemMst::getTyku).sum();
+        int itemTaikuu = getSlotItemMst(ship).mapToInt(SlotitemMst::getTyku).sum();
 
-        int shipAA = ship.getTaiku().get(0) - itemTyku;
+        int shipAA = ship.getTaiku().get(0) - itemTaikuu;
         return itemWeightAA + shipAA;
     }
 
@@ -845,11 +857,7 @@ public class Ships {
             bonus += 25D;
         }
 
-        int antiAircraft = (int) Math.floor(weightAntiAircraft(ship));
-        if (antiAircraft % 2 != 0)
-            antiAircraft -= 1;
-
-        double baseActivationRate = (antiAircraft + ship.getLucky().get(0)) / 282D;
+        double baseActivationRate = (weightAntiAircraft(ship) + ship.getLucky().get(0) * 0.9) / 281D;
         double activationRate = Math.floor(baseActivationRate * 1000) / 10;
 
         return activationRate + bonus;
