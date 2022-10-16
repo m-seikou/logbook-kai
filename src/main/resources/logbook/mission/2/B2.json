@@ -4,6 +4,9 @@
     "conditions": [
         {"type": "艦隊", "count_type": "レベル", "value": 150},
         {"type": "艦隊", "count_type": "火力", "value": 360},
+        {"type": "艦隊", "count_type": "対空", "value": 160},
+        {"type": "艦隊", "count_type": "対潜", "value": 160},
+        {"type": "艦隊", "count_type": "索敵", "value": 140},
         {
             "operator": "AND",
             "conditions": [
