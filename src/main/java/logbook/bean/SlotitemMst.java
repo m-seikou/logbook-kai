@@ -140,6 +140,21 @@ public class SlotitemMst implements Serializable {
     }
 
     /**
+     * 制空権に寄与する装備か?
+     * @return boolean
+     */
+    public boolean isAirSupremacy(){
+        if(this.is(SlotItemType.艦上戦闘機, SlotItemType.艦上攻撃機, SlotItemType.艦上爆撃機, SlotItemType.水上爆撃機,
+                SlotItemType.水上戦闘機, SlotItemType.噴式戦闘爆撃機)){
+            return true;
+        }
+        /*
+         * 一式戦 隼III型改(熟練/20戦隊)は対空値を持つため制空に寄与する
+         * 細かい条件が不明のため、"対空値が1以上の対潜哨戒機"を対象とした
+         */
+        return this.is(SlotItemType.対潜哨戒機) && this.getTyku() > 0;
+    }
+    /**
      * この装備定義から{@link SlotItemType}を返します。
      * 
      * @return {@link SlotItemType}

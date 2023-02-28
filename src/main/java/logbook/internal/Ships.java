@@ -692,16 +692,15 @@ public class Ships {
             if (itemMst == null)
                 continue;
 
-            // 制空状態に関係するのは対空値を持つ艦戦、艦攻、艦爆、水爆、水戦のみ
-            if (itemMst.is(SlotItemType.艦上戦闘機, SlotItemType.艦上攻撃機, SlotItemType.艦上爆撃機, SlotItemType.水上爆撃機,
-                    SlotItemType.水上戦闘機, SlotItemType.噴式戦闘爆撃機)) {
+            // 制空状態に関係するのは艦戦、艦攻、艦爆、水爆、水戦のみ <- 対潜哨戒機が追加された
+            if (itemMst.isAirSupremacy()) {
                 // 対空値
                 double tyku = itemMst.getTyku();
                 tyku += airSuperiorityTykuAdditional(itemMst, item);
 
                 // 制空値
                 local += tyku * Math.sqrt(onslot);
-                // 制空ボーナス値
+                // 制空値に対する熟練度ボーナス
                 local += airSuperiorityBonus(itemMst, item);
             }
             value += local;
@@ -738,21 +737,29 @@ public class Ships {
      * @return 制空ボーナス値
      */
     public static double airSuperiorityBonus(SlotitemMst itemMst, SlotItem item) {
-        if (item.getAlv() != null) {
-            // 上昇制空値＝内部熟練ボーナス＋制空ボーナス(艦戦/水爆)
-            // 内部熟練ボーナス＝√(内部熟練度/10)
-
-            // 熟練ボーナス
-            double bonus = Math.sqrt(skillLevel(item.getAlv()) / 10D);
-            // 制空ボーナス
-            if (itemMst.is(SlotItemType.艦上戦闘機, SlotItemType.水上戦闘機, SlotItemType.局地戦闘機)) {
-                bonus += skillBonus1(item.getAlv());
-            } else if (itemMst.is(SlotItemType.水上爆撃機)) {
-                bonus += skillBonus2(item.getAlv());
-            }
-            return bonus;
+        if (item.getAlv() == null) {
+            return 0D;
         }
-        return 0D;
+        /*
+         * 対潜哨戒機,回転翼機が航空戦に参加するようになったが、対空値を持たない機体は制空に寄与しない模様
+         */
+        if(itemMst.is(SlotItemType.対潜哨戒機, SlotItemType.オートジャイロ) && itemMst.getTyku() == 0){
+            return 0D;
+        }
+        // 上昇制空値＝内部熟練ボーナス＋制空ボーナス(艦戦/水爆)
+        // 内部熟練ボーナス＝√(内部熟練度/10)
+
+        // 熟練ボーナス
+        double bonus = Math.sqrt(skillLevel(item.getAlv()) / 10D);
+        // 制空ボーナス
+        // 対空値を持つ回転翼機が存在しないため、どちらのボーナスが適用されるのかは不明
+        if (itemMst.is(SlotItemType.艦上戦闘機, SlotItemType.水上戦闘機, SlotItemType.局地戦闘機,
+                SlotItemType.対潜哨戒機)) {
+            bonus += skillBonus1(item.getAlv());
+        } else if (itemMst.is(SlotItemType.水上爆撃機)) {
+            bonus += skillBonus2(item.getAlv());
+        }
+        return bonus;
     }
 
     /**
