@@ -263,7 +263,7 @@ public class Items {
         case 艦上爆撃機:
         case 艦上攻撃機:
         case 水上爆撃機:
-        case オートジャイロ:
+        case 回転翼機:
         case 対潜哨戒機:
         case 水上戦闘機:
         case 陸上攻撃機:
@@ -308,7 +308,7 @@ public class Items {
         case 艦上爆撃機:
         case 艦上攻撃機:
         case 水上爆撃機:
-        case オートジャイロ:
+        case 回転翼機:
         case 対潜哨戒機:
         case 水上戦闘機:
         case 陸上攻撃機:

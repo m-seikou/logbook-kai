@@ -137,8 +137,8 @@ public class Ships {
         VIEW_COEFFICIENT.put(SlotItemType.ソナー, 0.6D);
         // 特殊潜航艇：0.6
         VIEW_COEFFICIENT.put(SlotItemType.特殊潜航艇, 0.6D);
-        // オートジャイロ：0.6
-        VIEW_COEFFICIENT.put(SlotItemType.オートジャイロ, 0.6D);
+        // 回転翼機：0.6
+        VIEW_COEFFICIENT.put(SlotItemType.回転翼機, 0.6D);
         // 対潜哨戒機：0.6
         VIEW_COEFFICIENT.put(SlotItemType.対潜哨戒機, 0.6D);
         // 探照灯：0.6
@@ -743,7 +743,7 @@ public class Ships {
         /*
          * 対潜哨戒機,回転翼機が航空戦に参加するようになったが、対空値を持たない機体は制空に寄与しない模様
          */
-        if(itemMst.is(SlotItemType.対潜哨戒機, SlotItemType.オートジャイロ) && itemMst.getTyku() == 0){
+        if(itemMst.is(SlotItemType.対潜哨戒機, SlotItemType.回転翼機) && itemMst.getTyku() == 0){
             return 0D;
         }
         // 上昇制空値＝内部熟練ボーナス＋制空ボーナス(艦戦/水爆)
