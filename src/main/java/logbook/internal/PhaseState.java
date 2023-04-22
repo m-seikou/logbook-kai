@@ -741,7 +741,7 @@ public class PhaseState {
      */
     private void setInitialHp(IBattle b) {
         for (int i = 0, s = b.getFMaxhps().size(); i < s; i++) {
-            if (b.getEMaxhps().get(i) == null) {
+            if (b.getFMaxhps().get(i) == null) {
                 //潜水(空)マス対応
                 this.afterEnemy.get(i).setMaxhp(0);
                 this.afterEnemy.get(i).setNowhp(0);
