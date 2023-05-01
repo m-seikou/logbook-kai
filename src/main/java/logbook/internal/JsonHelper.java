@@ -1,14 +1,9 @@
 package logbook.internal;
 
+import logbook.bean.Chara;
+
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -49,6 +44,9 @@ public final class JsonHelper {
      * @return Integer
      */
     public static Integer toInteger(JsonValue val) {
+        if(val.toString().equals("N/A")){
+            return Chara.HP_N_A;
+        }
         if (val instanceof JsonNumber) {
             return ((JsonNumber) val).intValue();
         }

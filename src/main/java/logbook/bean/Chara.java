@@ -9,6 +9,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public interface Chara extends Cloneable {
 
+    Integer HP_N_A = -127;
+
     /**
      * 艦船IDを取得します。
      * @return 艦船ID

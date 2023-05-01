@@ -242,6 +242,8 @@ class ShipImage {
                 } else if (isEscape) {
                     layers.add(ESCAPE_BADGE);
                     gc.applyEffect(new ColorAdjust(0, -1, 0, 0));
+                } else if(chara.getMaxhp().equals(Chara.HP_N_A)){
+                    //do nothing
                 } else if (Ships.isSlightDamage(chara)) {
                     layers.add(SLIGHT_DAMAGE_BADGE);
                     layers.add(SLIGHT_DAMAGE_BACKGROUND);
