@@ -38,7 +38,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * 画像ファイルを処理します
- *
  */
 public class ImageListener implements ContentListenerSpi {
 
@@ -217,6 +216,10 @@ public class ImageListener implements ContentListenerSpi {
     }
 
     private void move(Path from, Path to) throws IOException {
+        if (!Files.exists(from)) {
+            LoggerHolder.get().warn(from.toString() + " not exists.");
+            return;
+        }
         Path parent = to.getParent();
         if (parent != null) {
             if (!Files.exists(parent)) {

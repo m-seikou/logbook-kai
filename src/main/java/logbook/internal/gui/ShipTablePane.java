@@ -89,7 +89,7 @@ public class ShipTablePane extends VBox {
     /** フィルターペイン */
     @FXML
     private FlowPane filters;
-    
+
     /** テキスト */
     @FXML
     private ToggleSwitch textFilter;
@@ -357,7 +357,7 @@ public class ShipTablePane extends VBox {
     private int shipsHashCode;
 
     /** 艦隊名 */
-    private String fleetName;
+    private final String fleetName;
 
     /** パラメータによるフィルター */
     private List<ParameterFilterPane.ShipItemParameterFilterPane> parameterFilters;
@@ -423,7 +423,7 @@ public class ShipTablePane extends VBox {
                 this.parameterFilters.add(new ParameterFilterPane.ShipItemParameterFilterPane());
             }
             this.filters.getChildren().addAll(1, this.parameterFilters);
-            
+
             // フィルターのバインド
             this.textFilter.selectedProperty().addListener((ob, ov, nv) -> {
                 this.textValue.setDisable(!nv);
@@ -440,7 +440,7 @@ public class ShipTablePane extends VBox {
                 public String toString(String object) {
                     return object.equals(ShipFilter.LabelFilter.NO_LABEL) ? "(ラベルなし)" : object;
                 }
-                
+
                 @Override
                 public String fromString(String string) {
                     return string;
@@ -991,7 +991,7 @@ public class ShipTablePane extends VBox {
                 .filter(CheckBox::isSelected)
                 .map(CheckBox::getText)
                 .collect(Collectors.toList()));
-        
+
         // パラメーターフィルター
         config.setParameterFilters(this.parameterFilters.stream()
             .map(ParameterFilterPane::saveConfig)
