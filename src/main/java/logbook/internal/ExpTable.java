@@ -5,7 +5,6 @@ import java.util.Map;
 
 /**
  * 経験値テーブル
- *
  */
 public class ExpTable {
 
@@ -191,6 +190,11 @@ public class ExpTable {
         EXP_TABLE.put(173, 9705000);
         EXP_TABLE.put(174, 10266000);
         EXP_TABLE.put(175, 10950000);
+        EXP_TABLE.put(176, 11100000);
+        EXP_TABLE.put(177, 11300000);
+        EXP_TABLE.put(178, 11600000);
+        EXP_TABLE.put(179, 12100000);
+        EXP_TABLE.put(180, 13000000);
     }
 
     /**
@@ -208,6 +212,6 @@ public class ExpTable {
      * @return 最大Lv
      */
     public static int maxLv() {
-        return 175;
+        return 180;
     }
 }
