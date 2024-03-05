@@ -1116,9 +1116,10 @@ public class BattleTypes {
 
     /**
      * 雷撃
+     * 2024/02/09まで使用していた
      */
     @Data
-    public static class Raigeki implements Serializable {
+    public static class RaigekiOld implements Serializable {
 
         private static final long serialVersionUID = 4769524848250854584L;
 
@@ -1163,6 +1164,60 @@ public class BattleTypes {
                     .setDoubleList("api_eydam", bean::setEydam)
                     .setIntegerList("api_fcl", bean::setFcl)
                     .setIntegerList("api_ecl", bean::setEcl);
+            return bean;
+        }
+    }
+
+    /**
+     * 雷撃
+     * 2024/02/29から使われることになった
+     */
+    @Data
+    public static class Raigeki implements Serializable {
+
+        private static final long serialVersionUID = 4769524848250854584L;
+
+        /** api_frai_list_items */
+        private List<List<Integer>> frai;
+
+        /** api_erai_list_items */
+        private List<List<Integer>> erai;
+
+        /** api_fdam */
+        private List<Double> fdam;
+
+        /** api_edam */
+        private List<Double> edam;
+
+        /** api_fydam_list_item */
+        private List<List<Integer>> fydam;
+
+        /** api_eydam_list_item */
+        private List<List<Integer>> eydam;
+
+        /** api_fcl_list_item */
+        private List<List<Integer>> fcl;
+
+        /** api_ecl_list_item */
+        private List<List<Integer>> ecl;
+
+        /**
+         * JsonObjectから{@link Raigeki}を構築します
+         *
+         * @param json JsonObject
+         * @return {@link Raigeki}
+         */
+        public static Raigeki toRaigeki(JsonObject json) {
+            Raigeki bean = new Raigeki();
+            JsonHelper.bind(json)
+                    .set("api_frai", bean::setFrai, JsonHelper.toList(JsonHelper::toIntegerList))
+                    .set("api_erai", bean::setErai, JsonHelper.toList(JsonHelper::toIntegerList))
+                    .setDoubleList("api_fdam", bean::setFdam)
+                    .setDoubleList("api_edam", bean::setEdam)
+                    .set("api_fydam", bean::setFydam, JsonHelper.toList(JsonHelper::toIntegerList))
+                    .set("api_eydam", bean::setEydam, JsonHelper.toList(JsonHelper::toIntegerList))
+                    .set("api_fcl", bean::setFcl, JsonHelper.toList(JsonHelper::toIntegerList))
+                    .set("api_ecl", bean::setEcl, JsonHelper.toList(JsonHelper::toIntegerList));
             return bean;
         }
     }
