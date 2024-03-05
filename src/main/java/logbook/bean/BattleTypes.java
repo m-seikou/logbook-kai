@@ -1153,8 +1153,8 @@ public class BattleTypes {
          * @param json JsonObject
          * @return {@link Raigeki}
          */
-        public static Raigeki toRaigeki(JsonObject json) {
-            Raigeki bean = new Raigeki();
+        public static RaigekiOld toRaigeki(JsonObject json) {
+            RaigekiOld bean = new RaigekiOld();
             JsonHelper.bind(json)
                     .setIntegerList("api_frai", bean::setFrai)
                     .setIntegerList("api_erai", bean::setErai)
@@ -1175,7 +1175,7 @@ public class BattleTypes {
     @Data
     public static class Raigeki implements Serializable {
 
-        private static final long serialVersionUID = 4769524848250854584L;
+        private static final long serialVersionUID = 4769524848250854594L;
 
         /** api_frai_list_items */
         private List<List<Integer>> frai;
@@ -1190,10 +1190,10 @@ public class BattleTypes {
         private List<Double> edam;
 
         /** api_fydam_list_item */
-        private List<List<Integer>> fydam;
+        private List<List<Double>> fydam;
 
         /** api_eydam_list_item */
-        private List<List<Integer>> eydam;
+        private List<List<Double>> eydam;
 
         /** api_fcl_list_item */
         private List<List<Integer>> fcl;
@@ -1210,14 +1210,14 @@ public class BattleTypes {
         public static Raigeki toRaigeki(JsonObject json) {
             Raigeki bean = new Raigeki();
             JsonHelper.bind(json)
-                    .set("api_frai", bean::setFrai, JsonHelper.toList(JsonHelper::toIntegerList))
-                    .set("api_erai", bean::setErai, JsonHelper.toList(JsonHelper::toIntegerList))
+                    .set("api_frai_list_items", bean::setFrai, JsonHelper.toList(JsonHelper::toIntegerList))
+                    .set("api_erai_list_items", bean::setErai, JsonHelper.toList(JsonHelper::toIntegerList))
                     .setDoubleList("api_fdam", bean::setFdam)
                     .setDoubleList("api_edam", bean::setEdam)
-                    .set("api_fydam", bean::setFydam, JsonHelper.toList(JsonHelper::toIntegerList))
-                    .set("api_eydam", bean::setEydam, JsonHelper.toList(JsonHelper::toIntegerList))
-                    .set("api_fcl", bean::setFcl, JsonHelper.toList(JsonHelper::toIntegerList))
-                    .set("api_ecl", bean::setEcl, JsonHelper.toList(JsonHelper::toIntegerList));
+                    .set("api_fydam_list_items", bean::setFydam, JsonHelper.toList(JsonHelper::toDoubleList))
+                    .set("api_eydam_list_items", bean::setEydam, JsonHelper.toList(JsonHelper::toDoubleList))
+                    .set("api_fcl_list_items", bean::setFcl, JsonHelper.toList(JsonHelper::toIntegerList))
+                    .set("api_ecl_list_items", bean::setEcl, JsonHelper.toList(JsonHelper::toIntegerList));
             return bean;
         }
     }
