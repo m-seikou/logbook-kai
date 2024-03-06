@@ -1,8 +1,11 @@
 package logbook.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -395,7 +398,7 @@ public class BattleTypes {
          * api_opening_atackを取得します。
          * @return api_opening_atack
          */
-        BattleTypes.Raigeki getOpeningAtack();
+        OpeningRaigeki getOpeningAtack();
 
         /**
          * api_opening_taisen_flagを取得します。
@@ -437,7 +440,7 @@ public class BattleTypes {
          * api_raigekiを取得します。
          * @return api_raigeki
          */
-        BattleTypes.Raigeki getRaigeki();
+        Raigeki getRaigeki();
 
         @Override
         default boolean isISortieHougeki() {
@@ -1115,11 +1118,11 @@ public class BattleTypes {
     }
 
     /**
-     * 雷撃
-     * 2024/02/09まで使用していた
+     * 閉幕雷撃
+     *
      */
     @Data
-    public static class RaigekiOld implements Serializable {
+    public static class Raigeki implements Serializable {
 
         private static final long serialVersionUID = 4769524848250854584L;
 
@@ -1153,8 +1156,8 @@ public class BattleTypes {
          * @param json JsonObject
          * @return {@link Raigeki}
          */
-        public static RaigekiOld toRaigeki(JsonObject json) {
-            RaigekiOld bean = new RaigekiOld();
+        public static Raigeki toRaigeki(JsonObject json) {
+            Raigeki bean = new Raigeki();
             JsonHelper.bind(json)
                     .setIntegerList("api_frai", bean::setFrai)
                     .setIntegerList("api_erai", bean::setErai)
@@ -1169,11 +1172,11 @@ public class BattleTypes {
     }
 
     /**
-     * 雷撃
+     * 開幕雷撃
      * 2024/02/29から使われることになった
      */
     @Data
-    public static class Raigeki implements Serializable {
+    public static class OpeningRaigeki implements Serializable {
 
         private static final long serialVersionUID = 4769524848250854594L;
 
@@ -1201,14 +1204,34 @@ public class BattleTypes {
         /** api_ecl_list_item */
         private List<List<Integer>> ecl;
 
+        private static <T> List<List<T>> convert(JsonArray input) {
+            List<List<T>> result = new ArrayList<>();
+            for (int i = 0; i < input.size(); i++) {
+                result.add(i, new ArrayList<T>(input.getInt(i)));
+            }
+            return result;
+        }
+
         /**
-         * JsonObjectから{@link Raigeki}を構築します
+         * JsonObjectから{@link OpeningRaigeki}を構築します
          *
          * @param json JsonObject
-         * @return {@link Raigeki}
+         * @return {@link OpeningRaigeki}
          */
-        public static Raigeki toRaigeki(JsonObject json) {
-            Raigeki bean = new Raigeki();
+        public static OpeningRaigeki toRaigeki(JsonObject json) {
+            OpeningRaigeki bean = new OpeningRaigeki();
+            // ログ表示の場合旧型式の場合がある
+            if (json.get("api_frai") != null){
+                JsonHelper.bind(json)
+                        .setDoubleList("api_fdam", bean::setFdam)
+                        .setDoubleList("api_edam", bean::setEdam);
+                bean.frai = convert(json.getJsonArray("api_frai"));
+                bean.erai = convert(json.getJsonArray("api_erai"));
+                bean.fcl = convert(json.getJsonArray("api_fcl"));
+                bean.ecl = convert(json.getJsonArray("api_ecl"));
+                bean.fydam = convert(json.getJsonArray("api_fydam"));
+                bean.eydam = convert(json.getJsonArray("api_eydam"));
+            }
             JsonHelper.bind(json)
                     .set("api_frai_list_items", bean::setFrai, JsonHelper.toList(JsonHelper::toIntegerList))
                     .set("api_erai_list_items", bean::setErai, JsonHelper.toList(JsonHelper::toIntegerList))
