@@ -1219,9 +1219,12 @@ public class BattleTypes {
          * @return {@link OpeningRaigeki}
          */
         public static OpeningRaigeki toRaigeki(JsonObject json) {
+            LoggerHolder.get().error("***** 開幕雷撃");
+            LoggerHolder.get().error(json);
             OpeningRaigeki bean = new OpeningRaigeki();
             // ログ表示の場合旧型式の場合がある
             if (json.get("api_frai") != null){
+                LoggerHolder.get().error("***** 旧開幕雷撃");
                 JsonHelper.bind(json)
                         .setDoubleList("api_fdam", bean::setFdam)
                         .setDoubleList("api_edam", bean::setEdam);
