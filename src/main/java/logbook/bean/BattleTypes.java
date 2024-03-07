@@ -1219,22 +1219,9 @@ public class BattleTypes {
          * @return {@link OpeningRaigeki}
          */
         public static OpeningRaigeki toRaigeki(JsonObject json) {
-            LoggerHolder.get().error("***** 開幕雷撃");
-            LoggerHolder.get().error(json);
+            LoggerHolder.get().debug("***** 開幕雷撃");
+            LoggerHolder.get().debug(json);
             OpeningRaigeki bean = new OpeningRaigeki();
-            // ログ表示の場合旧型式の場合がある
-            if (json.get("api_frai") != null){
-                LoggerHolder.get().error("***** 旧開幕雷撃");
-                JsonHelper.bind(json)
-                        .setDoubleList("api_fdam", bean::setFdam)
-                        .setDoubleList("api_edam", bean::setEdam);
-                bean.frai = convert(json.getJsonArray("api_frai"));
-                bean.erai = convert(json.getJsonArray("api_erai"));
-                bean.fcl = convert(json.getJsonArray("api_fcl"));
-                bean.ecl = convert(json.getJsonArray("api_ecl"));
-                bean.fydam = convert(json.getJsonArray("api_fydam"));
-                bean.eydam = convert(json.getJsonArray("api_eydam"));
-            }
             JsonHelper.bind(json)
                     .set("api_frai_list_items", bean::setFrai, JsonHelper.toList(JsonHelper::toIntegerList))
                     .set("api_erai_list_items", bean::setErai, JsonHelper.toList(JsonHelper::toIntegerList))

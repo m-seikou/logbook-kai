@@ -123,6 +123,7 @@ public class BattleLogs {
                 if (header == GZIPInputStream.GZIP_MAGIC) {
                     in = new GZIPInputStream(in);
                 }
+                LoggerHolder.get().debug(in);
                 return mapper.readValue(in, BattleLog.class);
             } finally {
                 in.close();
