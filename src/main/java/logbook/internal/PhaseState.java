@@ -244,10 +244,11 @@ public class PhaseState {
      */
     public void applySortieHougeki(ISortieHougeki battle) {
         // 先制対潜攻撃
-        this.applyHougeki(battle.getOpeningTaisen());
+        this.applyHougeki(battle.getOpeningTaisen(), false, BattleTypes.SortieAtTypeTSBK.対潜先制爆雷攻撃);
         // 開幕雷撃
         this.applyOpeningRaigeki(battle.getOpeningAtack());
         if (!this.combined && battle.isICombinedEcBattle()) {
+            // 敵だけ連合
             // 1巡目
             this.applyHougeki(battle.getHougeki1());
             // 雷撃
@@ -498,18 +499,19 @@ public class PhaseState {
      * @param support 支援
      */
     private void applySupport(SupportInfo support) {
-        if (support != null) {
-            SupportAiratack air = support.getSupportAiratack();
-            if (air != null) {
-                Stage3 stage3 = air.getStage3();
-                if (stage3 != null) {
-                    this.applyEnemyDamage(stage3.getEdam());
-                }
+        if (support == null) {
+            return;
+        }
+        SupportAiratack air = support.getSupportAiratack();
+        if (air != null) {
+            Stage3 stage3 = air.getStage3();
+            if (stage3 != null) {
+                this.applyEnemyDamage(stage3.getEdam());
             }
-            SupportHourai hou = support.getSupportHourai();
-            if (hou != null) {
-                this.applyEnemyDamage(hou.getDamage());
-            }
+        }
+        SupportHourai hou = support.getSupportHourai();
+        if (hou != null) {
+            this.applyEnemyDamage(hou.getDamage());
         }
     }
 
@@ -564,13 +566,17 @@ public class PhaseState {
         }
     }
 
+    private void applyHougeki(IHougeki hougeki, boolean isFriendlyBattle) {
+        applyHougeki(hougeki, isFriendlyBattle, null);
+    }
     /**
      * 砲撃戦フェイズを適用します
      * 
      * @param hougeki          砲撃戦フェイズ
      * @param isFriendlyBattle 友軍艦隊フラグ
+     * @param overrideAtType   攻撃種別
      */
-    private void applyHougeki(IHougeki hougeki, boolean isFriendlyBattle) {
+    private void applyHougeki(IHougeki hougeki, boolean isFriendlyBattle, AtType overrideAtType) {
         if (hougeki == null || hougeki.getAtEflag() == null) {
             return;
         }
@@ -581,7 +587,9 @@ public class PhaseState {
             int at = hougeki.getAtList().get(i);
             // 攻撃種別
             AtType atType;
-            if (hougeki instanceof MidnightHougeki) {
+            if (overrideAtType != null){
+                atType = overrideAtType;
+            }else if (hougeki instanceof MidnightHougeki) {
                 atType = Optional.ofNullable(((MidnightHougeki) hougeki).getSpList())
                         .map(l -> l.get(index))
                         .map(MidnightSpList::toMidnightSpList)
@@ -907,7 +915,7 @@ public class PhaseState {
                     defender.setNowhp(defender.getNowhp() - damage);
 
                     this.addDetail(attacker, defender, damage, Collections.singletonList(damage), Collections.singletonList(critical.get(i).get(j)),
-                            SortieAtTypeRaigeki.通常雷撃);
+                            SortieAtTypeRaigeki.開幕雷撃);
                 }
             }
         }

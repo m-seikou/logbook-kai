@@ -1645,8 +1645,7 @@ public class BattleTypes {
     }
 
     /**
-     * 攻撃種別
-     *
+     * 砲撃 攻撃種別
      */
     public enum SortieAtType implements AtType {
         通常攻撃("通常攻撃"),
@@ -1661,7 +1660,11 @@ public class BattleTypes {
         胸熱CI("一斉射かッ…胸が熱いな！"),
         陸奥タッチ("長門、いい？ いくわよ！ 主砲一斉射ッ！"),
         ColoradoTouch("特殊攻撃(Colorado)"),
-        僚艦夜戦突撃("僚艦夜戦突撃");   // 夜戦専用だが念のため
+        僚艦夜戦突撃("僚艦夜戦突撃"),   // 夜戦専用だが念のため
+
+        // 新しいものが出てきた場合補足できるように用意しておく
+        // ※大和タッチがまだ定義されていない
+        unknown("未定義");
 
         private String name;
 
@@ -1703,22 +1706,28 @@ public class BattleTypes {
             case 104:
                 return 僚艦夜戦突撃;
             default:
-                return 通常攻撃;
+                return unknown;
             }
         }
     }
 
     /**
-     * 攻撃種別
-     *
+     * 雷撃 攻撃種別
      */
     public enum SortieAtTypeRaigeki implements AtType {
-        通常雷撃;
+        通常雷撃,
+        開幕雷撃;
     }
 
     /**
-     * 攻撃種別
-     *
+     * 対潜先制爆雷攻撃 攻撃種別
+     */
+    public enum SortieAtTypeTSBK implements AtType {
+        対潜先制爆雷攻撃
+    }
+
+    /**
+     * 夜戦 攻撃種別
      */
     public enum MidnightSpList implements AtType {
         通常攻撃("通常攻撃"),

@@ -339,68 +339,72 @@ public class BattleDetail extends WindowController {
         this.tykuCI.setText("");
 
         if (this.battle.isIKouku()) {
-            Kouku kouku = this.battle.asIKouku().getKouku();
-            if (kouku != null) {
-                Stage1 stage1 = kouku.getStage1();
-                Stage2 stage2 = kouku.getStage2();
+            return;
+        }
+        Kouku kouku = this.battle.asIKouku().getKouku();
+        if (kouku == null) {
+            return;
+        }
+        Stage1 stage1 = kouku.getStage1();
+        Stage2 stage2 = kouku.getStage2();
 
-                if (stage1 != null) {
-                    Map<Integer, SlotitemMst> slotitemMst = SlotitemMstCollection.get()
-                            .getSlotitemMap();
-                    // 制空権
-                    this.dispSeiku.setText(BattleTypes.DispSeiku.toDispSeiku(stage1.getDispSeiku()).toString());
-                    this.dispSeiku.getStyleClass().add("dispseiku" + stage1.getDispSeiku());
-                    // 味方触接
-                    SlotitemMst fTouchPlaneItem = slotitemMst.get(stage1.getTouchPlane().get(0));
-                    if (fTouchPlaneItem != null) {
-                        Image image = Items.itemImage(fTouchPlaneItem);
-                        if (image != null) {
-                            this.fTouchPlaneImage.setImage(image);
-                            this.fTouchPlaneImage.setFitWidth(24);
-                            this.fTouchPlaneImage.setFitHeight(24);
-                        }
-                        this.fTouchPlane.setText(fTouchPlaneItem.getName()
-                                + "(+" + (int) (Ships.touchPlaneAttackCompensation(fTouchPlaneItem) * 100) + "%)");
-                    } else {
-                        this.fTouchPlaneImage.setFitWidth(0);
-                        this.fTouchPlaneImage.setFitHeight(0);
-                        this.fTouchPlane.setText("なし");
-                    }
-                    // 敵触接
-                    SlotitemMst eTouchPlaneItem = slotitemMst.get(stage1.getTouchPlane().get(1));
-                    if (eTouchPlaneItem != null) {
-                        Image image = Items.itemImage(eTouchPlaneItem);
-                        if (image != null) {
-                            this.eTouchPlaneImage.setImage(image);
-                            this.eTouchPlaneImage.setFitWidth(24);
-                            this.eTouchPlaneImage.setFitHeight(24);
-                        }
-                        this.eTouchPlane.setText(eTouchPlaneItem.getName()
-                                + "(+" + (int) (Ships.touchPlaneAttackCompensation(eTouchPlaneItem) * 100) + "%)");
-                    } else {
-                        this.eTouchPlaneImage.setFitWidth(0);
-                        this.eTouchPlaneImage.setFitHeight(0);
-                        this.eTouchPlane.setText("なし");
-                    }
+        if (stage1 != null) {
+            Map<Integer, SlotitemMst> slotitemMst = SlotitemMstCollection.get()
+                    .getSlotitemMap();
+            // 制空権
+            this.dispSeiku.setText(BattleTypes.DispSeiku.toDispSeiku(stage1.getDispSeiku()).toString());
+            this.dispSeiku.getStyleClass().add("dispseiku" + stage1.getDispSeiku());
+            // 味方触接
+            SlotitemMst fTouchPlaneItem = slotitemMst.get(stage1.getTouchPlane().get(0));
+            if (fTouchPlaneItem != null) {
+                Image image = Items.itemImage(fTouchPlaneItem);
+                if (image != null) {
+                    this.fTouchPlaneImage.setImage(image);
+                    this.fTouchPlaneImage.setFitWidth(24);
+                    this.fTouchPlaneImage.setFitHeight(24);
                 }
-                if (stage2 != null) {
-                    // 対空CI
-                    if (stage2.getAirFire() != null && stage2.getAirFire().getIdx() != null) {
-                        // インデックスは0始まり
-                        int idx = stage2.getAirFire().getIdx();
-                        Ship ship;
-                        // 遊撃部隊は7隻なので < 6 ではない
-                        if (idx < ps.getAfterFriend().size()) {
-                            ship = ps.getAfterFriend().get(idx);
-                        } else {
-                            ship = ps.getAfterFriendCombined().get(idx - 6);
-                        }
-                        this.tykuCI.setText(Ships.toName(ship)
-                                + " (第" + stage2.getAirFire().getKind() + "種)");
-                    }
+                this.fTouchPlane.setText(fTouchPlaneItem.getName()
+                        + "(+" + (int) (Ships.touchPlaneAttackCompensation(fTouchPlaneItem) * 100) + "%)");
+            } else {
+                this.fTouchPlaneImage.setFitWidth(0);
+                this.fTouchPlaneImage.setFitHeight(0);
+                this.fTouchPlane.setText("なし");
+            }
+            // 敵触接
+            SlotitemMst eTouchPlaneItem = slotitemMst.get(stage1.getTouchPlane().get(1));
+            if (eTouchPlaneItem != null) {
+                Image image = Items.itemImage(eTouchPlaneItem);
+                if (image != null) {
+                    this.eTouchPlaneImage.setImage(image);
+                    this.eTouchPlaneImage.setFitWidth(24);
+                    this.eTouchPlaneImage.setFitHeight(24);
                 }
+                this.eTouchPlane.setText(eTouchPlaneItem.getName()
+                        + "(+" + (int) (Ships.touchPlaneAttackCompensation(eTouchPlaneItem) * 100) + "%)");
+            } else {
+                this.eTouchPlaneImage.setFitWidth(0);
+                this.eTouchPlaneImage.setFitHeight(0);
+                this.eTouchPlane.setText("なし");
             }
         }
+        if (stage2 == null) {
+            return;
+        }
+        // 対空CI
+        if (stage2.getAirFire() == null || stage2.getAirFire().getIdx() == null) {
+            return;
+        }
+        // インデックスは0始まり
+        int idx = stage2.getAirFire().getIdx();
+        Ship ship;
+        // 遊撃部隊は7隻なので < 6 ではない
+        if (idx < ps.getAfterFriend().size()) {
+            ship = ps.getAfterFriend().get(idx);
+        } else {
+            ship = ps.getAfterFriendCombined().get(idx - 6);
+        }
+        this.tykuCI.setText(Ships.toName(ship)
+                + " (第" + stage2.getAirFire().getKind() + "種)");
     }
 
     /**
@@ -510,28 +514,27 @@ public class BattleDetail extends WindowController {
      */
     private void airBaseInjectionAttack(PhaseState ps, List<Node> phases) {
         // 基地航空隊戦フェイズ(噴式強襲)
-        if (this.battle.isIAirBaseAttack()) {
-            if (this.battle.asIAirBaseAttack().getAirBaseInjection() != null) {
-                // 基地航空隊戦フェイズ適用
-                ps.applyAirBaseInject((IAirBaseAttack) this.battle);
-
-                List<Node> stage = new ArrayList<>();
-
-                AirBaseAttack airBaseAttack = ((IAirBaseAttack) this.battle).getAirBaseInjection();
-                if (airBaseAttack.getStage1() != null) {
-                    Stage1 stage1 = airBaseAttack.getStage1();
-                    stage.add(new BattleDetailPhaseStage1(stage1, "基地航空隊"));
-                }
-                if (airBaseAttack.getStage2() != null) {
-                    Stage2 stage2 = airBaseAttack.getStage2();
-                    stage.add(new BattleDetailPhaseStage2(stage2, "基地航空隊"));
-                }
-                BattleDetailPhase phasePane = new BattleDetailPhase(ps, stage);
-                phasePane.setText("基地航空隊戦フェイズ(噴式強襲)");
-                phasePane.setExpanded(false);
-                phases.add(phasePane);
-            }
+        if (!this.battle.isIAirBaseAttack() || this.battle.asIAirBaseAttack().getAirBaseInjection() == null) {
+            return;
         }
+        // 基地航空隊戦フェイズ適用
+        ps.applyAirBaseInject((IAirBaseAttack) this.battle);
+
+        List<Node> stage = new ArrayList<>();
+
+        AirBaseAttack airBaseAttack = ((IAirBaseAttack) this.battle).getAirBaseInjection();
+        if (airBaseAttack.getStage1() != null) {
+            Stage1 stage1 = airBaseAttack.getStage1();
+            stage.add(new BattleDetailPhaseStage1(stage1, "基地航空隊"));
+        }
+        if (airBaseAttack.getStage2() != null) {
+            Stage2 stage2 = airBaseAttack.getStage2();
+            stage.add(new BattleDetailPhaseStage2(stage2, "基地航空隊"));
+        }
+        BattleDetailPhase phasePane = new BattleDetailPhase(ps, stage);
+        phasePane.setText("基地航空隊戦フェイズ(噴式強襲)");
+        phasePane.setExpanded(false);
+        phases.add(phasePane);
     }
 
     /**
@@ -541,29 +544,28 @@ public class BattleDetail extends WindowController {
      */
     private void injectionKouku(PhaseState ps, List<Node> phases) {
         // 航空戦フェイズ(噴式強襲)
-        if (this.battle.isIKouku()) {
-            if (this.battle.asIKouku().getInjectionKouku() != null) {
-                // 航空戦フェイズ適用
-                ps.applyInjectionKouku((IKouku) this.battle);
-
-                List<Node> stage = new ArrayList<>();
-
-                Kouku kouku = ((IKouku) this.battle).getInjectionKouku();
-                if (kouku.getStage1() != null) {
-                    Stage1 stage1 = kouku.getStage1();
-                    stage.add(new BattleDetailPhaseStage1(stage1, "僚艦"));
-                }
-                if (kouku.getStage2() != null) {
-                    Stage2 stage2 = kouku.getStage2();
-                    stage.add(new BattleDetailPhaseStage2(stage2, "僚艦"));
-                }
-                BattleDetailPhase phasePane = new BattleDetailPhase(ps, stage);
-                phasePane = new BattleDetailPhase(ps);
-                phasePane.setText("航空戦フェイズ(噴式強襲)");
-                phasePane.setExpanded(false);
-                phases.add(phasePane);
-            }
+        if (!this.battle.isIKouku() || this.battle.asIKouku().getInjectionKouku() == null) {
+            return;
         }
+        // 航空戦フェイズ適用
+        ps.applyInjectionKouku((IKouku) this.battle);
+
+        List<Node> stage = new ArrayList<>();
+
+        Kouku kouku = ((IKouku) this.battle).getInjectionKouku();
+        if (kouku.getStage1() != null) {
+            Stage1 stage1 = kouku.getStage1();
+            stage.add(new BattleDetailPhaseStage1(stage1, "僚艦"));
+        }
+        if (kouku.getStage2() != null) {
+            Stage2 stage2 = kouku.getStage2();
+            stage.add(new BattleDetailPhaseStage2(stage2, "僚艦"));
+        }
+        BattleDetailPhase phasePane = new BattleDetailPhase(ps, stage);
+        phasePane = new BattleDetailPhase(ps);
+        phasePane.setText("航空戦フェイズ(噴式強襲)");
+        phasePane.setExpanded(false);
+        phases.add(phasePane);
     }
 
     /**
@@ -573,27 +575,26 @@ public class BattleDetail extends WindowController {
      */
     private void airBaseAttack(PhaseState ps, List<Node> phases) {
         // 基地航空隊戦フェイズ
-        if (this.battle.isIAirBaseAttack()) {
-            if (this.battle.asIAirBaseAttack().getAirBaseAttack() != null) {
-                // 基地航空隊戦フェイズ適用
-                ps.applyAirBaseAttack((IAirBaseAttack) this.battle);
+        if (!this.battle.isIAirBaseAttack() || this.battle.asIAirBaseAttack().getAirBaseAttack() == null){
+            return;
+        }
+        // 基地航空隊戦フェイズ適用
+        ps.applyAirBaseAttack((IAirBaseAttack) this.battle);
 
-                List<Node> stage = new ArrayList<>();
+        List<Node> stage = new ArrayList<>();
 
-                for (AirBaseAttack airBaseAttack : ((IAirBaseAttack) this.battle).getAirBaseAttack()) {
-                    if (airBaseAttack.getStage1() != null) {
-                        stage.add(new BattleDetailPhaseStage1(airBaseAttack.getStage1(), "基地航空隊"));
-                    }
-                    if (airBaseAttack.getStage2() != null) {
-                        stage.add(new BattleDetailPhaseStage2(airBaseAttack.getStage2(), "基地航空隊"));
-                    }
-                }
-                BattleDetailPhase phasePane = new BattleDetailPhase(ps, stage);
-                phasePane.setText("基地航空隊戦フェイズ");
-                phasePane.setExpanded(false);
-                phases.add(phasePane);
+        for (AirBaseAttack airBaseAttack : ((IAirBaseAttack) this.battle).getAirBaseAttack()) {
+            if (airBaseAttack.getStage1() != null) {
+                stage.add(new BattleDetailPhaseStage1(airBaseAttack.getStage1(), "基地航空隊"));
+            }
+            if (airBaseAttack.getStage2() != null) {
+                stage.add(new BattleDetailPhaseStage2(airBaseAttack.getStage2(), "基地航空隊"));
             }
         }
+        BattleDetailPhase phasePane = new BattleDetailPhase(ps, stage);
+        phasePane.setText("基地航空隊戦フェイズ");
+        phasePane.setExpanded(false);
+        phases.add(phasePane);
     }
 
     /**
@@ -603,28 +604,27 @@ public class BattleDetail extends WindowController {
      */
     private void kouku(PhaseState ps, List<Node> phases) {
         // 航空戦フェイズ
-        if (this.battle.isIKouku()) {
-            if (this.battle.asIKouku().getKouku() != null) {
-                // 航空戦フェイズ適用
-                ps.applyKouku((IKouku) this.battle);
-
-                List<Node> stage = new ArrayList<>();
-
-                Kouku kouku = ((IKouku) this.battle).getKouku();
-                if (kouku.getStage1() != null) {
-                    Stage1 stage1 = kouku.getStage1();
-                    stage.add(new BattleDetailPhaseStage1(stage1, "僚艦"));
-                }
-                if (kouku.getStage2() != null) {
-                    Stage2 stage2 = kouku.getStage2();
-                    stage.add(new BattleDetailPhaseStage2(stage2, "僚艦"));
-                }
-                BattleDetailPhase phasePane = new BattleDetailPhase(ps, stage);
-                phasePane.setText("航空戦フェイズ");
-                phasePane.setExpanded(false);
-                phases.add(phasePane);
-            }
+        if (!this.battle.isIKouku() || this.battle.asIKouku().getKouku() == null){
+            return;
         }
+        // 航空戦フェイズ適用
+        ps.applyKouku((IKouku) this.battle);
+
+        List<Node> stage = new ArrayList<>();
+
+        Kouku kouku = ((IKouku) this.battle).getKouku();
+        if (kouku.getStage1() != null) {
+            Stage1 stage1 = kouku.getStage1();
+            stage.add(new BattleDetailPhaseStage1(stage1, "僚艦"));
+        }
+        if (kouku.getStage2() != null) {
+            Stage2 stage2 = kouku.getStage2();
+            stage.add(new BattleDetailPhaseStage2(stage2, "僚艦"));
+        }
+        BattleDetailPhase phasePane = new BattleDetailPhase(ps, stage);
+        phasePane.setText("航空戦フェイズ");
+        phasePane.setExpanded(false);
+        phases.add(phasePane);
     }
 
     /**
@@ -634,14 +634,16 @@ public class BattleDetail extends WindowController {
      */
     private void support(PhaseState ps, List<Node> phases) {
         // 支援フェイズ
-        if (this.battle.isISupport()) {
-            SupportInfo support = this.battle.asISupport().getSupportInfo();
-            if (support != null) {
-                // 支援フェイズ適用
-                ps.applySupport((ISupport) this.battle);
-                this.setSupportPhase(ps, phases, support);
-            }
+        if (!this.battle.isISupport()) {
+            return;
         }
+        SupportInfo support = this.battle.asISupport().getSupportInfo();
+        if (support == null) {
+            return;
+        }
+        // 支援フェイズ適用
+        ps.applySupport((ISupport) this.battle);
+        this.setSupportPhase(ps, phases, support);
     }
 
     /**
@@ -670,28 +672,30 @@ public class BattleDetail extends WindowController {
      */
     private void airbattle(PhaseState ps, List<Node> phases) {
         // 航空戦
-        if (this.battle.isIAirbattle()) {
-            if (this.battle.asIAirbattle().getKouku2() != null) {
-                // 航空戦適用
-                ps.applyAirbattle(this.battle.asIAirbattle());
-
-                List<Node> stage = new ArrayList<>();
-
-                Kouku kouku = this.battle.asIAirbattle().getKouku2();
-                if (kouku.getStage1() != null) {
-                    Stage1 stage1 = kouku.getStage1();
-                    stage.add(new BattleDetailPhaseStage1(stage1, "僚艦"));
-                }
-                if (kouku.getStage2() != null) {
-                    Stage2 stage2 = kouku.getStage2();
-                    stage.add(new BattleDetailPhaseStage2(stage2, "僚艦"));
-                }
-                BattleDetailPhase phasePane = new BattleDetailPhase(ps, stage);
-                phasePane.setText("航空戦");
-                phasePane.setExpanded(false);
-                phases.add(phasePane);
-            }
+        if (!this.battle.isIAirbattle()) {
+            return;
         }
+        if (this.battle.asIAirbattle().getKouku2() == null) {
+            return;
+        }
+        // 航空戦適用
+        ps.applyAirbattle(this.battle.asIAirbattle());
+
+        List<Node> stage = new ArrayList<>();
+
+        Kouku kouku = this.battle.asIAirbattle().getKouku2();
+        if (kouku.getStage1() != null) {
+            Stage1 stage1 = kouku.getStage1();
+            stage.add(new BattleDetailPhaseStage1(stage1, "僚艦"));
+        }
+        if (kouku.getStage2() != null) {
+            Stage2 stage2 = kouku.getStage2();
+            stage.add(new BattleDetailPhaseStage2(stage2, "僚艦"));
+        }
+        BattleDetailPhase phasePane = new BattleDetailPhase(ps, stage);
+        phasePane.setText("航空戦");
+        phasePane.setExpanded(false);
+        phases.add(phasePane);
     }
 
     /**

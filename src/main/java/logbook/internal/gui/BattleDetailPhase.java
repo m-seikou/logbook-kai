@@ -3,6 +3,7 @@ package logbook.internal.gui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
@@ -15,12 +16,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import logbook.bean.Chara;
-import logbook.bean.Enemy;
-import logbook.bean.Friend;
-import logbook.bean.Ship;
+import logbook.bean.*;
 import logbook.internal.LoggerHolder;
 import logbook.internal.PhaseState;
 import logbook.internal.Ships;
@@ -35,7 +35,7 @@ public class BattleDetailPhase extends TitledPane {
     private PhaseState phase;
 
     /** 詳細 */
-    private List<PhaseState.AttackDetail> attackDetails;
+    private List<PhaseState.AttackDetail> attackDetails = new ArrayList<>();
 
     /** 付加情報 */
     private List<? extends Node> nodes;
@@ -67,6 +67,8 @@ public class BattleDetailPhase extends TitledPane {
     /** 友軍艦隊フラグ */
     private boolean isFriendlyBattle;
 
+    private List<PhaseState.AttackDetail> TSBK = new ArrayList<>();
+    private List<PhaseState.AttackDetail> openingAttack = new ArrayList<>();
     /**
     * 戦闘ログ詳細のフェーズのコンストラクタ
     *
@@ -95,7 +97,17 @@ public class BattleDetailPhase extends TitledPane {
     */
     public BattleDetailPhase(PhaseState phase, List<? extends Node> infomation, boolean isFriendlyBattle) {
         this.phase = new PhaseState(phase);
-        this.attackDetails = new ArrayList<>(phase.getAttackDetails());
+        if(!phase.getAttackDetails().isEmpty()){
+            for (PhaseState.AttackDetail i : phase.getAttackDetails()) {
+                if (i.getAtType() == BattleTypes.SortieAtTypeTSBK.対潜先制爆雷攻撃){
+                    this.TSBK.add(i);
+                }else if (i.getAtType() == BattleTypes.SortieAtTypeRaigeki.開幕雷撃){
+                    this.openingAttack.add(i);
+                }else{
+                    this.attackDetails.add(i);
+                }
+            }
+        }
         this.nodes = infomation;
         this.isFriendlyBattle = isFriendlyBattle;
         try {
@@ -190,12 +202,25 @@ public class BattleDetailPhase extends TitledPane {
             }
         }
 
+        if (!this.TSBK.isEmpty()) {
+            TitledPane pane = new TitledPane("対潜先制爆雷攻撃", new VBox());
+            pane.setAnimated(false);
+            pane.setExpanded(false);
+            pane.expandedProperty().addListener((ChangeListener<Boolean>) this::initializeDetailTSBK);
+            this.detail.getChildren().add(pane);
+        }
+        if (!this.openingAttack.isEmpty()) {
+            TitledPane pane = new TitledPane("開幕雷撃", new VBox());
+            pane.setAnimated(false);
+            pane.setExpanded(false);
+            pane.expandedProperty().addListener((ChangeListener<Boolean>) this::initializeDetailOpeningAttack);
+            this.detail.getChildren().add(pane);
+        }
         if (!this.attackDetails.isEmpty()) {
             TitledPane pane = new TitledPane("詳細", new VBox());
             pane.setAnimated(false);
             pane.setExpanded(false);
             pane.expandedProperty().addListener((ChangeListener<Boolean>) this::initializeDetail);
-
             this.detail.getChildren().add(pane);
         }
     }
@@ -205,8 +230,38 @@ public class BattleDetailPhase extends TitledPane {
             return;
         for (Node node : this.detail.getChildren()) {
             if (node instanceof TitledPane) {
+                if (((TitledPane) node).getText().equals("対潜先制爆雷攻撃")){
+                    continue;
+                }
+                if (((TitledPane) node).getText().equals("開幕雷撃")){
+                    continue;
+                }
                 Parent content = this.detailNode(this.attackDetails);
                 ((TitledPane) node).setContent(content);
+            }
+        }
+    }
+    private void initializeDetailTSBK(ObservableValue<? extends Boolean> ob, Boolean o, Boolean n) {
+        if (!n)
+            return;
+        for (Node node : this.detail.getChildren()) {
+            if (node instanceof TitledPane) {
+                if (((TitledPane) node).getText().equals("対潜先制爆雷攻撃")){
+                    Parent content = this.detailNode(this.TSBK);
+                    ((TitledPane) node).setContent(content);
+                }
+            }
+        }
+    }
+    private void initializeDetailOpeningAttack(ObservableValue<? extends Boolean> ob, Boolean o, Boolean n) {
+        if (!n)
+            return;
+        for (Node node : this.detail.getChildren()) {
+            if (node instanceof TitledPane) {
+                if (((TitledPane) node).getText().equals("開幕雷撃")) {
+                    Parent content = this.detailNode(this.openingAttack);
+                    ((TitledPane) node).setContent(content);
+                }
             }
         }
     }
