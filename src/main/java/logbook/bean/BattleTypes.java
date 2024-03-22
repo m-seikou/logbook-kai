@@ -1,11 +1,8 @@
 package logbook.bean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -1210,14 +1207,6 @@ public class BattleTypes {
         /** api_ecl_list_item */
         private List<List<Integer>> ecl;
 
-        private static <T> List<List<T>> convert(JsonArray input) {
-            List<List<T>> result = new ArrayList<>();
-            for (int i = 0; i < input.size(); i++) {
-                result.add(i, new ArrayList<T>(input.getInt(i)));
-            }
-            return result;
-        }
-
         /**
          * JsonObjectから{@link OpeningRaigeki}を構築します
          *
@@ -1648,6 +1637,7 @@ public class BattleTypes {
      *
      */
     public interface AtType {
+        boolean isTouch();
     }
 
     /**
@@ -1667,9 +1657,10 @@ public class BattleTypes {
         陸奥タッチ("長門、いい？ いくわよ！ 主砲一斉射ッ！"),
         ColoradoTouch("特殊攻撃(Colorado)"),
         僚艦夜戦突撃("僚艦夜戦突撃"),   // 夜戦専用だが念のため
+        やまむさタッチ("第一戦隊、突撃！主砲、全力斉射ッ！"),
 
         // 新しいものが出てきた場合補足できるように用意しておく
-        // ※大和タッチがまだ定義されていない
+        // 大和タッチ,潜水艦タッチ
         unknown("未定義");
 
         private String name;
@@ -1711,8 +1702,25 @@ public class BattleTypes {
                 return ColoradoTouch;
             case 104:
                 return 僚艦夜戦突撃;
+            case 401:
+                return やまむさタッチ;
             default:
                 return unknown;
+            }
+        }
+
+        @Override
+        public boolean isTouch() {
+            switch (this) {
+                case NelsonTouch:
+                case 胸熱CI:
+                case 陸奥タッチ:
+                case ColoradoTouch:
+                case 僚艦夜戦突撃:
+                case やまむさタッチ:
+                    return true;
+                default:
+                    return false;
             }
         }
     }
@@ -1723,13 +1731,23 @@ public class BattleTypes {
     public enum SortieAtTypeRaigeki implements AtType {
         通常雷撃,
         開幕雷撃;
+
+        @Override
+        public boolean isTouch() {
+            return false;
+        }
     }
 
     /**
      * 対潜先制爆雷攻撃 攻撃種別
      */
     public enum SortieAtTypeTSBK implements AtType {
-        対潜先制爆雷攻撃
+        対潜先制爆雷攻撃;
+
+        @Override
+        public boolean isTouch() {
+            return false;
+        }
     }
 
     /**
@@ -1764,7 +1782,10 @@ public class BattleTypes {
         胸熱CI("一斉射かッ…胸が熱いな！"),
         陸奥タッチ("長門、いい？ いくわよ！ 主砲一斉射ッ！"),
         ColoradoTouch("特殊攻撃(Colorado)"),
-        僚艦夜戦突撃("僚艦夜戦突撃");
+        僚艦夜戦突撃("僚艦夜戦突撃"),
+        やまむさタッチ("第一戦隊、突撃！主砲、全力斉射ッ！"),
+        unknown("未定義");
+
 
         private String name;
 
@@ -1819,9 +1840,26 @@ public class BattleTypes {
                 return ColoradoTouch;
             case 104:
                 return 僚艦夜戦突撃;
+            case 401:
+                return やまむさタッチ;
             default:
                 LoggerHolder.get().error("***** unknown 夜戦CI id:" + i);
                 return 通常攻撃;
+            }
+        }
+
+        @Override
+        public boolean isTouch() {
+            switch (this) {
+                case NelsonTouch:
+                case 胸熱CI:
+                case 陸奥タッチ:
+                case ColoradoTouch:
+                case 僚艦夜戦突撃:
+                case やまむさタッチ:
+                    return true;
+                default:
+                    return false;
             }
         }
     }

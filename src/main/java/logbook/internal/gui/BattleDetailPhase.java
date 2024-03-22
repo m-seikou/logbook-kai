@@ -229,16 +229,17 @@ public class BattleDetailPhase extends TitledPane {
         if (!n)
             return;
         for (Node node : this.detail.getChildren()) {
-            if (node instanceof TitledPane) {
-                if (((TitledPane) node).getText().equals("対潜先制爆雷攻撃")){
-                    continue;
-                }
-                if (((TitledPane) node).getText().equals("開幕雷撃")){
-                    continue;
-                }
-                Parent content = this.detailNode(this.attackDetails);
-                ((TitledPane) node).setContent(content);
+            if (!(node instanceof TitledPane)) {
+                continue;
             }
+            if (((TitledPane) node).getText().equals("対潜先制爆雷攻撃")){
+                continue;
+            }
+            if (((TitledPane) node).getText().equals("開幕雷撃")){
+                continue;
+            }
+            Parent content = this.detailNode(this.attackDetails);
+            ((TitledPane) node).setContent(content);
         }
     }
     private void initializeDetailTSBK(ObservableValue<? extends Boolean> ob, Boolean o, Boolean n) {
@@ -269,6 +270,15 @@ public class BattleDetailPhase extends TitledPane {
     private Parent detailNode(List<PhaseState.AttackDetail> details) {
         VBox content = new VBox();
         for (PhaseState.AttackDetail detail : details) {
+            VBox action = new VBox();
+            // 砲撃戦が割とごちゃごちゃして見えるので一部に色を付けて見る
+            if (detail.getAtType() instanceof BattleTypes.SortieAtTypeRaigeki) {
+                // 通常の雷撃。連合艦隊だと砲撃の間に挟まるので
+                action.setStyle("-fx-background-color: #d0d0ff");
+            } else if (detail.getAtType().isTouch()) {
+                // 各種タッチ。効果が大きいため強調の意味も込めて
+                action.setStyle("-fx-background-color: #ffd0d0");
+            }
             Chara attacker = detail.getAttacker();
             Chara defender = detail.getDefender();
 
@@ -278,7 +288,7 @@ public class BattleDetailPhase extends TitledPane {
             sb.append(Ships.toName(defender)).append("に");
             sb.append(detail.getDamage()).append("ダメージ");
             sb.append("(").append(detail.getAtType()).append(")");
-            content.getChildren().add(new Label(sb.toString()));
+            action.getChildren().add(new Label(sb.toString()));
 
             StringJoiner sj = new StringJoiner("/");
             for (int i = 0; i < detail.getDamages().size(); i++) {
@@ -295,14 +305,15 @@ public class BattleDetailPhase extends TitledPane {
                     sj.add(sb2);
                 }
             }
-            content.getChildren().add(new Label(sj.toString()));
+            action.getChildren().add(new Label(sj.toString()));
 
             HBox graphic = new HBox();
             graphic.getChildren().add(new BattleDetailPhaseShip(attacker,
                     this.phase.getItemMap(), this.phase.getEscape()));
             graphic.getChildren().add(new BattleDetailPhaseShip(defender,
                     this.phase.getItemMap(), this.phase.getEscape()));
-            content.getChildren().add(graphic);
+            action.getChildren().add(graphic);
+            content.getChildren().add(action);
             content.getChildren().add(new Separator());
         }
         return content;

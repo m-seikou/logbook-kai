@@ -347,9 +347,6 @@ public class BattleDetail extends WindowController {
             this.smokeType.setText(smokeType + "重");
         }
 
-        if (this.battle.isIKouku()) {
-            return;
-        }
         Kouku kouku = this.battle.asIKouku().getKouku();
         if (kouku == null) {
             return;
