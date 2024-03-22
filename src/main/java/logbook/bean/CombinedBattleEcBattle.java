@@ -133,6 +133,9 @@ public class CombinedBattleEcBattle implements ICombinedEcBattle, ISortieBattle,
     /** api_raigeki */
     private BattleTypes.Raigeki raigeki;
 
+    /** api_smoke_type */
+    private Integer smokeType;
+
     /**
      * JsonObjectから{@link CombinedBattleEcBattle}を構築します
      *
@@ -180,7 +183,9 @@ public class CombinedBattleEcBattle implements ICombinedEcBattle, ISortieBattle,
                 .set("api_hougeki1", bean::setHougeki1, BattleTypes.Hougeki::toHougeki)
                 .set("api_hougeki2", bean::setHougeki2, BattleTypes.Hougeki::toHougeki)
                 .set("api_hougeki3", bean::setHougeki3, BattleTypes.Hougeki::toHougeki)
-                .set("api_raigeki", bean::setRaigeki, BattleTypes.Raigeki::toRaigeki);
+                .set("api_raigeki", bean::setRaigeki, BattleTypes.Raigeki::toRaigeki)
+                .setInteger("api_smoke_type",bean::setSmokeType)
+        ;
         return bean;
     }
 }

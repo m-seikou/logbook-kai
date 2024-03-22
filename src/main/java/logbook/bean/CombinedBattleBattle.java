@@ -121,6 +121,9 @@ public class CombinedBattleBattle implements ICombinedBattle, ISortieBattle, ISo
     /** api_hougeki3 */
     private BattleTypes.Hougeki hougeki3;
 
+    /** api_smoke_type */
+    private Integer smokeType;
+
     /**
      * JsonObjectから{@link CombinedBattleBattle}を構築します
      *
@@ -164,7 +167,9 @@ public class CombinedBattleBattle implements ICombinedBattle, ISortieBattle, ISo
                 .set("api_hougeki1", bean::setHougeki1, BattleTypes.Hougeki::toHougeki)
                 .set("api_raigeki", bean::setRaigeki, BattleTypes.Raigeki::toRaigeki)
                 .set("api_hougeki2", bean::setHougeki2, BattleTypes.Hougeki::toHougeki)
-                .set("api_hougeki3", bean::setHougeki3, BattleTypes.Hougeki::toHougeki);
+                .set("api_hougeki3", bean::setHougeki3, BattleTypes.Hougeki::toHougeki)
+                .setInteger("api_smoke_type", bean::setSmokeType)
+        ;
         return bean;
     }
 }

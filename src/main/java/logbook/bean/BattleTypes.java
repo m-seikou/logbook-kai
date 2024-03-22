@@ -90,6 +90,12 @@ public class BattleTypes {
          */
         List<List<Integer>> getEParam();
 
+        /**
+         * api_smoke_typeを取得します。
+         * @return api_smoke_type
+         */
+        Integer getSmokeType();
+
         @JsonIgnore
         default boolean isIAirBaseAttack() {
             return false;

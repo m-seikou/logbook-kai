@@ -87,6 +87,9 @@ public class CombinedBattleLdAirbattle
     /** api_kouku */
     private BattleTypes.Kouku kouku;
 
+    /** api_smoke_type */
+    private Integer smokeType;
+
     /**
      * JsonObjectから{@link CombinedBattleLdAirbattle}を構築します
      *
@@ -119,7 +122,9 @@ public class CombinedBattleLdAirbattle
                 .setIntegerList("api_formation", bean::setFormation)
                 .setIntegerList("api_stage_flag", bean::setStageFlag)
                 .set("api_injection_kouku", bean::setInjectionKouku, BattleTypes.Kouku::toKouku)
-                .set("api_kouku", bean::setKouku, BattleTypes.Kouku::toKouku);
+                .set("api_kouku", bean::setKouku, BattleTypes.Kouku::toKouku)
+                .setInteger("api_smoke_type", bean::setSmokeType)
+        ;
         return bean;
     }
 }

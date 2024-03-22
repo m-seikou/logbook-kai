@@ -74,6 +74,9 @@ public class BattleMidnightSpMidnight implements IMidnightBattle, IFormation, IN
     /** api_n_support_info */
     private BattleTypes.SupportInfo nSupportInfo;
 
+    /** api_smoke_type */
+    private Integer smokeType;
+
     /**
      * JsonObjectから{@link BattleMidnightSpMidnight}を構築します
      *

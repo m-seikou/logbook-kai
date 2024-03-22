@@ -162,6 +162,9 @@ public class CombinedBattleEcNightToDay implements ICombinedBattle, ICombinedEcB
     /** api_midnight_flag(未使用) */
     private Boolean midnightFlag;
 
+    /** api_smoke_type */
+    private Integer smokeType;
+
     /**
      * JsonObjectから{@link CombinedBattleEcNightToDay}を構築します
      *
@@ -216,7 +219,9 @@ public class CombinedBattleEcNightToDay implements ICombinedBattle, ICombinedEcB
                 .set("api_hougeki1", bean::setHougeki1, BattleTypes.Hougeki::toHougeki)
                 .set("api_hougeki2", bean::setHougeki2, BattleTypes.Hougeki::toHougeki)
                 .set("api_hougeki3", bean::setHougeki3, BattleTypes.Hougeki::toHougeki)
-                .set("api_raigeki", bean::setRaigeki, BattleTypes.Raigeki::toRaigeki);
+                .set("api_raigeki", bean::setRaigeki, BattleTypes.Raigeki::toRaigeki)
+                .setInteger("api_smoke_type", bean::setSmokeType)
+        ;
         return bean;
     }
 }

@@ -63,6 +63,8 @@ public class BattleMidnightBattle implements IMidnightBattle, Serializable {
     /** api_hougeki */
     private BattleTypes.MidnightHougeki hougeki;
 
+    /** api_smoke_type */
+    private Integer smokeType;
     /**
      * JsonObjectから{@link BattleMidnightBattle}を構築します
      *

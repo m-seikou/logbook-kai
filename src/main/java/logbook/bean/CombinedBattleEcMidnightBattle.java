@@ -88,6 +88,9 @@ public class CombinedBattleEcMidnightBattle implements ICombinedEcMidnightBattle
     /** api_hougeki */
     private BattleTypes.MidnightHougeki hougeki;
 
+    /** api_smoke_type */
+    private Integer smokeType;
+
     /**
      * JsonObjectから{@link CombinedBattleEcMidnightBattle}を構築します
      *
@@ -119,7 +122,9 @@ public class CombinedBattleEcMidnightBattle implements ICombinedEcMidnightBattle
                 .set("api_friendly_battle", bean::setFriendlyBattle, BattleTypes.FriendlyBattle::toFriendlyBattle)
                 .setIntegerList("api_touch_plane", bean::setTouchPlane)
                 .setIntegerList("api_flare_pos", bean::setFlarePos)
-                .set("api_hougeki", bean::setHougeki, BattleTypes.MidnightHougeki::toMidnightHougeki);
+                .set("api_hougeki", bean::setHougeki, BattleTypes.MidnightHougeki::toMidnightHougeki)
+                .setInteger("api_smoke_type", bean::setSmokeType)
+        ;
         return bean;
     }
 }

@@ -77,6 +77,9 @@ public class SortieLdAirbattle
     /** api_kouku */
     private BattleTypes.Kouku kouku;
 
+    /** api_smoke_type */
+    private Integer smokeType;
+
     /**
      * JsonObjectから{@link SortieLdAirbattle}を構築します
      *
