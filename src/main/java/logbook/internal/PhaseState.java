@@ -246,7 +246,7 @@ public class PhaseState {
         // 先制対潜攻撃
         this.applyHougeki(battle.getOpeningTaisen(), false, BattleTypes.SortieAtTypeTSBK.対潜先制爆雷攻撃);
         // 開幕雷撃
-        this.applyOpeningRaigeki(battle.getOpeningAttack());
+        this.applyOpeningRaigeki(battle.getOpeningAtack());
         if (!this.combined && battle.isICombinedEcBattle()) {
             // 敵だけ連合
             // 1巡目

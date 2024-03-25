@@ -14,7 +14,6 @@ import lombok.Data;
 
 /**
  * 戦闘で使用される型
- *
  */
 public class BattleTypes {
 
@@ -29,66 +28,77 @@ public class BattleTypes {
 
         /**
          * api_dock_id/api_deck_idを取得します。
+         *
          * @return api_dock_id/api_deck_id
          */
         Integer getDockId();
 
         /**
          * api_ship_keを取得します。
+         *
          * @return api_ship_ke
          */
         List<Integer> getShipKe();
 
         /**
          * api_ship_lvを取得します。
+         *
          * @return api_ship_lv
          */
         List<Integer> getShipLv();
 
         /**
          * api_f_nowhpsを取得します。
+         *
          * @return api_f_nowhps
          */
         List<Integer> getFNowhps();
 
         /**
          * api_f_maxhpsを取得します。
+         *
          * @return api_f_maxhps
          */
         List<Integer> getFMaxhps();
 
         /**
          * api_e_nowhpsを取得します。
+         *
          * @return api_e_nowhps
          */
         List<Integer> getENowhps();
 
         /**
          * api_e_maxhpsを取得します。
+         *
          * @return api_e_maxhps
          */
         List<Integer> getEMaxhps();
 
         /**
          * api_eSlotを取得します。
+         *
          * @return api_eSlot
          */
         List<List<Integer>> getESlot();
 
         /**
          * api_fParamを取得します。
+         *
          * @return api_fParam
          */
         List<List<Integer>> getFParam();
 
         /**
          * api_eParamを取得します。
+         *
          * @return api_eParam
          */
         List<List<Integer>> getEParam();
 
         /**
          * api_smoke_typeを取得します。
+         *
          * @return api_smoke_type
          */
         Integer getSmokeType();
@@ -251,18 +261,21 @@ public class BattleTypes {
 
         /**
          * api_f_nowhps_combinedを取得します。
+         *
          * @return api_f_nowhps_combined
          */
         List<Integer> getFNowhpsCombined();
 
         /**
          * api_f_maxhps_combinedを取得します。
+         *
          * @return api_f_maxhps_combined
          */
         List<Integer> getFMaxhpsCombined();
 
         /**
          * api_fParam_combinedを取得します。
+         *
          * @return api_fParam_combined
          */
         List<List<Integer>> getFParamCombined();
@@ -285,36 +298,42 @@ public class BattleTypes {
 
         /**
          * api_e_nowhps_combinedを取得します。
+         *
          * @return api_e_nowhps_combined
          */
         List<Integer> getENowhpsCombined();
 
         /**
          * api_e_maxhps_combinedを取得します。
+         *
          * @return api_e_maxhps_combined
          */
         List<Integer> getEMaxhpsCombined();
 
         /**
          * api_ship_ke_combinedを取得します。
+         *
          * @return api_ship_ke_combined
          */
         List<Integer> getShipKeCombined();
 
         /**
          * api_ship_lv_combinedを取得します。
+         *
          * @return api_ship_lv_combined
          */
         List<Integer> getShipLvCombined();
 
         /**
          * api_eSlot_combinedを取得します。
+         *
          * @return api_eSlot_combined
          */
         List<List<Integer>> getESlotCombined();
 
         /**
          * api_eParam_combinedを取得します。
+         *
          * @return api_eParam_combined
          */
         List<List<Integer>> getEParamCombined();
@@ -337,6 +356,7 @@ public class BattleTypes {
 
         /**
          * api_active_deckを取得します。
+         *
          * @return api_active_deck
          */
         List<Integer> getActiveDeck();
@@ -359,18 +379,21 @@ public class BattleTypes {
 
         /**
          * api_midnight_flagを取得します。
+         *
          * @return api_midnight_flag
          */
         Boolean getMidnightFlag();
 
         /**
          * api_searchを取得します。
+         *
          * @return api_search
          */
         List<Integer> getSearch();
 
         /**
          * api_stage_flagを取得します。
+         *
          * @return api_stage_flag
          */
         List<Integer> getStageFlag();
@@ -393,54 +416,63 @@ public class BattleTypes {
 
         /**
          * api_opening_flagを取得します。
+         *
          * @return api_opening_flag
          */
         Boolean getOpeningFlag();
 
         /**
          * api_opening_atackを取得します。
+         *
          * @return api_opening_atack
          */
         OpeningRaigeki getOpeningAtack();
 
         /**
          * api_opening_taisen_flagを取得します。
+         *
          * @return api_opening_taisen_flag
          */
         Boolean getOpeningTaisenFlag();
 
         /**
          * api_opening_taisenを取得します。
+         *
          * @return api_opening_taisen
          */
         BattleTypes.Hougeki getOpeningTaisen();
 
         /**
          * api_hourai_flagを取得します。
+         *
          * @return api_hourai_flag
          */
         List<Integer> getHouraiFlag();
 
         /**
          * api_hougeki1を取得します。
+         *
          * @return api_hougeki1
          */
         BattleTypes.Hougeki getHougeki1();
 
         /**
          * api_hougeki2を取得します。
+         *
          * @return api_hougeki2
          */
         BattleTypes.Hougeki getHougeki2();
 
         /**
          * api_hougeki3を取得します。
+         *
          * @return api_hougeki3
          */
         BattleTypes.Hougeki getHougeki3();
 
         /**
          * api_raigekiを取得します。
+         *
          * @return api_raigeki
          */
         Raigeki getRaigeki();
@@ -463,30 +495,35 @@ public class BattleTypes {
 
         /**
          * api_touch_planeを取得します。
+         *
          * @return api_touch_plane
          */
         List<Integer> getTouchPlane();
 
         /**
          * api_flare_posを取得します。
+         *
          * @return api_flare_pos
          */
         List<Integer> getFlarePos();
 
         /**
          * api_friendly_infoを取得します。
+         *
          * @return api_friendly_info
          */
         FriendlyInfo getFriendlyInfo();
 
         /**
          * api_friendly_battleを取得します。
+         *
          * @return api_friendly_battle
          */
         BattleTypes.FriendlyBattle getFriendlyBattle();
 
         /**
          * api_hougekiを取得します。
+         *
          * @return api_hougeki
          */
         BattleTypes.MidnightHougeki getHougeki();
@@ -509,30 +546,35 @@ public class BattleTypes {
 
         /**
          * api_touch_planeを取得します。
+         *
          * @return api_touch_plane
          */
         List<Integer> getTouchPlane();
 
         /**
          * api_flare_posを取得します。
+         *
          * @return api_flare_pos
          */
         List<Integer> getFlarePos();
 
         /**
          * api_n_hougeki1を取得します。
+         *
          * @return api_n_hougeki1
          */
         BattleTypes.MidnightHougeki getNHougeki1();
 
         /**
          * api_n_hougeki2を取得します。
+         *
          * @return api_n_hougeki2
          */
         BattleTypes.MidnightHougeki getNHougeki2();
 
         /**
          * api_day_flagを取得します。
+         *
          * @return api_day_flag
          */
         Boolean getDayFlag();
@@ -555,6 +597,7 @@ public class BattleTypes {
 
         /**
          * api_formationを取得します。
+         *
          * @return api_formation
          */
         List<Integer> getFormation();
@@ -577,12 +620,14 @@ public class BattleTypes {
 
         /**
          * api_injection_koukuを取得します。
+         *
          * @return api_injection_kouku
          */
         BattleTypes.Kouku getInjectionKouku();
 
         /**
          * api_koukuを取得します。
+         *
          * @return api_kouku
          */
         BattleTypes.Kouku getKouku();
@@ -605,6 +650,7 @@ public class BattleTypes {
 
         /**
          * api_kouku2を取得します。
+         *
          * @return api_kouku2
          */
         BattleTypes.Kouku getKouku2();
@@ -627,12 +673,14 @@ public class BattleTypes {
 
         /**
          * api_support_flagを取得します。
+         *
          * @return api_support_flag
          */
         Integer getSupportFlag();
 
         /**
          * api_support_infoを取得します。
+         *
          * @return api_support_info
          */
         BattleTypes.SupportInfo getSupportInfo();
@@ -655,12 +703,14 @@ public class BattleTypes {
 
         /**
          * api_n_support_flagを取得します。
+         *
          * @return api_n_support_flag
          */
         Integer getNSupportFlag();
 
         /**
          * api_n_support_infoを取得します。
+         *
          * @return api_n_support_info
          */
         BattleTypes.SupportInfo getNSupportInfo();
@@ -715,12 +765,14 @@ public class BattleTypes {
 
         /**
          * api_air_base_injectionを取得します。
+         *
          * @return api_air_base_injection
          */
         AirBaseAttack getAirBaseInjection();
 
         /**
          * api_air_base_attackを取得します。
+         *
          * @return api_air_base_attack
          */
         List<AirBaseAttack> getAirBaseAttack();
@@ -743,42 +795,49 @@ public class BattleTypes {
 
         /**
          * api_at_listを取得します。
+         *
          * @return api_at_list
          */
         List<Integer> getAtList();
 
         /**
          * api_at_typeを取得します。
+         *
          * @return api_at_type
          */
         List<Integer> getAtType();
 
         /**
          * api_df_listを取得します。
+         *
          * @return api_df_list
          */
         List<List<Integer>> getDfList();
 
         /**
          * api_si_listを取得します。
+         *
          * @return api_si_list
          */
         List<List<Integer>> getSiList();
 
         /**
          * api_cl_listを取得します。
+         *
          * @return api_cl_list
          */
         List<List<Integer>> getClList();
 
         /**
          * api_damageを取得します。
+         *
          * @return api_damage
          */
         List<List<Double>> getDamage();
 
         /**
          * api_at_eflagを取得します。
+         *
          * @return api_at_eflag
          */
         List<Integer> getAtEflag();
@@ -792,19 +851,29 @@ public class BattleTypes {
 
         private static final long serialVersionUID = -4772699490686134759L;
 
-        /** api_plane_from */
+        /**
+         * api_plane_from
+         */
         private List<List<Integer>> planeFrom;
 
-        /** api_stage1 */
+        /**
+         * api_stage1
+         */
         private Stage1 stage1;
 
-        /** api_stage2 */
+        /**
+         * api_stage2
+         */
         private Stage2 stage2;
 
-        /** api_stage3 */
+        /**
+         * api_stage3
+         */
         private Stage3 stage3;
 
-        /** api_stage3_combined */
+        /**
+         * api_stage3_combined
+         */
         private Stage3 stage3Combined;
 
         /**
@@ -833,22 +902,34 @@ public class BattleTypes {
 
         private static final long serialVersionUID = 4452384504283266181L;
 
-        /** api_f_count */
+        /**
+         * api_f_count
+         */
         private Integer fCount;
 
-        /** api_f_lostcount */
+        /**
+         * api_f_lostcount
+         */
         private Integer fLostcount;
 
-        /** api_e_count */
+        /**
+         * api_e_count
+         */
         private Integer eCount;
 
-        /** api_e_lostcount */
+        /**
+         * api_e_lostcount
+         */
         private Integer eLostcount;
 
-        /** api_disp_seiku */
+        /**
+         * api_disp_seiku
+         */
         private Integer dispSeiku;
 
-        /** api_touch_plane */
+        /**
+         * api_touch_plane
+         */
         private List<Integer> touchPlane;
 
         /**
@@ -878,19 +959,29 @@ public class BattleTypes {
 
         private static final long serialVersionUID = -4886136119036663720L;
 
-        /** api_f_count */
+        /**
+         * api_f_count
+         */
         private Integer fCount;
 
-        /** api_f_lostcount */
+        /**
+         * api_f_lostcount
+         */
         private Integer fLostcount;
 
-        /** api_e_count */
+        /**
+         * api_e_count
+         */
         private Integer eCount;
 
-        /** api_e_lostcount */
+        /**
+         * api_e_lostcount
+         */
         private Integer eLostcount;
 
-        /** api_air_fire */
+        /**
+         * api_air_fire
+         */
         private AirFire airFire;
 
         /**
@@ -919,13 +1010,19 @@ public class BattleTypes {
 
         private static final long serialVersionUID = 9184007312267069221L;
 
-        /** api_idx */
+        /**
+         * api_idx
+         */
         private Integer idx;
 
-        /** api_kind */
+        /**
+         * api_kind
+         */
         private Integer kind;
 
-        /** api_use_items */
+        /**
+         * api_use_items
+         */
         private List<Integer> useItems;
 
         /**
@@ -952,28 +1049,44 @@ public class BattleTypes {
 
         private static final long serialVersionUID = -3123663766612134315L;
 
-        /** api_frai_flag */
+        /**
+         * api_frai_flag
+         */
         private List<Integer> fraiFlag;
 
-        /** api_erai_flag */
+        /**
+         * api_erai_flag
+         */
         private List<Integer> eraiFlag;
 
-        /** api_fbak_flag */
+        /**
+         * api_fbak_flag
+         */
         private List<Integer> fbakFlag;
 
-        /** api_ebak_flag */
+        /**
+         * api_ebak_flag
+         */
         private List<Integer> ebakFlag;
 
-        /** api_fcl_flag */
+        /**
+         * api_fcl_flag
+         */
         private List<Integer> fclFlag;
 
-        /** api_ecl_flag */
+        /**
+         * api_ecl_flag
+         */
         private List<Integer> eclFlag;
 
-        /** api_fdam */
+        /**
+         * api_fdam
+         */
         private List<Double> fdam;
 
-        /** api_edam */
+        /**
+         * api_edam
+         */
         private List<Double> edam;
 
         /**
@@ -1005,10 +1118,14 @@ public class BattleTypes {
 
         private static final long serialVersionUID = 4584855806683009170L;
 
-        /** api_support_airatack */
+        /**
+         * api_support_airatack
+         */
         private SupportAiratack supportAiratack;
 
-        /** api_support_hourai */
+        /**
+         * api_support_hourai
+         */
         private SupportHourai supportHourai;
 
         /**
@@ -1034,28 +1151,44 @@ public class BattleTypes {
 
         private static final long serialVersionUID = -152573445471984643L;
 
-        /** api_deck_id */
+        /**
+         * api_deck_id
+         */
         private Integer deckId;
 
-        /** api_ship_id */
+        /**
+         * api_ship_id
+         */
         private List<Integer> shipId;
 
-        /** api_undressing_flag */
+        /**
+         * api_undressing_flag
+         */
         private List<Integer> undressingFlag;
 
-        /** api_stage_flag */
+        /**
+         * api_stage_flag
+         */
         private List<Integer> stageFlag;
 
-        /** api_plane_from */
+        /**
+         * api_plane_from
+         */
         private List<List<Integer>> planeFrom;
 
-        /** api_stage1 */
+        /**
+         * api_stage1
+         */
         private Stage1 stage1;
 
-        /** api_stage2 */
+        /**
+         * api_stage2
+         */
         private Stage2 stage2;
 
-        /** api_stage3 */
+        /**
+         * api_stage3
+         */
         private Stage3 stage3;
 
         /**
@@ -1087,19 +1220,29 @@ public class BattleTypes {
 
         private static final long serialVersionUID = 3060460027587015362L;
 
-        /** api_deck_id */
+        /**
+         * api_deck_id
+         */
         private Integer deckId;
 
-        /** api_ship_id */
+        /**
+         * api_ship_id
+         */
         private List<Integer> shipId;
 
-        /** api_undressing_flag */
+        /**
+         * api_undressing_flag
+         */
         private List<Integer> undressingFlag;
 
-        /** api_cl_list */
+        /**
+         * api_cl_list
+         */
         private List<Integer> clList;
 
-        /** api_damage */
+        /**
+         * api_damage
+         */
         private List<Double> damage;
 
         /**
@@ -1122,35 +1265,50 @@ public class BattleTypes {
 
     /**
      * 閉幕雷撃
-     *
      */
     @Data
     public static class Raigeki implements Serializable {
 
         private static final long serialVersionUID = 4769524848250854584L;
 
-        /** api_frai */
+        /**
+         * api_frai
+         */
         private List<Integer> frai;
 
-        /** api_erai */
+        /**
+         * api_erai
+         */
         private List<Integer> erai;
 
-        /** api_fdam */
+        /**
+         * api_fdam
+         */
         private List<Double> fdam;
 
-        /** api_edam */
+        /**
+         * api_edam
+         */
         private List<Double> edam;
 
-        /** api_fydam */
+        /**
+         * api_fydam
+         */
         private List<Double> fydam;
 
-        /** api_eydam */
+        /**
+         * api_eydam
+         */
         private List<Double> eydam;
 
-        /** api_fcl */
+        /**
+         * api_fcl
+         */
         private List<Integer> fcl;
 
-        /** api_ecl */
+        /**
+         * api_ecl
+         */
         private List<Integer> ecl;
 
         /**
@@ -1183,28 +1341,44 @@ public class BattleTypes {
 
         private static final long serialVersionUID = 4769524848250854594L;
 
-        /** api_frai_list_items */
+        /**
+         * api_frai_list_items
+         */
         private List<List<Integer>> frai;
 
-        /** api_erai_list_items */
+        /**
+         * api_erai_list_items
+         */
         private List<List<Integer>> erai;
 
-        /** api_fdam */
+        /**
+         * api_fdam
+         */
         private List<Double> fdam;
 
-        /** api_edam */
+        /**
+         * api_edam
+         */
         private List<Double> edam;
 
-        /** api_fydam_list_item */
+        /**
+         * api_fydam_list_item
+         */
         private List<List<Double>> fydam;
 
-        /** api_eydam_list_item */
+        /**
+         * api_eydam_list_item
+         */
         private List<List<Double>> eydam;
 
-        /** api_fcl_list_item */
+        /**
+         * api_fcl_list_item
+         */
         private List<List<Integer>> fcl;
 
-        /** api_ecl_list_item */
+        /**
+         * api_ecl_list_item
+         */
         private List<List<Integer>> ecl;
 
         /**
@@ -1238,25 +1412,39 @@ public class BattleTypes {
 
         private static final long serialVersionUID = -5339612671179791906L;
 
-        /** api_at_list */
+        /**
+         * api_at_list
+         */
         public List<Integer> atList;
 
-        /** api_at_type */
+        /**
+         * api_at_type
+         */
         public List<Integer> atType;
 
-        /** api_df_list */
+        /**
+         * api_df_list
+         */
         public List<List<Integer>> dfList;
 
-        /** api_si_list */
+        /**
+         * api_si_list
+         */
         public List<List<Integer>> siList;
 
-        /** api_cl_list */
+        /**
+         * api_cl_list
+         */
         public List<List<Integer>> clList;
 
-        /** api_damage */
+        /**
+         * api_damage
+         */
         public List<List<Double>> damage;
 
-        /** api_at_eflag */
+        /**
+         * api_at_eflag
+         */
         public List<Integer> atEflag;
 
         /**
@@ -1287,31 +1475,49 @@ public class BattleTypes {
 
         private static final long serialVersionUID = 8897484398602178656L;
 
-        /** api_at_list */
+        /**
+         * api_at_list
+         */
         private List<Integer> atList;
 
-        /** api_at_type */
+        /**
+         * api_at_type
+         */
         private List<Integer> atType;
 
-        /** api_n_mother_list */
+        /**
+         * api_n_mother_list
+         */
         private List<Integer> nMotherList;
 
-        /** api_df_list */
+        /**
+         * api_df_list
+         */
         private List<List<Integer>> dfList;
 
-        /** api_si_list */
+        /**
+         * api_si_list
+         */
         private List<List<Integer>> siList;
 
-        /** api_cl_list */
+        /**
+         * api_cl_list
+         */
         private List<List<Integer>> clList;
 
-        /** api_sp_list */
+        /**
+         * api_sp_list
+         */
         private List<Integer> spList;
 
-        /** api_damage */
+        /**
+         * api_damage
+         */
         private List<List<Double>> damage;
 
-        /** api_at_eflag */
+        /**
+         * api_at_eflag
+         */
         private List<Integer> atEflag;
 
         /**
@@ -1344,28 +1550,44 @@ public class BattleTypes {
 
         private static final long serialVersionUID = -7255540756859970824L;
 
-        /** api_base_id */
+        /**
+         * api_base_id
+         */
         private Integer baseId;
 
-        /** api_plane_from */
+        /**
+         * api_plane_from
+         */
         private List<List<Integer>> planeFrom;
 
-        /** api_squadron_plane または api_air_base_data */
+        /**
+         * api_squadron_plane または api_air_base_data
+         */
         private List<SquadronPlane> squadronPlane;
 
-        /** api_stage1 */
+        /**
+         * api_stage1
+         */
         private Stage1 stage1;
 
-        /** api_stage2 */
+        /**
+         * api_stage2
+         */
         private Stage2 stage2;
 
-        /** api_stage3 */
+        /**
+         * api_stage3
+         */
         private Stage3 stage3;
 
-        /** api_stage3_combined */
+        /**
+         * api_stage3_combined
+         */
         private Stage3 stage3Combined;
 
-        /** api_stage_flag */
+        /**
+         * api_stage_flag
+         */
         private List<Integer> stageFlag;
 
         /**
@@ -1400,10 +1622,14 @@ public class BattleTypes {
 
         private static final long serialVersionUID = -8553957904692166481L;
 
-        /** api_count */
+        /**
+         * api_count
+         */
         private Integer count;
 
-        /** api_mst_id */
+        /**
+         * api_mst_id
+         */
         private Integer mstId;
 
         /**
@@ -1429,25 +1655,39 @@ public class BattleTypes {
 
         private static final long serialVersionUID = 6082076344715211541L;
 
-        /** api_production_type */
+        /**
+         * api_production_type
+         */
         private Integer productionType;
 
-        /** api_ship_id */
+        /**
+         * api_ship_id
+         */
         private List<Integer> shipId;
 
-        /** api_ship_lv */
+        /**
+         * api_ship_lv
+         */
         private List<Integer> shipLv;
 
-        /** api_nowhps */
+        /**
+         * api_nowhps
+         */
         private List<Integer> nowhps;
 
-        /** api_maxhps */
+        /**
+         * api_maxhps
+         */
         private List<Integer> maxhps;
 
-        /** api_Slot */
+        /**
+         * api_Slot
+         */
         private List<List<Integer>> slot;
 
-        /** api_Param */
+        /**
+         * api_Param
+         */
         private List<List<Integer>> param;
 
         /**
@@ -1478,10 +1718,14 @@ public class BattleTypes {
 
         private static final long serialVersionUID = 8663372068066994366L;
 
-        /** api_flare_pos */
+        /**
+         * api_flare_pos
+         */
         private List<Integer> flarePos;
 
-        /** api_hougeki */
+        /**
+         * api_hougeki
+         */
         private BattleTypes.MidnightHougeki hougeki;
 
         /**
@@ -1516,33 +1760,34 @@ public class BattleTypes {
 
         /**
          * 陣形を取得します
+         *
          * @param f api_formation[0],api_formation[1]
          * @return 陣形
          */
         public static Formation toFormation(int f) {
             switch (f) {
-            case 1:
-                return 単縦陣;
-            case 2:
-                return 複縦陣;
-            case 3:
-                return 輪形陣;
-            case 4:
-                return 梯形陣;
-            case 5:
-                return 単横陣;
-            case 6:
-                return 警戒陣;
-            case 11:
-                return 第一警戒航行序列;
-            case 12:
-                return 第二警戒航行序列;
-            case 13:
-                return 第三警戒航行序列;
-            case 14:
-                return 第四警戒航行序列;
-            default:
-                return 単縦陣;
+                case 1:
+                    return 単縦陣;
+                case 2:
+                    return 複縦陣;
+                case 3:
+                    return 輪形陣;
+                case 4:
+                    return 梯形陣;
+                case 5:
+                    return 単横陣;
+                case 6:
+                    return 警戒陣;
+                case 11:
+                    return 第一警戒航行序列;
+                case 12:
+                    return 第二警戒航行序列;
+                case 13:
+                    return 第三警戒航行序列;
+                case 14:
+                    return 第四警戒航行序列;
+                default:
+                    return 単縦陣;
             }
         }
     }
@@ -1561,16 +1806,16 @@ public class BattleTypes {
          */
         public static Intercept toIntercept(int i) {
             switch (i) {
-            case 1:
-                return 同航戦;
-            case 2:
-                return 反航戦;
-            case 3:
-                return Ｔ字戦有利;
-            case 4:
-                return Ｔ字戦不利;
-            default:
-                return 同航戦;
+                case 1:
+                    return 同航戦;
+                case 2:
+                    return 反航戦;
+                case 3:
+                    return Ｔ字戦有利;
+                case 4:
+                    return Ｔ字戦不利;
+                default:
+                    return 同航戦;
             }
         }
     }
@@ -1579,7 +1824,7 @@ public class BattleTypes {
      * 制空権表示
      */
     public enum DispSeiku {
-        制空均衡, 制空権確保, 航空優勢, 航空劣勢, 制空権喪失;
+        制空均衡, 制空権確保, 航空優勢, 航空劣勢, 制空権喪失,unknown;
 
         /**
          * 制空権表示を取得します
@@ -1589,18 +1834,18 @@ public class BattleTypes {
          */
         public static DispSeiku toDispSeiku(int i) {
             switch (i) {
-            case 0:
-                return 制空均衡;
-            case 1:
-                return 制空権確保;
-            case 2:
-                return 航空優勢;
-            case 3:
-                return 航空劣勢;
-            case 4:
-                return 制空権喪失;
-            default:
-                return 制空均衡;
+                case 0:
+                    return 制空均衡;
+                case 1:
+                    return 制空権確保;
+                case 2:
+                    return 航空優勢;
+                case 3:
+                    return 航空劣勢;
+                case 4:
+                    return 制空権喪失;
+                default:
+                    return unknown;
             }
         }
     }
@@ -1610,31 +1855,30 @@ public class BattleTypes {
      * 0=未結成, 1=機動部隊, 2=水上部隊, 3=輸送部隊, (4, 5 - 念のため定義のみ）
      */
     public enum CombinedType {
-        未結成, 機動部隊, 水上部隊, 輸送部隊, 連合艦隊タイプ4, 連合艦隊タイプ5;
+        未結成, 機動部隊, 水上部隊, 輸送部隊, 連合艦隊タイプ4, 連合艦隊タイプ5,unknown;
 
         public static CombinedType toCombinedType(int i) {
             switch (i) {
-            case 0:
-                return 未結成;
-            case 1:
-                return 機動部隊;
-            case 2:
-                return 水上部隊;
-            case 3:
-                return 輸送部隊;
-            case 4:
-                return 連合艦隊タイプ4;
-            case 5:
-                return 連合艦隊タイプ5;
-            default:
-                return 未結成;
+                case 0:
+                    return 未結成;
+                case 1:
+                    return 機動部隊;
+                case 2:
+                    return 水上部隊;
+                case 3:
+                    return 輸送部隊;
+                case 4:
+                    return 連合艦隊タイプ4;
+                case 5:
+                    return 連合艦隊タイプ5;
+                default:
+                    return unknown;
             }
         }
     }
 
     /**
      * 攻撃種別
-     *
      */
     public interface AtType {
         boolean isTouch();
@@ -1658,12 +1902,14 @@ public class BattleTypes {
         ColoradoTouch("特殊攻撃(Colorado)"),
         僚艦夜戦突撃("僚艦夜戦突撃"),   // 夜戦専用だが念のため
         やまむさタッチ("第一戦隊、突撃！主砲、全力斉射ッ！"),
+        大和タッチ("大和、突撃します！二番艦も続いてください！"),
+        潜水艦隊攻撃("潜水艦隊攻撃"),
 
         // 新しいものが出てきた場合補足できるように用意しておく
         // 大和タッチ,潜水艦タッチ
         unknown("未定義");
 
-        private String name;
+        private final String name;
 
         private SortieAtType(String name) {
             this.name = name;
@@ -1676,36 +1922,36 @@ public class BattleTypes {
 
         public static SortieAtType toSortieAtType(int i) {
             switch (i) {
-            case 0:
-                return 通常攻撃;
-            case 1:
-                return レーザー攻撃;
-            case 2:
-                return 連撃;
-            case 3:
-                return 主砲副砲CI;
-            case 4:
-                return 主砲電探CI;
-            case 5:
-                return 主砲徹甲弾CI;
-            case 6:
-                return 主砲主砲CI;
-            case 7:
-                return 戦爆連合CI;
-            case 100:
-                return NelsonTouch;
-            case 101:
-                return 胸熱CI;
-            case 102:
-                return 陸奥タッチ;
-            case 103:
-                return ColoradoTouch;
-            case 104:
-                return 僚艦夜戦突撃;
-            case 401:
-                return やまむさタッチ;
-            default:
-                return unknown;
+                case 0:
+                    return 通常攻撃;
+                case 1:
+                    return レーザー攻撃;
+                case 2:
+                    return 連撃;
+                case 3:
+                    return 主砲副砲CI;
+                case 4:
+                    return 主砲電探CI;
+                case 5:
+                    return 主砲徹甲弾CI;
+                case 6:
+                    return 主砲主砲CI;
+                case 7:
+                    return 戦爆連合CI;
+                case 100:
+                    return NelsonTouch;
+                case 101:
+                    return 胸熱CI;
+                case 102:
+                    return 陸奥タッチ;
+                case 103:
+                    return ColoradoTouch;
+                case 104:
+                    return 僚艦夜戦突撃;
+                case 401:
+                    return やまむさタッチ;
+                default:
+                    return unknown;
             }
         }
 
@@ -1718,6 +1964,8 @@ public class BattleTypes {
                 case ColoradoTouch:
                 case 僚艦夜戦突撃:
                 case やまむさタッチ:
+                case 大和タッチ:
+                case 潜水艦隊攻撃:
                     return true;
                 default:
                     return false;
@@ -1784,10 +2032,13 @@ public class BattleTypes {
         ColoradoTouch("特殊攻撃(Colorado)"),
         僚艦夜戦突撃("僚艦夜戦突撃"),
         やまむさタッチ("第一戦隊、突撃！主砲、全力斉射ッ！"),
+        大和タッチ("大和、突撃します！二番艦も続いてください！"),
+        潜水艦隊攻撃("潜水艦隊攻撃"),
+        夜間瑞雲夜戦CI("夜間瑞雲夜戦カットイン"),
         unknown("未定義");
 
 
-        private String name;
+        private final String name;
 
         private MidnightSpList(String name) {
             this.name = name;
@@ -1800,51 +2051,53 @@ public class BattleTypes {
 
         public static MidnightSpList toMidnightSpList(int i) {
             switch (i) {
-            case 0:
-                return 通常攻撃;
-            case 1:
-                return 連撃;
-            case 2:
-                return 主砲魚雷CI;
-            case 3:
-                return 魚雷魚雷CI;
-            case 4:
-                return 主砲副砲CI;
-            case 5:
-                return 主砲主砲CI;
-            case 6:
-                return 夜襲CI;
-            case 7:
-                return 主砲魚雷電探CI;
-            case 8:
-                return 魚雷見張員電探CI;
-            case 9:
-                return 魚雷魚雷見張員CI;
-            case 10:
-                return 魚雷ドラム缶見張員CI;
-            case 11:
-                return 主砲魚雷電探CI2;
-            case 12:
-                return 魚雷見張員電探CI2;
-            case 13:
-                return 魚雷魚雷見張員CI2;
-            case 14:
-                return 魚雷ドラム缶見張員CI2;
-            case 100:
-                return NelsonTouch;
-            case 101:
-                return 胸熱CI;
-            case 102:
-                return 陸奥タッチ;
-            case 103:
-                return ColoradoTouch;
-            case 104:
-                return 僚艦夜戦突撃;
-            case 401:
-                return やまむさタッチ;
-            default:
-                LoggerHolder.get().error("***** unknown 夜戦CI id:" + i);
-                return 通常攻撃;
+                case 0:
+                    return 通常攻撃;
+                case 1:
+                    return 連撃;
+                case 2:
+                    return 主砲魚雷CI;
+                case 3:
+                    return 魚雷魚雷CI;
+                case 4:
+                    return 主砲副砲CI;
+                case 5:
+                    return 主砲主砲CI;
+                case 6:
+                    return 夜襲CI;
+                case 7:
+                    return 主砲魚雷電探CI;
+                case 8:
+                    return 魚雷見張員電探CI;
+                case 9:
+                    return 魚雷魚雷見張員CI;
+                case 10:
+                    return 魚雷ドラム缶見張員CI;
+                case 11:
+                    return 主砲魚雷電探CI2;
+                case 12:
+                    return 魚雷見張員電探CI2;
+                case 13:
+                    return 魚雷魚雷見張員CI2;
+                case 14:
+                    return 魚雷ドラム缶見張員CI2;
+                case 100:
+                    return NelsonTouch;
+                case 101:
+                    return 胸熱CI;
+                case 102:
+                    return 陸奥タッチ;
+                case 103:
+                    return ColoradoTouch;
+                case 104:
+                    return 僚艦夜戦突撃;
+                case 200:
+                    return 夜間瑞雲夜戦CI;
+                case 401:
+                    return やまむさタッチ;
+                default:
+                    LoggerHolder.get().error("***** unknown 夜戦CI id:" + i);
+                    return 通常攻撃;
             }
         }
 
@@ -1857,6 +2110,8 @@ public class BattleTypes {
                 case ColoradoTouch:
                 case 僚艦夜戦突撃:
                 case やまむさタッチ:
+                case 大和タッチ:
+                case 潜水艦隊攻撃:
                     return true;
                 default:
                     return false;
