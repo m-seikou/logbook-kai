@@ -1,10 +1,7 @@
 package logbook.internal.gui;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javafx.beans.value.ChangeListener;
@@ -32,13 +29,13 @@ import logbook.internal.Ships;
 public class BattleDetailPhase extends TitledPane {
 
     /** フェイズ */
-    private PhaseState phase;
+    private final PhaseState phase;
 
     /** 詳細 */
-    private List<PhaseState.AttackDetail> attackDetails = new ArrayList<>();
+    private final List<PhaseState.AttackDetail> attackDetails = new ArrayList<>();
 
     /** 付加情報 */
-    private List<? extends Node> nodes;
+    private final List<? extends Node> nodes;
 
     /** 付加情報 */
     @FXML
@@ -65,10 +62,10 @@ public class BattleDetailPhase extends TitledPane {
     private VBox detail;
 
     /** 友軍艦隊フラグ */
-    private boolean isFriendlyBattle;
+    private final boolean isFriendlyBattle;
 
-    private List<PhaseState.AttackDetail> TSBK = new ArrayList<>();
-    private List<PhaseState.AttackDetail> openingAttack = new ArrayList<>();
+    private final List<PhaseState.AttackDetail> TSBK = new ArrayList<>();
+    private final List<PhaseState.AttackDetail> openingAttack = new ArrayList<>();
     /**
     * 戦闘ログ詳細のフェーズのコンストラクタ
     *
@@ -136,13 +133,13 @@ public class BattleDetailPhase extends TitledPane {
                             return false;
                         }
                         if (chara.isShip()) {
-                            return chara.asShip().getId() == e.getAttacker().asShip().getId();
+                            return Objects.equals(chara.asShip().getId(), e.getAttacker().asShip().getId());
                         }
                         if (chara.isFriend()) {
-                            return chara.getShipId() == e.getAttacker().getShipId();
+                            return Objects.equals(chara.getShipId(), e.getAttacker().getShipId());
                         }
                         if (chara.isEnemy()) {
-                            return chara.asEnemy().getOrder() == e.getAttacker().asEnemy().getOrder();
+                            return Objects.equals(chara.asEnemy().getOrder(), e.getAttacker().asEnemy().getOrder());
                         }
                         return false;
                     })
@@ -242,28 +239,33 @@ public class BattleDetailPhase extends TitledPane {
             ((TitledPane) node).setContent(content);
         }
     }
+
     private void initializeDetailTSBK(ObservableValue<? extends Boolean> ob, Boolean o, Boolean n) {
         if (!n)
             return;
         for (Node node : this.detail.getChildren()) {
-            if (node instanceof TitledPane) {
-                if (((TitledPane) node).getText().equals("対潜先制爆雷攻撃")){
-                    Parent content = this.detailNode(this.TSBK);
-                    ((TitledPane) node).setContent(content);
-                }
+            if (!(node instanceof TitledPane)) {
+                continue;
             }
+            if (!((TitledPane) node).getText().equals("対潜先制爆雷攻撃")) {
+                continue;
+            }
+            Parent content = this.detailNode(this.TSBK);
+            ((TitledPane) node).setContent(content);
         }
     }
     private void initializeDetailOpeningAttack(ObservableValue<? extends Boolean> ob, Boolean o, Boolean n) {
         if (!n)
             return;
         for (Node node : this.detail.getChildren()) {
-            if (node instanceof TitledPane) {
-                if (((TitledPane) node).getText().equals("開幕雷撃")) {
-                    Parent content = this.detailNode(this.openingAttack);
-                    ((TitledPane) node).setContent(content);
-                }
+            if (!(node instanceof TitledPane)) {
+                continue;
             }
+            if (!((TitledPane) node).getText().equals("開幕雷撃")) {
+                continue;
+            }
+            Parent content = this.detailNode(this.openingAttack);
+            ((TitledPane) node).setContent(content);
         }
     }
 
@@ -292,18 +294,15 @@ public class BattleDetailPhase extends TitledPane {
 
             StringJoiner sj = new StringJoiner("/");
             for (int i = 0; i < detail.getDamages().size(); i++) {
-                if (detail.getDamages().get(i) > -1) {
-                    StringBuilder sb2 = new StringBuilder();
-                    sb2.append((i + 1) + "回目");
-                    sb2.append(detail.getDamages().get(i) + "ダメージ");
-                    sb2.append("");
-                    switch (detail.getCritical().get(i)) {
-                    case 2:
-                        sb2.append("(クリティカル)");
-                        break;
-                    }
-                    sj.add(sb2);
+                if (detail.getDamages().get(i) <= -1) {
+                    continue;
                 }
+                StringBuilder sb2 = new StringBuilder();
+                sb2.append((i + 1)).append("回目").append(detail.getDamages().get(i)).append("ダメージ");
+                if (detail.getCritical().get(i) == 2) {
+                    sb2.append("(クリティカル)");
+                }
+                sj.add(sb2);
             }
             action.getChildren().add(new Label(sj.toString()));
 

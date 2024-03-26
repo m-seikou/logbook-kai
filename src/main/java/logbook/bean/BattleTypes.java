@@ -1756,7 +1756,8 @@ public class BattleTypes {
         第一警戒航行序列,
         第二警戒航行序列,
         第三警戒航行序列,
-        第四警戒航行序列;
+        第四警戒航行序列,
+        unknown;
 
         /**
          * 陣形を取得します
@@ -1787,7 +1788,8 @@ public class BattleTypes {
                 case 14:
                     return 第四警戒航行序列;
                 default:
-                    return 単縦陣;
+                    LoggerHolder.get().error("unknown Formation:" + f);
+                    return unknown;
             }
         }
     }
@@ -1796,7 +1798,7 @@ public class BattleTypes {
      * 艦隊行動
      */
     public enum Intercept {
-        同航戦, 反航戦, Ｔ字戦有利, Ｔ字戦不利;
+        同航戦, 反航戦, Ｔ字戦有利, Ｔ字戦不利,unknown;
 
         /**
          * 艦隊行動を取得します
@@ -1815,7 +1817,8 @@ public class BattleTypes {
                 case 4:
                     return Ｔ字戦不利;
                 default:
-                    return 同航戦;
+                    LoggerHolder.get().error("unknown Intercept:" + i);
+                    return unknown;
             }
         }
     }
@@ -1845,6 +1848,7 @@ public class BattleTypes {
                 case 4:
                     return 制空権喪失;
                 default:
+                    LoggerHolder.get().error("unknown 制空権表示:" + i);
                     return unknown;
             }
         }
@@ -1872,6 +1876,7 @@ public class BattleTypes {
                 case 5:
                     return 連合艦隊タイプ5;
                 default:
+                    LoggerHolder.get().error("unknown 連合艦隊:" + i);
                     return unknown;
             }
         }
@@ -1951,6 +1956,7 @@ public class BattleTypes {
                 case 401:
                     return やまむさタッチ;
                 default:
+                    LoggerHolder.get().error("unknown 砲撃 攻撃種別:" + i);
                     return unknown;
             }
         }
