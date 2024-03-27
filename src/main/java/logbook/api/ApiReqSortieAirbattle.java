@@ -12,7 +12,7 @@ import logbook.bean.BattleLog;
 import logbook.bean.BattleTypes.IFormation;
 import logbook.bean.Ship;
 import logbook.bean.ShipCollection;
-import logbook.bean.SortieAirbattle;
+import logbook.bean.SortieAirBattle;
 import logbook.internal.PhaseState;
 import logbook.proxy.RequestMetaData;
 import logbook.proxy.ResponseMetaData;
@@ -36,7 +36,7 @@ public class ApiReqSortieAirbattle implements APIListenerSpi {
                 log.setBattleCount(condition.getBattleCount());
                 log.setRoute(condition.getRoute());
 
-                log.setBattle(SortieAirbattle.toAirbattle(data));
+                log.setBattle(SortieAirBattle.toAirbattle(data));
                 // ローデータを設定する
                 if (AppConfig.get().isIncludeRawData()) {
                     BattleLog.setRawData(log, BattleLog.RawData::setBattle, data, req);

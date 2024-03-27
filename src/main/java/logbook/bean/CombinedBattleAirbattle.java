@@ -6,7 +6,7 @@ import java.util.List;
 import javax.json.JsonObject;
 
 import logbook.bean.BattleTypes.IAirBaseAttack;
-import logbook.bean.BattleTypes.IAirbattle;
+import logbook.bean.BattleTypes.IAirBattle;
 import logbook.bean.BattleTypes.ICombinedBattle;
 import logbook.bean.BattleTypes.IFormation;
 import logbook.bean.BattleTypes.ISortieBattle;
@@ -19,8 +19,8 @@ import lombok.Data;
  *
  */
 @Data
-public class CombinedBattleAirbattle
-        implements ICombinedBattle, ISortieBattle, IFormation, IAirbattle, ISupport, IAirBaseAttack, Serializable {
+public class CombinedBattleAirBattle
+        implements ICombinedBattle, ISortieBattle, IFormation, IAirBattle, ISupport, IAirBaseAttack, Serializable {
 
     private static final long serialVersionUID = 5422374810830868549L;
 
@@ -40,22 +40,22 @@ public class CombinedBattleAirbattle
     private List<Integer> shipLv;
 
     /** api_f_nowhps */
-    private List<Integer> fNowhps;
+    private List<Integer> fNowHps;
 
     /** api_f_maxhps */
-    private List<Integer> fMaxhps;
+    private List<Integer> fMaxHps;
 
     /** api_e_nowhps */
-    private List<Integer> eNowhps;
+    private List<Integer> eNowHps;
 
     /** api_e_maxhps */
-    private List<Integer> eMaxhps;
+    private List<Integer> eMaxHps;
 
     /** api_f_nowhps_combined */
-    private List<Integer> fNowhpsCombined;
+    private List<Integer> fNowHpsCombined;
 
     /** api_f_maxhps_combined */
-    private List<Integer> fMaxhpsCombined;
+    private List<Integer> fMaxHpsCombined;
 
     /** api_midnight_flag */
     private Boolean midnightFlag;
@@ -103,13 +103,13 @@ public class CombinedBattleAirbattle
     private Integer smokeType;
 
     /**
-     * JsonObjectから{@link CombinedBattleAirbattle}を構築します
+     * JsonObjectから{@link CombinedBattleAirBattle}を構築します
      *
      * @param json JsonObject
-     * @return {@link CombinedBattleAirbattle}
+     * @return {@link CombinedBattleAirBattle}
      */
-    public static CombinedBattleAirbattle toBattle(JsonObject json) {
-        CombinedBattleAirbattle bean = new CombinedBattleAirbattle();
+    public static CombinedBattleAirBattle toBattle(JsonObject json) {
+        CombinedBattleAirBattle bean = new CombinedBattleAirBattle();
         JsonHelper.bind(json)
                 .set("api_air_base_injection", bean::setAirBaseInjection,
                         BattleTypes.AirBaseAttack::toAirBaseAttack)
@@ -119,12 +119,12 @@ public class CombinedBattleAirbattle
                 .setInteger("api_deck_id", bean::setDockId)
                 .setIntegerList("api_ship_ke", bean::setShipKe)
                 .setIntegerList("api_ship_lv", bean::setShipLv)
-                .setIntegerList("api_f_nowhps", bean::setFNowhps)
-                .setIntegerList("api_f_maxhps", bean::setFMaxhps)
-                .setIntegerList("api_e_nowhps", bean::setENowhps)
-                .setIntegerList("api_e_maxhps", bean::setEMaxhps)
-                .setIntegerList("api_f_nowhps_combined", bean::setFNowhpsCombined)
-                .setIntegerList("api_f_maxhps_combined", bean::setFMaxhpsCombined)
+                .setIntegerList("api_f_nowhps", bean::setFNowHps)
+                .setIntegerList("api_f_maxhps", bean::setFMaxHps)
+                .setIntegerList("api_e_nowhps", bean::setENowHps)
+                .setIntegerList("api_e_maxhps", bean::setEMaxHps)
+                .setIntegerList("api_f_nowhps_combined", bean::setFNowHpsCombined)
+                .setIntegerList("api_f_maxhps_combined", bean::setFMaxHpsCombined)
                 .setBoolean("api_midnight_flag", bean::setMidnightFlag)
                 .set("api_eSlot", bean::setESlot, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_fParam", bean::setFParam, JsonHelper.toList(JsonHelper::toIntegerList))

@@ -52,28 +52,28 @@ public class BattleTypes {
          *
          * @return api_f_nowhps
          */
-        List<Integer> getFNowhps();
+        List<Integer> getFNowHps();
 
         /**
          * api_f_maxhpsを取得します。
          *
          * @return api_f_maxhps
          */
-        List<Integer> getFMaxhps();
+        List<Integer> getFMaxHps();
 
         /**
          * api_e_nowhpsを取得します。
          *
          * @return api_e_nowhps
          */
-        List<Integer> getENowhps();
+        List<Integer> getENowHps();
 
         /**
          * api_e_maxhpsを取得します。
          *
          * @return api_e_maxhps
          */
-        List<Integer> getEMaxhps();
+        List<Integer> getEMaxHps();
 
         /**
          * api_eSlotを取得します。
@@ -119,7 +119,7 @@ public class BattleTypes {
         }
 
         @JsonIgnore
-        default IAirbattle asIAirbattle() {
+        default IAirBattle asIAirbattle() {
             throw new IllegalStateException(this + " is not an IAirbattle");
         }
 
@@ -264,14 +264,14 @@ public class BattleTypes {
          *
          * @return api_f_nowhps_combined
          */
-        List<Integer> getFNowhpsCombined();
+        List<Integer> getFNowHpsCombined();
 
         /**
          * api_f_maxhps_combinedを取得します。
          *
          * @return api_f_maxhps_combined
          */
-        List<Integer> getFMaxhpsCombined();
+        List<Integer> getFMaxHpsCombined();
 
         /**
          * api_fParam_combinedを取得します。
@@ -301,14 +301,14 @@ public class BattleTypes {
          *
          * @return api_e_nowhps_combined
          */
-        List<Integer> getENowhpsCombined();
+        List<Integer> getENowHpsCombined();
 
         /**
          * api_e_maxhps_combinedを取得します。
          *
          * @return api_e_maxhps_combined
          */
-        List<Integer> getEMaxhpsCombined();
+        List<Integer> getEMaxHpsCombined();
 
         /**
          * api_ship_ke_combinedを取得します。
@@ -426,7 +426,7 @@ public class BattleTypes {
          *
          * @return api_opening_atack
          */
-        OpeningRaigeki getOpeningAtack();
+        OpeningRaigeki getOpeningAttack();
 
         /**
          * api_opening_taisen_flagを取得します。
@@ -646,7 +646,7 @@ public class BattleTypes {
     /**
      * 航空戦
      */
-    public interface IAirbattle extends IKouku {
+    public interface IAirBattle extends IKouku {
 
         /**
          * api_kouku2を取得します。
@@ -661,7 +661,7 @@ public class BattleTypes {
         }
 
         @Override
-        default IAirbattle asIAirbattle() {
+        default IAirBattle asIAirbattle() {
             return this;
         }
     }

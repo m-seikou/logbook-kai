@@ -148,7 +148,7 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
                     Ship ship = friendFleet.get(i);
                     if (ship != null) {
                         format.味方艦[i] = Ships.toName(ship);
-                        format.味方艦HP[i] = battle.getFNowhps().get(i) + "/" + battle.getFMaxhps().get(i);
+                        format.味方艦HP[i] = battle.getFNowHps().get(i) + "/" + battle.getFMaxHps().get(i);
                     }
                 }
             }
@@ -162,7 +162,7 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
                     Ship ship = friendFleet.get(i);
                     if (ship != null) {
                         format.味方艦[i] = Ships.toName(ship);
-                        format.味方艦HP[i] = combinedBattle.getFNowhps().get(i) + "/" + combinedBattle.getFMaxhps().get(i);
+                        format.味方艦HP[i] = combinedBattle.getFNowHps().get(i) + "/" + combinedBattle.getFMaxHps().get(i);
                     }
                 }
             }
@@ -172,8 +172,8 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
                     Ship ship = friendFleet.get(i);
                     if (ship != null) {
                         format.味方艦[i + 6] = Ships.toName(ship);
-                        format.味方艦HP[i + 6] = combinedBattle.getFNowhpsCombined().get(i) + "/"
-                                + combinedBattle.getFMaxhpsCombined().get(i);
+                        format.味方艦HP[i + 6] = combinedBattle.getFNowHpsCombined().get(i) + "/"
+                                + combinedBattle.getFMaxHpsCombined().get(i);
                     }
                 }
             }
@@ -195,7 +195,7 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
                         name = shipMst.getName() + "(" + flagship + ")";
                     }
                     format.敵艦[i] = name;
-                    format.敵艦HP[i] = battle.getENowhps().get(i) + "/" + battle.getEMaxhps().get(i);
+                    format.敵艦HP[i] = battle.getENowHps().get(i) + "/" + battle.getEMaxHps().get(i);
                 }
             }
         }
@@ -216,8 +216,8 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
                             name = shipMst.getName() + "(" + flagship + ")";
                         }
                         format.敵艦[i + 6] = name;
-                        format.敵艦HP[i + 6] = ((ICombinedEcBattle) battle).getENowhpsCombined().get(i) + "/"
-                                + ((ICombinedEcBattle) battle).getEMaxhpsCombined().get(i);
+                        format.敵艦HP[i + 6] = ((ICombinedEcBattle) battle).getENowHpsCombined().get(i) + "/"
+                                + ((ICombinedEcBattle) battle).getEMaxHpsCombined().get(i);
                     }
                 }
             }

@@ -28,16 +28,16 @@ public class BattleMidnightBattle implements IMidnightBattle, Serializable {
     private List<Integer> shipLv;
 
     /** api_f_nowhps */
-    private List<Integer> fNowhps;
+    private List<Integer> fNowHps;
 
     /** api_f_maxhps */
-    private List<Integer> fMaxhps;
+    private List<Integer> fMaxHps;
 
     /** api_e_nowhps */
-    private List<Integer> eNowhps;
+    private List<Integer> eNowHps;
 
     /** api_e_maxhps */
-    private List<Integer> eMaxhps;
+    private List<Integer> eMaxHps;
 
     /** api_eSlot */
     private List<List<Integer>> eSlot;
@@ -78,10 +78,10 @@ public class BattleMidnightBattle implements IMidnightBattle, Serializable {
                 .setInteger("api_deck_id", bean::setDockId)
                 .setIntegerList("api_ship_ke", bean::setShipKe)
                 .setIntegerList("api_ship_lv", bean::setShipLv)
-                .setIntegerList("api_f_nowhps", bean::setFNowhps)
-                .setIntegerList("api_f_maxhps", bean::setFMaxhps)
-                .setIntegerList("api_e_nowhps", bean::setENowhps)
-                .setIntegerList("api_e_maxhps", bean::setEMaxhps)
+                .setIntegerList("api_f_nowhps", bean::setFNowHps)
+                .setIntegerList("api_f_maxhps", bean::setFMaxHps)
+                .setIntegerList("api_e_nowhps", bean::setENowHps)
+                .setIntegerList("api_e_maxhps", bean::setEMaxHps)
                 .set("api_eSlot", bean::setESlot, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_fParam", bean::setFParam, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_eParam", bean::setEParam, JsonHelper.toList(JsonHelper::toIntegerList))

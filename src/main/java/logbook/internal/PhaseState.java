@@ -20,7 +20,7 @@ import logbook.bean.BattleTypes.CombinedType;
 import logbook.bean.BattleTypes.FriendlyBattle;
 import logbook.bean.BattleTypes.FriendlyInfo;
 import logbook.bean.BattleTypes.IAirBaseAttack;
-import logbook.bean.BattleTypes.IAirbattle;
+import logbook.bean.BattleTypes.IAirBattle;
 import logbook.bean.BattleTypes.IBattle;
 import logbook.bean.BattleTypes.ICombinedEcBattle;
 import logbook.bean.BattleTypes.ICombinedEcMidnightBattle;
@@ -246,7 +246,7 @@ public class PhaseState {
         // 先制対潜攻撃
         this.applyHougeki(battle.getOpeningTaisen(), false, BattleTypes.SortieAtTypeTSBK.対潜先制爆雷攻撃);
         // 開幕雷撃
-        this.applyOpeningRaigeki(battle.getOpeningAtack());
+        this.applyOpeningRaigeki(battle.getOpeningAttack());
         if (!this.combined && battle.isICombinedEcBattle()) {
             // 敵だけ連合
             // 1巡目
@@ -293,7 +293,7 @@ public class PhaseState {
      * 
      * @param battle 航空戦
      */
-    public void applyAirbattle(IAirbattle battle) {
+    public void applyAirbattle(IAirBattle battle) {
         this.applyKouku(battle.getKouku2());
     }
 
@@ -756,31 +756,31 @@ public class PhaseState {
      * @param b 戦闘
      */
     private void setInitialHp(IBattle b) {
-        for (int i = 0, s = b.getFMaxhps().size(); i < s; i++) {
-            if (b.getFMaxhps().get(i) == null) {
+        for (int i = 0, s = b.getFMaxHps().size(); i < s; i++) {
+            if (b.getFMaxHps().get(i) == null) {
                 //潜水(空)マス対応
                 this.afterEnemy.get(i).setMaxhp(0);
                 this.afterEnemy.get(i).setNowhp(0);
             }
-            if (b.getFMaxhps().get(i) == -1) {
+            if (b.getFMaxHps().get(i) == -1) {
                 continue;
             }
             if (this.afterFriend.get(i) != null) {
-                this.afterFriend.get(i).setMaxhp(b.getFMaxhps().get(i));
-                this.afterFriend.get(i).setNowhp(b.getFNowhps().get(i));
+                this.afterFriend.get(i).setMaxhp(b.getFMaxHps().get(i));
+                this.afterFriend.get(i).setNowhp(b.getFNowHps().get(i));
             }
         }
-        for (int i = 0, s = b.getEMaxhps().size(); i < s; i++) {
-            if (b.getEMaxhps().get(i) == -1) {
+        for (int i = 0, s = b.getEMaxHps().size(); i < s; i++) {
+            if (b.getEMaxHps().get(i) == -1) {
                 continue;
             }
             if (this.afterEnemy.get(i) != null) {
-                this.afterEnemy.get(i).setMaxhp(b.getEMaxhps().get(i));
-                this.afterEnemy.get(i).setNowhp(b.getENowhps().get(i));
+                this.afterEnemy.get(i).setMaxhp(b.getEMaxHps().get(i));
+                this.afterEnemy.get(i).setNowhp(b.getENowHps().get(i));
             }
         }
         if (b.isICombinedBattle()) {
-            List<Integer> fNowHps = b.asICombinedBattle().getFNowhpsCombined();
+            List<Integer> fNowHps = b.asICombinedBattle().getFNowHpsCombined();
             if (fNowHps != null) {
                 for (int i = 0, s = fNowHps.size(); i < s; i++) {
                     if (fNowHps.get(i) == -1) {
@@ -794,8 +794,8 @@ public class PhaseState {
             }
         }
         if (b.isICombinedEcBattle()) {
-            List<Integer> eMaxHps = b.asICombinedEcBattle().getEMaxhpsCombined();
-            List<Integer> eNowHps = b.asICombinedEcBattle().getENowhpsCombined();
+            List<Integer> eMaxHps = b.asICombinedEcBattle().getEMaxHpsCombined();
+            List<Integer> eNowHps = b.asICombinedEcBattle().getENowHpsCombined();
             if (eNowHps != null) {
                 for (int i = 0, s = eNowHps.size(); i < s; i++) {
                     if (eNowHps.get(i) == -1) {

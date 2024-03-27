@@ -34,16 +34,16 @@ public class CombinedBattleEcNightToDay implements ICombinedBattle, ICombinedEcB
     private List<Integer> formation;
 
     /** api_f_nowhps */
-    private List<Integer> fNowhps;
+    private List<Integer> fNowHps;
 
     /** api_f_maxhps */
-    private List<Integer> fMaxhps;
+    private List<Integer> fMaxHps;
 
     /** api_f_nowhps_combined */
-    private List<Integer> fNowhpsCombined;
+    private List<Integer> fNowHpsCombined;
 
     /** api_f_maxhps_combined */
-    private List<Integer> fMaxhpsCombined;
+    private List<Integer> fMaxHpsCombined;
 
     /** api_fParam */
     private List<List<Integer>> fParam;
@@ -64,16 +64,16 @@ public class CombinedBattleEcNightToDay implements ICombinedBattle, ICombinedEcB
     private List<Integer> shipLvCombined;
 
     /** api_e_nowhps */
-    private List<Integer> eNowhps;
+    private List<Integer> eNowHps;
 
     /** api_e_maxhps */
-    private List<Integer> eMaxhps;
+    private List<Integer> eMaxHps;
 
     /** api_e_nowhps_combined */
-    private List<Integer> eNowhpsCombined;
+    private List<Integer> eNowHpsCombined;
 
     /** api_e_maxhps_combined */
-    private List<Integer> eMaxhpsCombined;
+    private List<Integer> eMaxHpsCombined;
 
     /** api_eSlot */
     private List<List<Integer>> eSlot;
@@ -142,7 +142,7 @@ public class CombinedBattleEcNightToDay implements ICombinedBattle, ICombinedEcB
     private Boolean openingFlag;
 
     /** api_opening_atack */
-    private BattleTypes.OpeningRaigeki openingAtack;
+    private BattleTypes.OpeningRaigeki openingAttack;
 
     /** api_hourai_flag */
     private List<Integer> houraiFlag;
@@ -176,20 +176,20 @@ public class CombinedBattleEcNightToDay implements ICombinedBattle, ICombinedEcB
         JsonHelper.bind(json)
                 .setInteger("api_deck_id", bean::setDockId)
                 .setIntegerList("api_formation", bean::setFormation)
-                .setIntegerList("api_f_nowhps", bean::setFNowhps)
-                .setIntegerList("api_f_maxhps", bean::setFMaxhps)
-                .setIntegerList("api_f_nowhps_combined", bean::setFNowhpsCombined)
-                .setIntegerList("api_f_maxhps_combined", bean::setFMaxhpsCombined)
+                .setIntegerList("api_f_nowhps", bean::setFNowHps)
+                .setIntegerList("api_f_maxhps", bean::setFMaxHps)
+                .setIntegerList("api_f_nowhps_combined", bean::setFNowHpsCombined)
+                .setIntegerList("api_f_maxhps_combined", bean::setFMaxHpsCombined)
                 .set("api_fParam", bean::setFParam, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_fParam_combined", bean::setFParamCombined, JsonHelper.toList(JsonHelper::toIntegerList))
                 .setIntegerList("api_ship_ke", bean::setShipKe)
                 .setIntegerList("api_ship_lv", bean::setShipLv)
                 .setIntegerList("api_ship_ke_combined", bean::setShipKeCombined)
                 .setIntegerList("api_ship_lv_combined", bean::setShipLvCombined)
-                .setIntegerList("api_e_nowhps", bean::setENowhps)
-                .setIntegerList("api_e_maxhps", bean::setEMaxhps)
-                .setIntegerList("api_e_nowhps_combined", bean::setENowhpsCombined)
-                .setIntegerList("api_e_maxhps_combined", bean::setEMaxhpsCombined)
+                .setIntegerList("api_e_nowhps", bean::setENowHps)
+                .setIntegerList("api_e_maxhps", bean::setEMaxHps)
+                .setIntegerList("api_e_nowhps_combined", bean::setENowHpsCombined)
+                .setIntegerList("api_e_maxhps_combined", bean::setEMaxHpsCombined)
                 .set("api_eSlot", bean::setESlot, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_eSlot_combined", bean::setESlotCombined, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_eParam", bean::setEParam, JsonHelper.toList(JsonHelper::toIntegerList))
@@ -214,7 +214,7 @@ public class CombinedBattleEcNightToDay implements ICombinedBattle, ICombinedEcB
                 .setBoolean("api_opening_taisen_flag", bean::setOpeningTaisenFlag)
                 .set("api_opening_taisen", bean::setOpeningTaisen, BattleTypes.Hougeki::toHougeki)
                 .setBoolean("api_opening_flag", bean::setOpeningFlag)
-                .set("api_opening_atack", bean::setOpeningAtack, BattleTypes.OpeningRaigeki::toRaigeki)
+                .set("api_opening_atack", bean::setOpeningAttack, BattleTypes.OpeningRaigeki::toRaigeki)
                 .setIntegerList("api_hourai_flag", bean::setHouraiFlag)
                 .set("api_hougeki1", bean::setHougeki1, BattleTypes.Hougeki::toHougeki)
                 .set("api_hougeki2", bean::setHougeki2, BattleTypes.Hougeki::toHougeki)

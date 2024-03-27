@@ -6,7 +6,7 @@ import java.util.List;
 import javax.json.JsonObject;
 
 import logbook.bean.BattleTypes.IAirBaseAttack;
-import logbook.bean.BattleTypes.IAirbattle;
+import logbook.bean.BattleTypes.IAirBattle;
 import logbook.bean.BattleTypes.IFormation;
 import logbook.bean.BattleTypes.ISortieBattle;
 import logbook.bean.BattleTypes.ISupport;
@@ -18,7 +18,7 @@ import lombok.Data;
  *
  */
 @Data
-public class SortieAirbattle implements ISortieBattle, IFormation, IAirbattle, ISupport, IAirBaseAttack, Serializable {
+public class SortieAirBattle implements ISortieBattle, IFormation, IAirBattle, ISupport, IAirBaseAttack, Serializable {
 
     private static final long serialVersionUID = -6199870579231576550L;
 
@@ -38,16 +38,16 @@ public class SortieAirbattle implements ISortieBattle, IFormation, IAirbattle, I
     private List<Integer> shipLv;
 
     /** api_f_nowhps */
-    private List<Integer> fNowhps;
+    private List<Integer> fNowHps;
 
     /** api_f_maxhps */
-    private List<Integer> fMaxhps;
+    private List<Integer> fMaxHps;
 
     /** api_e_nowhps */
-    private List<Integer> eNowhps;
+    private List<Integer> eNowHps;
 
     /** api_e_maxhps */
-    private List<Integer> eMaxhps;
+    private List<Integer> eMaxHps;
 
     /** api_midnight_flag */
     private Boolean midnightFlag;
@@ -92,13 +92,13 @@ public class SortieAirbattle implements ISortieBattle, IFormation, IAirbattle, I
     private Integer smokeType;
 
     /**
-     * JsonObjectから{@link SortieAirbattle}を構築します
+     * JsonObjectから{@link SortieAirBattle}を構築します
      *
      * @param json JsonObject
-     * @return {@link SortieAirbattle}
+     * @return {@link SortieAirBattle}
      */
-    public static SortieAirbattle toAirbattle(JsonObject json) {
-        SortieAirbattle bean = new SortieAirbattle();
+    public static SortieAirBattle toAirbattle(JsonObject json) {
+        SortieAirBattle bean = new SortieAirBattle();
         JsonHelper.bind(json)
                 .set("api_air_base_injection", bean::setAirBaseInjection,
                         BattleTypes.AirBaseAttack::toAirBaseAttack)
@@ -108,10 +108,10 @@ public class SortieAirbattle implements ISortieBattle, IFormation, IAirbattle, I
                 .setInteger("api_deck_id", bean::setDockId)
                 .setIntegerList("api_ship_ke", bean::setShipKe)
                 .setIntegerList("api_ship_lv", bean::setShipLv)
-                .setIntegerList("api_f_nowhps", bean::setFNowhps)
-                .setIntegerList("api_f_maxhps", bean::setFMaxhps)
-                .setIntegerList("api_e_nowhps", bean::setENowhps)
-                .setIntegerList("api_e_maxhps", bean::setEMaxhps)
+                .setIntegerList("api_f_nowhps", bean::setFNowHps)
+                .setIntegerList("api_f_maxhps", bean::setFMaxHps)
+                .setIntegerList("api_e_nowhps", bean::setENowHps)
+                .setIntegerList("api_e_maxhps", bean::setEMaxHps)
                 .setBoolean("api_midnight_flag", bean::setMidnightFlag)
                 .set("api_eSlot", bean::setESlot, JsonHelper.toList(JsonHelper::toIntegerList))
                 .set("api_fParam", bean::setFParam, JsonHelper.toList(JsonHelper::toIntegerList))
