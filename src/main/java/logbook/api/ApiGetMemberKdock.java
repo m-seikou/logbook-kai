@@ -16,7 +16,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/kdock
- *
  */
 @API("/kcsapi/api_get_member/kdock")
 public class ApiGetMemberKdock implements APIListenerSpi {
@@ -26,11 +25,11 @@ public class ApiGetMemberKdock implements APIListenerSpi {
         JsonArray data = json.getJsonArray("api_data");
         if (data != null) {
             Map<Integer, Createship> createshipMap = CreateshipCollection.get()
-                    .getCreateshipMap();
+                .getCreateshipMap();
             if (!createshipMap.isEmpty()) {
                 Map<Integer, Kdock> kdockMap = data.stream()
-                        .map(Kdock::toKdock)
-                        .collect(Collectors.toMap(Kdock::getId, d -> d));
+                    .map(Kdock::toKdock)
+                    .collect(Collectors.toMap(Kdock::getId, d -> d));
 
                 int emptyDock = 0;
                 for (Kdock kdock : kdockMap.values()) {
@@ -45,7 +44,7 @@ public class ApiGetMemberKdock implements APIListenerSpi {
                     createship.setEmptyDock(emptyDock);
 
                     LogWriter.getInstance(CreateshipLogFormat::new)
-                            .write(createship);
+                        .write(createship);
                 }
 
                 createshipMap.clear();

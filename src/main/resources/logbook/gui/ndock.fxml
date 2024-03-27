@@ -7,18 +7,20 @@
 <?import javafx.scene.layout.*?>
 
 <fx:root styleClass="ndock" type="HBox" xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <AnchorPane prefHeight="40.0" prefWidth="160.0">
-         <children>
-            <ImageView fx:id="ship" fitHeight="40.0" fitWidth="160.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-      </ImageView>
-         </children>
-      </AnchorPane>
-      <AnchorPane prefHeight="40.0" prefWidth="100.0">
-         <children>
-            <Label fx:id="time" styleClass="time" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" />
-            <Label fx:id="name" maxWidth="100.0" prefWidth="100.0" styleClass="name" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="1.0" />
-         </children>
-      </AnchorPane>
-   </children>
+    <children>
+        <AnchorPane prefHeight="40.0" prefWidth="160.0">
+            <children>
+                <ImageView fx:id="ship" fitHeight="40.0" fitWidth="160.0" AnchorPane.leftAnchor="0.0"
+                           AnchorPane.topAnchor="0.0">
+                </ImageView>
+            </children>
+        </AnchorPane>
+        <AnchorPane prefHeight="40.0" prefWidth="100.0">
+            <children>
+                <Label fx:id="time" styleClass="time" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0"/>
+                <Label fx:id="name" maxWidth="100.0" prefWidth="100.0" styleClass="name" AnchorPane.leftAnchor="1.0"
+                       AnchorPane.topAnchor="1.0"/>
+            </children>
+        </AnchorPane>
+    </children>
 </fx:root>

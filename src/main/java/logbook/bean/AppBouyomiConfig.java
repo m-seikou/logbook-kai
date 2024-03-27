@@ -8,7 +8,6 @@ import lombok.Data;
 
 /**
  * 棒読みちゃん連携設定
- *
  */
 @Data
 public class AppBouyomiConfig {
@@ -39,7 +38,7 @@ public class AppBouyomiConfig {
      * アプリケーションのデフォルト設定ディレクトリから<code>AppBouyomiCollection</code>を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(AppBouyomiCollection.class, AppBouyomiCollection::new)</code>
+     * <code>Config.getDefault().get(AppBouyomiCollection.class, AppBouyomiCollection::new)</code>
      * </blockquote>
      *
      * @return <code>AppBouyomiCollection</code>

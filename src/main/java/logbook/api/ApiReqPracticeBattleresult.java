@@ -14,7 +14,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_practice/battle_result
- *
  */
 @API("/kcsapi/api_req_practice/battle_result")
 public class ApiReqPracticeBattleresult implements APIListenerSpi {
@@ -31,8 +30,8 @@ public class ApiReqPracticeBattleresult implements APIListenerSpi {
                     log.setTime(Logs.nowString());
                     // 出撃艦隊
                     Integer dockId = Optional.ofNullable(log.getBattle())
-                            .map(IFormation::getDockId)
-                            .orElse(1);
+                        .map(IFormation::getDockId)
+                        .orElse(1);
                     // 艦隊スナップショットを作る
                     BattleLog.snapshot(log, dockId);
                 }

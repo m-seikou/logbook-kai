@@ -10,7 +10,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_mission/result
- *
  */
 @API("/kcsapi/api_req_mission/result")
 public class ApiReqMissionResult implements APIListenerSpi {
@@ -23,7 +22,7 @@ public class ApiReqMissionResult implements APIListenerSpi {
             MissionResult result = MissionResult.toMissionResult(data);
 
             LogWriter.getInstance(MissionResultLogFormat::new)
-                    .write(result);
+                .write(result);
         }
     }
 

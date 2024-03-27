@@ -27,6 +27,7 @@ public interface TestAllPredicate<T> extends Predicate<T> {
 
     /**
      * 条件(論理演算)
+     *
      * @return 論理演算を行う Predicate
      */
     default Predicate<T> processOperator(String operator, List<? extends TestAllPredicate<T>> conditions) {
@@ -36,8 +37,8 @@ public interface TestAllPredicate<T> extends Predicate<T> {
                 predicate = condition;
             } else {
                 predicate = operator.endsWith("AND")
-                        ? predicate.and(condition)
-                        : predicate.or(condition);
+                    ? predicate.and(condition)
+                    : predicate.or(condition);
             }
         }
         if ("NAND".equals(operator) || "NOR".equals(operator)) {
@@ -49,20 +50,20 @@ public interface TestAllPredicate<T> extends Predicate<T> {
     default String toStringOperator(String operator, String description) {
         StringBuilder sb = new StringBuilder(64);
         switch (operator) {
-        case "AND":
-            sb.append("次の条件を全て満たす");
-            break;
-        case "OR":
-            sb.append("次の条件のいずれか少なくとも1つを満たす");
-            break;
-        case "NAND":
-            sb.append("次の条件のいずれか少なくとも1つを満たさない");
-            break;
-        case "NOR":
-            sb.append("次の条件を全て満たさない");
-            break;
-        default:
-            break;
+            case "AND":
+                sb.append("次の条件を全て満たす");
+                break;
+            case "OR":
+                sb.append("次の条件のいずれか少なくとも1つを満たす");
+                break;
+            case "NAND":
+                sb.append("次の条件のいずれか少なくとも1つを満たさない");
+                break;
+            case "NOR":
+                sb.append("次の条件を全て満たさない");
+                break;
+            default:
+                break;
         }
         if (description != null) {
             sb.append("(").append(description).append(")");

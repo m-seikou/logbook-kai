@@ -11,7 +11,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/useitem
- *
  */
 @API("/kcsapi/api_get_member/useitem")
 public class ApiGetMemberUseitem implements APIListenerSpi {
@@ -21,7 +20,7 @@ public class ApiGetMemberUseitem implements APIListenerSpi {
         JsonArray array = json.getJsonArray("api_data");
         if (array != null) {
             UseitemCollection.get()
-                    .setUseitemMap(JsonHelper.toMap(array, Useitem::getId, Useitem::toUseitem));
+                .setUseitemMap(JsonHelper.toMap(array, Useitem::getId, Useitem::toUseitem));
         }
     }
 

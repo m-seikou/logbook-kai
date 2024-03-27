@@ -6,7 +6,6 @@ import lombok.Builder;
 
 /**
  * 所有装備一覧のフィルター
- *
  */
 @FunctionalInterface
 public interface ItemFilter extends Predicate<Item> {
@@ -14,10 +13,14 @@ public interface ItemFilter extends Predicate<Item> {
     @Builder
     public static class DefaultFilter implements ItemFilter {
 
-        /** テキスト */
+        /**
+         * テキスト
+         */
         private boolean typeFilter;
 
-        /** テキスト */
+        /**
+         * テキスト
+         */
         private String typeValue;
 
         @Override

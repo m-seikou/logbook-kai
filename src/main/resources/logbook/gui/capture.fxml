@@ -17,68 +17,75 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="320.0" styleClass="captureWindow" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.CaptureController">
-   <children>
-      <ToolBar>
-         <items>
-            <MenuButton mnemonicParsing="false" text="座標">
-              <items>
-                  <MenuItem mnemonicParsing="false" onAction="#detect" text="自動" />
-                  <MenuItem mnemonicParsing="false" onAction="#detectManual" text="手動" />
-                  <MenuItem mnemonicParsing="false" onAction="#input" text="範囲を編集" />
-              </items>
-            </MenuButton>
-            <MenuButton fx:id="config" disable="true" mnemonicParsing="false" text="設定">
-              <items>
-                  <CheckMenuItem fx:id="cyclic" mnemonicParsing="false" onAction="#cyclic" text="連写" />
-                  <CheckMenuItem fx:id="movie" mnemonicParsing="false" onAction="#movie" text="動画" />
-                  <Menu mnemonicParsing="false" text="切り取り">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0"
+      prefWidth="320.0" styleClass="captureWindow" xmlns="http://javafx.com/javafx/8.0.162"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.CaptureController">
+    <children>
+        <ToolBar>
+            <items>
+                <MenuButton mnemonicParsing="false" text="座標">
                     <items>
-                        <RadioMenuItem mnemonicParsing="false" onAction="#cutNone" selected="true" text="無し">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="cut" />
-                           </toggleGroup>
-                        </RadioMenuItem>
-                        <RadioMenuItem mnemonicParsing="false" onAction="#cutUnit" text="改装(艦娘付き)" toggleGroup="$cut" />
-                        <RadioMenuItem mnemonicParsing="false" onAction="#cutUnitWithoutShip" text="改装(艦娘除く)" toggleGroup="$cut" />
+                        <MenuItem mnemonicParsing="false" onAction="#detect" text="自動"/>
+                        <MenuItem mnemonicParsing="false" onAction="#detectManual" text="手動"/>
+                        <MenuItem mnemonicParsing="false" onAction="#input" text="範囲を編集"/>
                     </items>
-                  </Menu>
-                  <Menu mnemonicParsing="false" text="画像の形式">
-                     <items>
-                        <RadioMenuItem mnemonicParsing="false" fx:id="jpeg" onAction="#setJpeg" selected="true" text="JPEG">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="type" />
-                           </toggleGroup>
-                        </RadioMenuItem>
-                        <RadioMenuItem mnemonicParsing="false" fx:id="png" onAction="#setPng" text="PNG" toggleGroup="$type" />
-                     </items>
-                  </Menu>
-              </items>
-            </MenuButton>
-            <Button fx:id="capture" disable="true" mnemonicParsing="false" onAction="#capture" text="キャプチャ">
-               <styleClass>
-                  <String fx:value="capture" />
-                  <String fx:value="start" />
-               </styleClass>
-            </Button>
-            <Button fx:id="save" mnemonicParsing="false" onAction="#save" text="保存" />
-            <CheckBox fx:id="direct" mnemonicParsing="false" text="直接保存" />
-            <CheckBox fx:id="autoBattleCapture" mnemonicParsing="false" text="出撃と連動" disable="true"/>
-         </items>
-      </ToolBar>
-      <HBox alignment="CENTER_LEFT">
-         <children>
-            <Label fx:id="message" text="座標未設定" />
-         </children>
-      </HBox>
-      <ScrollPane fx:id="imageParent" focusTraversable="false" hbarPolicy="NEVER" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
-         <content>
-            <ImageView fx:id="image" fitHeight="120.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-         </content>
-      </ScrollPane>
-   </children>
-   <stylesheets>
-      <URL value="@application.css" />
-      <URL value="@capture.css" />
-   </stylesheets>
+                </MenuButton>
+                <MenuButton fx:id="config" disable="true" mnemonicParsing="false" text="設定">
+                    <items>
+                        <CheckMenuItem fx:id="cyclic" mnemonicParsing="false" onAction="#cyclic" text="連写"/>
+                        <CheckMenuItem fx:id="movie" mnemonicParsing="false" onAction="#movie" text="動画"/>
+                        <Menu mnemonicParsing="false" text="切り取り">
+                            <items>
+                                <RadioMenuItem mnemonicParsing="false" onAction="#cutNone" selected="true" text="無し">
+                                    <toggleGroup>
+                                        <ToggleGroup fx:id="cut"/>
+                                    </toggleGroup>
+                                </RadioMenuItem>
+                                <RadioMenuItem mnemonicParsing="false" onAction="#cutUnit" text="改装(艦娘付き)"
+                                               toggleGroup="$cut"/>
+                                <RadioMenuItem mnemonicParsing="false" onAction="#cutUnitWithoutShip"
+                                               text="改装(艦娘除く)" toggleGroup="$cut"/>
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="画像の形式">
+                            <items>
+                                <RadioMenuItem mnemonicParsing="false" fx:id="jpeg" onAction="#setJpeg" selected="true"
+                                               text="JPEG">
+                                    <toggleGroup>
+                                        <ToggleGroup fx:id="type"/>
+                                    </toggleGroup>
+                                </RadioMenuItem>
+                                <RadioMenuItem mnemonicParsing="false" fx:id="png" onAction="#setPng" text="PNG"
+                                               toggleGroup="$type"/>
+                            </items>
+                        </Menu>
+                    </items>
+                </MenuButton>
+                <Button fx:id="capture" disable="true" mnemonicParsing="false" onAction="#capture" text="キャプチャ">
+                    <styleClass>
+                        <String fx:value="capture"/>
+                        <String fx:value="start"/>
+                    </styleClass>
+                </Button>
+                <Button fx:id="save" mnemonicParsing="false" onAction="#save" text="保存"/>
+                <CheckBox fx:id="direct" mnemonicParsing="false" text="直接保存"/>
+                <CheckBox fx:id="autoBattleCapture" mnemonicParsing="false" text="出撃と連動" disable="true"/>
+            </items>
+        </ToolBar>
+        <HBox alignment="CENTER_LEFT">
+            <children>
+                <Label fx:id="message" text="座標未設定"/>
+            </children>
+        </HBox>
+        <ScrollPane fx:id="imageParent" focusTraversable="false" hbarPolicy="NEVER" vbarPolicy="NEVER"
+                    VBox.vgrow="ALWAYS">
+            <content>
+                <ImageView fx:id="image" fitHeight="120.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"/>
+            </content>
+        </ScrollPane>
+    </children>
+    <stylesheets>
+        <URL value="@application.css"/>
+        <URL value="@capture.css"/>
+    </stylesheets>
 </VBox>

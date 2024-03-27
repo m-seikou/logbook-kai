@@ -11,7 +11,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_kaisou/slot_exchange_index
- *
  */
 @API("/kcsapi/api_req_kaisou/slot_exchange_index")
 public class ApiReqKaisouSlotExchangeIndex implements APIListenerSpi {
@@ -21,7 +20,7 @@ public class ApiReqKaisouSlotExchangeIndex implements APIListenerSpi {
         JsonObject data = json.getJsonObject("api_data");
         if (data != null) {
             Map<Integer, Ship> shipMap = ShipCollection.get()
-                    .getShipMap();
+                .getShipMap();
 
             Integer shipId = Integer.valueOf(req.getParameter("api_id"));
             shipMap.put(shipId, Ship.toShip(data.getJsonObject("api_ship_data")));

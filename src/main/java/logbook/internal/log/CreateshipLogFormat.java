@@ -20,19 +20,19 @@ public class CreateshipLogFormat extends LogFormatBase<Createship> {
     @Override
     public String header() {
         return new StringJoiner(",")
-                .add("日付")
-                .add("種類")
-                .add("名前")
-                .add("艦種")
-                .add("燃料")
-                .add("弾薬")
-                .add("鋼材")
-                .add("ボーキ")
-                .add("開発資材")
-                .add("空きドック")
-                .add("秘書艦")
-                .add("司令部Lv")
-                .toString();
+            .add("日付")
+            .add("種類")
+            .add("名前")
+            .add("艦種")
+            .add("燃料")
+            .add("弾薬")
+            .add("鋼材")
+            .add("ボーキ")
+            .add("開発資材")
+            .add("空きドック")
+            .add("秘書艦")
+            .add("司令部Lv")
+            .toString();
     }
 
     @Override
@@ -47,15 +47,15 @@ public class CreateshipLogFormat extends LogFormatBase<Createship> {
             joiner.add("通常艦建造");
         }
         Optional<ShipMst> ship = Optional.ofNullable(ShipMstCollection.get()
-                .getShipMap()
-                .get(value.getKdock().getCreatedShipId()));
+            .getShipMap()
+            .get(value.getKdock().getCreatedShipId()));
         // 名前
         joiner.add(ship.map(ShipMst::getName).orElse(""));
         // 艦種
         joiner.add(ship.map(mst -> StypeCollection.get()
-                .getStypeMap()
-                .get(mst.getStype())
-                .getName()).orElse(""));
+            .getStypeMap()
+            .get(mst.getStype())
+            .getName()).orElse(""));
         // 燃料
         joiner.add(String.valueOf(value.getItem1()));
         // 弾薬
@@ -71,8 +71,8 @@ public class CreateshipLogFormat extends LogFormatBase<Createship> {
         // 秘書艦
         Optional<ShipMst> mst = Ships.shipMst(value.getSecretary());
         joiner.add(mst.map(ShipMst::getName)
-                .map(n -> n + "(Lv" + value.getSecretary().getLv() + ")")
-                .orElse(""));
+            .map(n -> n + "(Lv" + value.getSecretary().getLv() + ")")
+            .orElse(""));
         // 司令部Lv
         joiner.add(String.valueOf(Basic.get().getLevel()));
 

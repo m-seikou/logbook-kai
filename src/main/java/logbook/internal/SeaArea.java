@@ -25,16 +25,14 @@ public enum SeaArea {
     /**
      * 名前
      * -- GETTER --
-     *  名前を取得します。
-     *
+     * 名前を取得します。
      */
     private final String name;
 
     /**
      * 海域(イベント海域のお札)
      * -- GETTER --
-     *  海域(イベント海域のお札)を取得します。
-     *
+     * 海域(イベント海域のお札)を取得します。
      */
     private final int area;
 

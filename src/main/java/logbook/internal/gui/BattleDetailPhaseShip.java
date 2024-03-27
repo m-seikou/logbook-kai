@@ -16,38 +16,49 @@ import logbook.internal.Ships;
 
 /**
  * 戦闘ログ詳細のフェーズの艦船
- *
  */
 public class BattleDetailPhaseShip extends HBox {
 
-    /** キャラクター */
+    /**
+     * キャラクター
+     */
     private Chara chara;
 
-    /** 装備Map */
+    /**
+     * 装備Map
+     */
     private Map<Integer, SlotItem> itemMap;
 
-    /** 退避艦IDスナップショット */
+    /**
+     * 退避艦IDスナップショット
+     */
     private Set<Integer> escape;
 
-    /** キャラクター画像 */
+    /**
+     * キャラクター画像
+     */
     @FXML
     private ImageView img;
 
-    /** 名前 */
+    /**
+     * 名前
+     */
     @FXML
     private Label name;
 
-    /** HP */
+    /**
+     * HP
+     */
     @FXML
     private Label hp;
 
     /**
-    * 戦闘ログ詳細のフェーズの艦船のコンストラクタ
-    *
-    * @param chara キャラクター
-    * @param itemMap 装備
-    * @param escape 退避艦ID
-    */
+     * 戦闘ログ詳細のフェーズの艦船のコンストラクタ
+     *
+     * @param chara   キャラクター
+     * @param itemMap 装備
+     * @param escape  退避艦ID
+     */
     public BattleDetailPhaseShip(Chara chara, Map<Integer, SlotItem> itemMap, Set<Integer> escape) {
         this.chara = chara;
         this.itemMap = itemMap;

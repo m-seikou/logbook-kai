@@ -17,10 +17,14 @@ public class AppSeaAreaExp implements Serializable {
     public AppSeaAreaExp() {
     }
 
-    /** 海域 */
+    /**
+     * 海域
+     */
     private String name;
 
-    /** 海域Exp */
+    /**
+     * 海域Exp
+     */
     private int exp;
 
     @Override

@@ -10,7 +10,6 @@ import logbook.bean.UseitemMstCollection;
 
 /**
  * 遠征報告書
- *
  */
 public class MissionResultLogFormat extends LogFormatBase<MissionResult> {
 
@@ -22,20 +21,20 @@ public class MissionResultLogFormat extends LogFormatBase<MissionResult> {
     @Override
     public String header() {
         return new StringJoiner(",")
-                .add("日付")
-                .add("結果")
-                .add("海域")
-                .add("遠征名")
-                .add("燃料")
-                .add("弾薬")
-                .add("鋼材")
-                .add("ボーキ")
-                .add("アイテム1名前")
-                .add("アイテム1個数")
-                .add("アイテム2名前")
-                .add("アイテム2個数")
-                .add("取得経験値計")
-                .toString();
+            .add("日付")
+            .add("結果")
+            .add("海域")
+            .add("遠征名")
+            .add("燃料")
+            .add("弾薬")
+            .add("鋼材")
+            .add("ボーキ")
+            .add("アイテム1名前")
+            .add("アイテム1個数")
+            .add("アイテム2名前")
+            .add("アイテム2個数")
+            .add("取得経験値計")
+            .toString();
     }
 
     @Override

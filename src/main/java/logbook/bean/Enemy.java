@@ -7,32 +7,45 @@ import lombok.Data;
 
 /**
  * 敵艦
- *
  */
 @Data
 public class Enemy implements Chara, Serializable, Cloneable {
 
     private static final long serialVersionUID = -4222845234889789870L;
 
-    /** 艦船ID */
+    /**
+     * 艦船ID
+     */
     private Integer shipId;
 
-    /** Lv */
+    /**
+     * Lv
+     */
     private Integer lv;
 
-    /** HP */
+    /**
+     * HP
+     */
     private Integer nowhp;
 
-    /** 最大HP */
+    /**
+     * 最大HP
+     */
     private Integer maxhp;
 
-    /** 装備 */
+    /**
+     * 装備
+     */
     private List<Integer> slot;
 
-    /** 序列 */
+    /**
+     * 序列
+     */
     private Integer order;
 
-    /** 演習相手かどうか */
+    /**
+     * 演習相手かどうか
+     */
     private boolean practice;
 
     @Override

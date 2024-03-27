@@ -46,7 +46,6 @@ import logbook.internal.Tuple.Pair;
 
 /**
  * 遠征ログ
- *
  */
 public class MissionLogController extends WindowController {
 
@@ -59,104 +58,154 @@ public class MissionLogController extends WindowController {
     @FXML
     private SplitPane splitPane3;
 
-    /** 統計 */
+    /**
+     * 統計
+     */
     @FXML
     private TreeTableView<MissionLogCollect> collect;
 
-    /** 集計 */
+    /**
+     * 集計
+     */
     @FXML
     private TreeTableColumn<MissionLogCollect, String> unit;
 
-    /** 大成功 */
+    /**
+     * 大成功
+     */
     @FXML
     private TreeTableColumn<MissionLogCollect, Integer> successGood;
 
-    /** 成功 */
+    /**
+     * 成功
+     */
     @FXML
     private TreeTableColumn<MissionLogCollect, Integer> success;
 
-    /** 失敗 */
+    /**
+     * 失敗
+     */
     @FXML
     private TreeTableColumn<MissionLogCollect, Integer> fail;
 
-    /** 詳細 */
+    /**
+     * 詳細
+     */
     @FXML
     private TableView<MissionLogDetail> detail;
 
-    /** 行番号 */
+    /**
+     * 行番号
+     */
     @FXML
     private TableColumn<BattleLogDetail, Integer> row;
 
-    /** 日付 */
+    /**
+     * 日付
+     */
     @FXML
     private TableColumn<MissionLogDetail, String> date;
 
-    /** 遠征名 */
+    /**
+     * 遠征名
+     */
     @FXML
     private TableColumn<MissionLogDetail, String> name;
 
-    /** 結果 */
+    /**
+     * 結果
+     */
     @FXML
     private TableColumn<MissionLogDetail, String> result;
 
-    /** 燃料 */
+    /**
+     * 燃料
+     */
     @FXML
     private TableColumn<MissionLogDetail, Integer> fuel;
 
-    /** 弾薬 */
+    /**
+     * 弾薬
+     */
     @FXML
     private TableColumn<MissionLogDetail, Integer> ammo;
 
-    /** 鋼材 */
+    /**
+     * 鋼材
+     */
     @FXML
     private TableColumn<MissionLogDetail, Integer> metal;
 
-    /** ボーキ */
+    /**
+     * ボーキ
+     */
     @FXML
     private TableColumn<MissionLogDetail, Integer> bauxite;
 
-    /** アイテム1 */
+    /**
+     * アイテム1
+     */
     @FXML
     private TableColumn<MissionLogDetail, String> item1name;
 
-    /** アイテム1 */
+    /**
+     * アイテム1
+     */
     @FXML
     private TableColumn<MissionLogDetail, String> item1count;
 
-    /** アイテム2 */
+    /**
+     * アイテム2
+     */
     @FXML
     private TableColumn<MissionLogDetail, String> item2name;
 
-    /** アイテム2 */
+    /**
+     * アイテム2
+     */
     @FXML
     private TableColumn<MissionLogDetail, String> item2count;
 
-    /** 集計 */
+    /**
+     * 集計
+     */
     @FXML
     private TableView<MissionAggregate> aggregate;
 
-    /** 資材 */
+    /**
+     * 資材
+     */
     @FXML
     private TableColumn<MissionAggregate, String> resource;
 
-    /** 個数 */
+    /**
+     * 個数
+     */
     @FXML
     private TableColumn<MissionAggregate, Integer> count;
 
-    /** 平均 */
+    /**
+     * 平均
+     */
     @FXML
     private TableColumn<MissionAggregate, Double> average;
 
     @FXML
     private PieChart chart;
 
-    /** ログ */
+    /**
+     * ログ
+     */
     private Map<Unit, List<SimpleMissionLog>> logMap = new EnumMap<>(Unit.class);
 
-    /** 詳細 */
+    /**
+     * 詳細
+     */
     private ObservableList<MissionLogDetail> details = FXCollections.observableArrayList();
 
-    /** 集計 */
+    /**
+     * 集計
+     */
     private ObservableList<MissionAggregate> aggregates = FXCollections.observableArrayList();
 
     @FXML
@@ -218,17 +267,17 @@ public class MissionLogController extends WindowController {
 
         // 選択された時のリスナーを設定
         this.collect.getSelectionModel()
-                .selectedItemProperty()
-                .addListener(this::detail);
+            .selectedItemProperty()
+            .addListener(this::detail);
         this.aggregate.getSelectionModel()
-                .selectedItemProperty()
-                .addListener(this::chart);
+            .selectedItemProperty()
+            .addListener(this::chart);
     }
 
     private boolean sortCollect(List<TreeTableColumn<MissionLogCollect, ?>> sortOrder, List<TreeItem<MissionLogCollect>> items) {
         items.sort((o1, o2) -> {
-            MissionLogCollect c1 = (MissionLogCollect)o1.getValue();
-            MissionLogCollect c2 = (MissionLogCollect)o2.getValue();
+            MissionLogCollect c1 = (MissionLogCollect) o1.getValue();
+            MissionLogCollect c2 = (MissionLogCollect) o2.getValue();
             for (TreeTableColumn<MissionLogCollect, ?> column : sortOrder) {
                 int diff = 0;
                 if (column == this.unit) {
@@ -253,7 +302,7 @@ public class MissionLogController extends WindowController {
         items.forEach(item -> sortCollect(sortOrder, item.getChildren()));
         return true;
     }
-    
+
     @FXML
     void copyDetail(ActionEvent event) {
         TableTool.selectionCopy(this.detail);
@@ -268,7 +317,7 @@ public class MissionLogController extends WindowController {
     void columnVisibleDetail(ActionEvent event) {
         try {
             TableTool.showVisibleSetting(this.detail, this.getClass() + "#" + "detail",
-                    this.getWindow());
+                this.getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -288,7 +337,7 @@ public class MissionLogController extends WindowController {
     void columnVisibleAggregate(ActionEvent event) {
         try {
             TableTool.showVisibleSetting(this.aggregate, this.getClass() + "#" + "aggregate",
-                    this.getWindow());
+                this.getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -298,11 +347,11 @@ public class MissionLogController extends WindowController {
      * 右ペインに詳細表示するリスナー
      *
      * @param observable 値が変更されたObservableValue
-     * @param oldValue 古い値
-     * @param value 新しい値
+     * @param oldValue   古い値
+     * @param value      新しい値
      */
     private void detail(ObservableValue<? extends TreeItem<MissionLogCollect>> observable,
-            TreeItem<MissionLogCollect> oldValue, TreeItem<MissionLogCollect> value) {
+                        TreeItem<MissionLogCollect> oldValue, TreeItem<MissionLogCollect> value) {
         this.details.clear();
         this.aggregates.clear();
 
@@ -314,13 +363,13 @@ public class MissionLogController extends WindowController {
             MissionLogCollect collect = value.getValue();
 
             List<SimpleMissionLog> subLog = this.logMap.get(collect.getCollectUnit())
-                    .stream()
-                    .filter(e -> collect.getName() == null || e.getName().equals(collect.getName()))
-                    .collect(Collectors.toList());
+                .stream()
+                .filter(e -> collect.getName() == null || e.getName().equals(collect.getName()))
+                .collect(Collectors.toList());
 
             this.details.addAll(subLog.stream()
-                    .map(MissionLogDetail::toMissionLogDetail)
-                    .collect(Collectors.toList()));
+                .map(MissionLogDetail::toMissionLogDetail)
+                .collect(Collectors.toList()));
 
             List<Pair<String, Integer>> aggregateBase = this.aggregateBase(subLog);
 
@@ -333,7 +382,7 @@ public class MissionLogController extends WindowController {
                 }
             };
             Map<String, Integer> resources = aggregateBase.stream()
-                    .collect(LinkedHashMap<String, Integer>::new, accumulator, combiner);
+                .collect(LinkedHashMap<String, Integer>::new, accumulator, combiner);
 
             for (Entry<String, Integer> entry : resources.entrySet()) {
                 MissionAggregate agg = new MissionAggregate();
@@ -361,31 +410,31 @@ public class MissionLogController extends WindowController {
      * 右ペインのチャートに遠征・資材別の取得割合を表示する
      *
      * @param observable 値が変更されたObservableValue
-     * @param oldValue 古い値
-     * @param value 新しい値
+     * @param oldValue   古い値
+     * @param value      新しい値
      */
     private void chart(ObservableValue<? extends MissionAggregate> observable,
-            MissionAggregate oldValue, MissionAggregate value) {
+                       MissionAggregate oldValue, MissionAggregate value) {
         this.chart.getData().clear();
 
         if (value != null) {
             TreeItem<MissionLogCollect> ti = this.collect.getSelectionModel()
-                    .getSelectedItem();
+                .getSelectedItem();
 
             if (ti != null) {
                 this.chart.setTitle(value.resourceProperty().get() + " の入手元");
 
                 MissionLogCollect collect = ti.getValue();
                 Map<String, List<SimpleMissionLog>> subLog = this.logMap.get(collect.getCollectUnit())
-                        .stream()
-                        .filter(e -> collect.getName() == null || e.getName().equals(collect.getName()))
-                        .collect(Collectors.groupingBy(SimpleMissionLog::getName));
+                    .stream()
+                    .filter(e -> collect.getName() == null || e.getName().equals(collect.getName()))
+                    .collect(Collectors.groupingBy(SimpleMissionLog::getName));
 
                 for (Entry<String, List<SimpleMissionLog>> entry : subLog.entrySet()) {
                     int sum = this.aggregateBase(entry.getValue()).stream()
-                            .filter(p -> p.getKey().equals(value.resourceProperty().get()))
-                            .mapToInt(Pair<String, Integer>::getValue)
-                            .sum();
+                        .filter(p -> p.getKey().equals(value.resourceProperty().get()))
+                        .mapToInt(Pair<String, Integer>::getValue)
+                        .sum();
                     if (sum > 0) {
                         this.chart.getData().add(new PieChart.Data(entry.getKey(), sum));
                     }
@@ -400,15 +449,15 @@ public class MissionLogController extends WindowController {
     private void readLog() {
         // 今日
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT+04:00"))
-                .truncatedTo(ChronoUnit.DAYS);
+            .truncatedTo(ChronoUnit.DAYS);
         // ログ読み込み制限
         ZonedDateTime limit = now.minusMonths(2);
 
         List<SimpleMissionLog> all = MissionLogs.readSimpleLog(log -> log.getDate().compareTo(limit) > 0);
         for (Unit unit : Unit.values()) {
             this.logMap.put(unit, all.stream()
-                    .filter(log -> unit.accept(log.getDate(), now))
-                    .collect(Collectors.toList()));
+                .filter(log -> unit.accept(log.getDate(), now))
+                .collect(Collectors.toList()));
         }
     }
 
@@ -423,7 +472,7 @@ public class MissionLogController extends WindowController {
 
         int index = 0;
         Map<String, Integer> orders = MissionCollection.get().getMissionMap().values().stream().collect(
-                Collectors.toMap(Mission::getName, m -> m.getMapareaId()*10000+m.getId(), (k1, k2) -> k1));
+            Collectors.toMap(Mission::getName, m -> m.getMapareaId() * 10000 + m.getId(), (k1, k2) -> k1));
         for (Unit unit : Unit.values()) {
             List<SimpleMissionLog> list = this.logMap.get(unit);
             // 単位のルート
@@ -437,10 +486,10 @@ public class MissionLogController extends WindowController {
 
             // 遠征の名前
             List<String> names = list.stream()
-                    .map(SimpleMissionLog::getName)
-                    .distinct()
-                    .sorted(Comparator.naturalOrder())
-                    .collect(Collectors.toList());
+                .map(SimpleMissionLog::getName)
+                .distinct()
+                .sorted(Comparator.naturalOrder())
+                .collect(Collectors.toList());
             for (String name : names) {
                 // 遠征毎の集計
                 MissionLogCollect subValue = collect(list, name);
@@ -467,38 +516,38 @@ public class MissionLogController extends WindowController {
         List<SimpleMissionLog> subList;
         if (name != null) {
             subList = list.stream()
-                    .filter(e -> e.getName().equals(name))
-                    .collect(Collectors.toList());
+                .filter(e -> e.getName().equals(name))
+                .collect(Collectors.toList());
             row.setUnit(name);
         } else {
             subList = list;
             row.setUnit("-");
         }
         row.setSuccessGood((int) subList.stream().map(SimpleMissionLog::getResult)
-                .filter("大成功"::equals).count());
+            .filter("大成功"::equals).count());
         row.setSuccess((int) subList.stream().map(SimpleMissionLog::getResult)
-                .filter("成功"::equals).count());
+            .filter("成功"::equals).count());
         row.setFail((int) subList.stream().map(SimpleMissionLog::getResult)
-                .filter("失敗"::equals).count());
+            .filter("失敗"::equals).count());
         return row;
     }
 
     private List<Pair<String, Integer>> aggregateBase(List<SimpleMissionLog> log) {
         return log.stream()
-                .flatMap(e -> {
-                    List<Pair<String, Integer>> pairs = new ArrayList<>();
-                    pairs.add(Tuple.of("燃料", e.getFuel()));
-                    pairs.add(Tuple.of("弾薬", e.getAmmo()));
-                    pairs.add(Tuple.of("鋼材", e.getMetal()));
-                    pairs.add(Tuple.of("ボーキ", e.getBauxite()));
-                    if (!e.getItem1name().isEmpty()) {
-                        pairs.add(Tuple.of(e.getItem1name(), e.getItem1count()));
-                    }
-                    if (!e.getItem2name().isEmpty()) {
-                        pairs.add(Tuple.of(e.getItem2name(), e.getItem2count()));
-                    }
-                    return pairs.stream();
-                })
-                .collect(Collectors.toList());
+            .flatMap(e -> {
+                List<Pair<String, Integer>> pairs = new ArrayList<>();
+                pairs.add(Tuple.of("燃料", e.getFuel()));
+                pairs.add(Tuple.of("弾薬", e.getAmmo()));
+                pairs.add(Tuple.of("鋼材", e.getMetal()));
+                pairs.add(Tuple.of("ボーキ", e.getBauxite()));
+                if (!e.getItem1name().isEmpty()) {
+                    pairs.add(Tuple.of(e.getItem1name(), e.getItem1count()));
+                }
+                if (!e.getItem2name().isEmpty()) {
+                    pairs.add(Tuple.of(e.getItem2name(), e.getItem2count()));
+                }
+                return pairs.stream();
+            })
+            .collect(Collectors.toList());
     }
 }

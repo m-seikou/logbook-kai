@@ -6,23 +6,30 @@ import lombok.Data;
 
 /**
  * ウインドウの位置とサイズ
- *
  */
 @Data
 public class WindowLocation implements Serializable {
 
     private static final long serialVersionUID = 3548270453031293618L;
 
-    /** X */
+    /**
+     * X
+     */
     private double x;
 
-    /** Y */
+    /**
+     * Y
+     */
     private double y;
 
-    /** Width */
+    /**
+     * Width
+     */
     private double width;
 
-    /** Height */
+    /**
+     * Height
+     */
     private double height;
 
 }

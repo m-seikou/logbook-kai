@@ -40,9 +40,9 @@ public class DeckBuilder {
      */
     public static void displayCopy(TableView<ShipItem> table) {
         copyToClipboard(table.getItems()
-                .stream()
-                .map(ShipItem::getShip)
-                .collect(Collectors.toList()), null);
+            .stream()
+            .map(ShipItem::getShip)
+            .collect(Collectors.toList()), null);
     }
 
     /**
@@ -52,16 +52,16 @@ public class DeckBuilder {
      */
     public static void selectionCopy(TableView<ShipItem> table) {
         copyToClipboard(table.getSelectionModel()
-                .getSelectedItems()
-                .stream()
-                .map(ShipItem::getShip)
-                .collect(Collectors.toList()), null);
+            .getSelectedItems()
+            .stream()
+            .map(ShipItem::getShip)
+            .collect(Collectors.toList()), null);
     }
-    
+
     /**
      * 選択された基地航空隊の機体リストをクリップボードにコピーする。
      * 艦隊部分は現在の艦隊が入る。
-     * 
+     *
      * @param table テーブル
      */
     public static void airbaseSelectionCopy(TableView<AirBaseItem> table) {
@@ -77,11 +77,11 @@ public class DeckBuilder {
         }
         copyToClipboard(ShipCollection.get().getShipMap().values(), all);
     }
-    
+
     /**
      * 選択された基地航空隊をクリップボードにコピーする。
      * 艦隊部分は現在の艦隊が入る。
-     * 
+     *
      * @param airbases 基地航空隊
      */
     public static void airbaseSelectionCopy(List<AirBase> airbases) {
@@ -102,7 +102,7 @@ public class DeckBuilder {
             Map<String, DeckBuilder.Kanmusu> fleet = new TreeMap<>();
             Optional.ofNullable(port.getShip()).ifPresent(list -> {
                 for (int i = 0; i < list.size(); i++) {
-                    final int index = i+1;
+                    final int index = i + 1;
                     Optional.ofNullable(list.get(i))
                         .filter(targets::contains)
                         .map(shipsMap::get)
@@ -116,11 +116,11 @@ public class DeckBuilder {
             for (int a = 0; a < airbase.size(); a++) {
                 Airbase ab = airbase.get(a);
                 if (ab.getList() != null && ab.getList().size() > 0) {
-                    data.put("a" + (a+1), ab);
+                    data.put("a" + (a + 1), ab);
                     List<AirBaseItem> planes = ab.getList();
                     for (int i = 0; i < planes.size(); i++) {
                         Item item = new Item(planes.get(i));
-                        ab.getItems().put("i" + (i+1), item);
+                        ab.getItems().put("i" + (i + 1), item);
                     }
                 }
             }
@@ -141,13 +141,13 @@ public class DeckBuilder {
         private final int id;
         private final Integer rf;
         private final Integer mas;
-        
+
         Item(SlotItem item) {
             this.id = item.getSlotitemId();
             this.rf = item.getLevel();
             this.mas = item.getAlv();
         }
-        
+
         Item(AirBaseItem item) {
             this.id = item.getId();
             this.rf = item.getLevel();
@@ -161,7 +161,7 @@ public class DeckBuilder {
         private final int lv;
         private final int luck;
         private Map<String, DeckBuilder.Item> items;
-        
+
         Kanmusu(Ship ship) {
             this.id = ship.getShipId();
             this.lv = ship.getLv();
@@ -171,11 +171,11 @@ public class DeckBuilder {
             Optional.ofNullable(ship.getSlot())
                 .ifPresent(slot -> {
                     for (int i = 0; i < slot.size(); i++) {
-                        final int index = i+1;
+                        final int index = i + 1;
                         Optional.ofNullable(slot.get(i))
                             .map(slotitemMap::get)
                             .map(DeckBuilder.Item::new)
-                            .ifPresent(item -> this.items.put("i"+(index), item));
+                            .ifPresent(item -> this.items.put("i" + (index), item));
                     }
                 });
             Optional.ofNullable(ship.getSlotEx())
@@ -184,18 +184,18 @@ public class DeckBuilder {
                 .ifPresent(item -> this.items.put("ix", item));
         }
     }
-    
+
     @Data
     private static class Airbase {
         private int mode = 1;     // default
         private final Map<String, DeckBuilder.Item> items = new TreeMap<>();
         @JsonIgnore
         private List<AirBaseItem> list;
-        
+
         Airbase() {
             this.list = new ArrayList<>();
         }
-        
+
         Airbase(AirBase ab) {
             this.mode = ab.getActionKind();
             if (ab != null && ab.getPlaneInfo() != null) {

@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * 複数のバイト配列を1つのInputStreamとして扱うByteArrayInputStream
- *
  */
 public class ByteArrayInputStream2 extends InputStream {
 

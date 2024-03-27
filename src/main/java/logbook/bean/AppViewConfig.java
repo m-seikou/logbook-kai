@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * ビュー回りの状態
- * 
+ * <p>
  * アプリケーションの設定と異なり、マシンを変更した時など引き継がなくてもいい情報はこちらに保存する。
  * 今 AppConfig にあるテーブルのカラム幅の情報等もそのうちこちらにまとめる予定。
  */
@@ -83,7 +83,7 @@ public class AppViewConfig {
      * アプリケーションのデフォルト設定ディレクトリから<code>AppViewConfig</code>を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(AppViewConfig.class, AppViewConfig::new)</code>
+     * <code>Config.getDefault().get(AppViewConfig.class, AppViewConfig::new)</code>
      * </blockquote>
      *
      * @return <code>AppViewConfig</code>

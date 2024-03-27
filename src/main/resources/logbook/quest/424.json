@@ -1,9 +1,14 @@
 /* [424]輸送船団護衛を強化せよ！*/
 {
-    "type": "遠征",
-    "resetType" : "マンスリー",
-    "conditions" : [
-        {"missions": ["海上護衛任務"], "count": 4}
-    ]
+  "type": "遠征",
+  "resetType": "マンスリー",
+  "conditions": [
+    {
+      "missions": [
+        "海上護衛任務"
+      ],
+      "count": 4
+    }
+  ]
 }
 

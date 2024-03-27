@@ -8,44 +8,65 @@ import lombok.Data;
 
 /**
  * api_req_kousyou/createship
- *
  */
 @Data
 public class Createship implements Serializable {
 
     private static final long serialVersionUID = -6347833469189820203L;
 
-    /** api_kdock_id */
+    /**
+     * api_kdock_id
+     */
     private Integer kdockId;
 
-    /** api_item1 */
+    /**
+     * api_item1
+     */
     private Integer item1;
 
-    /** api_item2 */
+    /**
+     * api_item2
+     */
     private Integer item2;
 
-    /** api_item3 */
+    /**
+     * api_item3
+     */
     private Integer item3;
 
-    /** api_item4 */
+    /**
+     * api_item4
+     */
     private Integer item4;
 
-    /** api_item5 */
+    /**
+     * api_item5
+     */
     private Integer item5;
 
-    /** api_highspeed */
+    /**
+     * api_highspeed
+     */
     private Integer highspeed;
 
-    /** api_large_flag */
+    /**
+     * api_large_flag
+     */
     private Integer largeFlag;
 
-    /** 秘書艦 */
+    /**
+     * 秘書艦
+     */
     private Ship secretary;
 
-    /** 空きドック */
+    /**
+     * 空きドック
+     */
     private Integer emptyDock;
 
-    /** 建造ドック */
+    /**
+     * 建造ドック
+     */
     private Kdock kdock;
 
     /**
@@ -67,15 +88,15 @@ public class Createship implements Serializable {
 
         Ship secretary = null;
         DeckPort port = DeckPortCollection.get()
-                .getDeckPortMap()
-                .get(1);
+            .getDeckPortMap()
+            .get(1);
         if (port != null) {
             List<Integer> ships = port.getShip();
             if (ships != null) {
                 Integer id = ships.get(0);
                 secretary = ShipCollection.get()
-                        .getShipMap()
-                        .get(id);
+                    .getShipMap()
+                    .get(id);
             }
         }
         bean.setSecretary(secretary);

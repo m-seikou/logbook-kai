@@ -13,50 +13,52 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.Deck">
-   <children>
-      <VBox fx:id="left" styleClass="left">
-         <children>
-            <ToolBar>
-              <items>
-                <Button mnemonicParsing="false" onAction="#addNewDeck" text="新しい編成" />
-                  <Pane prefHeight="0.0" prefWidth="10.0" />
-                  <Button fx:id="deckUp" mnemonicParsing="false" onAction="#up" text="↑" disable="true" />
-                  <Button fx:id="deckDown" mnemonicParsing="false" onAction="#down" text="↓" disable="true" />
-              </items>
-            </ToolBar>
-            <ListView fx:id="deckList" styleClass="deckList" VBox.vgrow="ALWAYS" />
-            <Label text="艦隊" />
-            <ListView fx:id="fleetList" styleClass="fleetList" />
-         </children>
-      </VBox>
-      <VBox fx:id="right" styleClass="right" HBox.hgrow="ALWAYS">
-         <children>
-            <ToolBar>
-              <items>
-                  <Button mnemonicParsing="false" onAction="#save" styleClass="save" text="保存" />
-                  <Label fx:id="status" styleClass="status" />
-                  <Button mnemonicParsing="false" onAction="#storeImage" text="画像ファイルとして保存" />
-                  <Label text="編成テンプレート" />
-                  <ComboBox fx:id="preFleetList" />
-                  <Button fx:id="addPreFleet" mnemonicParsing="false" onAction="#addPreFleet" text="追加" disable="true"/>
-              </items>
-            </ToolBar>
-            <ScrollPane fx:id="decksPane" VBox.vgrow="ALWAYS">
-               <content>
-                  <VBox fx:id="deck" styleClass="deck">
-                     <children>
-                        <TextField fx:id="deckName" promptText="編成名を入力..." styleClass="deckName" />
-                        <TilePane fx:id="fleets" prefColumns="2" prefRows="2" VBox.vgrow="ALWAYS" />
-                     </children>
-                  </VBox>
-               </content>
-            </ScrollPane>
-         </children>
-      </VBox>
-   </children>
-   <stylesheets>
-      <URL value="@application.css" />
-      <URL value="@deck.css" />
-   </stylesheets>
+<HBox prefHeight="650.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="logbook.internal.gui.Deck">
+    <children>
+        <VBox fx:id="left" styleClass="left">
+            <children>
+                <ToolBar>
+                    <items>
+                        <Button mnemonicParsing="false" onAction="#addNewDeck" text="新しい編成"/>
+                        <Pane prefHeight="0.0" prefWidth="10.0"/>
+                        <Button fx:id="deckUp" mnemonicParsing="false" onAction="#up" text="↑" disable="true"/>
+                        <Button fx:id="deckDown" mnemonicParsing="false" onAction="#down" text="↓" disable="true"/>
+                    </items>
+                </ToolBar>
+                <ListView fx:id="deckList" styleClass="deckList" VBox.vgrow="ALWAYS"/>
+                <Label text="艦隊"/>
+                <ListView fx:id="fleetList" styleClass="fleetList"/>
+            </children>
+        </VBox>
+        <VBox fx:id="right" styleClass="right" HBox.hgrow="ALWAYS">
+            <children>
+                <ToolBar>
+                    <items>
+                        <Button mnemonicParsing="false" onAction="#save" styleClass="save" text="保存"/>
+                        <Label fx:id="status" styleClass="status"/>
+                        <Button mnemonicParsing="false" onAction="#storeImage" text="画像ファイルとして保存"/>
+                        <Label text="編成テンプレート"/>
+                        <ComboBox fx:id="preFleetList"/>
+                        <Button fx:id="addPreFleet" mnemonicParsing="false" onAction="#addPreFleet" text="追加"
+                                disable="true"/>
+                    </items>
+                </ToolBar>
+                <ScrollPane fx:id="decksPane" VBox.vgrow="ALWAYS">
+                    <content>
+                        <VBox fx:id="deck" styleClass="deck">
+                            <children>
+                                <TextField fx:id="deckName" promptText="編成名を入力..." styleClass="deckName"/>
+                                <TilePane fx:id="fleets" prefColumns="2" prefRows="2" VBox.vgrow="ALWAYS"/>
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </children>
+    <stylesheets>
+        <URL value="@application.css"/>
+        <URL value="@deck.css"/>
+    </stylesheets>
 </HBox>

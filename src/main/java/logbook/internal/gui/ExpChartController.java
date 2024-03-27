@@ -28,7 +28,6 @@ import logbook.internal.BattleLogs.SimpleBattleLog;
 
 /**
  * 経験値チャート
- *
  */
 public class ExpChartController extends WindowController {
 
@@ -117,11 +116,11 @@ public class ExpChartController extends WindowController {
 
     /**
      * グラフデータを読み込み
-     * 
-     * @param type 種類
+     *
+     * @param type  種類
      * @param scale 期間
-     * @param min 期間の最小(自身を含む)
-     * @param max 期間の最大(自身を含まない)
+     * @param min   期間の最小(自身を含む)
+     * @param max   期間の最大(自身を含まない)
      * @return グラフデータ
      */
     private Map<ZonedDateTime, Double> load(TypeOption type, ScaleOption scale, ZonedDateTime min, ZonedDateTime max) {
@@ -141,14 +140,13 @@ public class ExpChartController extends WindowController {
             return a.compareTo(minInstant) >= 0 && a.compareTo(maxInstant) < 0;
         });
         map.putAll(logs.stream()
-                .collect(Collectors.groupingBy(log -> scale.convert(log.getDate(), type),
-                        Collectors.summingDouble(type::convert))));
+            .collect(Collectors.groupingBy(log -> scale.convert(log.getDate(), type),
+                Collectors.summingDouble(type::convert))));
         return map;
     }
 
     /**
      * 種類
-     *
      */
     private enum TypeOption {
         SHIP_EXP("艦娘経験値") {
@@ -197,10 +195,11 @@ public class ExpChartController extends WindowController {
 
     /**
      * スケールの選択肢
-     *
      */
     private enum ScaleOption {
-        /** 今日 */
+        /**
+         * 今日
+         */
         NOW_DAY("今日", "HH:mm", Duration.ofHours(1)) {
             @Override
             public ZonedDateTime convert(ZonedDateTime time, TypeOption type) {
@@ -215,10 +214,12 @@ public class ExpChartController extends WindowController {
             @Override
             public ZonedDateTime max(ZonedDateTime base) {
                 return base.truncatedTo(ChronoUnit.DAYS)
-                        .plusDays(1);
+                    .plusDays(1);
             }
         },
-        /** 昨日 */
+        /**
+         * 昨日
+         */
         LAST_DAY("昨日", "HH:mm", Duration.ofHours(1)) {
             @Override
             public ZonedDateTime convert(ZonedDateTime time, TypeOption type) {
@@ -228,7 +229,7 @@ public class ExpChartController extends WindowController {
             @Override
             public ZonedDateTime min(ZonedDateTime base) {
                 return base.truncatedTo(ChronoUnit.DAYS)
-                        .minusDays(1);
+                    .minusDays(1);
             }
 
             @Override
@@ -236,7 +237,9 @@ public class ExpChartController extends WindowController {
                 return base.truncatedTo(ChronoUnit.DAYS);
             }
         },
-        /** 今週 */
+        /**
+         * 今週
+         */
         NOW_WEEK("今週", "d日a", Duration.ofHours(12)) {
             @Override
             public ZonedDateTime convert(ZonedDateTime time, TypeOption type) {
@@ -246,17 +249,19 @@ public class ExpChartController extends WindowController {
             @Override
             public ZonedDateTime min(ZonedDateTime base) {
                 return base.truncatedTo(ChronoUnit.DAYS)
-                        .minusDays(base.getDayOfWeek().getValue() - 1);
+                    .minusDays(base.getDayOfWeek().getValue() - 1);
             }
 
             @Override
             public ZonedDateTime max(ZonedDateTime base) {
                 return base.truncatedTo(ChronoUnit.DAYS)
-                        .plusWeeks(1)
-                        .minusDays(base.getDayOfWeek().getValue() - 1);
+                    .plusWeeks(1)
+                    .minusDays(base.getDayOfWeek().getValue() - 1);
             }
         },
-        /** 先週 */
+        /**
+         * 先週
+         */
         LAST_WEEK("先週", "d日a", Duration.ofHours(12)) {
             @Override
             public ZonedDateTime convert(ZonedDateTime time, TypeOption type) {
@@ -266,17 +271,19 @@ public class ExpChartController extends WindowController {
             @Override
             public ZonedDateTime min(ZonedDateTime base) {
                 return base.truncatedTo(ChronoUnit.DAYS)
-                        .minusWeeks(1)
-                        .minusDays(base.getDayOfWeek().getValue() - 1);
+                    .minusWeeks(1)
+                    .minusDays(base.getDayOfWeek().getValue() - 1);
             }
 
             @Override
             public ZonedDateTime max(ZonedDateTime base) {
                 return base.truncatedTo(ChronoUnit.DAYS)
-                        .minusDays(base.getDayOfWeek().getValue() - 1);
+                    .minusDays(base.getDayOfWeek().getValue() - 1);
             }
         },
-        /** 今月 */
+        /**
+         * 今月
+         */
         NOW_MONTH("今月", "d日", Duration.ofDays(1)) {
             @Override
             public ZonedDateTime convert(ZonedDateTime time, TypeOption type) {
@@ -286,17 +293,19 @@ public class ExpChartController extends WindowController {
             @Override
             public ZonedDateTime min(ZonedDateTime base) {
                 return base.truncatedTo(ChronoUnit.DAYS)
-                        .withDayOfMonth(1);
+                    .withDayOfMonth(1);
             }
 
             @Override
             public ZonedDateTime max(ZonedDateTime base) {
                 return base.truncatedTo(ChronoUnit.DAYS)
-                        .withDayOfMonth(1)
-                        .plusMonths(1);
+                    .withDayOfMonth(1)
+                    .plusMonths(1);
             }
         },
-        /** 先月 */
+        /**
+         * 先月
+         */
         LAST_MONTH("先月", "d日", Duration.ofDays(1)) {
             @Override
             public ZonedDateTime convert(ZonedDateTime time, TypeOption type) {
@@ -306,14 +315,14 @@ public class ExpChartController extends WindowController {
             @Override
             public ZonedDateTime min(ZonedDateTime base) {
                 return base.truncatedTo(ChronoUnit.DAYS)
-                        .withDayOfMonth(1)
-                        .minusMonths(1);
+                    .withDayOfMonth(1)
+                    .minusMonths(1);
             }
 
             @Override
             public ZonedDateTime max(ZonedDateTime base) {
                 return base.truncatedTo(ChronoUnit.DAYS)
-                        .withDayOfMonth(1);
+                    .withDayOfMonth(1);
             }
         };
 

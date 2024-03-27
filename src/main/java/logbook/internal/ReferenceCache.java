@@ -9,7 +9,6 @@ import java.util.function.Function;
 
 /**
  * LRUアルゴリズムを実装した容量制限付きキャッシュ
- *
  */
 public final class ReferenceCache<K, V> {
 
@@ -29,7 +28,7 @@ public final class ReferenceCache<K, V> {
      * このキャッシュにそのキーのマッピングが含まれていない、または参照オブジェクトがクリアされている場合は
      * getterで指定された値と指定されたキーをこのキャッシュに関連付けます。
      *
-     * @param key 関連付けられた値が返されるキー
+     * @param key    関連付けられた値が返されるキー
      * @param getter 指定されたキーに関連付けられる値
      * @return 指定されたキーがマップされている値
      */
@@ -49,7 +48,7 @@ public final class ReferenceCache<K, V> {
      * このキャッシュにそのキーのマッピングが含まれていない、または参照オブジェクトがクリアされている場合は
      * getterで指定された値と指定されたキーをこのキャッシュに関連付けます。
      *
-     * @param key 関連付けられた値が返されるキー
+     * @param key    関連付けられた値が返されるキー
      * @param getter 指定されたキーに関連付けられる値
      * @return 指定されたキーがマップされている値
      */

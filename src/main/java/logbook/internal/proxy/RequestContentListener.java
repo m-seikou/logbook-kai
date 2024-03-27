@@ -9,7 +9,6 @@ import org.eclipse.jetty.client.api.Request.ContentListener;
 
 /**
  * リクエストをキャプチャします
- *
  */
 public final class RequestContentListener implements ContentListener {
 

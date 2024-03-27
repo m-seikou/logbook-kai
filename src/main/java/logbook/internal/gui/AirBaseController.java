@@ -56,83 +56,118 @@ import logbook.plugin.PluginServices;
 
 /**
  * 基地航空隊
- *
  */
 public class AirBaseController extends WindowController {
 
     @FXML
     private SplitPane splitPane;
 
-    /** 基地航空隊 テーブル */
+    /**
+     * 基地航空隊 テーブル
+     */
     @FXML
     private TreeTableView<AreaTable> areaTable;
 
-    /** 基地航空隊 */
+    /**
+     * 基地航空隊
+     */
     @FXML
     private TreeTableColumn<AreaTable, String> airBase;
 
-    /** 行動 */
+    /**
+     * 行動
+     */
     @FXML
     private TreeTableColumn<AreaTable, String> actionKind;
 
-    /** 制空値 */
+    /**
+     * 制空値
+     */
     @FXML
     private TreeTableColumn<AreaTable, String> seiku;
 
-    /** 戦闘行動半径 */
+    /**
+     * 戦闘行動半径
+     */
     @FXML
     private TreeTableColumn<AreaTable, String> distance;
 
-    /** 制空値 */
+    /**
+     * 制空値
+     */
     @FXML
     private Label seikuTotal;
 
-    /** 劣勢 */
+    /**
+     * 劣勢
+     */
     @FXML
     private Label lesser;
 
-    /** 均衡 */
+    /**
+     * 均衡
+     */
     @FXML
     private Label equal;
 
-    /** 優勢 */
+    /**
+     * 優勢
+     */
     @FXML
     private Label superior;
 
-    /** 確保 */
+    /**
+     * 確保
+     */
     @FXML
     private Label greater;
 
-    /** 情報 */
+    /**
+     * 情報
+     */
     @FXML
     private HBox info;
 
-    /** 中隊 テーブル */
+    /**
+     * 中隊 テーブル
+     */
     @FXML
     private TableView<Plane> planeTable;
 
-    /** スロット */
+    /**
+     * スロット
+     */
     @FXML
     private TableColumn<Plane, Integer> slot;
 
-    /** 稼働 */
+    /**
+     * 稼働
+     */
     @FXML
     private TableColumn<Plane, Integer> count;
 
-    /** 定数 */
+    /**
+     * 定数
+     */
     @FXML
     private TableColumn<Plane, String> maxCount;
 
-    /** 疲労 */
+    /**
+     * 疲労
+     */
     @FXML
     private TableColumn<Plane, Integer> cond;
 
-    /** 中隊 */
+    /**
+     * 中隊
+     */
     private ObservableList<Plane> planes = FXCollections.observableArrayList();
 
     private Timeline timeline;
 
-    /** 更新検知用 ハッシュ・コード */
+    /**
+     * 更新検知用 ハッシュ・コード
+     */
     private int hashCode;
 
     @FXML
@@ -166,14 +201,14 @@ public class AirBaseController extends WindowController {
             this.planeTable.setOnKeyPressed(TableTool::defaultOnKeyPressedHandler);
 
             this.areaTable.getSelectionModel()
-                    .selectedItemProperty()
-                    .addListener(this::plane);
+                .selectedItemProperty()
+                .addListener(this::plane);
 
             this.timeline = new Timeline();
             this.timeline.setCycleCount(Timeline.INDEFINITE);
             this.timeline.getKeyFrames().add(new KeyFrame(
-                    javafx.util.Duration.seconds(1),
-                    this::update));
+                javafx.util.Duration.seconds(1),
+                this::update));
             this.timeline.play();
             this.setAirBase();
         } catch (Exception e) {
@@ -187,7 +222,7 @@ public class AirBaseController extends WindowController {
         addItem(airbases, this.areaTable.getSelectionModel().getSelectedItem());
         DeckBuilder.airbaseSelectionCopy(airbases);
     }
-    
+
     void addItem(List<AirBase> list, TreeItem<AreaTable> item) {
         Optional.ofNullable(item.getValue()).map(AreaTable::getAirBase).ifPresent(list::add);
         Optional.ofNullable(item.getChildren()).ifPresent(children -> children.forEach(child -> addItem(list, child)));
@@ -216,7 +251,7 @@ public class AirBaseController extends WindowController {
     void columnVisible() {
         try {
             TableTool.showVisibleSetting(this.planeTable, this.getClass().toString() + "#" + "planeTable",
-                    this.getWindow());
+                this.getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -229,8 +264,8 @@ public class AirBaseController extends WindowController {
      */
     void update(ActionEvent e) {
         int hashCode = Mapinfo.get()
-                .getAirBase()
-                .hashCode();
+            .getAirBase()
+            .hashCode();
         if (this.hashCode != hashCode) {
             int selection = this.areaTable.getSelectionModel().getSelectedIndex();
             this.setAirBase();
@@ -244,8 +279,8 @@ public class AirBaseController extends WindowController {
      */
     private void setAirBase() {
         this.hashCode = Mapinfo.get()
-                .getAirBase()
-                .hashCode();
+            .getAirBase()
+            .hashCode();
         // ルート要素(非表示)
         TreeItem<AreaTable> root = new TreeItem<AreaTable>(new AreaTable());
         this.areaTable.setRoot(root);
@@ -266,10 +301,10 @@ public class AirBaseController extends WindowController {
         root.getChildren().add(event);
 
         Map<Integer, List<AirBase>> airBaseMap = Mapinfo.get()
-                .getAirBase()
-                .stream()
-                .sorted(Comparator.comparing(AirBase::getAreaId).thenComparing(AirBase::getRid))
-                .collect(Collectors.groupingBy(AirBase::getAreaId));
+            .getAirBase()
+            .stream()
+            .sorted(Comparator.comparing(AirBase::getAreaId).thenComparing(AirBase::getRid))
+            .collect(Collectors.groupingBy(AirBase::getAreaId));
 
         for (Entry<Integer, List<AirBase>> entry : airBaseMap.entrySet()) {
             Maparea maparea = mapareaMap.get(entry.getKey());
@@ -318,16 +353,16 @@ public class AirBaseController extends WindowController {
 
     private String actionKind(int actionKind) {
         switch (actionKind) {
-        case 0:
-            return "待機";
-        case 1:
-            return "出撃";
-        case 2:
-            return "防空";
-        case 3:
-            return "退避";
-        case 4:
-            return "休息";
+            case 0:
+                return "待機";
+            case 1:
+                return "出撃";
+            case 2:
+                return "防空";
+            case 3:
+                return "退避";
+            case 4:
+                return "休息";
         }
         return "";
     }
@@ -336,11 +371,11 @@ public class AirBaseController extends WindowController {
      * 右ペインに中隊を表示するリスナー
      *
      * @param observable 値が変更されたObservableValue
-     * @param oldValue 古い値
-     * @param value 新しい値
+     * @param oldValue   古い値
+     * @param value      新しい値
      */
     private void plane(ObservableValue<? extends TreeItem<AreaTable>> observable,
-            TreeItem<AreaTable> oldValue, TreeItem<AreaTable> value) {
+                       TreeItem<AreaTable> oldValue, TreeItem<AreaTable> value) {
         this.planes.clear();
         this.info.getChildren().clear();
 
@@ -362,25 +397,25 @@ public class AirBaseController extends WindowController {
             this.greater.setText(String.valueOf((int) (seiku * (1D / 3D))));
 
             boolean lowsupply = row.getAirBase().getPlaneInfo().stream()
-                    .filter(info -> info.getState() == 1)
-                    .filter(info -> Objects.nonNull(info.getCount()))
-                    .anyMatch(info -> !info.getMaxCount().equals(info.getCount()));
+                .filter(info -> info.getState() == 1)
+                .filter(info -> Objects.nonNull(info.getCount()))
+                .anyMatch(info -> !info.getMaxCount().equals(info.getCount()));
             if (lowsupply) {
                 Button button = new Button("補給不足");
                 HBox.setMargin(button, new Insets(1));
                 this.info.getChildren().add(button);
             }
             boolean cond = row.getAirBase().getPlaneInfo().stream()
-                    .filter(info -> info.getState() == 1)
-                    .filter(info -> Objects.nonNull(info.getCond()))
-                    .anyMatch(info -> info.getCond() != 1);
+                .filter(info -> info.getState() == 1)
+                .filter(info -> Objects.nonNull(info.getCond()))
+                .anyMatch(info -> info.getCond() != 1);
             if (cond) {
                 Button button = new Button("疲労");
                 HBox.setMargin(button, new Insets(1));
                 this.info.getChildren().add(button);
             }
             boolean change = row.getAirBase().getPlaneInfo().stream()
-                    .anyMatch(info -> info.getState() == 2);
+                .anyMatch(info -> info.getState() == 2);
             if (change) {
                 Button button = new Button("配置転換中");
                 HBox.setMargin(button, new Insets(1));
@@ -412,26 +447,39 @@ public class AirBaseController extends WindowController {
      */
     public static class AreaTable {
 
-        /** 基地航空隊 */
+        /**
+         * 基地航空隊
+         */
         private StringProperty name;
 
-        /** 行動 */
+        /**
+         * 行動
+         */
         private StringProperty actionKind;
 
-        /** 制空値 */
+        /**
+         * 制空値
+         */
         private StringProperty seiku;
 
-        /** 戦闘行動半径 */
+        /**
+         * 戦闘行動半径
+         */
         private StringProperty distance;
 
-        /** 中隊 */
+        /**
+         * 中隊
+         */
         private List<Plane> planes = new ArrayList<>();
 
-        /** 基地航空隊 */
+        /**
+         * 基地航空隊
+         */
         private AirBase airBase;
 
         /**
          * 基地航空隊を設定します。
+         *
          * @param name 基地航空隊計
          */
         public void setName(String name) {
@@ -440,6 +488,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 基地航空隊を取得します。
+         *
          * @return 基地航空隊
          */
         public StringProperty nameProperty() {
@@ -448,6 +497,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 行動を設定します。
+         *
          * @param actionKind 行動
          */
         public void setActionKind(String actionKind) {
@@ -456,6 +506,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 行動を取得します。
+         *
          * @return 行動
          */
         public StringProperty actionKindProperty() {
@@ -464,6 +515,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 制空値を設定します。
+         *
          * @param seiku 制空値
          */
         public void setSeiku(String seiku) {
@@ -472,6 +524,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 制空値を取得します。
+         *
          * @return 制空値
          */
         public StringProperty seikuProperty() {
@@ -480,6 +533,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 戦闘行動半径を設定します。
+         *
          * @param distance 戦闘行動半径
          */
         public void setDistance(String distance) {
@@ -488,6 +542,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 戦闘行動半径を取得します。
+         *
          * @return 戦闘行動半径
          */
         public StringProperty distanceProperty() {
@@ -496,6 +551,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 中隊を取得します。
+         *
          * @return 中隊
          */
         public List<Plane> getPlanes() {
@@ -504,6 +560,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 基地航空隊を設定します。
+         *
          * @param airBase 基地航空隊
          */
         public void setAirBase(AirBase airBase) {
@@ -512,6 +569,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 基地航空隊を取得します。
+         *
          * @return 基地航空隊
          */
         public AirBase getAirBase() {
@@ -521,11 +579,11 @@ public class AirBaseController extends WindowController {
         @Override
         public String toString() {
             return new StringJoiner("\t")
-                    .add(this.name.get())
-                    .add(this.actionKind.get())
-                    .add(this.seiku.get())
-                    .add(this.distance.get())
-                    .toString();
+                .add(this.name.get())
+                .add(this.actionKind.get())
+                .add(this.seiku.get())
+                .add(this.distance.get())
+                .toString();
         }
     }
 
@@ -534,23 +592,34 @@ public class AirBaseController extends WindowController {
      */
     public static class Plane {
 
-        /** スロット */
+        /**
+         * スロット
+         */
         private IntegerProperty slot;
 
-        /** 稼働 */
+        /**
+         * 稼働
+         */
         private IntegerProperty count;
 
-        /** 定数 */
+        /**
+         * 定数
+         */
         private IntegerProperty maxCount;
 
-        /** 疲労 */
+        /**
+         * 疲労
+         */
         private IntegerProperty cond;
 
-        /** 中隊 */
+        /**
+         * 中隊
+         */
         private PlaneInfo planeInfo;
 
         /**
          * スロットを設定します。
+         *
          * @param slot スロット
          */
         public void setSlot(Integer slot) {
@@ -559,6 +628,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * スロットを取得します。
+         *
          * @return スロット
          */
         public IntegerProperty slotProperty() {
@@ -567,6 +637,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 稼働を設定します。
+         *
          * @param count 稼働
          */
         public void setCount(Integer count) {
@@ -576,6 +647,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 稼働を取得します。
+         *
          * @return 稼働
          */
         public IntegerProperty countProperty() {
@@ -584,6 +656,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 定数を設定します。
+         *
          * @param maxCount 定数
          */
         public void setMaxCount(Integer maxCount) {
@@ -593,6 +666,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 定数を取得します。
+         *
          * @return 定数
          */
         public IntegerProperty maxCountProperty() {
@@ -601,6 +675,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 疲労を設定します。
+         *
          * @param cond 疲労
          */
         public void setCond(Integer cond) {
@@ -610,6 +685,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 疲労を取得します。
+         *
          * @return 疲労
          */
         public IntegerProperty condProperty() {
@@ -618,6 +694,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 中隊を設定します。
+         *
          * @param planeInfo 中隊
          */
         public void setPlaneInfo(PlaneInfo planeInfo) {
@@ -626,6 +703,7 @@ public class AirBaseController extends WindowController {
 
         /**
          * 中隊を取得します。
+         *
          * @return 中隊
          */
         public PlaneInfo getPlaneInfo() {
@@ -635,19 +713,18 @@ public class AirBaseController extends WindowController {
         @Override
         public String toString() {
             Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                    .getSlotitemMap();
+                .getSlotitemMap();
             return new StringJoiner("\t")
-                    .add(Items.name(itemMap.get(this.slot.get())))
-                    .add(Optional.ofNullable(this.count).map(IntegerProperty::get).map(String::valueOf).orElse(""))
-                    .add(Optional.ofNullable(this.maxCount).map(IntegerProperty::get).map(String::valueOf).orElse(""))
-                    .add(Optional.ofNullable(this.cond).map(IntegerProperty::get).map(String::valueOf).orElse(""))
-                    .toString();
+                .add(Items.name(itemMap.get(this.slot.get())))
+                .add(Optional.ofNullable(this.count).map(IntegerProperty::get).map(String::valueOf).orElse(""))
+                .add(Optional.ofNullable(this.maxCount).map(IntegerProperty::get).map(String::valueOf).orElse(""))
+                .add(Optional.ofNullable(this.cond).map(IntegerProperty::get).map(String::valueOf).orElse(""))
+                .toString();
         }
     }
 
     /**
      * 装備画像のセル
-     *
      */
     private static class ItemImageCell extends TableCell<Plane, Integer> {
         @Override
@@ -658,7 +735,7 @@ public class AirBaseController extends WindowController {
 
             if (!empty) {
                 Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                        .getSlotitemMap();
+                    .getSlotitemMap();
 
                 SlotItem item = itemMap.get(itemId);
 
@@ -690,7 +767,6 @@ public class AirBaseController extends WindowController {
 
     /**
      * 稼働のセル
-     *
      */
     private static class CountImageCell extends TableCell<Plane, Integer> {
 
@@ -725,7 +801,6 @@ public class AirBaseController extends WindowController {
 
     /**
      * 疲労画像のセル
-     *
      */
     private static class CondImageCell extends TableCell<Plane, Integer> {
 

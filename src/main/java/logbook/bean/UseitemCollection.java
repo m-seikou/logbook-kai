@@ -9,21 +9,22 @@ import lombok.Data;
 
 /**
  * アイテムのコレクション
- *
  */
 @Data
 public class UseitemCollection implements Serializable {
 
     private static final long serialVersionUID = -8478137452548268689L;
 
-    /** アイテム */
+    /**
+     * アイテム
+     */
     private Map<Integer, Useitem> useitemMap = new LinkedHashMap<>();
 
     /**
      * アプリケーションのデフォルト設定ディレクトリから{@link UseitemCollection}を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(UseitemCollection.class, UseitemCollection::new)</code>
+     * <code>Config.getDefault().get(UseitemCollection.class, UseitemCollection::new)</code>
      * </blockquote>
      *
      * @return {@link UseitemCollection}

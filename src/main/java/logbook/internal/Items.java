@@ -31,14 +31,17 @@ import lombok.Data;
 
 /**
  * 装備に関するメソッドを集めたクラス
- *
  */
 public class Items {
 
-    /** 画像キャッシュ */
+    /**
+     * 画像キャッシュ
+     */
     private static final ReferenceCache<String, Image> CACHE = new ReferenceCache<>(50);
 
-    /** 装備アイコンサイズ */
+    /**
+     * 装備アイコンサイズ
+     */
     private static final int ITEM_ICON_SIZE = 45;
 
     private Items() {
@@ -52,19 +55,19 @@ public class Items {
      */
     public static String name(SlotItem item) {
         return Items.slotitemMst(item)
-                .map(mst -> {
+            .map(mst -> {
 
-                    StringBuilder text = new StringBuilder(mst.getName());
+                StringBuilder text = new StringBuilder(mst.getName());
 
-                    text.append(Optional.ofNullable(item.getAlv())
-                            .map(alv -> Messages.getString("item.alv", alv)) //$NON-NLS-1$
-                            .orElse(""));
-                    text.append(Optional.ofNullable(item.getLevel())
-                            .filter(lv -> lv > 0)
-                            .map(lv -> Messages.getString("item.level", lv)) //$NON-NLS-1$
-                            .orElse(""));
-                    return text.toString();
-                }).orElse("");
+                text.append(Optional.ofNullable(item.getAlv())
+                    .map(alv -> Messages.getString("item.alv", alv)) //$NON-NLS-1$
+                    .orElse(""));
+                text.append(Optional.ofNullable(item.getLevel())
+                    .filter(lv -> lv > 0)
+                    .map(lv -> Messages.getString("item.level", lv)) //$NON-NLS-1$
+                    .orElse(""));
+                return text.toString();
+            }).orElse("");
     }
 
     /**
@@ -151,14 +154,15 @@ public class Items {
         SlotitemMst mst = null;
         if (item != null) {
             mst = SlotitemMstCollection.get()
-                    .getSlotitemMap()
-                    .get(item.getSlotitemId());
+                .getSlotitemMap()
+                .get(item.getSlotitemId());
         }
         return Optional.ofNullable(mst);
     }
 
     /**
      * 装備リソースファイルのディレクトリを取得します。
+     *
      * @return 装備リソースファイルのディレクトリ
      */
     static Path getItemResourcePathDir() {
@@ -247,8 +251,8 @@ public class Items {
      */
     public static boolean isAircraft(SlotItem item) {
         return Items.slotitemMst(item)
-                .map(Items::isAircraft)
-                .orElse(false);
+            .map(Items::isAircraft)
+            .orElse(false);
     }
 
     /**
@@ -259,28 +263,28 @@ public class Items {
      */
     public static boolean isAircraft(SlotitemMst item) {
         switch (SlotItemType.toSlotItemType(item)) {
-        case 艦上戦闘機:
-        case 艦上爆撃機:
-        case 艦上攻撃機:
-        case 水上爆撃機:
-        case 回転翼機:
-        case 対潜哨戒機:
-        case 水上戦闘機:
-        case 陸上攻撃機:
-        case 局地戦闘機:
-        case 噴式戦闘機:
-        case 噴式戦闘爆撃機:
-        case 噴式攻撃機:
+            case 艦上戦闘機:
+            case 艦上爆撃機:
+            case 艦上攻撃機:
+            case 水上爆撃機:
+            case 回転翼機:
+            case 対潜哨戒機:
+            case 水上戦闘機:
+            case 陸上攻撃機:
+            case 局地戦闘機:
+            case 噴式戦闘機:
+            case 噴式戦闘爆撃機:
+            case 噴式攻撃機:
 
-        case 艦上偵察機:
-        case 艦上偵察機II:
-        case 水上偵察機:
-        case 大型飛行艇:
-        case 噴式偵察機:
-        case 陸上偵察機:
-            return true;
-        default:
-            return false;
+            case 艦上偵察機:
+            case 艦上偵察機II:
+            case 水上偵察機:
+            case 大型飛行艇:
+            case 噴式偵察機:
+            case 陸上偵察機:
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -292,8 +296,8 @@ public class Items {
      */
     public static boolean isCombatAircraft(SlotItem item) {
         return Items.slotitemMst(item)
-                .map(Items::isCombatAircraft)
-                .orElse(false);
+            .map(Items::isCombatAircraft)
+            .orElse(false);
     }
 
     /**
@@ -304,21 +308,21 @@ public class Items {
      */
     public static boolean isCombatAircraft(SlotitemMst item) {
         switch (SlotItemType.toSlotItemType(item)) {
-        case 艦上戦闘機:
-        case 艦上爆撃機:
-        case 艦上攻撃機:
-        case 水上爆撃機:
-        case 回転翼機:
-        case 対潜哨戒機:
-        case 水上戦闘機:
-        case 陸上攻撃機:
-        case 局地戦闘機:
-        case 噴式戦闘機:
-        case 噴式戦闘爆撃機:
-        case 噴式攻撃機:
-            return true;
-        default:
-            return false;
+            case 艦上戦闘機:
+            case 艦上爆撃機:
+            case 艦上攻撃機:
+            case 水上爆撃機:
+            case 回転翼機:
+            case 対潜哨戒機:
+            case 水上戦闘機:
+            case 陸上攻撃機:
+            case 局地戦闘機:
+            case 噴式戦闘機:
+            case 噴式戦闘爆撃機:
+            case 噴式攻撃機:
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -330,8 +334,8 @@ public class Items {
      */
     public static boolean isReconAircraft(SlotItem item) {
         return Items.slotitemMst(item)
-                .map(Items::isReconAircraft)
-                .orElse(false);
+            .map(Items::isReconAircraft)
+            .orElse(false);
     }
 
     /**
@@ -342,15 +346,15 @@ public class Items {
      */
     public static boolean isReconAircraft(SlotitemMst item) {
         switch (SlotItemType.toSlotItemType(item)) {
-        case 艦上偵察機:
-        case 艦上偵察機II:
-        case 水上偵察機:
-        case 大型飛行艇:
-        case 噴式偵察機:
-        case 陸上偵察機:
-            return true;
-        default:
-            return false;
+            case 艦上偵察機:
+            case 艦上偵察機II:
+            case 水上偵察機:
+            case 大型飛行艇:
+            case 噴式偵察機:
+            case 陸上偵察機:
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -377,7 +381,7 @@ public class Items {
     @Data
     private static class Category {
         private String name;
-        private int [] types;
+        private int[] types;
     }
 
     @Data

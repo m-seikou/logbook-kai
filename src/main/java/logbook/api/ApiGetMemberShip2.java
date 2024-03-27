@@ -18,7 +18,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/ship2
- *
  */
 @API("/kcsapi/api_get_member/ship2")
 public class ApiGetMemberShip2 implements APIListenerSpi {
@@ -42,7 +41,7 @@ public class ApiGetMemberShip2 implements APIListenerSpi {
      */
     private void apiShipData(JsonArray array) {
         Map<Integer, Ship> map = ShipCollection.get()
-                .getShipMap();
+            .getShipMap();
         map.putAll(JsonHelper.toMap(array, Ship::getId, Ship::toShip));
     }
 
@@ -54,13 +53,13 @@ public class ApiGetMemberShip2 implements APIListenerSpi {
     private void apiDeckData(JsonArray array) {
         Map<Integer, DeckPort> deckMap = JsonHelper.toMap(array, DeckPort::getId, DeckPort::toDeckPort);
         DeckPortCollection.get()
-                .setDeckPortMap(deckMap);
+            .setDeckPortMap(deckMap);
         DeckPortCollection.get()
-                .setMissionShips(deckMap.values()
-                        .stream()
-                        .filter(d -> d.getMission().get(0) != 0)
-                        .map(DeckPort::getShip)
-                        .flatMap(List::stream)
-                        .collect(Collectors.toCollection(LinkedHashSet::new)));
+            .setMissionShips(deckMap.values()
+                .stream()
+                .filter(d -> d.getMission().get(0) != 0)
+                .map(DeckPort::getShip)
+                .flatMap(List::stream)
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 }

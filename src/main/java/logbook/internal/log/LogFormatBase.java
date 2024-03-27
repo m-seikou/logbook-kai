@@ -7,7 +7,9 @@ import logbook.internal.Logs;
 
 public abstract class LogFormatBase<T> implements LogFormat<T> {
 
-    /** 日付書式 */
+    /**
+     * 日付書式
+     */
     protected static final DateTimeFormatter DATE_FORMAT = Logs.DATE_FORMAT;
 
     /**
@@ -27,10 +29,10 @@ public abstract class LogFormatBase<T> implements LogFormat<T> {
     protected static String nowString() {
         return Logs.nowString();
     }
-    
+
     /**
      * 文字列を "" で囲み、" があればエスケープします
-     * 
+     *
      * @param text 元の文字列
      * @return エスケープ済みの "" で囲まれた文字列
      */

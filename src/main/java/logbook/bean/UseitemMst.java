@@ -16,13 +16,19 @@ public class UseitemMst implements Serializable {
 
     private static final long serialVersionUID = -3290324243327123224L;
 
-    /** api_id */
+    /**
+     * api_id
+     */
     private Integer id;
 
-    /** api_name */
+    /**
+     * api_name
+     */
     private String name;
 
-    /** api_description */
+    /**
+     * api_description
+     */
     private List<String> description;
 
     @Override
@@ -39,9 +45,9 @@ public class UseitemMst implements Serializable {
     public static UseitemMst toUseitem(JsonObject json) {
         UseitemMst bean = new UseitemMst();
         JsonHelper.bind(json)
-                .setInteger("api_id", bean::setId)
-                .setString("api_name", bean::setName)
-                .setStringList("api_description", bean::setDescription);
+            .setInteger("api_id", bean::setId)
+            .setString("api_name", bean::setName)
+            .setStringList("api_description", bean::setDescription);
         return bean;
     }
 }

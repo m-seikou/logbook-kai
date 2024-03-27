@@ -8,44 +8,63 @@ import lombok.Data;
 
 /**
  * 所有装備一覧の設定
- *
  */
 @Data
 public class AppItemTableConfig {
 
-    /** インデックス */
+    /**
+     * インデックス
+     */
     private int tabIndex;
 
-    /** 装備タブの設定 */
+    /**
+     * 装備タブの設定
+     */
     private ItemTabConfig itemTabConfig;
-    
-    /** 基地航空隊タブの設定 */
+
+    /**
+     * 基地航空隊タブの設定
+     */
     private AirbaseTabConfig airbaseTabConfig;
-    
+
     /**
      * 装備タブの設定
      */
     @Data
     public static class ItemTabConfig {
-        /** フィルターが展開されていたかどうか */
+        /**
+         * フィルターが展開されていたかどうか
+         */
         private boolean filterExpanded;
 
-        /** テキストフィルターがオンだったかどうか */
+        /**
+         * テキストフィルターがオンだったかどうか
+         */
         private boolean textFilterEnabled;
 
-        /** テキストフィルター */
+        /**
+         * テキストフィルター
+         */
         private String textFilter;
 
-        /** 種類フィルターがオンだったかどうか */
+        /**
+         * 種類フィルターがオンだったかどうか
+         */
         private boolean typeFilterEnabled;
 
-        /** 種類フィルターが展開されていたかどうか */
+        /**
+         * 種類フィルターが展開されていたかどうか
+         */
         private boolean typeFilterExpanded;
 
-        /** オンだった種類フィルター */
+        /**
+         * オンだった種類フィルター
+         */
         private Collection<Integer> selectedTypes;
 
-        /** パラメータフィルター */
+        /**
+         * パラメータフィルター
+         */
         private List<ParameterFilterConfig> parameterFilters;
 
     }
@@ -55,13 +74,19 @@ public class AppItemTableConfig {
      */
     @Data
     public static class AirbaseTabConfig {
-        /** フィルターが展開されていたかどうか */
+        /**
+         * フィルターが展開されていたかどうか
+         */
         private boolean filterExpanded;
 
-        /** グルーピングをしない */
+        /**
+         * グルーピングをしない
+         */
         private boolean disableGrouping;
 
-        /** パラメータフィルター */
+        /**
+         * パラメータフィルター
+         */
         private List<ParameterFilterConfig> parameterFilters;
     }
 
@@ -69,7 +94,7 @@ public class AppItemTableConfig {
      * アプリケーションのデフォルト設定ディレクトリから<code>AppItemTableConfig</code>を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(AppItemTableConfig.class, AppItemTableConfig::new)</code>
+     * <code>Config.getDefault().get(AppItemTableConfig.class, AppItemTableConfig::new)</code>
      * </blockquote>
      *
      * @return <code>AppShipTableConfig</code>

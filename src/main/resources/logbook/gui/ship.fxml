@@ -4,12 +4,13 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" styleClass="shipWindow" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.ShipController">
-   <children>
-      <TabPane fx:id="tab" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS" />
-   </children>
-   <stylesheets>
-      <URL value="@application.css" />
-      <URL value="@ship.css" />
-   </stylesheets>
+<VBox prefHeight="600.0" prefWidth="800.0" styleClass="shipWindow" xmlns="http://javafx.com/javafx/8.0.111"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.ShipController">
+    <children>
+        <TabPane fx:id="tab" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS"/>
+    </children>
+    <stylesheets>
+        <URL value="@application.css"/>
+        <URL value="@ship.css"/>
+    </stylesheets>
 </VBox>

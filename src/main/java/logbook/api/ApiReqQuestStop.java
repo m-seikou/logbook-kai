@@ -9,7 +9,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_quest/stop
- *
  */
 @API("/kcsapi/api_req_quest/stop")
 public class ApiReqQuestStop implements APIListenerSpi {

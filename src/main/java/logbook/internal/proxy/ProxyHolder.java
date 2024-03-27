@@ -9,7 +9,6 @@ import logbook.proxy.ProxyServerSpi;
 
 /**
  * プロキシサーバースレッドを保持します
- *
  */
 public class ProxyHolder {
 
@@ -19,7 +18,7 @@ public class ProxyHolder {
         Thread thread = null;
         try {
             List<ProxyServerSpi> proxies = PluginServices.instances(ProxyServerSpi.class)
-                    .collect(Collectors.toList());
+                .collect(Collectors.toList());
             ProxyServerSpi impl = null;
             for (ProxyServerSpi proxy : proxies) {
                 // プラグインのプロキシサーバーを優先する
@@ -37,6 +36,7 @@ public class ProxyHolder {
 
     /**
      * リバースプロキシスレッド を取得します
+     *
      * @return リバースプロキシ スレッドインスタンス
      */
     public static Thread getInstance() {

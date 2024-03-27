@@ -5,11 +5,12 @@ import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * スレッドを管理します
- *
  */
 public final class ThreadManager {
 
-    /** Executor */
+    /**
+     * Executor
+     */
     private static final ScheduledExecutorService EXECUTOR = Executors.newScheduledThreadPool(4);
 
     /**

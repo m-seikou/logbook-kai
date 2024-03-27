@@ -23,7 +23,9 @@ public class AppQuestCollection implements Serializable {
 
     private static final long serialVersionUID = 9151098623774557766L;
 
-    /** 任務 */
+    /**
+     * 任務
+     */
     private ConcurrentSkipListMap<Integer, AppQuest> quest = new ConcurrentSkipListMap<>();
 
     /**
@@ -33,7 +35,7 @@ public class AppQuestCollection implements Serializable {
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Tokyo"));
 
         val copyMap = new ConcurrentSkipListMap<>(this.quest);
-        for (Iterator<Entry<Integer, AppQuest>> iterator = copyMap.entrySet().iterator(); iterator.hasNext();) {
+        for (Iterator<Entry<Integer, AppQuest>> iterator = copyMap.entrySet().iterator(); iterator.hasNext(); ) {
             Entry<Integer, AppQuest> entry = iterator.next();
 
             String exp = entry.getValue().getExpire();
@@ -58,7 +60,7 @@ public class AppQuestCollection implements Serializable {
         this.update();
 
         // 今はすべての Quest が一度に送られてくるので、all のタブのデータの場合は既にある map を保持しておく必要はない
-        ConcurrentSkipListMap<Integer, AppQuest> copyMap  = all ? new ConcurrentSkipListMap<>() : new ConcurrentSkipListMap<>(this.quest);
+        ConcurrentSkipListMap<Integer, AppQuest> copyMap = all ? new ConcurrentSkipListMap<>() : new ConcurrentSkipListMap<>(this.quest);
         if (questList.getList() != null) {
             for (Quest quest : questList.getList()) {
                 if (quest != null) {
@@ -79,7 +81,7 @@ public class AppQuestCollection implements Serializable {
      * アプリケーションのデフォルト設定ディレクトリから<code>AppQuestCollection</code>を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(AppQuestCollection.class, AppQuestCollection::new)</code>
+     * <code>Config.getDefault().get(AppQuestCollection.class, AppQuestCollection::new)</code>
      * </blockquote>
      *
      * @return <code>AppQuestCollection</code>

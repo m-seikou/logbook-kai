@@ -51,7 +51,6 @@ import lombok.Getter;
 
 /**
  * 戦闘ログに関するクラス
- *
  */
 public class BattleLogs {
 
@@ -106,6 +105,7 @@ public class BattleLogs {
         }
         return null;
     }
+
     /**
      * 戦闘ログを取得します。
      *
@@ -138,9 +138,9 @@ public class BattleLogs {
         Path dir = Paths.get(AppConfig.get().getBattleLogDir());
         String name = fileNameSafeDateString(dateString);
         return Arrays.asList(
-                dir.resolve(Paths.get(name.substring(0, 7), name + ".json")),
-                dir.resolve(Paths.get(name.substring(0, 7), name + ".json.gz")),
-                dir.resolve(Paths.get(name + ".json")));
+            dir.resolve(Paths.get(name.substring(0, 7), name + ".json")),
+            dir.resolve(Paths.get(name.substring(0, 7), name + ".json.gz")),
+            dir.resolve(Paths.get(name + ".json")));
     }
 
     private static Path writePath(String dateString) {
@@ -229,13 +229,13 @@ public class BattleLogs {
             }
             // 期限(自身を含まない)
             ZonedDateTime exp = unitToday()
-                    .minusDays(expires)
-                    .withZoneSameInstant(ZoneId.of("Asia/Tokyo"));
+                .minusDays(expires)
+                .withZoneSameInstant(ZoneId.of("Asia/Tokyo"));
             // 比較するためのファイル名(拡張子を含まない)
             String expired = fileNameSafeDateString(Logs.DATE_FORMAT.format(exp));
 
             Files.walkFileTree(dir, EnumSet.of(FileVisitOption.FOLLOW_LINKS), 2,
-                    new DeleteExpiredVisitor(dir, expired));
+                new DeleteExpiredVisitor(dir, expired));
         } catch (Exception e) {
             LoggerHolder.get().warn("戦闘ログの削除中に例外", e);
         }
@@ -361,8 +361,8 @@ public class BattleLogs {
             Map<IUnit, List<SimpleBattleLog>> map = new LinkedHashMap<>();
             for (IUnit unit : Unit.values()) {
                 map.put(unit, all.stream()
-                        .filter(log -> unit.accept(log.getDate(), now))
-                        .collect(Collectors.toList()));
+                    .filter(log -> unit.accept(log.getDate(), now))
+                    .collect(Collectors.toList()));
             }
             return map;
         } catch (Exception e) {
@@ -373,7 +373,7 @@ public class BattleLogs {
 
     /**
      * 任意条件のログを取得します。
-     * 
+     *
      * @param predicate 条件
      * @return ログ
      */
@@ -402,12 +402,12 @@ public class BattleLogs {
 
             try (Stream<String> lines = tmp) {
                 return lines.skip(1)
-                        .filter(l -> !l.isEmpty())
-                        .map(mapper)
-                        .filter(Objects::nonNull)
-                        .filter(predicate)
-                        .peek(log -> updateLog(mapNames, log))
-                        .collect(Collectors.toList());
+                    .filter(l -> !l.isEmpty())
+                    .map(mapper)
+                    .filter(Objects::nonNull)
+                    .filter(predicate)
+                    .peek(log -> updateLog(mapNames, log))
+                    .collect(Collectors.toList());
             }
         } catch (Exception e) {
             LoggerHolder.get().warn("海戦・ドロップ報告書の読み込み中に例外", e);
@@ -428,9 +428,9 @@ public class BattleLogs {
     /**
      * 集計します
      *
-     * @param logs 出撃統計のベースになるリスト
+     * @param logs          出撃統計のベースになるリスト
      * @param areaShortName 海域(nullの場合前開域)
-     * @param bossOnly 集計対象をボスのみにする場合true
+     * @param bossOnly      集計対象をボスのみにする場合true
      * @return 出撃統計
      */
     public static BattleLogCollect collect(List<SimpleBattleLog> logs, String areaShortName, boolean bossOnly) {
@@ -447,18 +447,18 @@ public class BattleLogs {
             start = "-";
         } else {
             start = Long.toString(logs.stream()
-                    .filter(areaFilter)
-                    .map(SimpleBattleLog::getBoss)
-                    .filter(boss -> boss.indexOf("出撃") != -1)
-                    .count());
+                .filter(areaFilter)
+                .map(SimpleBattleLog::getBoss)
+                .filter(boss -> boss.indexOf("出撃") != -1)
+                .count());
         }
 
         // 評価(S-D)
         Map<String, Long> rank = logs.stream()
-                .filter(areaFilter)
-                .filter(bossFilter)
-                .map(SimpleBattleLog::getRank)
-                .collect(Collectors.groupingBy(s -> s, Collectors.counting()));
+            .filter(areaFilter)
+            .filter(bossFilter)
+            .map(SimpleBattleLog::getRank)
+            .collect(Collectors.groupingBy(s -> s, Collectors.counting()));
         int s = rank.getOrDefault("S", 0L).intValue();
         int a = rank.getOrDefault("A", 0L).intValue();
         int b = rank.getOrDefault("B", 0L).intValue();
@@ -479,7 +479,7 @@ public class BattleLogs {
 
     private static ZonedDateTime unitToday() {
         return ZonedDateTime.now(ZoneId.of("GMT+04:00"))
-                .truncatedTo(ChronoUnit.DAYS);
+            .truncatedTo(ChronoUnit.DAYS);
     }
 
     private static void updateLog(Map<String, String> mapNames, SimpleBattleLog log) {
@@ -508,53 +508,94 @@ public class BattleLogs {
 
     /**
      * 出撃統計のベース
-     *
      */
     @Data
     public static class SimpleBattleLog {
 
-        /** 日付文字列 */
+        /**
+         * 日付文字列
+         */
         private String dateString;
-        /** 日付 */
+        /**
+         * 日付
+         */
         private ZonedDateTime date;
-        /** 海域 */
+        /**
+         * 海域
+         */
         private String area;
-        /** 海域略称 */
+        /**
+         * 海域略称
+         */
         private String areaShortName;
-        /** 海域の並び替え順 */
+        /**
+         * 海域の並び替え順
+         */
         private int areaSortOrder;
-        /** マス */
+        /**
+         * マス
+         */
         private String cell;
-        /** ボス */
+        /**
+         * ボス
+         */
         private String boss;
-        /** ランク */
+        /**
+         * ランク
+         */
         private String rank;
-        /** 艦隊行動 */
+        /**
+         * 艦隊行動
+         */
         private String intercept;
-        /** 味方陣形 */
+        /**
+         * 味方陣形
+         */
         private String fformation;
-        /** 敵陣形 */
+        /**
+         * 敵陣形
+         */
         private String eformation;
-        /** 制空権 */
+        /**
+         * 制空権
+         */
         private String dispseiku;
-        /** 味方触接 */
+        /**
+         * 味方触接
+         */
         private String ftouch;
-        /** 敵触接 */
+        /**
+         * 敵触接
+         */
         private String etouch;
-        /** 敵艦隊 */
+        /**
+         * 敵艦隊
+         */
         private String efleet;
-        /** ドロップ艦種 */
+        /**
+         * ドロップ艦種
+         */
         private String dropType;
-        /** ドロップ艦娘 */
+        /**
+         * ドロップ艦娘
+         */
         private String dropShip;
-        /** ドロップアイテム */
+        /**
+         * ドロップアイテム
+         */
         private String dropItem = "";
-        /** 艦娘経験値 */
+        /**
+         * 艦娘経験値
+         */
         private String shipExp = "";
-        /** 提督経験値 */
+        /**
+         * 提督経験値
+         */
         private String exp = "";
 
-        /** 海域名の海域略称付きパターン */
+        /**
+         * 海域名の海域略称付きパターン
+         */
         private static final Pattern AREA_PATTERN = Pattern.compile("^([0-9]+-[0-9]+) (.*)$");
 
         /**
@@ -570,7 +611,7 @@ public class BattleLogs {
             // 日付文字列を日本時間として解釈した後、GMT+04:00のタイムゾーンに変更します
             TemporalAccessor ta = Logs.DATE_FORMAT.parse(columns[0]);
             ZonedDateTime date = ZonedDateTime.of(LocalDateTime.from(ta), ZoneId.of("Asia/Tokyo"))
-                    .withZoneSameInstant(ZoneId.of("GMT+04:00"));
+                .withZoneSameInstant(ZoneId.of("GMT+04:00"));
             this.setDate(date);
             // 旧フォーマットは"海域名"のみ(例:"鎮守府正面海域")、新フォーマットは"略称 海域名"(例:"1-1 鎮守府正面海域") 
             Matcher m = AREA_PATTERN.matcher(columns[1]);
@@ -591,7 +632,7 @@ public class BattleLogs {
             this.setEtouch(columns[10]);
             if ("深海5".equals(columns[11]) && "500t級軽巡洋艦".equals(columns[12])) {
                 columns = Arrays.copyOfRange(columns, 1, columns.length);
-                columns[11] = columns[10]+","+columns[11];
+                columns[11] = columns[10] + "," + columns[11];
             }
             this.setEfleet(columns[11]);
             this.setDropType(columns[12]);
@@ -606,47 +647,47 @@ public class BattleLogs {
                 this.setExp(columns[64]);
             }
         }
-        
-        private static final String [] parseLine(String line) {
+
+        private static final String[] parseLine(String line) {
             List<String> tmp = new ArrayList<String>(line.length());
             for (int i = 0; i < line.length(); i++) {
                 char c = line.charAt(i);
                 switch (c) {
-                case ',':
-                    // 空
-                    tmp.add("");
-                    break;
-                case '"':
-                    // ", 次の単独の " まで
-                    int dq = line.indexOf('"', i+1);
-                    while (dq > 0 && dq < line.length()-1 && line.charAt(dq+1) =='"') {
-                        dq = line.indexOf('"', dq+2);
-                    }
-                    if (dq < 0) {
-                        // 異常
-                        tmp.add(line.substring(i+1));
-                        i = line.length()-1;
-                    } else {
-                        tmp.add(line.substring(i+1, dq).replaceAll("\"\"", "\""));
-                        i = dq+1;
-                        // もし " の後がカンマじゃないと一文字捨てることになるがどのみち異常なのでそのまま
-                    }
-                    break;
-                default:
-                    // 次のカンマまで
-                    int comma = line.indexOf(',', i+1);
-                    if (comma < 0) {
-                        comma = line.length();
-                    }
-                    tmp.add(line.substring(i, comma));
-                    i=comma;
-                    break;
+                    case ',':
+                        // 空
+                        tmp.add("");
+                        break;
+                    case '"':
+                        // ", 次の単独の " まで
+                        int dq = line.indexOf('"', i + 1);
+                        while (dq > 0 && dq < line.length() - 1 && line.charAt(dq + 1) == '"') {
+                            dq = line.indexOf('"', dq + 2);
+                        }
+                        if (dq < 0) {
+                            // 異常
+                            tmp.add(line.substring(i + 1));
+                            i = line.length() - 1;
+                        } else {
+                            tmp.add(line.substring(i + 1, dq).replaceAll("\"\"", "\""));
+                            i = dq + 1;
+                            // もし " の後がカンマじゃないと一文字捨てることになるがどのみち異常なのでそのまま
+                        }
+                        break;
+                    default:
+                        // 次のカンマまで
+                        int comma = line.indexOf(',', i + 1);
+                        if (comma < 0) {
+                            comma = line.length();
+                        }
+                        tmp.add(line.substring(i, comma));
+                        i = comma;
+                        break;
                 }
             }
-            if (line.length() > 0 && line.charAt(line.length()-1) == ',') {
+            if (line.length() > 0 && line.charAt(line.length() - 1) == ',') {
                 tmp.add("");
             }
-            return tmp.toArray(new String [0]);
+            return tmp.toArray(new String[0]);
         }
     }
 
@@ -656,6 +697,7 @@ public class BattleLogs {
     public interface IUnit {
         /**
          * 名前を取得します。
+         *
          * @return 名前
          */
         String getName();
@@ -664,7 +706,7 @@ public class BattleLogs {
          * 集計するかを判定します
          *
          * @param target 集計対象の日付(タイムゾーンがGMT+04:00)
-         * @param now 今日(タイムゾーンがGMT+04:00)
+         * @param now    今日(タイムゾーンがGMT+04:00)
          * @return 集計する場合true
          */
         boolean accept(ZonedDateTime target, ZonedDateTime now);
@@ -672,11 +714,12 @@ public class BattleLogs {
 
     /**
      * 集計の単位
-     *
      */
     public enum Unit implements IUnit {
 
-        /** デイリー */
+        /**
+         * デイリー
+         */
         DAILY("デイリー") {
             @Override
             public boolean accept(ZonedDateTime target, ZonedDateTime now) {
@@ -684,7 +727,9 @@ public class BattleLogs {
                 return now.get(field) == target.get(field);
             }
         },
-        /** ウィークリー */
+        /**
+         * ウィークリー
+         */
         WEEKLY("ウィークリー") {
             @Override
             public boolean accept(ZonedDateTime target, ZonedDateTime now) {
@@ -692,7 +737,9 @@ public class BattleLogs {
                 return now.get(field) == target.get(field);
             }
         },
-        /** マンスリー */
+        /**
+         * マンスリー
+         */
         MONTHLY("マンスリー") {
             @Override
             public boolean accept(ZonedDateTime target, ZonedDateTime now) {
@@ -700,7 +747,9 @@ public class BattleLogs {
                 return now.get(field) == target.get(field);
             }
         },
-        /** 先週 */
+        /**
+         * 先週
+         */
         LAST_WEEK("先週") {
             @Override
             public boolean accept(ZonedDateTime target, ZonedDateTime now) {
@@ -708,7 +757,9 @@ public class BattleLogs {
                 return now.minusWeeks(1).get(field) == target.get(field);
             }
         },
-        /** 先月 */
+        /**
+         * 先月
+         */
         LAST_MONTH("先月") {
             @Override
             public boolean accept(ZonedDateTime target, ZonedDateTime now) {
@@ -717,7 +768,9 @@ public class BattleLogs {
             }
         };
 
-        /** 名前 */
+        /**
+         * 名前
+         */
         private String name;
 
         /**
@@ -731,6 +784,7 @@ public class BattleLogs {
 
         /**
          * 名前を取得します。
+         *
          * @return 名前
          */
         @Override
@@ -742,7 +796,7 @@ public class BattleLogs {
          * 集計するかを判定します
          *
          * @param target 集計対象の日付(タイムゾーンがGMT+04:00)
-         * @param now 今日(タイムゾーンがGMT+04:00)
+         * @param now    今日(タイムゾーンがGMT+04:00)
          * @return 集計する場合true
          */
         @Override
@@ -753,18 +807,23 @@ public class BattleLogs {
 
     /**
      * 任意期間の集計単位
-     *
      */
     public static class CustomUnit implements IUnit {
 
-        /** 単位の名前 */
+        /**
+         * 単位の名前
+         */
         private String name;
 
-        /** 期間の開始 */
+        /**
+         * 期間の開始
+         */
         @Getter
         private ZonedDateTime from;
 
-        /** 期間の終了 */
+        /**
+         * 期間の終了
+         */
         @Getter
         private ZonedDateTime to;
 
@@ -772,14 +831,14 @@ public class BattleLogs {
          * 任意期間の集計単位
          *
          * @param from 期間の開始日付
-         * @param to 期間の終了日付
+         * @param to   期間の終了日付
          */
         public CustomUnit(LocalDate from, LocalDate to) {
             DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
             // 単位の名前
             // yy/MM/dd-yy/MM/dd(xx日)
             this.name = formatter.format(from) + "-" + formatter.format(to)
-                    + "(" + ((to.toEpochDay() - from.toEpochDay()) + 1) + "日)";
+                + "(" + ((to.toEpochDay() - from.toEpochDay()) + 1) + "日)";
             // 期間の開始
             this.from = ZonedDateTime.of(LocalDateTime.of(from, LocalTime.MIN), ZoneId.of("GMT+04:00"));
             // 期間の終了
@@ -788,6 +847,7 @@ public class BattleLogs {
 
         /**
          * 名前を取得します。
+         *
          * @return 名前
          */
         @Override
@@ -799,7 +859,7 @@ public class BattleLogs {
          * 集計するかを判定します
          *
          * @param target 集計対象の日付(タイムゾーンがGMT+04:00)
-         * @param now 今日(タイムゾーンがGMT+04:00)
+         * @param now    今日(タイムゾーンがGMT+04:00)
          * @return 集計する場合true
          */
         @Override

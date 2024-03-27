@@ -21,7 +21,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_hensei/change
- *
  */
 @API("/kcsapi/api_req_hensei/change")
 public class ApiReqHenseiChange implements APIListenerSpi {
@@ -33,14 +32,14 @@ public class ApiReqHenseiChange implements APIListenerSpi {
         Set<Integer> changed = new HashSet<>();
 
         Map<Integer, DeckPort> deckMap = DeckPortCollection.get()
-                .getDeckPortMap();
+            .getDeckPortMap();
 
         Integer portId = Integer.valueOf(req.getParameter("api_id"));
         Integer shipId = Integer.valueOf(req.getParameter("api_ship_id"));
         int shipIdx = Integer.parseInt(req.getParameter("api_ship_idx"));
 
         DeckPort deckPort = deckMap.get(portId)
-                .clone();
+            .clone();
         List<Integer> ships = new ArrayList<>(deckPort.getShip());
         deckPort.setShip(ships);
         deckMap.put(portId, deckPort);

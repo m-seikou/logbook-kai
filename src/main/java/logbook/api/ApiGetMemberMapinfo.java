@@ -9,7 +9,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/mapinfo
- *
  */
 @API("/kcsapi/api_get_member/mapinfo")
 public class ApiGetMemberMapinfo implements APIListenerSpi {

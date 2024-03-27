@@ -13,15 +13,25 @@ public class BiImage {
     private static final int ADDRESS_BITS_PER_WORD = 6;
     private static final long WORD_MASK = 0xffffffffffffffffL;
 
-    /** color */
+    /**
+     * color
+     */
     private final int color;
-    /** width */
+    /**
+     * width
+     */
     private final int width;
-    /** height */
+    /**
+     * height
+     */
     private final int height;
-    /** width word length */
+    /**
+     * width word length
+     */
     private final int wwl;
-    /** height word length */
+    /**
+     * height word length
+     */
     private final int hwl;
     // (width/64)×height
     private long[] dataW;
@@ -97,8 +107,8 @@ public class BiImage {
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
                 data[x + y * this.width] = (this.dataW[(x >> ADDRESS_BITS_PER_WORD) + y * this.wwl] & (1L << x)) == 0
-                        ? background
-                        : foreground;
+                    ? background
+                    : foreground;
             }
         }
         raster.setDataElements(0, 0, this.width, this.height, data);
@@ -110,7 +120,7 @@ public class BiImage {
      *
      * @param x X
      * @param y Y
-     * @return x,yで指定された座標の色
+     * @return x, yで指定された座標の色
      */
     public boolean get(int x, int y) {
         int idx = (x >> ADDRESS_BITS_PER_WORD) + y * this.wwl;
@@ -120,8 +130,8 @@ public class BiImage {
     /**
      * x,yで指定された座標を原点としてx+width,yまで(を含まない)の線形が全て黒色であるかを調べます
      *
-     * @param x X
-     * @param y Y
+     * @param x     X
+     * @param y     Y
      * @param width 調べる横幅
      * @return 全て黒色であればtrue
      */
@@ -132,8 +142,8 @@ public class BiImage {
     /**
      * x,yで指定された座標を原点としてx+width,yまで(を含まない)の線形に黒色が含まれるかを調べます
      *
-     * @param x X
-     * @param y Y
+     * @param x     X
+     * @param y     Y
      * @param width 調べる横幅
      * @return 黒色が含まれる場合true
      */
@@ -144,8 +154,8 @@ public class BiImage {
     /**
      * x,yで指定された座標を原点としてx+width,yまで(を含まない)の線形の黒色のピクセル数を数えます
      *
-     * @param x X
-     * @param y Y
+     * @param x     X
+     * @param y     Y
      * @param width 調べる横幅
      * @return 線形の黒色のピクセル数
      */
@@ -156,8 +166,8 @@ public class BiImage {
     /**
      * x,yで指定された座標を原点としてx,y+heightまで(を含まない)の線形が全て黒色であるかを調べます
      *
-     * @param x X
-     * @param y Y
+     * @param x      X
+     * @param y      Y
      * @param height 調べる縦幅
      * @return 全て黒色であればtrue
      */
@@ -168,8 +178,8 @@ public class BiImage {
     /**
      * x,yで指定された座標を原点としてx,y+heightまで(を含まない)の線形に黒色が含まれるかを調べます
      *
-     * @param x X
-     * @param y Y
+     * @param x      X
+     * @param y      Y
      * @param height 調べる縦幅
      * @return 黒色が含まれる場合true
      */
@@ -180,8 +190,8 @@ public class BiImage {
     /**
      * x,yで指定された座標を原点としてx,y+heightまで(を含まない)の線形の黒色のピクセル数を数えます
      *
-     * @param x X
-     * @param y Y
+     * @param x      X
+     * @param y      Y
      * @param height 調べる縦幅
      * @return 線形の黒色のピクセル数
      */
@@ -192,9 +202,9 @@ public class BiImage {
     /**
      * x,yで指定された座標を原点としてx+width,y+heightまで(を含まない)の矩形が全て黒色であるかを調べます
      *
-     * @param x X
-     * @param y Y
-     * @param width 調べる横幅
+     * @param x      X
+     * @param y      Y
+     * @param width  調べる横幅
      * @param height 調べる縦幅
      * @return 全て黒色であればtrue
      */
@@ -220,9 +230,9 @@ public class BiImage {
     /**
      * x,yで指定された座標を原点としてx+width,y+heightまで(を含まない)の矩形に黒色が含まれるかを調べます
      *
-     * @param x X
-     * @param y Y
-     * @param width 調べる横幅
+     * @param x      X
+     * @param y      Y
+     * @param width  調べる横幅
      * @param height 調べる縦幅
      * @return 黒色が含まれる場合true
      */
@@ -248,9 +258,9 @@ public class BiImage {
     /**
      * x,yで指定された座標を原点としてx+width,y+heightまで(を含まない)の矩形の黒色のピクセル数を数えます
      *
-     * @param x X
-     * @param y Y
-     * @param width 調べる横幅
+     * @param x      X
+     * @param y      Y
+     * @param width  調べる横幅
      * @param height 調べる縦幅
      * @return 矩形の黒色のピクセル数
      */

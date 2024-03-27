@@ -74,43 +74,60 @@ import lombok.Getter;
 
 /**
  * キャプチャ
- *
  */
 public class CaptureController extends WindowController {
 
-    /** 設定 */
+    /**
+     * 設定
+     */
     @FXML
     private MenuButton config;
 
-    /** 連写 */
+    /**
+     * 連写
+     */
     @FXML
     private CheckMenuItem cyclic;
 
-    /** 動画 */
+    /**
+     * 動画
+     */
     @FXML
     private CheckMenuItem movie;
 
-    /** ラジオボタングループ */
+    /**
+     * ラジオボタングループ
+     */
     @FXML
     private ToggleGroup cut;
 
-    /** 画像形式jpeg */
+    /**
+     * 画像形式jpeg
+     */
     @FXML
     private RadioMenuItem jpeg;
 
-    /** 画像形式png */
+    /**
+     * 画像形式png
+     */
     @FXML
     private RadioMenuItem png;
 
-    /** 画像形式ボタングループ */
+    /**
+     * 画像形式ボタングループ
+     */
     @FXML
     private ToggleGroup type;
 
-    /** キャプチャ */
+    /**
+     * キャプチャ
+     */
     @FXML
     private Button capture;
 
-    /** 保存 */
+    /**
+     * 保存
+     */
     @FXML
     private Button save;
 
@@ -129,28 +146,44 @@ public class CaptureController extends WindowController {
     @FXML
     private ImageView image;
 
-    /** 画像リスト */
+    /**
+     * 画像リスト
+     */
     private ObservableList<ImageData> images = FXCollections.observableArrayList();
 
-    /** 画像プレビュー */
+    /**
+     * 画像プレビュー
+     */
     private ObjectProperty<ImageData> preview = new SimpleObjectProperty<>();
 
-    /** スクリーンショット */
+    /**
+     * スクリーンショット
+     */
     private ScreenCapture sc;
 
-    /** 周期キャプチャ */
+    /**
+     * 周期キャプチャ
+     */
     private Timeline timeline = new Timeline();
 
-    /** 動画キャプチャ ステータス */
+    /**
+     * 動画キャプチャ ステータス
+     */
     private boolean processRunning;
 
-    /** 動画キャプチャ */
+    /**
+     * 動画キャプチャ
+     */
     private Process process;
 
-    /** 直接保存先 */
+    /**
+     * 直接保存先
+     */
     private Path directPath;
 
-    /** 出撃連動動画キャプチャ用チェック */
+    /**
+     * 出撃連動動画キャプチャ用チェック
+     */
     private Timeline autoBattleCaptureTimeline;
 
     @FXML
@@ -165,9 +198,9 @@ public class CaptureController extends WindowController {
                 dc.setTitle("キャプチャの保存先");
                 // 覚えた保存先をセット
                 File initDir = Optional.ofNullable(AppConfig.get().getCaptureDir())
-                        .map(File::new)
-                        .filter(File::isDirectory)
-                        .orElse(null);
+                    .map(File::new)
+                    .filter(File::isDirectory)
+                    .orElse(null);
                 if (initDir != null) {
                     dc.setInitialDirectory(initDir);
                 }
@@ -247,7 +280,7 @@ public class CaptureController extends WindowController {
             }
         }
     }
-    
+
     @FXML
     void cutNone(ActionEvent event) {
         this.sc.setCutRect(ScreenCapture.CutType.NONE.getAngle());
@@ -315,10 +348,10 @@ public class CaptureController extends WindowController {
         this.cyclic.setSelected(false);
 
         if ((AppConfig.get().getFfmpegPath() == null || AppConfig.get().getFfmpegPath().isEmpty())
-                || (AppConfig.get().getFfmpegArgs() == null || AppConfig.get().getFfmpegArgs().isEmpty())
-                || (AppConfig.get().getFfmpegExt() == null || AppConfig.get().getFfmpegExt().isEmpty())) {
+            || (AppConfig.get().getFfmpegArgs() == null || AppConfig.get().getFfmpegArgs().isEmpty())
+            || (AppConfig.get().getFfmpegExt() == null || AppConfig.get().getFfmpegExt().isEmpty())) {
             Tools.Controls.alert(AlertType.INFORMATION, "設定が必要です", "[設定]メニューの[キャプチャ]タブから"
-                    + "FFmpegパスおよび引数を設定してください。", this.getWindow());
+                + "FFmpegパスおよび引数を設定してください。", this.getWindow());
             this.movie.setSelected(false);
         }
         if (this.movie.isSelected()) {
@@ -357,8 +390,8 @@ public class CaptureController extends WindowController {
                 this.timeline.setCycleCount(Animation.INDEFINITE);
                 this.timeline.getKeyFrames().clear();
                 this.timeline.getKeyFrames()
-                        .add(new KeyFrame(javafx.util.Duration.millis(100),
-                                this::captureAction));
+                    .add(new KeyFrame(javafx.util.Duration.millis(100),
+                        this::captureAction));
                 this.timeline.play();
                 // キャプチャボタンテキストの変更
                 this.setCatureButtonState(ButtonState.STOP);
@@ -494,9 +527,9 @@ public class CaptureController extends WindowController {
                 if (!this.start.equals(this.end)) {
 
                     Optional<ButtonType> buttonType = Tools.Controls.alert(Alert.AlertType.CONFIRMATION,
-                            "矩形選択",
-                            "この範囲でよろしいですか？",
-                            stage);
+                        "矩形選択",
+                        "この範囲でよろしいですか？",
+                        stage);
                     if (buttonType.orElse(null) == ButtonType.OK) {
                         int x = (int) Math.min(this.start.getX(), this.end.getX());
                         int y = (int) Math.min(this.start.getY(), this.end.getY());
@@ -505,10 +538,10 @@ public class CaptureController extends WindowController {
 
                         Rectangle tmp = getTrimSize(bufferedImage.getSubimage(x, y, w, h));
                         Rectangle relative = new Rectangle(
-                                (int) (x + tmp.getX()),
-                                (int) (y + tmp.getY()),
-                                (int) tmp.getWidth(),
-                                (int) tmp.getHeight());
+                            (int) (x + tmp.getX()),
+                            (int) (y + tmp.getY()),
+                            (int) tmp.getWidth(),
+                            (int) tmp.getHeight());
 
                         Rectangle screenBounds = gcnf.getBounds();
 
@@ -578,8 +611,8 @@ public class CaptureController extends WindowController {
      * キャプチャプレビュー
      *
      * @param ov 値が変更されたObservableValue
-     * @param o 古い値
-     * @param n 新しい値
+     * @param o  古い値
+     * @param n  新しい値
      */
     private void viewImage(ObservableValue<? extends ImageData> ov, ImageData o, ImageData n) {
         ImageData image = this.preview.getValue();
@@ -603,7 +636,7 @@ public class CaptureController extends WindowController {
     private void startProcess() {
         Rectangle rectangle = this.sc.getRectangle();
         Path to = this.directPath.resolve(CaptureSaveController.DATE_FORMAT.format(ZonedDateTime.now())
-                + "." + AppConfig.get().getFfmpegExt());
+            + "." + AppConfig.get().getFfmpegExt());
 
         Map<String, String> param = new HashMap<>();
         param.put("{x}", String.valueOf((int) rectangle.getX()));
@@ -615,15 +648,15 @@ public class CaptureController extends WindowController {
         List<String> args = new ArrayList<>();
         args.add(AppConfig.get().getFfmpegPath());
         Arrays.stream(AppConfig.get().getFfmpegArgs().split("\n"))
-                .flatMap(str -> Arrays.stream(str.split(" ")))
-                .map(str -> {
-                    String r = str;
-                    for (Entry<String, String> entry : param.entrySet()) {
-                        r = r.replace(entry.getKey(), entry.getValue());
-                    }
-                    return r;
-                })
-                .forEach(args::add);
+            .flatMap(str -> Arrays.stream(str.split(" ")))
+            .map(str -> {
+                String r = str;
+                for (Entry<String, String> entry : param.entrySet()) {
+                    r = r.replace(entry.getKey(), entry.getValue());
+                }
+                return r;
+            })
+            .forEach(args::add);
         try {
             ProcessBuilder pb = new ProcessBuilder(args);
             pb.redirectError(ProcessBuilder.Redirect.INHERIT);
@@ -631,7 +664,7 @@ public class CaptureController extends WindowController {
         } catch (Exception e) {
             this.stopProcess();
             Tools.Controls.alert(AlertType.ERROR, "動画撮影に失敗しました", "設定が誤っている可能性があります。\n引数:" + args.toString(), e,
-                    this.getWindow());
+                this.getWindow());
         }
     }
 
@@ -732,7 +765,7 @@ public class CaptureController extends WindowController {
     private void setBounds(Robot robot, Rectangle relative, Rectangle screenBounds) {
         if (relative != null) {
             Rectangle fixed = new Rectangle(relative.x + screenBounds.x, relative.y + screenBounds.y,
-                    relative.width, relative.height);
+                relative.width, relative.height);
             this.setBounds(robot, fixed);
         } else {
             this.message.setText("座標未設定");
@@ -750,16 +783,16 @@ public class CaptureController extends WindowController {
         this.sc = new ScreenCapture(robot, fixed);
         this.sc.setItems(this.images);
         this.sc.setCurrent(this.preview);
-        
+
         CaptureConfig config = AppViewConfig.get().getCaptureConfig();
         if (config == null) {
             config = new CaptureConfig();
         }
         CaptureConfig.Bounds bounds = new CaptureConfig.Bounds();
-        bounds.setX((int)fixed.getMinX());
-        bounds.setY((int)fixed.getMinY());
-        bounds.setWidth((int)fixed.getWidth());
-        bounds.setHeight((int)fixed.getHeight());
+        bounds.setX((int) fixed.getMinX());
+        bounds.setY((int) fixed.getMinY());
+        bounds.setWidth((int) fixed.getWidth());
+        bounds.setHeight((int) fixed.getHeight());
         config.setBounds(bounds);
         AppViewConfig.get().setCaptureConfig(config);
     }

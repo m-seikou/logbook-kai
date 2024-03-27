@@ -11,24 +11,27 @@ import lombok.Data;
 
 /**
  * 入渠ドックのコレクション
- *
  */
 @Data
 public class NdockCollection implements Serializable {
 
     private static final long serialVersionUID = 3570762805703032390L;
 
-    /** 入渠ドック */
+    /**
+     * 入渠ドック
+     */
     private Map<Integer, Ndock> ndockMap = new LinkedHashMap<>();
 
-    /** 入渠中の艦娘 */
+    /**
+     * 入渠中の艦娘
+     */
     private Set<Integer> ndockSet = new LinkedHashSet<>();
 
     /**
      * アプリケーションのデフォルト設定ディレクトリから<code>NdockCollection</code>を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(NdockCollection.class, NdockCollection::new)</code>
+     * <code>Config.getDefault().get(NdockCollection.class, NdockCollection::new)</code>
      * </blockquote>
      *
      * @return <code>NdockCollection</code>

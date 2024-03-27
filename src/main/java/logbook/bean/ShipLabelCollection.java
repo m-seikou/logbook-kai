@@ -10,7 +10,6 @@ import lombok.Data;
 
 /**
  * 艦娘のラベル
- *
  */
 @Data
 public class ShipLabelCollection implements Serializable {
@@ -23,7 +22,7 @@ public class ShipLabelCollection implements Serializable {
      * アプリケーションのデフォルト設定ディレクトリから<code>ShipLabelCollection</code>を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(ShipLabelCollection.class)</code>
+     * <code>Config.getDefault().get(ShipLabelCollection.class)</code>
      * </blockquote>
      *
      * @return <code>ShipLabelCollection</code>

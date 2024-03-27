@@ -435,7 +435,7 @@ public class Ships {
      */
     public static Image shipWithItemWithoutStateBannerImage(Chara chara) throws IllegalStateException {
         return shipWithItemWithoutStateBannerImage(chara,
-                SlotItemCollection.get().getSlotitemMap(), AppCondition.get().getEscape());
+            SlotItemCollection.get().getSlotitemMap(), AppCondition.get().getEscape());
     }
 
     /**
@@ -491,8 +491,8 @@ public class Ships {
         ShipMst mst = null;
         if (chara != null) {
             mst = ShipMstCollection.get()
-                    .getShipMap()
-                    .get(chara.getShipId());
+                .getShipMap()
+                .get(chara.getShipId());
         }
         return Optional.ofNullable(mst);
     }
@@ -508,8 +508,8 @@ public class Ships {
         Optional<ShipMst> mst = shipMst(chara);
         if (mst.isPresent()) {
             stype = StypeCollection.get()
-                    .getStypeMap()
-                    .get(mst.get().getStype());
+                .getStypeMap()
+                .get(mst.get().getStype());
         }
         return Optional.ofNullable(stype);
     }
@@ -524,9 +524,9 @@ public class Ships {
         List<SlotitemMst> items = getSlotItemMst(ship).collect(Collectors.toList());
         // 艦攻艦爆搭載艦
         boolean isPasedoCarrier = items.stream()
-                .filter(i -> i.is(SlotItemType.艦上攻撃機, SlotItemType.艦上爆撃機))
-                .findAny()
-                .isPresent();
+            .filter(i -> i.is(SlotItemType.艦上攻撃機, SlotItemType.艦上爆撃機))
+            .findAny()
+            .isPresent();
         // 火力
         int karyoku = ship.getKaryoku().get(0);
 
@@ -534,11 +534,11 @@ public class Ships {
             // 空母(または空母扱い)の場合
             // (火力 + 雷装) × 1.5 + 爆装 × 2 + 55
             int raig = items.stream()
-                    .mapToInt(SlotitemMst::getRaig)
-                    .sum();
+                .mapToInt(SlotitemMst::getRaig)
+                .sum();
             int baku = items.stream()
-                    .mapToInt(SlotitemMst::getBaku)
-                    .sum();
+                .mapToInt(SlotitemMst::getBaku)
+                .sum();
             return (int) Math.round(((karyoku + raig) * 1.5D) + (baku * 2) + 55);
         } else {
             return karyoku + 5;
@@ -622,9 +622,9 @@ public class Ships {
             combineRate = 1;
         }
         return (int) ((
-                Math.sqrt(getTaisen(ship)) * 2 // 地の対潜値
-                        + antiSub * 1.5 // 装備の対潜値(改修&装備ボーナス)
-                        + shipTypeConst // 艦種別定数(速吸はいい加減)
+            Math.sqrt(getTaisen(ship)) * 2 // 地の対潜値
+                + antiSub * 1.5 // 装備の対潜値(改修&装備ボーナス)
+                + shipTypeConst // 艦種別定数(速吸はいい加減)
         ) * combineRate);
     }
 
@@ -634,9 +634,9 @@ public class Ships {
      */
     private static boolean isMine(SlotitemMst itemMst) {
         return itemMst.getName().equals("九四式爆雷投射機")
-                || itemMst.getName().equals("二式爆雷")
-                || itemMst.getName().equals("対潜短魚雷(試作初期型)")
-                || itemMst.getName().equals("Hedgehog(初期型)");
+            || itemMst.getName().equals("二式爆雷")
+            || itemMst.getName().equals("対潜短魚雷(試作初期型)")
+            || itemMst.getName().equals("Hedgehog(初期型)");
     }
 
     /**
@@ -645,11 +645,11 @@ public class Ships {
      */
     private static boolean isThrower(SlotitemMst itemMst) {
         return itemMst.getName().equals("九五式爆雷")
-                || itemMst.getName().equals("三式爆雷投射機")
-                || itemMst.getName().equals("三式爆雷投射機 集中配備")
-                || itemMst.getName().equals("試製15cm9連装対潜噴進砲")
-                || itemMst.getName().equals("RUR-4A Weapon Alpha改")
-                || itemMst.getName().equals("Mk.32 対潜魚雷(Mk.2落射機)");
+            || itemMst.getName().equals("三式爆雷投射機")
+            || itemMst.getName().equals("三式爆雷投射機 集中配備")
+            || itemMst.getName().equals("試製15cm9連装対潜噴進砲")
+            || itemMst.getName().equals("RUR-4A Weapon Alpha改")
+            || itemMst.getName().equals("Mk.32 対潜魚雷(Mk.2落射機)");
     }
 
     /**
@@ -670,9 +670,9 @@ public class Ships {
      */
     public static int airSuperiority(Ship ship) {
         Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         // 参考 http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9
 
         // 艦娘制空値
@@ -718,13 +718,13 @@ public class Ships {
     public static double airSuperiorityTykuAdditional(SlotitemMst itemMst, SlotItem item) {
         if (itemMst.is(SlotItemType.艦上戦闘機, SlotItemType.水上戦闘機, SlotItemType.局地戦闘機)) {
             return Optional.ofNullable(item.getLevel())
-                    .map(level -> 0.2D * level)
-                    .orElse(0D);
+                .map(level -> 0.2D * level)
+                .orElse(0D);
         }
         if (itemMst.is(SlotItemType.艦上爆撃機)) {
             return Optional.ofNullable(item.getLevel())
-                    .map(level -> 0.25D * level)
-                    .orElse(0D);
+                .map(level -> 0.25D * level)
+                .orElse(0D);
         }
         return 0D;
     }
@@ -743,7 +743,7 @@ public class Ships {
         /*
          * 対潜哨戒機,回転翼機が航空戦に参加するようになったが、対空値を持たない機体は制空に寄与しない模様
          */
-        if(itemMst.is(SlotItemType.対潜哨戒機, SlotItemType.回転翼機) && itemMst.getTyku() == 0){
+        if (itemMst.is(SlotItemType.対潜哨戒機, SlotItemType.回転翼機) && itemMst.getTyku() == 0) {
             return 0D;
         }
         // 上昇制空値＝内部熟練ボーナス＋制空ボーナス(艦戦/水爆)
@@ -754,7 +754,7 @@ public class Ships {
         // 制空ボーナス
         // 対空値を持つ回転翼機が存在しないため、どちらのボーナスが適用されるのかは不明
         if (itemMst.is(SlotItemType.艦上戦闘機, SlotItemType.水上戦闘機, SlotItemType.局地戦闘機,
-                SlotItemType.対潜哨戒機)) {
+            SlotItemType.対潜哨戒機)) {
             bonus += skillBonus1(item.getAlv());
         } else if (itemMst.is(SlotItemType.水上爆撃機)) {
             bonus += skillBonus2(item.getAlv());
@@ -771,10 +771,10 @@ public class Ships {
     public static double weightAntiAircraft(Ship ship) {
         // 装備マスタ
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         // 装備
         Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
 
         // 装備から加重対空値を取り出すFunction
         ToDoubleFunction<SlotItem> weightAA = item -> {
@@ -783,8 +783,8 @@ public class Ships {
                 return 0D;
 
             boolean isGun = Optional.of(mst)
-                    .map(type -> type.is(SlotItemType.小口径主砲, SlotItemType.副砲))
-                    .orElse(false);
+                .map(type -> type.is(SlotItemType.小口径主砲, SlotItemType.副砲))
+                .orElse(false);
             if (mst.getType().get(3) != 16 && isGun)
                 return 0D;
 
@@ -818,10 +818,10 @@ public class Ships {
 
         // 装備加重対空値＝装備係数(対空)×装備対空値+改修係数(対空)×√★
         double itemWeightAA = Stream.concat(ship.getSlot().stream(), Stream.of(ship.getSlotEx()))
-                .map(itemMap::get)
-                .filter(Objects::nonNull)
-                .mapToDouble(weightAA)
-                .sum();
+            .map(itemMap::get)
+            .filter(Objects::nonNull)
+            .mapToDouble(weightAA)
+            .sum();
 
         int itemTaikuu = getSlotItemMst(ship).mapToInt(SlotitemMst::getTyku).sum();
 
@@ -838,17 +838,17 @@ public class Ships {
     public static double rocketBarrageActivationRate(Ship ship) {
         List<SlotitemMst> items = getSlotItemMst(ship).collect(Collectors.toList());
         long rocketCount = items.stream()
-                .filter(e -> e.getId() == 274) // 噴進砲改二
-                .count();
+            .filter(e -> e.getId() == 274) // 噴進砲改二
+            .count();
         if (rocketCount == 0)
             return 0D;
 
         boolean canRocketBarrage = ship.is(ShipType.水上機母艦,
-                ShipType.航空巡洋艦,
-                ShipType.航空戦艦,
-                ShipType.軽空母,
-                ShipType.正規空母,
-                ShipType.装甲空母);
+            ShipType.航空巡洋艦,
+            ShipType.航空戦艦,
+            ShipType.軽空母,
+            ShipType.正規空母,
+            ShipType.装甲空母);
         if (!canRocketBarrage)
             return 0D;
 
@@ -858,9 +858,9 @@ public class Ships {
             bonus += 15D;
 
         if (shipMst(ship)
-                .map(ShipMst::getName)
-                .filter(name -> name.contains("伊勢") || name.contains("日向"))
-                .isPresent()) {
+            .map(ShipMst::getName)
+            .filter(name -> name.contains("伊勢") || name.contains("日向"))
+            .isPresent()) {
             bonus += 25D;
         }
 
@@ -880,43 +880,43 @@ public class Ships {
     public static Decision33 decision33(List<Ship> ships, double branchCoefficient) {
         // 装備マスタ
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         // 装備
         Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         // 艦娘から装備を取り出すFunction
         Function<Ship, Stream<SlotItem>> toSlotItem = ship -> {
             return Stream.concat(ship.getSlot().stream(), Stream.of(ship.getSlotEx()))
-                    .map(itemMap::get)
-                    .filter(Objects::nonNull);
+                .map(itemMap::get)
+                .filter(Objects::nonNull);
         };
 
         //  索敵スコア＝(装備倍率×装備索敵値)の和＋√(各艦娘の素索敵)の和−[0.4×司令部レベル(端数切り上げ)]＋2×(6−出撃艦数)
 
         // (装備係数(索敵)×(装備索敵値+改修係数(索敵)×√★))の和
         double itemView = ships.stream()
-                .flatMap(toSlotItem)
-                .mapToDouble(e -> {
-                    SlotitemMst mst = itemMstMap.get(e.getSlotitemId());
-                    if (mst != null) {
-                        SlotItemType type = SlotItemType.toSlotItemType(mst);
-                        // 装備係数
-                        double ic = VIEW_COEFFICIENT.getOrDefault(type, 0D);
-                        // (装備索敵値+改修係数(索敵)×√★)
-                        double v = mst.getSaku() + LV_COEFFICIENT.getOrDefault(type, 0D) * Math.sqrt(e.getLevel());
+            .flatMap(toSlotItem)
+            .mapToDouble(e -> {
+                SlotitemMst mst = itemMstMap.get(e.getSlotitemId());
+                if (mst != null) {
+                    SlotItemType type = SlotItemType.toSlotItemType(mst);
+                    // 装備係数
+                    double ic = VIEW_COEFFICIENT.getOrDefault(type, 0D);
+                    // (装備索敵値+改修係数(索敵)×√★)
+                    double v = mst.getSaku() + LV_COEFFICIENT.getOrDefault(type, 0D) * Math.sqrt(e.getLevel());
 
-                        return ic * v;
-                    }
-                    return 0;
-                })
-                .sum();
+                    return ic * v;
+                }
+                return 0;
+            })
+            .sum();
         // √(各艦娘の素索敵)の和
         double shipView = ships.stream()
-                .mapToDouble(e -> e.getSakuteki().get(0) - getSlotItemMst(e)
-                        .mapToInt(SlotitemMst::getSaku)
-                        .sum())
-                .map(Math::sqrt)
-                .sum();
+            .mapToDouble(e -> e.getSakuteki().get(0) - getSlotItemMst(e)
+                .mapToInt(SlotitemMst::getSaku)
+                .sum())
+            .map(Math::sqrt)
+            .sum();
         // [0.4×司令部レベル(端数切り上げ)]
         double levelScore = Math.ceil(Basic.get().getLevel() * 0.4D);
         // 2×(6−出撃艦数)
@@ -934,9 +934,9 @@ public class Ships {
      */
     public static double touchPlaneStartProbability(List<Ship> ships) {
         Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         // 艦娘からスロット毎に装備を取り出す
         Function<Ship, Stream<Pair<SlotitemMst, Integer>>> onSlotItem = ship -> {
             List<Integer> slot = ship.getSlot();
@@ -961,13 +961,13 @@ public class Ships {
         };
         // 各スロットごとの{0.04 × 艦載機の索敵値 × √(搭載数)}を計算
         ToDoubleFunction<Pair<SlotitemMst, Integer>> calc = pair -> 0.04D * pair.getKey().getSaku()
-                * Math.sqrt(pair.getValue());
+            * Math.sqrt(pair.getValue());
 
         return ships.stream()
-                .flatMap(onSlotItem)
-                .filter(filter)
-                .mapToDouble(calc)
-                .sum();
+            .flatMap(onSlotItem)
+            .filter(filter)
+            .mapToDouble(calc)
+            .sum();
     }
 
     /**
@@ -1002,9 +1002,9 @@ public class Ships {
      */
     public static int transportPoint(Ship ship) {
         Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         // 参考 https://wikiwiki.jp/kancolle/%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E6%B5%B7%E5%9F%9F%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88/%E8%BC%B8%E9%80%81%E8%B3%87%E6%BA%90%E9%87%8F%E3%81%AE%E8%A8%88%E7%AE%97_2019%E7%A7%8B
 
 
@@ -1016,15 +1016,15 @@ public class Ships {
         }
         // 装備TP
         value += Stream.concat(ship.getSlot().stream(), Stream.of(ship.getSlotEx()))
-                .map(itemMap::get)
-                .filter(Objects::nonNull)
-                .map(SlotItem::getSlotitemId)
-                .map(itemMstMap::get)
-                .map(SlotItemType::toSlotItemType)
-                .map(SLOTITEM_TYPE_TP_MAP::get)
-                .filter(Objects::nonNull)
-                .mapToInt(Integer::intValue)
-                .sum();
+            .map(itemMap::get)
+            .filter(Objects::nonNull)
+            .map(SlotItem::getSlotitemId)
+            .map(itemMstMap::get)
+            .map(SlotItemType::toSlotItemType)
+            .map(SLOTITEM_TYPE_TP_MAP::get)
+            .filter(Objects::nonNull)
+            .mapToInt(Integer::intValue)
+            .sum();
         return value;
     }
 
@@ -1041,20 +1041,20 @@ public class Ships {
         if (chara.isShip() || chara.isFriend()) {
             // 艦娘
             return Messages.getString("ship.name", shipMst(chara)
-                    .map(ShipMst::getName)
-                    .orElse(""), chara.getLv());
+                .map(ShipMst::getName)
+                .orElse(""), chara.getLv());
         } else {
             // 敵艦
             return Messages.getString("ship.name", shipMst(chara)
-                    .map(mst -> {
-                        String yomi = mst.getYomi();
-                        if (yomi == null || "-".equals(yomi) || yomi.isEmpty() || chara.isPractice()) {
-                            return mst.getName();
-                        } else {
-                            return mst.getName() + yomi;
-                        }
-                    })
-                    .orElse(""), chara.getLv());
+                .map(mst -> {
+                    String yomi = mst.getYomi();
+                    if (yomi == null || "-".equals(yomi) || yomi.isEmpty() || chara.isPractice()) {
+                        return mst.getName();
+                    } else {
+                        return mst.getName() + yomi;
+                    }
+                })
+                .orElse(""), chara.getLv());
         }
     }
 
@@ -1182,18 +1182,18 @@ public class Ships {
      */
     private static Stream<SlotitemMst> getSlotItemMst(Chara chara) {
         Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         Stream<Integer> stream = chara.getSlot().stream();
         if (chara.isShip()) {
             stream = Stream.concat(stream, Stream.of(chara.asShip().getSlotEx()));
         }
         return stream.map(itemMap::get)
-                .filter(Objects::nonNull)
-                .map(SlotItem::getSlotitemId)
-                .map(itemMstMap::get)
-                .filter(Objects::nonNull);
+            .filter(Objects::nonNull)
+            .map(SlotItem::getSlotitemId)
+            .map(itemMstMap::get)
+            .filter(Objects::nonNull);
     }
 
     /**
@@ -1268,25 +1268,25 @@ public class Ships {
         for (int i = 0; i < ship.getSlot().size(); i++) {
             final int index = i;
             Items.slotitemMst(items.get(ship.getSlot().get(i)))
-                    .filter(item -> {
-                        if (Items.isAircraft(item) && excludeEmptyAircraft) {
-                            // 航空機なら搭載数が1以上のときのみ加算する
-                            Integer onSlot = (index < ship.getOnslot().size()) ? ship.getOnslot().get(index) : -1;
-                            return onSlot.intValue() > 0;
-                        } else {
-                            // それ以外は常に加算
-                            return true;
-                        }
-                    })
-                    .ifPresent(list::add);
+                .filter(item -> {
+                    if (Items.isAircraft(item) && excludeEmptyAircraft) {
+                        // 航空機なら搭載数が1以上のときのみ加算する
+                        Integer onSlot = (index < ship.getOnslot().size()) ? ship.getOnslot().get(index) : -1;
+                        return onSlot.intValue() > 0;
+                    } else {
+                        // それ以外は常に加算
+                        return true;
+                    }
+                })
+                .ifPresent(list::add);
         }
         // exslot は航空機が乗らない
         Items.slotitemMst(items.get(ship.getSlotEx())).ifPresent(list::add);
 
         return list.stream()
-                .map(mapper)
-                .mapToInt(i -> i.intValue())
-                .sum();
+            .map(mapper)
+            .mapToInt(i -> i.intValue())
+            .sum();
     }
 
     /**

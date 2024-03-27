@@ -41,7 +41,6 @@ import logbook.plugin.PluginServices;
 
 /**
  * 基地航空隊一覧のUIコントローラー
- *
  */
 public class ItemAirBaseController extends WindowController {
 
@@ -49,108 +48,156 @@ public class ItemAirBaseController extends WindowController {
     @FXML
     private TitledPane filter;
 
-    /** グルーピングをしない */
+    /**
+     * グルーピングをしない
+     */
     @FXML
     private ToggleSwitch disableGrouping;
-    
+
     @FXML
     private FlowPane filters;
 
     // 一覧
 
-    /** 一覧 */
+    /**
+     * 一覧
+     */
     @FXML
     private TableView<AirBaseItem> itemTable;
 
-    /** 名称 */
+    /**
+     * 名称
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> name;
 
-    /** 種別 */
+    /**
+     * 種別
+     */
     @FXML
     private TableColumn<AirBaseItem, String> type;
 
-    /** 熟練 */
+    /**
+     * 熟練
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> alv;
 
-    /** 改修 */
+    /**
+     * 改修
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> level;
 
-    /** 個数 */
+    /**
+     * 個数
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> count;
 
-    /** 出撃時制空 */
+    /**
+     * 出撃時制空
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> seiku;
 
-    /** 防空時制空 */
+    /**
+     * 防空時制空
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> interceptSeiku;
 
-    /** 半径 */
+    /**
+     * 半径
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> distance;
 
-    /** 大艇入り半径 */
+    /**
+     * 大艇入り半径
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> distanceTaiteichan;
 
-    /** Catalina入り半径 */
+    /**
+     * Catalina入り半径
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> distanceCatalina;
 
-    /** 配置コスト */
+    /**
+     * 配置コスト
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> cost;
 
-    /** 対空 */
+    /**
+     * 対空
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> tyku;
 
-    /** 対爆 */
+    /**
+     * 対爆
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> houm;
 
-    /** 迎撃 */
+    /**
+     * 迎撃
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> houk;
 
-    /** 雷装 */
+    /**
+     * 雷装
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> raig;
 
-    /** 爆装 */
+    /**
+     * 爆装
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> baku;
 
-    /** 対潜 */
+    /**
+     * 対潜
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> tais;
 
-    /** 索敵 */
+    /**
+     * 索敵
+     */
     @FXML
     private TableColumn<AirBaseItem, Integer> saku;
 
-    /** 基地航空隊 */
+    /**
+     * 基地航空隊
+     */
     private ObservableList<AirBaseItem> items;
 
-    /** フィルターされた基地航空隊リスト */
+    /**
+     * フィルターされた基地航空隊リスト
+     */
     private FilteredList<AirBaseItem> filteredItems;
 
-    /** フィルター */
+    /**
+     * フィルター
+     */
     private List<ParameterFilterPane.AirBaseParameterFilterPane> parameterFilters;
 
-    /** フィルターの更新を停止 */
+    /**
+     * フィルターの更新を停止
+     */
     private boolean disableFilterUpdate;
 
     @FXML
     void initialize() {
         try {
             TableTool.setVisible(this.itemTable, this.getClass().toString() + "#" + "airBaseItemTable");
-            
+
             this.filter.expandedProperty().addListener((ob, o, n) -> saveConfig());
 
             // フィルター 初期化
@@ -207,11 +254,11 @@ public class ItemAirBaseController extends WindowController {
     private void setItems() {
         // 一覧を作る
         Stream<AirBaseItem> listItems = SlotItemCollection.get()
-                .getSlotitemMap()
-                .values().stream()
-                .filter(AirBaseItem::isTarget)
-                .map(AirBaseItem::toAirBaseItem);
-        
+            .getSlotitemMap()
+            .values().stream()
+            .filter(AirBaseItem::isTarget)
+            .map(AirBaseItem::toAirBaseItem);
+
         if (!this.disableGrouping.isSelected()) {
             listItems = listItems
                 .collect(Collectors.groupingBy(e -> e))
@@ -226,11 +273,11 @@ public class ItemAirBaseController extends WindowController {
         List<AirBaseItem> items = this.items;
         items.clear();
         listItems
-                .sorted(Comparator.comparing(AirBaseItem::getType3)
-                        .thenComparing(AirBaseItem::getType2)
-                        .thenComparing(Comparator.comparing(AirBaseItem::getName))
-                        .thenComparing(Comparator.comparing(item -> item.seikuProperty().get())))
-                .forEach(items::add);
+            .sorted(Comparator.comparing(AirBaseItem::getType3)
+                .thenComparing(AirBaseItem::getType2)
+                .thenComparing(Comparator.comparing(AirBaseItem::getName))
+                .thenComparing(Comparator.comparing(item -> item.seikuProperty().get())))
+            .forEach(items::add);
     }
 
     /**
@@ -269,8 +316,8 @@ public class ItemAirBaseController extends WindowController {
             super.updateItem(itemId, empty);
             if (!empty) {
                 SlotitemMst mst = SlotitemMstCollection.get()
-                        .getSlotitemMap()
-                        .get(itemId);
+                    .getSlotitemMap()
+                    .get(itemId);
 
                 if (mst != null) {
                     this.setGraphic(Tools.Controls.zoomImage(new ImageView(Items.itemImage(mst))));
@@ -313,9 +360,9 @@ public class ItemAirBaseController extends WindowController {
             super.updateItem(lv, empty);
             if (!empty) {
                 this.setText(Optional.ofNullable(lv)
-                        .filter(v -> v > 0)
-                        .map(v -> Messages.getString("item.level", v)) //$NON-NLS-1$
-                        .orElse(""));
+                    .filter(v -> v > 0)
+                    .map(v -> Messages.getString("item.level", v)) //$NON-NLS-1$
+                    .orElse(""));
                 if (!this.getStyleClass().contains("level")) {
                     this.getStyleClass().add("level");
                 }
@@ -369,7 +416,7 @@ public class ItemAirBaseController extends WindowController {
     void columnVisibleAirBase() {
         try {
             TableTool.showVisibleSetting(this.itemTable, this.getClass().toString() + "#" + "airBaseItemTable",
-                    this.getWindow());
+                this.getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }

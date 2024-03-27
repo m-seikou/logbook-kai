@@ -1,9 +1,12 @@
 /* [403] 「遠征」を１０回成功させよう！*/
 {
-    "type": "遠征",
-    "resetType" : "デイリー",
-    "conditions" : [
-        {"missions": [], "count": 10}
-    ]
+  "type": "遠征",
+  "resetType": "デイリー",
+  "conditions": [
+    {
+      "missions": [],
+      "count": 10
+    }
+  ]
 }
 

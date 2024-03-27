@@ -18,7 +18,7 @@ public class MapinfoMstCollection implements Serializable {
      * アプリケーションのデフォルト設定ディレクトリから<code>MapinfoMstCollection</code>を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(MapinfoMstCollection.class, MapinfoMstCollection::new)</code>
+     * <code>Config.getDefault().get(MapinfoMstCollection.class, MapinfoMstCollection::new)</code>
      * </blockquote>
      *
      * @return <code>MapinfoMstCollection</code>

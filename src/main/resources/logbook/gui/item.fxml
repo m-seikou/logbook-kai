@@ -5,25 +5,26 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" styleClass="itemWindow" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.ItemController">
-   <children>
-      <TabPane fx:id="tab" VBox.vgrow="ALWAYS">
-         <tabs>
-            <Tab closable="false" text="全ての装備">
-               <content>
-                  <fx:include fx:id="item" source="item_item.fxml" />
-               </content>
-            </Tab>
-            <Tab closable="false" text="基地航空隊">
-               <content>
-                  <fx:include fx:id="airbase" source="item_airbase.fxml" />
-               </content>
-            </Tab>
-         </tabs>
-      </TabPane>
-   </children>
-   <stylesheets>
-      <URL value="@application.css" />
-      <URL value="@item.css" />
-   </stylesheets>
+<VBox prefHeight="600.0" prefWidth="800.0" styleClass="itemWindow" xmlns="http://javafx.com/javafx/8.0.162"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.ItemController">
+    <children>
+        <TabPane fx:id="tab" VBox.vgrow="ALWAYS">
+            <tabs>
+                <Tab closable="false" text="全ての装備">
+                    <content>
+                        <fx:include fx:id="item" source="item_item.fxml"/>
+                    </content>
+                </Tab>
+                <Tab closable="false" text="基地航空隊">
+                    <content>
+                        <fx:include fx:id="airbase" source="item_airbase.fxml"/>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+    <stylesheets>
+        <URL value="@application.css"/>
+        <URL value="@item.css"/>
+    </stylesheets>
 </VBox>

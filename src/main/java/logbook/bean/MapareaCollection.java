@@ -9,7 +9,6 @@ import lombok.Data;
 
 /**
  * 出撃海域のコレクション
- *
  */
 @Data
 public class MapareaCollection implements Serializable {
@@ -22,7 +21,7 @@ public class MapareaCollection implements Serializable {
      * アプリケーションのデフォルト設定ディレクトリから{@link MapareaCollection}を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(MapareaCollection.class, MapareaCollection::new)</code>
+     * <code>Config.getDefault().get(MapareaCollection.class, MapareaCollection::new)</code>
      * </blockquote>
      *
      * @return {@link MapareaCollection}

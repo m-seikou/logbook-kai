@@ -23,11 +23,12 @@ import logbook.proxy.ProxyServerSpi;
 
 /**
  * プロキシサーバーです
- *
  */
 public final class ProxyServerImpl implements ProxyServerSpi {
 
-    /** Server */
+    /**
+     * Server
+     */
     private Server server;
 
     @Override
@@ -36,14 +37,14 @@ public final class ProxyServerImpl implements ProxyServerSpi {
             this.server = new Server();
 
             boolean allowLocalOnly = AppConfig.get()
-                    .isAllowOnlyFromLocalhost();
+                .isAllowOnlyFromLocalhost();
 
             ServerConnector connector = new ServerConnector(this.server);
             connector.setPort(AppConfig.get().getListenPort());
             if (allowLocalOnly) {
                 connector.setHost("localhost");
             }
-            this.server.setConnectors(new Connector[] { connector });
+            this.server.setConnectors(new Connector[]{connector});
 
             // httpsをプロキシできるようにConnectHandlerを設定
             ConnectHandler proxy = new ConnectHandler();

@@ -12,45 +12,67 @@ import logbook.internal.MissionLogs.SimpleMissionLog;
 
 /**
  * 遠征ログの詳細行
- *
  */
 public class MissionLogDetail {
 
-    /** 日付 */
+    /**
+     * 日付
+     */
     private StringProperty date = new SimpleStringProperty();
 
-    /** 遠征名 */
+    /**
+     * 遠征名
+     */
     private StringProperty name = new SimpleStringProperty();
 
-    /** 結果 */
+    /**
+     * 結果
+     */
     private StringProperty result = new SimpleStringProperty();
 
-    /** 燃料 */
+    /**
+     * 燃料
+     */
     private IntegerProperty fuel = new SimpleIntegerProperty();
 
-    /** 弾薬 */
+    /**
+     * 弾薬
+     */
     private IntegerProperty ammo = new SimpleIntegerProperty();
 
-    /** 鋼材 */
+    /**
+     * 鋼材
+     */
     private IntegerProperty metal = new SimpleIntegerProperty();
 
-    /** ボーキ */
+    /**
+     * ボーキ
+     */
     private IntegerProperty bauxite = new SimpleIntegerProperty();
 
-    /** アイテム1 */
+    /**
+     * アイテム1
+     */
     private StringProperty item1name = new SimpleStringProperty();
 
-    /** アイテム1 */
+    /**
+     * アイテム1
+     */
     private StringProperty item1count = new SimpleStringProperty();
 
-    /** アイテム2 */
+    /**
+     * アイテム2
+     */
     private StringProperty item2name = new SimpleStringProperty();
 
-    /** アイテム2 */
+    /**
+     * アイテム2
+     */
     private StringProperty item2count = new SimpleStringProperty();
 
     /**
      * 日付を取得します。
+     *
      * @return 日付
      */
     public StringProperty dateProperty() {
@@ -59,6 +81,7 @@ public class MissionLogDetail {
 
     /**
      * 日付を取得します。
+     *
      * @return 日付
      */
     public String getDate() {
@@ -67,6 +90,7 @@ public class MissionLogDetail {
 
     /**
      * 日付を設定します。
+     *
      * @param date 日付
      */
     public void setDate(String date) {
@@ -75,6 +99,7 @@ public class MissionLogDetail {
 
     /**
      * 遠征名を取得します。
+     *
      * @return 遠征名
      */
     public StringProperty nameProperty() {
@@ -83,6 +108,7 @@ public class MissionLogDetail {
 
     /**
      * 遠征名を取得します。
+     *
      * @return 遠征名
      */
     public String getName() {
@@ -91,6 +117,7 @@ public class MissionLogDetail {
 
     /**
      * 遠征名を設定します。
+     *
      * @param name 遠征名
      */
     public void setName(String name) {
@@ -99,6 +126,7 @@ public class MissionLogDetail {
 
     /**
      * 結果を取得します。
+     *
      * @return 結果
      */
     public StringProperty resultProperty() {
@@ -107,6 +135,7 @@ public class MissionLogDetail {
 
     /**
      * 結果を取得します。
+     *
      * @return 結果
      */
     public String getResult() {
@@ -115,6 +144,7 @@ public class MissionLogDetail {
 
     /**
      * 結果を設定します。
+     *
      * @param result 結果
      */
     public void setResult(String result) {
@@ -123,6 +153,7 @@ public class MissionLogDetail {
 
     /**
      * 燃料を取得します。
+     *
      * @return 燃料
      */
     public IntegerProperty fuelProperty() {
@@ -131,6 +162,7 @@ public class MissionLogDetail {
 
     /**
      * 燃料を取得します。
+     *
      * @return 燃料
      */
     public Integer getFuel() {
@@ -139,6 +171,7 @@ public class MissionLogDetail {
 
     /**
      * 燃料を設定します。
+     *
      * @param fuel 燃料
      */
     public void setFuel(Integer fuel) {
@@ -147,6 +180,7 @@ public class MissionLogDetail {
 
     /**
      * 弾薬を取得します。
+     *
      * @return 弾薬
      */
     public IntegerProperty ammoProperty() {
@@ -155,6 +189,7 @@ public class MissionLogDetail {
 
     /**
      * 弾薬を取得します。
+     *
      * @return 弾薬
      */
     public Integer getAmmo() {
@@ -163,6 +198,7 @@ public class MissionLogDetail {
 
     /**
      * 弾薬を設定します。
+     *
      * @param ammo 弾薬
      */
     public void setAmmo(Integer ammo) {
@@ -171,6 +207,7 @@ public class MissionLogDetail {
 
     /**
      * 鋼材を取得します。
+     *
      * @return 鋼材
      */
     public IntegerProperty metalProperty() {
@@ -179,6 +216,7 @@ public class MissionLogDetail {
 
     /**
      * 鋼材を取得します。
+     *
      * @return 鋼材
      */
     public Integer getMetal() {
@@ -187,6 +225,7 @@ public class MissionLogDetail {
 
     /**
      * 鋼材を設定します。
+     *
      * @param metal 鋼材
      */
     public void setMetal(Integer metal) {
@@ -195,6 +234,7 @@ public class MissionLogDetail {
 
     /**
      * ボーキを取得します。
+     *
      * @return ボーキ
      */
     public IntegerProperty bauxiteProperty() {
@@ -203,6 +243,7 @@ public class MissionLogDetail {
 
     /**
      * ボーキを取得します。
+     *
      * @return ボーキ
      */
     public Integer getBauxite() {
@@ -211,6 +252,7 @@ public class MissionLogDetail {
 
     /**
      * ボーキを設定します。
+     *
      * @param bauxite ボーキ
      */
     public void setBauxite(Integer bauxite) {
@@ -219,6 +261,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム1を取得します。
+     *
      * @return アイテム1
      */
     public StringProperty item1nameProperty() {
@@ -227,6 +270,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム1を取得します。
+     *
      * @return アイテム1
      */
     public String getItem1name() {
@@ -235,6 +279,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム1を設定します。
+     *
      * @param item1name アイテム1
      */
     public void setItem1name(String item1name) {
@@ -243,6 +288,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム1を取得します。
+     *
      * @return アイテム1
      */
     public StringProperty item1countProperty() {
@@ -251,6 +297,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム1を取得します。
+     *
      * @return アイテム1
      */
     public String getItem1count() {
@@ -259,6 +306,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム1を設定します。
+     *
      * @param item1count アイテム1
      */
     public void setItem1count(String item1count) {
@@ -267,6 +315,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム2を取得します。
+     *
      * @return アイテム2
      */
     public StringProperty item2nameProperty() {
@@ -275,6 +324,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム2を取得します。
+     *
      * @return アイテム2
      */
     public String getItem2name() {
@@ -283,6 +333,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム2を設定します。
+     *
      * @param item2name アイテム2
      */
     public void setItem2name(String item2name) {
@@ -291,6 +342,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム2を取得します。
+     *
      * @return アイテム2
      */
     public StringProperty item2countProperty() {
@@ -299,6 +351,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム2を取得します。
+     *
      * @return アイテム2
      */
     public String getItem2count() {
@@ -307,6 +360,7 @@ public class MissionLogDetail {
 
     /**
      * アイテム2を設定します。
+     *
      * @param item2count アイテム2
      */
     public void setItem2count(String item2count) {
@@ -316,18 +370,18 @@ public class MissionLogDetail {
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(this.date.get())
-                .add(this.name.get())
-                .add(this.result.get())
-                .add(Integer.toString(this.fuel.get()))
-                .add(Integer.toString(this.ammo.get()))
-                .add(Integer.toString(this.metal.get()))
-                .add(Integer.toString(this.bauxite.get()))
-                .add(this.item1name.get())
-                .add(this.item1count.get())
-                .add(this.item2name.get())
-                .add(this.item2count.get())
-                .toString();
+            .add(this.date.get())
+            .add(this.name.get())
+            .add(this.result.get())
+            .add(Integer.toString(this.fuel.get()))
+            .add(Integer.toString(this.ammo.get()))
+            .add(Integer.toString(this.metal.get()))
+            .add(Integer.toString(this.bauxite.get()))
+            .add(this.item1name.get())
+            .add(this.item1count.get())
+            .add(this.item2name.get())
+            .add(this.item2count.get())
+            .toString();
     }
 
     /**

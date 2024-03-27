@@ -14,17 +14,22 @@ import javafx.stage.Screen;
 
 /**
  * ノードへのマウスオーバー時に指定されたノードの内容をマウス位置に表示する
- *
  */
 public class PopOver<T> {
 
-    /** ポップアップ */
+    /**
+     * ポップアップ
+     */
     protected Popup popup;
 
-    /** ポップアップの内容 */
+    /**
+     * ポップアップの内容
+     */
     protected BiFunction<Node, T, Parent> nodeSupplier;
 
-    /** ユーザーデータ */
+    /**
+     * ユーザーデータ
+     */
     protected WeakHashMap<Node, T> userData = new WeakHashMap<>();
 
     /**
@@ -41,7 +46,7 @@ public class PopOver<T> {
      * 指定されたノードへポップアップを設定します
      *
      * @param anchorNode アンカーノード
-     * @param userData ユーザーデータ
+     * @param userData   ユーザーデータ
      */
     public void install(Node anchorNode, T userData) {
         anchorNode.setOnMouseEntered(this::setOnMouseEntered);
@@ -100,6 +105,7 @@ public class PopOver<T> {
 
     /**
      * 表示位置のギャップを取得します
+     *
      * @return 表示位置のギャップ
      */
     protected double getGapSize() {
@@ -109,9 +115,9 @@ public class PopOver<T> {
     /**
      * ポップアップの表示位置を設定します
      *
-     * @param popup ポップアップ
+     * @param popup      ポップアップ
      * @param anchorNode アンカーノード
-     * @param event {@link MouseEvent}
+     * @param event      {@link MouseEvent}
      */
     protected void setLocation(Popup popup, Node anchorNode, MouseEvent event) {
         double x = event.getScreenX();

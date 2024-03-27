@@ -10,7 +10,6 @@ import logbook.internal.LoggerHolder;
 
 /**
  * プラグインを管理します
- *
  */
 public class PluginContainer {
 
@@ -33,8 +32,8 @@ public class PluginContainer {
     public synchronized void init(List<JarBasedPlugin> plugins) {
         if (!this.initialized) {
             URL[] urls = plugins.stream()
-                    .map(JarBasedPlugin::getURL)
-                    .toArray(URL[]::new);
+                .map(JarBasedPlugin::getURL)
+                .toArray(URL[]::new);
             this.plugins = new ArrayList<>(plugins);
             this.classLoader = new URLClassLoader(urls);
             this.initialized = true;
@@ -52,6 +51,7 @@ public class PluginContainer {
 
     /**
      * このプラグインコンテナーが読み込んでいるプラグインのリストを返します
+     *
      * @return プラグインのリスト
      */
     public List<JarBasedPlugin> getPlugins() {
@@ -63,6 +63,7 @@ public class PluginContainer {
 
     /**
      * このプラグインコンテナーのクラスローダーを返します
+     *
      * @return クラスローダー
      */
     public ClassLoader getClassLoader() {
@@ -75,6 +76,7 @@ public class PluginContainer {
 
     /**
      * プラグインコンテナーのインスタンスを返します
+     *
      * @return プラグインコンテナーのインスタンス
      */
     public static PluginContainer getInstance() {

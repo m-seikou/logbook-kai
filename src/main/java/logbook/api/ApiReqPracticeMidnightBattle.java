@@ -10,7 +10,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_practice/midnight_battle
- *
  */
 @API("/kcsapi/api_req_practice/midnight_battle")
 public class ApiReqPracticeMidnightBattle implements APIListenerSpi {

@@ -25,7 +25,6 @@ import logbook.internal.ThreadManager;
 
 /**
  * 任務進捗確認
- *
  */
 public class QuestProgress extends WindowController {
 

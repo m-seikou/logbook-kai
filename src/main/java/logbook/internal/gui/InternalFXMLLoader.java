@@ -15,7 +15,9 @@ import logbook.plugin.PluginServices;
 
 public final class InternalFXMLLoader {
 
-    /** OSによる（今の所Macのみ特別扱い）デフォルトのフォントファミリー */
+    /**
+     * OSによる（今の所Macのみ特別扱い）デフォルトのフォントファミリー
+     */
     private static final String DEFAULT_FONT;
 
     static {
@@ -42,16 +44,16 @@ public final class InternalFXMLLoader {
             }
         }
         String font = Optional.ofNullable(AppConfig.get().getFontFamily()).filter(str -> str.trim().length() > 0).orElse(DEFAULT_FONT);
-        root.setStyle("-fx-font-family: \""+ font + "\";");
+        root.setStyle("-fx-font-family: \"" + font + "\";");
         return root;
     }
 
     /**
      * ウインドウを開く
      *
-     * @param name リソース
+     * @param name   リソース
      * @param parent 親ウインドウ
-     * @param title ウインドウタイトル
+     * @param title  ウインドウタイトル
      * @throws IOException 入出力例外が発生した場合
      */
     static void showWindow(String name, Stage parent, String title) throws IOException {
@@ -61,50 +63,50 @@ public final class InternalFXMLLoader {
     /**
      * ウインドウを開く
      *
-     * @param name リソース
-     * @param parent 親ウインドウ
-     * @param title ウインドウタイトル
+     * @param name               リソース
+     * @param parent             親ウインドウ
+     * @param title              ウインドウタイトル
      * @param controllerConsumer コントローラーを操作するConsumer
-     * @param windowConsumer ウインドウを操作するConsumer
+     * @param windowConsumer     ウインドウを操作するConsumer
      * @throws IOException 入出力例外が発生した場合
      */
     static void showWindow(String name, Stage parent, String title, Consumer<WindowController> controllerConsumer,
-            Consumer<Stage> windowConsumer) throws IOException {
+                           Consumer<Stage> windowConsumer) throws IOException {
         showWindow(name, parent, title, null, controllerConsumer, windowConsumer);
     }
 
     /**
      * ウインドウを開く
      *
-     * @param name リソース
-     * @param parent 親ウインドウ
-     * @param title ウインドウタイトル
-     * @param sceneFunction シーン・グラフを操作するFunction
+     * @param name               リソース
+     * @param parent             親ウインドウ
+     * @param title              ウインドウタイトル
+     * @param sceneFunction      シーン・グラフを操作するFunction
      * @param controllerConsumer コントローラーを操作するConsumer
-     * @param windowConsumer ウインドウを操作するConsumer
+     * @param windowConsumer     ウインドウを操作するConsumer
      * @throws IOException 入出力例外が発生した場合
      */
     static void showWindow(String name, Stage parent, String title, Function<Parent, Scene> sceneFunction,
-            Consumer<WindowController> controllerConsumer,
-            Consumer<Stage> windowConsumer) throws IOException {
+                           Consumer<WindowController> controllerConsumer,
+                           Consumer<Stage> windowConsumer) throws IOException {
         showWindow(name, parent, title, null, sceneFunction, controllerConsumer, windowConsumer);
     }
 
     /**
      * ウインドウを開く
      *
-     * @param name リソース
-     * @param parent 親ウインドウ
-     * @param title ウインドウタイトル
-     * @param subkey 同じクラスでウィンドウ位置の保存を分けたいときに使うキー
-     * @param sceneFunction シーン・グラフを操作するFunction
+     * @param name               リソース
+     * @param parent             親ウインドウ
+     * @param title              ウインドウタイトル
+     * @param subkey             同じクラスでウィンドウ位置の保存を分けたいときに使うキー
+     * @param sceneFunction      シーン・グラフを操作するFunction
      * @param controllerConsumer コントローラーを操作するConsumer
-     * @param windowConsumer ウインドウを操作するConsumer
+     * @param windowConsumer     ウインドウを操作するConsumer
      * @throws IOException 入出力例外が発生した場合
      */
     static void showWindow(String name, Stage parent, String title, String subkey, Function<Parent, Scene> sceneFunction,
-            Consumer<WindowController> controllerConsumer,
-            Consumer<Stage> windowConsumer) throws IOException {
+                           Consumer<WindowController> controllerConsumer,
+                           Consumer<Stage> windowConsumer) throws IOException {
 
         FXMLLoader loader = load(name);
         Stage stage = new Stage();

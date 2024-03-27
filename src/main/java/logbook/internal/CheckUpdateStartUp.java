@@ -5,7 +5,6 @@ import logbook.plugin.lifecycle.StartUp;
 
 /**
  * アップデートチェック
- *
  */
 public class CheckUpdateStartUp implements StartUp {
 

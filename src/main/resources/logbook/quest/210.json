@@ -1,7 +1,9 @@
 /* [210]敵艦隊を10回邀撃せよ！ */
 {
-    "resetType" : "デイリー",
-    "conditions" : [
-        {"count": 10}
-    ]
+  "resetType": "デイリー",
+  "conditions": [
+    {
+      "count": 10
+    }
+  ]
 }

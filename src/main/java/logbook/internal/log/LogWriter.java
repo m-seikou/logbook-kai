@@ -16,42 +16,63 @@ import logbook.internal.LoggerHolder;
 
 /**
  * ログ書き込みをサポートします
- *
  */
 public class LogWriter<T> {
 
-    /** CR+LF */
+    /**
+     * CR+LF
+     */
     public static final String CRLF = "\r\n";
 
-    /** LF */
+    /**
+     * LF
+     */
     public static final String LF = "\n";
 
-    /** デフォルトの文字コード  */
+    /**
+     * デフォルトの文字コード
+     */
     public static final Charset DEFAULT_CHARSET = Charset.forName("UTF8");
 
-    /** デフォルトのファイルを開く方法を指定するオプション */
-    private static final OpenOption[] DEFAULT_OPTION = new OpenOption[] { StandardOpenOption.CREATE,
-            StandardOpenOption.APPEND };
+    /**
+     * デフォルトのファイルを開く方法を指定するオプション
+     */
+    private static final OpenOption[] DEFAULT_OPTION = new OpenOption[]{StandardOpenOption.CREATE,
+        StandardOpenOption.APPEND};
 
-    /** 文字コード */
+    /**
+     * 文字コード
+     */
     private Charset charset = DEFAULT_CHARSET;
 
-    /** ファイルを開く方法を指定するオプション */
+    /**
+     * ファイルを開く方法を指定するオプション
+     */
     private OpenOption[] options = DEFAULT_OPTION;
 
-    /** 行の区切り文字 */
+    /**
+     * 行の区切り文字
+     */
     private String delimiter = LF;
 
-    /** ヘッダー */
+    /**
+     * ヘッダー
+     */
     private String header;
 
-    /** ファイルパス */
+    /**
+     * ファイルパス
+     */
     private Path filePath;
 
-    /** 代替ファイルパス */
+    /**
+     * 代替ファイルパス
+     */
     private Path alterFilePath;
 
-    /** オブジェクトを文字列に変換するコンバーター */
+    /**
+     * オブジェクトを文字列に変換するコンバーター
+     */
     private Function<T, String> converter;
 
     /**
@@ -168,7 +189,7 @@ public class LogWriter<T> {
     /**
      * オブジェクトをファイルに書き込みます
      *
-     * @param obj 書き込むオブジェクト
+     * @param obj       書き込むオブジェクト
      * @param converter オブジェクトをStringへ変換するコンバーター
      */
     public void write(T obj, Function<T, String> converter) {

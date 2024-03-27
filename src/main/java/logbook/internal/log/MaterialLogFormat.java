@@ -7,7 +7,6 @@ import logbook.bean.Material;
 
 /**
  * 資材ログ
- *
  */
 public class MaterialLogFormat extends LogFormatBase<Map<Integer, Material>> {
 
@@ -19,16 +18,16 @@ public class MaterialLogFormat extends LogFormatBase<Map<Integer, Material>> {
     @Override
     public String header() {
         return new StringJoiner(",")
-                .add("日付")
-                .add("燃料")
-                .add("弾薬")
-                .add("鋼材")
-                .add("ボーキ")
-                .add("高速修復材")
-                .add("高速建造材")
-                .add("開発資材")
-                .add("改修資材")
-                .toString();
+            .add("日付")
+            .add("燃料")
+            .add("弾薬")
+            .add("鋼材")
+            .add("ボーキ")
+            .add("高速修復材")
+            .add("高速建造材")
+            .add("開発資材")
+            .add("改修資材")
+            .toString();
     }
 
     @Override

@@ -13,6 +13,7 @@ public class JarBasedPluginTest {
 
     /**
      * {@link logbook.plugin.JarBasedPlugin} のためのテスト・メソッド。
+     *
      * @throws IOException
      */
     @Test
@@ -23,6 +24,7 @@ public class JarBasedPluginTest {
 
     /**
      * {@link logbook.plugin.JarBasedPlugin} のためのテスト・メソッド。
+     *
      * @throws IOException
      */
     @Test(expected = IOException.class)
@@ -32,6 +34,7 @@ public class JarBasedPluginTest {
 
     /**
      * {@link logbook.plugin.JarBasedPlugin#getURL()} のためのテスト・メソッド。
+     *
      * @throws IOException
      */
     @Test
@@ -44,6 +47,7 @@ public class JarBasedPluginTest {
 
     /**
      * {@link logbook.plugin.JarBasedPlugin#getName()} のためのテスト・メソッド。
+     *
      * @throws IOException
      */
     @Test
@@ -80,6 +84,7 @@ public class JarBasedPluginTest {
 
     /**
      * {@link logbook.plugin.JarBasedPlugin#getVendor()} のためのテスト・メソッド。
+     *
      * @throws IOException
      */
     @Test
@@ -116,6 +121,7 @@ public class JarBasedPluginTest {
 
     /**
      * {@link logbook.plugin.JarBasedPlugin#getVersion()} のためのテスト・メソッド。
+     *
      * @throws IOException
      */
     @Test
@@ -152,6 +158,7 @@ public class JarBasedPluginTest {
 
     /**
      * {@link logbook.plugin.JarBasedPlugin#getLicense()} のためのテスト・メソッド。
+     *
      * @throws IOException
      */
     @Test

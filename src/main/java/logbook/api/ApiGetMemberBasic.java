@@ -9,7 +9,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/basic
- *
  */
 @API("/kcsapi/api_get_member/basic")
 public class ApiGetMemberBasic implements APIListenerSpi {

@@ -14,7 +14,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_air_corps/set_plane
- *
  */
 @API("/kcsapi/api_req_air_corps/set_plane")
 public class ApiReqAirCorpsSetPlane implements APIListenerSpi {
@@ -27,16 +26,16 @@ public class ApiReqAirCorpsSetPlane implements APIListenerSpi {
             int baseId = Integer.parseInt(req.getParameter("api_base_id"));
 
             AirBase airBase = Mapinfo.get()
-                    .getAirBase()
-                    .stream()
-                    .filter(b -> b.getAreaId() == areaId)
-                    .filter(b -> b.getRid() == baseId)
-                    .findFirst()
-                    .orElse(null);
+                .getAirBase()
+                .stream()
+                .filter(b -> b.getAreaId() == areaId)
+                .filter(b -> b.getRid() == baseId)
+                .findFirst()
+                .orElse(null);
             if (airBase != null) {
                 List<PlaneInfo> infos = airBase.getPlaneInfo();
                 Map<Integer, PlaneInfo> supplys = JsonHelper.toMap(object.getJsonArray("api_plane_info"),
-                        PlaneInfo::getSquadronId, PlaneInfo::toPlaneInfo);
+                    PlaneInfo::getSquadronId, PlaneInfo::toPlaneInfo);
                 for (int i = 0; i < infos.size(); i++) {
                     PlaneInfo newPlane = supplys.get(infos.get(i).getSquadronId());
                     if (newPlane != null) {

@@ -25,62 +25,88 @@ import lombok.Data;
 
 /**
  * 戦闘ログ
- *
  */
 @Data
 public class BattleLog implements Serializable {
 
     private static final long serialVersionUID = -6163406897520116392L;
 
-    /** 連合艦隊 */
+    /**
+     * 連合艦隊
+     */
     private CombinedType combinedType = CombinedType.未結成;
 
-    /** 開始/進撃(順番に複数存在する) */
+    /**
+     * 開始/進撃(順番に複数存在する)
+     */
     private List<MapStartNext> next = new ArrayList<>();
 
-    /** 戦闘(昼戦、特殊夜戦) */
+    /**
+     * 戦闘(昼戦、特殊夜戦)
+     */
     private IFormation battle;
 
-    /** 夜戦 */
+    /**
+     * 夜戦
+     */
     private IMidnightBattle midnight;
 
-    /** 戦闘結果 */
+    /**
+     * 戦闘結果
+     */
     private BattleResult result;
 
-    /** 艦隊スナップショット */
+    /**
+     * 艦隊スナップショット
+     */
     private Map<Integer, List<Ship>> deckMap;
 
-    /** 装備スナップショット */
+    /**
+     * 装備スナップショット
+     */
     private Map<Integer, SlotItem> itemMap;
 
-    /** 退避艦IDスナップショット */
+    /**
+     * 退避艦IDスナップショット
+     */
     private Set<Integer> escape;
 
-    /** 日時(戦闘結果の取得日時) */
+    /**
+     * 日時(戦闘結果の取得日時)
+     */
     private String time;
 
-    /** 先頭カウント */
+    /**
+     * 先頭カウント
+     */
     private Integer battleCount;
 
-    /** ルート */
+    /**
+     * ルート
+     */
     private List<String> route;
 
-    /** ローデータ */
+    /**
+     * ローデータ
+     */
     private RawData raw;
 
-    /** 演習かどうか */
+    /**
+     * 演習かどうか
+     */
     private boolean isPractice;
 
     /**
      * 艦隊スナップショットを作成します
-     * @param log 戦闘ログ
+     *
+     * @param log     戦闘ログ
      * @param dockIds 艦隊ID
      */
     public static void snapshot(BattleLog log, Integer... dockIds) {
         Map<Integer, Ship> shipMap = ShipCollection.get()
-                .getShipMap();
+            .getShipMap();
         Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
 
         Map<Integer, List<Ship>> deckMap = new HashMap<>();
         Map<Integer, SlotItem> cloneItem = new HashMap<>();
@@ -88,9 +114,9 @@ public class BattleLog implements Serializable {
         for (Integer dockId : dockIds) {
             List<Ship> ships = new ArrayList<>();
             for (Integer shipId : DeckPortCollection.get()
-                    .getDeckPortMap()
-                    .get(dockId)
-                    .getShip()) {
+                .getDeckPortMap()
+                .get(dockId)
+                .getShip()) {
                 Ship ship = shipMap.get(shipId);
                 if (ship != null) {
                     ship = ship.clone();
@@ -121,14 +147,14 @@ public class BattleLog implements Serializable {
     /**
      * ローデータを設定する
      *
-     * @param log 戦闘ログ
+     * @param log      戦闘ログ
      * @param consumer setter
-     * @param json 設定するjson
-     * @param req リクエスト
+     * @param json     設定するjson
+     * @param req      リクエスト
      */
     @SuppressWarnings("unchecked")
     public static void setRawData(BattleLog log, BiConsumer<RawData, ApiData> consumer,
-            JsonObject json, RequestMetaData req) {
+                                  JsonObject json, RequestMetaData req) {
         RawData rawData = log.getRaw();
         if (rawData == null) {
             rawData = new RawData();
@@ -158,13 +184,19 @@ public class BattleLog implements Serializable {
 
         private static final long serialVersionUID = 4291532219144781718L;
 
-        /** 戦闘(昼戦、特殊夜戦) */
+        /**
+         * 戦闘(昼戦、特殊夜戦)
+         */
         private ApiData battle;
 
-        /** 夜戦 */
+        /**
+         * 夜戦
+         */
         private ApiData midnight;
 
-        /** 戦闘結果 */
+        /**
+         * 戦闘結果
+         */
         private ApiData result;
     }
 
@@ -176,10 +208,14 @@ public class BattleLog implements Serializable {
 
         private static final long serialVersionUID = 8729885890089448397L;
 
-        /** URI */
+        /**
+         * URI
+         */
         private String uri;
 
-        /** api_data */
+        /**
+         * api_data
+         */
         @JsonProperty("api_data")
         private Map<Object, Object> apidata;
     }

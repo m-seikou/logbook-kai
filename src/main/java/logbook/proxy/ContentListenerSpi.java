@@ -12,6 +12,7 @@ public interface ContentListenerSpi {
 
     /**
      * レスポンスを受け入れるかをテストします
+     *
      * @param requestMetaData リクエストに含まれている情報
      * @return 受け入れる場合true
      */
@@ -19,7 +20,8 @@ public interface ContentListenerSpi {
 
     /**
      * レスポンスを処理します
-     * @param requestMetaData リクエストに含まれている情報
+     *
+     * @param requestMetaData  リクエストに含まれている情報
      * @param responseMetaData レスポンスに含まれている情報
      */
     void accept(RequestMetaData requestMetaData, ResponseMetaData responseMetaData);

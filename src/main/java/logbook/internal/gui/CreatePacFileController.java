@@ -16,7 +16,6 @@ import logbook.plugin.PluginServices;
 
 /**
  * 自動プロキシ構成スクリプトファイル生成
- *
  */
 public class CreatePacFileController extends WindowController {
 
@@ -36,7 +35,7 @@ public class CreatePacFileController extends WindowController {
                 }
             }
             packFile = new String(out.toByteArray())
-                    .replace("{port}", String.valueOf(AppConfig.get().getListenPort()));
+                .replace("{port}", String.valueOf(AppConfig.get().getListenPort()));
 
             FileChooser fc = new FileChooser();
             fc.setTitle("名前をつけて保存");
@@ -50,16 +49,16 @@ public class CreatePacFileController extends WindowController {
                 this.addr.setText("file:///" + file.toURI().toString().replaceFirst("file:/", ""));
 
                 Tools.Controls.alert(AlertType.INFORMATION,
-                        "自動プロキシ構成スクリプトファイル",
-                        "自動プロキシ構成スクリプトファイルを生成しました。\n" + "次にブラウザの設定を行って下さい。",
-                        this.getWindow());
+                    "自動プロキシ構成スクリプトファイル",
+                    "自動プロキシ構成スクリプトファイルを生成しました。\n" + "次にブラウザの設定を行って下さい。",
+                    this.getWindow());
             }
         } catch (IOException e) {
             Tools.Controls.alert(AlertType.ERROR,
-                    "自動プロキシ構成スクリプトファイル",
-                    "自動プロキシ構成スクリプトファイルの生成に失敗しました",
-                    e,
-                    this.getWindow());
+                "自動プロキシ構成スクリプトファイル",
+                "自動プロキシ構成スクリプトファイルの生成に失敗しました",
+                e,
+                this.getWindow());
         }
     }
 

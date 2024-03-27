@@ -17,22 +17,34 @@ public class QuestList implements Serializable {
 
     private static final long serialVersionUID = 7042549795095230008L;
 
-    /** api_count */
+    /**
+     * api_count
+     */
     private Integer count;
 
-    /** api_completed_kind */
+    /**
+     * api_completed_kind
+     */
     private Integer completedKind;
 
-    /** api_page_count */
+    /**
+     * api_page_count
+     */
     private Integer pageCount;
 
-    /** api_disp_page */
+    /**
+     * api_disp_page
+     */
     private Integer dispPage;
 
-    /** api_list */
+    /**
+     * api_list
+     */
     private List<Quest> list;
 
-    /** api_exec_count */
+    /**
+     * api_exec_count
+     */
     private Integer execCount;
 
     /**
@@ -43,34 +55,54 @@ public class QuestList implements Serializable {
 
         private static final long serialVersionUID = 257861496728265702L;
 
-        /** api_no */
+        /**
+         * api_no
+         */
         private Integer no;
 
-        /** api_category */
+        /**
+         * api_category
+         */
         private Integer category;
 
-        /** api_type */
+        /**
+         * api_type
+         */
         private Integer type;
 
-        /** api_state */
+        /**
+         * api_state
+         */
         private Integer state;
 
-        /** api_title */
+        /**
+         * api_title
+         */
         private String title;
 
-        /** api_detail */
+        /**
+         * api_detail
+         */
         private String detail;
 
-        /** api_get_material */
+        /**
+         * api_get_material
+         */
         private List<Integer> getMaterial;
 
-        /** api_bonus_flag */
+        /**
+         * api_bonus_flag
+         */
         private Integer bonusFlag;
 
-        /** api_progress_flag */
+        /**
+         * api_progress_flag
+         */
         private Integer progressFlag;
 
-        /** api_invalid_flag */
+        /**
+         * api_invalid_flag
+         */
         private Integer invalidFlag;
 
         /**
@@ -83,16 +115,16 @@ public class QuestList implements Serializable {
             if (value instanceof JsonObject) {
                 Quest bean = new Quest();
                 JsonHelper.bind((JsonObject) value)
-                        .setInteger("api_no", bean::setNo)
-                        .setInteger("api_category", bean::setCategory)
-                        .setInteger("api_type", bean::setType)
-                        .setInteger("api_state", bean::setState)
-                        .setString("api_title", bean::setTitle)
-                        .setString("api_detail", bean::setDetail)
-                        .setIntegerList("api_get_material", bean::setGetMaterial)
-                        .setInteger("api_bonus_flag", bean::setBonusFlag)
-                        .setInteger("api_progress_flag", bean::setProgressFlag)
-                        .setInteger("api_invalid_flag", bean::setInvalidFlag);
+                    .setInteger("api_no", bean::setNo)
+                    .setInteger("api_category", bean::setCategory)
+                    .setInteger("api_type", bean::setType)
+                    .setInteger("api_state", bean::setState)
+                    .setString("api_title", bean::setTitle)
+                    .setString("api_detail", bean::setDetail)
+                    .setIntegerList("api_get_material", bean::setGetMaterial)
+                    .setInteger("api_bonus_flag", bean::setBonusFlag)
+                    .setInteger("api_progress_flag", bean::setProgressFlag)
+                    .setInteger("api_invalid_flag", bean::setInvalidFlag);
                 return bean;
             } else {
                 return null;
@@ -109,12 +141,12 @@ public class QuestList implements Serializable {
     public static QuestList toQuestList(JsonObject json) {
         QuestList bean = new QuestList();
         JsonHelper.bind(json)
-                .setInteger("api_count", bean::setCount)
-                .setInteger("api_completed_kind", bean::setCompletedKind)
-                .setInteger("api_page_count", bean::setPageCount)
-                .setInteger("api_disp_page", bean::setDispPage)
-                .set("api_list", bean::setList, JsonHelper.toList(Quest::toQuest))
-                .setInteger("api_exec_count", bean::setExecCount);
+            .setInteger("api_count", bean::setCount)
+            .setInteger("api_completed_kind", bean::setCompletedKind)
+            .setInteger("api_page_count", bean::setPageCount)
+            .setInteger("api_disp_page", bean::setDispPage)
+            .set("api_list", bean::setList, JsonHelper.toList(Quest::toQuest))
+            .setInteger("api_exec_count", bean::setExecCount);
         return bean;
     }
 }

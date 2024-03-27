@@ -67,30 +67,29 @@ import logbook.plugin.PluginServices;
 
 /**
  * JavaFx Tools
- *
  */
 public class Tools {
 
     /**
      * window
-     *
      */
     public static class Windows {
 
         /**
          * ウインドウの設定
+         *
          * @param stage Stage
          * @throws IOException 入出力例外が発生した場合
          */
         public static void setIcon(Stage stage) throws IOException {
             // アイコン
             String[] uris = {
-                    "logbook/gui/icon_256x256.png",
-                    "logbook/gui/icon_128x128.png",
-                    "logbook/gui/icon_64x64.png",
-                    "logbook/gui/icon_48x48.png",
-                    "logbook/gui/icon_32x32.png",
-                    "logbook/gui/icon_16x16.png" };
+                "logbook/gui/icon_256x256.png",
+                "logbook/gui/icon_128x128.png",
+                "logbook/gui/icon_64x64.png",
+                "logbook/gui/icon_48x48.png",
+                "logbook/gui/icon_32x32.png",
+                "logbook/gui/icon_16x16.png"};
 
             for (String uri : uris) {
                 try (InputStream is = PluginServices.getResourceAsStream(uri)) {
@@ -101,6 +100,7 @@ public class Tools {
 
         /**
          * デフォルトの閉じるアクション
+         *
          * @param controller WindowController
          */
         public static void defaultCloseAction(WindowController controller) {
@@ -109,24 +109,26 @@ public class Tools {
 
         /**
          * デフォルトの閉じるアクション
+         *
          * @param controller WindowController
-         * @param subkey String
+         * @param subkey     String
          */
         public static void defaultCloseAction(WindowController controller, String subkey) {
             if (controller.getWindow() != null) {
                 EventHandler<WindowEvent> action = e -> {
-                    String key = controller.getClass().getCanonicalName()+ Optional.ofNullable(subkey).map(str -> "#"+ str).orElse("");
+                    String key = controller.getClass().getCanonicalName() + Optional.ofNullable(subkey).map(str -> "#" + str).orElse("");
                     AppConfig.get()
-                            .getWindowLocationMap()
-                            .put(key, controller.getWindowLocation());
+                        .getWindowLocationMap()
+                        .put(key, controller.getWindowLocation());
                 };
                 controller.getWindow()
-                        .addEventHandler(WindowEvent.WINDOW_HIDDEN, action);
+                    .addEventHandler(WindowEvent.WINDOW_HIDDEN, action);
             }
         }
 
         /**
          * デフォルトのウインドウ設定
+         *
          * @param controller WindowController
          */
         public static void defaultOpenAction(WindowController controller) {
@@ -135,30 +137,30 @@ public class Tools {
 
         /**
          * デフォルトのウインドウ設定
+         *
          * @param controller WindowController
-         * @param subkey String
+         * @param subkey     String
          */
         public static void defaultOpenAction(WindowController controller, String subkey) {
-            String key = controller.getClass().getCanonicalName() + Optional.ofNullable(subkey).map(str -> "#"+ str).orElse("");
+            String key = controller.getClass().getCanonicalName() + Optional.ofNullable(subkey).map(str -> "#" + str).orElse("");
             WindowLocation location = AppConfig.get()
-                    .getWindowLocationMap()
-                    .get(key);
+                .getWindowLocationMap()
+                .get(key);
             controller.setWindowLocation(location);
         }
     }
 
     /**
      * misc
-     *
      */
     public static class Controls {
 
         /**
          * ノードの内容をPNGファイルとして出力します
          *
-         * @param node ノード
+         * @param node  ノード
          * @param title タイトル及びファイル名
-         * @param own 親ウインドウ
+         * @param own   親ウインドウ
          */
         public static void storeSnapshot(Node node, String title, Window own) {
             try {
@@ -166,7 +168,7 @@ public class Tools {
                 chooser.setTitle(title + "の保存");
                 chooser.setInitialFileName(title + ".png");
                 chooser.getExtensionFilters().addAll(
-                        new ExtensionFilter("PNG Files", "*.png"));
+                    new ExtensionFilter("PNG Files", "*.png"));
                 File f = chooser.showSaveDialog(own);
                 if (f != null) {
                     SnapshotParameters sp = new SnapshotParameters();
@@ -184,10 +186,10 @@ public class Tools {
         /**
          * ダイアログを表示する
          *
-         * @param type ダイアログタイプ
-         * @param title メッセージタイトル
+         * @param type    ダイアログタイプ
+         * @param title   メッセージタイトル
          * @param message タイトル
-         * @param own 親ウインドウ
+         * @param own     親ウインドウ
          * @return ボタンタイプ
          */
         public static Optional<ButtonType> alert(AlertType type, String title, String message, Window own) {
@@ -197,15 +199,15 @@ public class Tools {
         /**
          * ダイアログを表示する(スタックトレース付)
          *
-         * @param type ダイアログタイプ
-         * @param title メッセージタイトル
+         * @param type    ダイアログタイプ
+         * @param title   メッセージタイトル
          * @param message タイトル
-         * @param t 例外
-         * @param own 親ウインドウ
+         * @param t       例外
+         * @param own     親ウインドウ
          * @return ボタンタイプ
          */
         public static Optional<ButtonType> alert(AlertType type, String title, String message, Throwable t,
-                Window own) {
+                                                 Window own) {
             StringWriter w = new StringWriter();
             t.printStackTrace(new PrintWriter(w));
             String stackTrace = w.toString();
@@ -217,15 +219,15 @@ public class Tools {
         /**
          * ダイアログを表示する
          *
-         * @param type ダイアログタイプ
-         * @param title メッセージタイトル
+         * @param type    ダイアログタイプ
+         * @param title   メッセージタイトル
          * @param message タイトル
          * @param content コンテンツ
-         * @param own 親ウインドウ
+         * @param own     親ウインドウ
          * @return ボタンタイプ
          */
         public static Optional<ButtonType> alert(AlertType type, String title, String message, Node content,
-                Window own) {
+                                                 Window own) {
             Alert alert = new Alert(type);
             alert.getDialogPane().getStylesheets().add("logbook/gui/application.css");
             InternalFXMLLoader.setGlobal(alert.getDialogPane());
@@ -239,8 +241,8 @@ public class Tools {
         /**
          * 通知を表示する
          *
-         * @param node グラフィック
-         * @param title タイトル
+         * @param node    グラフィック
+         * @param title   タイトル
          * @param message メッセージ
          */
         public static void showNotify(Node node, String title, String message) {
@@ -250,32 +252,32 @@ public class Tools {
         /**
          * 通知を表示する
          *
-         * @param node グラフィック
-         * @param title タイトル
+         * @param node    グラフィック
+         * @param title   タイトル
          * @param message メッセージ
-         * @param hide 消えるまでの秒数
+         * @param hide    消えるまでの秒数
          */
         public static void showNotify(Node node, String title, String message, Duration hide) {
-            showNotify(node, title, message, hide, 
-                    Optional.ofNullable(AppConfig.get().getToastLocation()).map(Pos::valueOf).orElse(Pos.BOTTOM_RIGHT));
+            showNotify(node, title, message, hide,
+                Optional.ofNullable(AppConfig.get().getToastLocation()).map(Pos::valueOf).orElse(Pos.BOTTOM_RIGHT));
         }
 
         /**
          * 通知を表示する
          *
-         * @param node グラフィック
-         * @param title タイトル
+         * @param node    グラフィック
+         * @param title   タイトル
          * @param message メッセージ
-         * @param hide 消えるまでの秒数
-         * @param pos 出す位置
+         * @param hide    消えるまでの秒数
+         * @param pos     出す位置
          */
         public static void showNotify(Node node, String title, String message, Duration hide, Pos position) {
             Notifications notifications = Notifications.create()
-                    .graphic(node)
-                    .title(title)
-                    .text(message)
-                    .hideAfter(hide)
-                    .position(position);
+                .graphic(node)
+                .title(title)
+                .text(message)
+                .hideAfter(hide)
+                .position(position);
             if (node == null) {
                 notifications.showInformation();
             } else {
@@ -285,6 +287,7 @@ public class Tools {
 
         /**
          * 画像の拡大・縮小を行う
+         *
          * @param view 拡大・縮小を行う画像を保持した {@link ImageView}
          * @return 設定に従った拡大・縮小を行った画像を保持した {@link ImageView}
          */
@@ -300,15 +303,15 @@ public class Tools {
 
         /**
          * SplitPaneの分割サイズを設定する
-         * 
+         *
          * @param pane SplitPane
-         * @param key SplitPaneのキー
+         * @param key  SplitPaneのキー
          */
         public static void setSplitWidth(SplitPane pane, String key) {
             Double position = AppConfig.get().getDividerPositionMap()
-                    .get(key);
+                .get(key);
             Iterator<Divider> ite = pane.getDividers()
-                    .iterator();
+                .iterator();
             if (ite.hasNext()) {
                 Divider divider = ite.next();
                 if (position != null) {
@@ -323,12 +326,12 @@ public class Tools {
 
         /**
          * 親子関係のある CheckBox を bind します。
-         * 
+         * <p>
          * 親を選択した場合、子は全部選択され、親を非選択した場合は子も全部非選択されます。
          * すべての子が選択されていたら親を選択し、すべての子が非選択ならば親も非選択にします。
          * 子が選択非選択混ざっている場合は親は不定にします。
-         * 
-         * @param parent 親の CheckBox
+         *
+         * @param parent   親の CheckBox
          * @param children 子供の CheckBox
          */
         public static void bindChildCheckBoxes(CheckBox parent, List<CheckBox> children) {
@@ -396,13 +399,14 @@ public class Tools {
 
         /**
          * テーブル列の幅の設定を行う
+         *
          * @param table テーブル
-         * @param key テーブルのキー名
+         * @param key   テーブルのキー名
          */
-        public static  <S> void setWidth(Supplier<Stream<? extends TableColumnBase<S, ?>>> columns, String key) {
+        public static <S> void setWidth(Supplier<Stream<? extends TableColumnBase<S, ?>>> columns, String key) {
             Map<String, Double> setting = AppConfig.get()
-                    .getColumnWidthMap()
-                    .get(key);
+                .getColumnWidthMap()
+                .get(key);
             if (setting != null) {
                 // 初期設定
                 columns.get().forEach(column -> {
@@ -416,8 +420,8 @@ public class Tools {
             columns.get().forEach(column -> {
                 column.widthProperty().addListener((ob, o, n) -> {
                     Map<String, Double> map = AppConfig.get()
-                            .getColumnWidthMap()
-                            .computeIfAbsent(key, e -> new HashMap<>());
+                        .getColumnWidthMap()
+                        .computeIfAbsent(key, e -> new HashMap<>());
                     map.put(getColumnName(column), n.doubleValue());
                 });
             });
@@ -425,19 +429,25 @@ public class Tools {
 
         public interface AbstractTable<S, C extends TableColumnBase<?, ?>> {
             public Stream<C> getColumns();
+
             public ObservableList<C> getTopColumns();
+
             public ObservableList<C> getSortOrder();
+
             public String getSortType(C column);
+
             public void setSortType(C column, String type);
+
             public ObjectProperty<?> sortTypeProperty(C column);
         }
-        
+
         public static class TableWrapper<S> implements AbstractTable<S, TableColumn<S, ?>> {
             private final TableView<S> table;
+
             TableWrapper(TableView<S> table) {
                 this.table = table;
             }
-            
+
             @Override
             public Stream<TableColumn<S, ?>> getColumns() {
                 return Tables.getColumns(this.table);
@@ -471,10 +481,11 @@ public class Tools {
 
         public static class TreeWrapper<S> implements AbstractTable<S, TreeTableColumn<S, ?>> {
             private final TreeTableView<S> tree;
+
             TreeWrapper(TreeTableView<S> table) {
                 this.tree = table;
             }
-            
+
             @Override
             public Stream<TreeTableColumn<S, ?>> getColumns() {
                 return Trees.getColumns(this.tree);
@@ -505,21 +516,22 @@ public class Tools {
                 return column.sortTypeProperty();
             }
         }
-        
+
         /**
          * テーブルソート列の設定を行う
+         *
          * @param table テーブル
-         * @param key テーブルのキー名
+         * @param key   テーブルのキー名
          */
         public static <S, C extends TableColumnBase<?, ?>> void setSortOrder(AbstractTable<S, C> table, String key) {
             Map<String, String> setting = AppConfig.get()
-                    .getColumnSortOrderMap()
-                    .get(key);
+                .getColumnSortOrderMap()
+                .get(key);
             ObservableList<C> sortOrder = table.getSortOrder();
             if (setting != null) {
                 // 初期設定
                 Map<String, C> columnsMap = table.getColumns()
-                        .collect(Collectors.toMap(Tables::getColumnName, c -> c, (c1, c2) -> c1));
+                    .collect(Collectors.toMap(Tables::getColumnName, c -> c, (c1, c2) -> c1));
                 setting.forEach((k, v) -> {
                     Optional.ofNullable(columnsMap.get(k)).ifPresent(col -> {
                         sortOrder.add(col);
@@ -537,27 +549,28 @@ public class Tools {
         private static <S, C extends TableColumnBase<?, ?>> void storeSortOrder(AbstractTable<S, C> table, String key) {
             ObservableList<C> sortOrder = table.getSortOrder();
             Map<String, String> setting = AppConfig.get()
-                    .getColumnSortOrderMap()
-                    .computeIfAbsent(key, e1 -> new LinkedHashMap<>());
+                .getColumnSortOrderMap()
+                .computeIfAbsent(key, e1 -> new LinkedHashMap<>());
             setting.clear();
             sortOrder.stream().forEach(col -> setting.put(getColumnName(col), table.getSortType(col)));
         }
-        
+
         /**
          * テーブル列の並び順の設定を行う
+         *
          * @param table テーブル
-         * @param key テーブルのキー名
+         * @param key   テーブルのキー名
          */
         public static <S, C extends TableColumnBase<?, ?>> void setColumnOrder(AbstractTable<S, C> table, String key) {
             List<String> setting = AppConfig.get()
-                    .getColumnOrderMap()
-                    .get(key);
+                .getColumnOrderMap()
+                .get(key);
             ObservableList<C> columns = table.getTopColumns();
             if (setting != null) {
                 for (int i = 0; i < setting.size() && i < columns.size(); i++) {
                     if (!setting.get(i).equals(columns.get(i).getText())) {
                         // 並び順が違うので探す
-                        for (int j = i+1; j < columns.size(); j++) {
+                        for (int j = i + 1; j < columns.size(); j++) {
                             if (setting.get(i).equals(columns.get(j).getText())) {
                                 // 見つかった
                                 C column = columns.remove(j);
@@ -578,6 +591,7 @@ public class Tools {
 
         /**
          * TableColumnの名前を取得する
+         *
          * @param column TableColumn
          * @return TableColumnの名前
          */
@@ -597,10 +611,9 @@ public class Tools {
             }
         }
     }
-    
+
     /**
      * TableViewに関係するメソッドを集めたクラス
-     *
      */
     public static class Tables extends TablesTreesBase {
 
@@ -616,16 +629,16 @@ public class Tools {
          * 行をヘッダ付きで文字列にします
          *
          * @param table テーブル
-         * @param rows 行
+         * @param rows  行
          * @return ヘッダ付きの文字列
          */
         public static <T> String toString(TableView<?> table, List<?> rows) {
             String body = rows.stream()
-                    .map(Object::toString)
-                    .collect(Collectors.joining(NL));
+                .map(Object::toString)
+                .collect(Collectors.joining(NL));
             return new StringJoiner(NL).add(tableHeader(table, SEPARATOR))
-                    .add(body)
-                    .toString();
+                .add(body)
+                .toString();
         }
 
         /**
@@ -636,7 +649,7 @@ public class Tools {
          */
         public static String selectionToString(TableView<?> table) {
             return toString(table, table.getSelectionModel()
-                    .getSelectedItems());
+                .getSelectedItems());
         }
 
         /**
@@ -648,7 +661,7 @@ public class Tools {
             ClipboardContent content = new ClipboardContent();
             content.putString(selectionToString(table));
             Clipboard.getSystemClipboard()
-                    .setContent(content);
+                .setContent(content);
         }
 
         /**
@@ -659,7 +672,7 @@ public class Tools {
         public static void selectAll(TableView<?> table) {
             // Selection All
             table.getSelectionModel()
-                    .selectAll();
+                .selectAll();
         }
 
         /**
@@ -682,24 +695,24 @@ public class Tools {
          *
          * @param table テーブル
          * @param title タイトル及びファイル名
-         * @param own 親ウインドウ
+         * @param own   親ウインドウ
          */
         public static void store(TableView<?> table, String title, Window own) throws IOException {
             String body = table.getItems()
-                    .stream()
-                    .map(Object::toString)
-                    .collect(Collectors.joining(CSV_NL))
-                    .replaceAll(SEPARATOR, CSV_SEPARATOR);
+                .stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(CSV_NL))
+                .replaceAll(SEPARATOR, CSV_SEPARATOR);
             String content = new StringJoiner(CSV_NL)
-                    .add(tableHeader(table, CSV_SEPARATOR))
-                    .add(body)
-                    .toString();
+                .add(tableHeader(table, CSV_SEPARATOR))
+                .add(body)
+                .toString();
 
             FileChooser chooser = new FileChooser();
             chooser.setTitle(title + "の保存");
             chooser.setInitialFileName(title + ".csv");
             chooser.getExtensionFilters().addAll(
-                    new ExtensionFilter("CSV Files", "*.csv"));
+                new ExtensionFilter("CSV Files", "*.csv"));
             File f = chooser.showSaveDialog(own);
             if (f != null) {
                 Files.write(f.toPath(), content.getBytes(LogWriter.DEFAULT_CHARSET));
@@ -708,8 +721,9 @@ public class Tools {
 
         /**
          * テーブル列の表示・非表示の設定を行う
-         * @param table テーブル
-         * @param key テーブルのキー名
+         *
+         * @param table  テーブル
+         * @param key    テーブルのキー名
          * @param window 親ウインドウ
          * @throws IOException 入出力例外が発生した場合
          */
@@ -721,13 +735,14 @@ public class Tools {
 
         /**
          * テーブル列の表示・非表示の設定を行う
+         *
          * @param table テーブル
-         * @param key テーブルのキー名
+         * @param key   テーブルのキー名
          */
         public static void setVisible(TableView<?> table, String key) {
             Set<String> setting = AppConfig.get()
-                    .getColumnVisibleMap()
-                    .get(key);
+                .getColumnVisibleMap()
+                .get(key);
             if (setting != null) {
                 getColumns(table).forEach(column -> {
                     if (setting.contains(getColumnName(column))) {
@@ -739,8 +754,9 @@ public class Tools {
 
         /**
          * テーブル列の幅の設定を行う
+         *
          * @param table テーブル
-         * @param key テーブルのキー名
+         * @param key   テーブルのキー名
          */
         public static void setWidth(TableView<?> table, String key) {
             TablesTreesBase.setWidth(() -> getColumns(table), key);
@@ -748,8 +764,9 @@ public class Tools {
 
         /**
          * テーブルソート列の設定を行う
+         *
          * @param table テーブル
-         * @param key テーブルのキー名
+         * @param key   テーブルのキー名
          */
         public static <S> void setSortOrder(TableView<S> table, String key) {
             TablesTreesBase.setSortOrder(new TableWrapper<S>(table), key);
@@ -757,9 +774,10 @@ public class Tools {
 
         /**
          * テーブル列の並び順の設定を行う
-         * @param <S> テーブルの型
+         *
+         * @param <S>   テーブルの型
          * @param table テーブル
-         * @param key テーブルのキー名
+         * @param key   テーブルのキー名
          */
         public static <S> void setColumnOrder(TableView<S> table, String key) {
             TablesTreesBase.setColumnOrder(new TableWrapper<S>(table), key);
@@ -767,50 +785,54 @@ public class Tools {
 
         /**
          * TableViewからTableColumnをストリームとして取得する
+         *
          * @param table TableView
          * @return TableColumn
          */
         public static <S> Stream<TableColumn<S, ?>> getColumns(TableView<S> table) {
             return table.getColumns()
-                    .stream()
-                    .flatMap(Tables::flatColumns);
+                .stream()
+                .flatMap(Tables::flatColumns);
         }
 
         private static String tableHeader(TableView<?> table, String separator) {
             return getColumns(table)
-                    .map(Tables::getColumnName)
-                    .filter(name -> !name.equals("行番号"))
-                    .collect(Collectors.joining(separator));
+                .map(Tables::getColumnName)
+                .filter(name -> !name.equals("行番号"))
+                .collect(Collectors.joining(separator));
         }
 
         /**
          * ネスとされたTableColumnの終端になるTableColumnを取得する
+         *
          * @param column TableColumn
          * @return TableColumnのストリーム
          */
         private static <S> Stream<TableColumn<S, ?>> flatColumns(TableColumn<S, ?> column) {
             if (!column.getColumns().isEmpty()) {
                 return column.getColumns().stream()
-                        .flatMap(Tables::flatColumns);
+                    .flatMap(Tables::flatColumns);
             }
             return Stream.of(column);
         }
     }
-    
+
     public static class Trees extends TablesTreesBase {
         /**
          * テーブル列の幅の設定を行う
+         *
          * @param table テーブル
-         * @param key テーブルのキー名
+         * @param key   テーブルのキー名
          */
         public static void setWidth(TreeTableView<?> tree, String key) {
             TablesTreesBase.setWidth(() -> getColumns(tree), key);
         }
-        
+
         /**
          * テーブルソート列の設定を行う
+         *
          * @param table テーブル
-         * @param key テーブルのキー名
+         * @param key   テーブルのキー名
          */
         public static <S> void setSortOrder(TreeTableView<S> table, String key) {
             TablesTreesBase.setSortOrder(new TreeWrapper<S>(table), key);
@@ -818,8 +840,9 @@ public class Tools {
 
         /**
          * テーブル列の並び順の設定を行う
+         *
          * @param table テーブル
-         * @param key テーブルのキー名
+         * @param key   テーブルのキー名
          */
         public static <S> void setColumnOrder(TreeTableView<S> table, String key) {
             TablesTreesBase.setColumnOrder(new TreeWrapper<S>(table), key);
@@ -827,6 +850,7 @@ public class Tools {
 
         /**
          * TreeTableViewからTreeTableColumnをストリームとして取得する
+         *
          * @param tree TreeTableView
          * @return TreeTableColumn
          */

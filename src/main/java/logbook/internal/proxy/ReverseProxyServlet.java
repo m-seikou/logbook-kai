@@ -36,13 +36,14 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * リバースプロキシ
- *
  */
 public final class ReverseProxyServlet extends ProxyServlet {
 
     private static final long serialVersionUID = 1L;
 
-    /** リスナー */
+    /**
+     * リスナー
+     */
     private transient List<ContentListenerSpi> listeners;
 
     /*
@@ -80,8 +81,8 @@ public final class ReverseProxyServlet extends ProxyServlet {
      */
     @Override
     protected void onResponseContent(HttpServletRequest request, HttpServletResponse response,
-            Response proxyResponse,
-            byte[] buffer, int offset, int length) throws IOException {
+                                     Response proxyResponse,
+                                     byte[] buffer, int offset, int length) throws IOException {
 
         CaptureHolder holder = (CaptureHolder) request.getAttribute(Filter.CONTENT_HOLDER);
         if (holder == null) {
@@ -99,9 +100,9 @@ public final class ReverseProxyServlet extends ProxyServlet {
      */
     @Override
     protected void onResponseSuccess(HttpServletRequest request, HttpServletResponse response,
-            Response proxyResponse) {
+                                     Response proxyResponse) {
         try {
-            if(response.getStatus() == HttpServletResponse.SC_OK) {
+            if (response.getStatus() == HttpServletResponse.SC_OK) {
                 CaptureHolder holder = (CaptureHolder) request.getAttribute(Filter.CONTENT_HOLDER);
                 if (holder != null) {
                     RequestMetaDataWrapper req = new RequestMetaDataWrapper();
@@ -296,7 +297,7 @@ public final class ReverseProxyServlet extends ProxyServlet {
                     value = null;
                 }
                 map.computeIfAbsent(key, k -> new ArrayList<>())
-                        .add(value);
+                    .add(value);
             }
             this.setParameterMap(map);
             this.setRequestBody(Optional.of(body));
@@ -380,12 +381,15 @@ public final class ReverseProxyServlet extends ProxyServlet {
     }
 
     private static class FieldHolder {
-        /** ライブラリバグ対応 (HttpRequest#queryを上書きする) */
+        /**
+         * ライブラリバグ対応 (HttpRequest#queryを上書きする)
+         */
         static final Field QUERY_FIELD = getDeclaredField(HttpRequest.class, "query");
 
         /**
          * private フィールドを取得する
-         * @param clazz クラス
+         *
+         * @param clazz  クラス
          * @param string フィールド名
          * @return フィールドオブジェクト
          */

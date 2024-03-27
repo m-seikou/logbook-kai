@@ -13,19 +13,26 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 棒読みちゃん
- *
  */
 public class BouyomiChan {
 
     private final InetSocketAddress addr;
 
-    /** 音量(0～100, -1) */
+    /**
+     * 音量(0～100, -1)
+     */
     private short volume = -1;
-    /** 速度(50～300, -1) */
+    /**
+     * 速度(50～300, -1)
+     */
     private short speed = -1;
-    /** 音程(50～200, -1) */
+    /**
+     * 音程(50～200, -1)
+     */
     private short tone = -1;
-    /** 声質(1～8, 0) */
+    /**
+     * 声質(1～8, 0)
+     */
     private short voice = 0;
 
     private BouyomiChan(String host, int port) {
@@ -34,7 +41,7 @@ public class BouyomiChan {
 
     /**
      * 音量を設定します。
-     * 
+     *
      * @param volume 音量(0～100, -1)
      * @return このオブジェクトへの参照。
      */
@@ -45,7 +52,7 @@ public class BouyomiChan {
 
     /**
      * 速度を設定します。
-     * 
+     *
      * @param speed 速度(50～300, -1)
      * @return このオブジェクトへの参照。
      */
@@ -56,7 +63,7 @@ public class BouyomiChan {
 
     /**
      * 音程を設定します。
-     * 
+     *
      * @param tone 音程(50～200, -1)
      * @return このオブジェクトへの参照。
      */
@@ -67,7 +74,7 @@ public class BouyomiChan {
 
     /**
      * 声質を設定します。
-     * 
+     *
      * @param voice 声質(1～8, 0)
      * @return このオブジェクトへの参照。
      */
@@ -78,6 +85,7 @@ public class BouyomiChan {
 
     /**
      * 読み上げを一時停止します。
+     *
      * @throws IOException 接続に失敗した、または要求を送信出来ない場合。
      */
     public void pasuse() throws IOException {
@@ -86,6 +94,7 @@ public class BouyomiChan {
 
     /**
      * 読み上げを再開します。
+     *
      * @throws IOException 接続に失敗した、または要求を送信出来ない場合。
      */
     public void resume() throws IOException {
@@ -94,6 +103,7 @@ public class BouyomiChan {
 
     /**
      * 次の文章を読み上げます。
+     *
      * @throws IOException 接続に失敗した、または要求を送信出来ない場合。
      */
     public void skip() throws IOException {
@@ -102,6 +112,7 @@ public class BouyomiChan {
 
     /**
      * 残りの文章をキャンセルします。
+     *
      * @throws IOException 接続に失敗した、または要求を送信出来ない場合。
      */
     public void clear() throws IOException {
@@ -110,7 +121,7 @@ public class BouyomiChan {
 
     /**
      * 文章を読み上げます。
-     * 
+     *
      * @param text 文章
      * @throws IOException 接続に失敗した、または要求を送信出来ない場合。
      */
@@ -164,7 +175,7 @@ public class BouyomiChan {
 
     /**
      * 棒読みちゃんへデフォルトの設定を使って接続します。
-     * 
+     *
      * @return 棒読みちゃん
      */
     public static BouyomiChan create() {
@@ -173,7 +184,7 @@ public class BouyomiChan {
 
     /**
      * 棒読みちゃんへ接続します。
-     * 
+     *
      * @param host リモートホスト
      * @param port リモートポート
      * @return 棒読みちゃん

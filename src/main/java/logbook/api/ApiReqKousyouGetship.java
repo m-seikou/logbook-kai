@@ -15,7 +15,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_kousyou/getship
- *
  */
 @API("/kcsapi/api_req_kousyou/getship")
 public class ApiReqKousyouGetship implements APIListenerSpi {
@@ -39,7 +38,7 @@ public class ApiReqKousyouGetship implements APIListenerSpi {
     private void apiShip(JsonObject object) {
         Ship ship = Ship.toShip(object);
         ShipCollection.get()
-                .getShipMap().put(ship.getId(), ship);
+            .getShipMap().put(ship.getId(), ship);
     }
 
     /**
@@ -50,7 +49,7 @@ public class ApiReqKousyouGetship implements APIListenerSpi {
     private void apiSlotitem(JsonArray array) {
         if (array != null) {
             Map<Integer, SlotItem> map = SlotItemCollection.get()
-                    .getSlotitemMap();
+                .getSlotitemMap();
             for (JsonValue value : array) {
                 SlotItem item = SlotItem.toSlotItem((JsonObject) value);
                 item.setLevel(0);

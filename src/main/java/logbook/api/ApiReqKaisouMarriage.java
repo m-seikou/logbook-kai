@@ -11,7 +11,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_kaisou/marriage
- *
  */
 @API("/kcsapi/api_req_kaisou/marriage")
 public class ApiReqKaisouMarriage implements APIListenerSpi {
@@ -21,7 +20,7 @@ public class ApiReqKaisouMarriage implements APIListenerSpi {
         JsonObject data = json.getJsonObject("api_data");
         if (data != null) {
             Map<Integer, Ship> shipMap = ShipCollection.get()
-                    .getShipMap();
+                .getShipMap();
 
             Integer shipId = Integer.valueOf(req.getParameter("api_id"));
             shipMap.put(shipId, Ship.toShip(data));

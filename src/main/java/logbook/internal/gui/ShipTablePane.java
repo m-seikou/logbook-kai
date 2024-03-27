@@ -78,288 +78,431 @@ import lombok.val;
 
 /**
  * 所有艦娘一覧のテーブル
- *
  */
 public class ShipTablePane extends VBox {
 
-    /** フィルター */
+    /**
+     * フィルター
+     */
     @FXML
     private TitledPane filter;
 
-    /** フィルターペイン */
+    /**
+     * フィルターペイン
+     */
     @FXML
     private FlowPane filters;
 
-    /** テキスト */
+    /**
+     * テキスト
+     */
     @FXML
     private ToggleSwitch textFilter;
 
-    /** テキスト */
+    /**
+     * テキスト
+     */
     @FXML
     private TextField textValue;
 
-    /** 艦種 */
+    /**
+     * 艦種
+     */
     @FXML
     private ToggleSwitch typeFilter;
 
-    /** 海防艦 */
+    /**
+     * 海防艦
+     */
     @FXML
     private CheckBox escort;
 
-    /** 駆逐艦 */
+    /**
+     * 駆逐艦
+     */
     @FXML
     private CheckBox destroyer;
 
-    /** 軽巡洋艦 */
+    /**
+     * 軽巡洋艦
+     */
     @FXML
     private CheckBox lightCruiser;
 
-    /** 重雷装巡洋艦 */
+    /**
+     * 重雷装巡洋艦
+     */
     @FXML
     private CheckBox torpedoCruiser;
 
-    /** 重巡洋艦 */
+    /**
+     * 重巡洋艦
+     */
     @FXML
     private CheckBox heavyCruiser;
 
-    /** 航空巡洋艦 */
+    /**
+     * 航空巡洋艦
+     */
     @FXML
     private CheckBox flyingDeckCruiser;
 
-    /** 水上機母艦 */
+    /**
+     * 水上機母艦
+     */
     @FXML
     private CheckBox seaplaneTender;
 
-    /** 軽空母 */
+    /**
+     * 軽空母
+     */
     @FXML
     private CheckBox escortCarrier;
 
-    /** 正規空母 */
+    /**
+     * 正規空母
+     */
     @FXML
     private CheckBox carrier;
 
-    /** 装甲空母 */
+    /**
+     * 装甲空母
+     */
     @FXML
     private CheckBox armoredcarrier;
 
-    /** 戦艦 */
+    /**
+     * 戦艦
+     */
     @FXML
     private CheckBox battleship;
 
-    /** 航空戦艦 */
+    /**
+     * 航空戦艦
+     */
     @FXML
     private CheckBox flyingDeckBattleship;
 
-    /** 潜水艦 */
+    /**
+     * 潜水艦
+     */
     @FXML
     private CheckBox submarine;
 
-    /** 潜水空母 */
+    /**
+     * 潜水空母
+     */
     @FXML
     private CheckBox carrierSubmarine;
 
-    /** 揚陸艦 */
+    /**
+     * 揚陸艦
+     */
     @FXML
     private CheckBox landingship;
 
-    /** 工作艦 */
+    /**
+     * 工作艦
+     */
     @FXML
     private CheckBox repairship;
 
-    /** 潜水母艦 */
+    /**
+     * 潜水母艦
+     */
     @FXML
     private CheckBox submarineTender;
 
-    /** 練習巡洋艦 */
+    /**
+     * 練習巡洋艦
+     */
     @FXML
     private CheckBox trainingShip;
 
-    /** 補給艦 */
+    /**
+     * 補給艦
+     */
     @FXML
     private CheckBox supply;
 
-    /** すべて */
+    /**
+     * すべて
+     */
     @FXML
     private CheckBox allTypes;
 
-    /** ラベル */
+    /**
+     * ラベル
+     */
     @FXML
     private ToggleSwitch labelFilter;
 
-    /** ラベル条件 */
+    /**
+     * ラベル条件
+     */
     @FXML
     private ChoiceBox<String> labelValue;
 
-    /** 補強増設 */
+    /**
+     * 補強増設
+     */
     @FXML
     private ToggleSwitch slotExFilter;
 
-    /** 補強増設 */
+    /**
+     * 補強増設
+     */
     @FXML
     private CheckBox slotExValue;
 
-    /** 遠征 */
+    /**
+     * 遠征
+     */
     @FXML
     private ToggleSwitch missionFilter;
 
-    /** 遠征 */
+    /**
+     * 遠征
+     */
     @FXML
     private CheckBox missionValue;
 
-    /** テーブル */
+    /**
+     * テーブル
+     */
     @FXML
     private TableView<ShipItem> table;
 
-    /** 行番号 */
+    /**
+     * 行番号
+     */
     @FXML
     private TableColumn<ShipItem, Integer> row;
 
-    /** ID */
+    /**
+     * ID
+     */
     @FXML
     private TableColumn<ShipItem, Integer> id;
 
-    /** 艦隊 */
+    /**
+     * 艦隊
+     */
     @FXML
     private TableColumn<ShipItem, String> fleet;
 
-    /** 艦娘 */
+    /**
+     * 艦娘
+     */
     @FXML
     private TableColumn<ShipItem, Ship> ship;
 
-    /** 艦種 */
+    /**
+     * 艦種
+     */
     @FXML
     private TableColumn<ShipItem, String> type;
 
-    /** Lv */
+    /**
+     * Lv
+     */
     @FXML
     private TableColumn<ShipItem, Integer> lv;
 
-    /** 経験値 */
+    /**
+     * 経験値
+     */
     @FXML
     private TableColumn<ShipItem, Integer> exp;
 
-    /** Next */
+    /**
+     * Next
+     */
     @FXML
     private TableColumn<ShipItem, Integer> next;
 
-    /** cond */
+    /**
+     * cond
+     */
     @FXML
     private TableColumn<ShipItem, Integer> cond;
 
-    /** ラベル */
+    /**
+     * ラベル
+     */
     @FXML
     private TableColumn<ShipItem, Set<String>> label;
 
-    /** 制空 */
+    /**
+     * 制空
+     */
     @FXML
     private TableColumn<ShipItem, Integer> seiku;
 
-    /** 砲戦火力 */
+    /**
+     * 砲戦火力
+     */
     @FXML
     private TableColumn<ShipItem, Integer> hPower;
 
-    /** 雷戦火力 */
+    /**
+     * 雷戦火力
+     */
     @FXML
     private TableColumn<ShipItem, Integer> rPower;
 
-    /** 夜戦火力 */
+    /**
+     * 夜戦火力
+     */
     @FXML
     private TableColumn<ShipItem, Integer> yPower;
 
-    /** 対潜火力 */
+    /**
+     * 対潜火力
+     */
     @FXML
     private TableColumn<ShipItem, Integer> tPower;
 
-    /** 火力(素) */
+    /**
+     * 火力(素)
+     */
     @FXML
     private TableColumn<ShipItem, Integer> karyoku;
 
-    /** 雷装(素) */
+    /**
+     * 雷装(素)
+     */
     @FXML
     private TableColumn<ShipItem, Integer> raisou;
 
-    /** 対空(素) */
+    /**
+     * 対空(素)
+     */
     @FXML
     private TableColumn<ShipItem, Integer> taiku;
 
-    /** 対潜(素) */
+    /**
+     * 対潜(素)
+     */
     @FXML
     private TableColumn<ShipItem, Integer> tais;
 
-    /** 索敵(素) */
+    /**
+     * 索敵(素)
+     */
     @FXML
     private TableColumn<ShipItem, Integer> sakuteki;
 
-    /** 運(素) */
+    /**
+     * 運(素)
+     */
     @FXML
     private TableColumn<ShipItem, Integer> lucky;
 
-    /** 耐久 */
+    /**
+     * 耐久
+     */
     @FXML
     private TableColumn<ShipItem, Integer> maxhp;
 
-    /** 装甲(素) */
+    /**
+     * 装甲(素)
+     */
     @FXML
     private TableColumn<ShipItem, Integer> soukou;
 
-    /** 回避(素) */
+    /**
+     * 回避(素)
+     */
     @FXML
     private TableColumn<ShipItem, Integer> kaihi;
 
-    /** 速力 */
+    /**
+     * 速力
+     */
     @FXML
     private TableColumn<ShipItem, Integer> soku;
 
-    /** 射程 */
+    /**
+     * 射程
+     */
     @FXML
     private TableColumn<ShipItem, Integer> leng;
 
-    /** 装備1 */
+    /**
+     * 装備1
+     */
     @FXML
     private TableColumn<ShipItem, Integer> slot1;
 
-    /** 装備2 */
+    /**
+     * 装備2
+     */
     @FXML
     private TableColumn<ShipItem, Integer> slot2;
 
-    /** 装備3 */
+    /**
+     * 装備3
+     */
     @FXML
     private TableColumn<ShipItem, Integer> slot3;
 
-    /** 装備4 */
+    /**
+     * 装備4
+     */
     @FXML
     private TableColumn<ShipItem, Integer> slot4;
 
-    /** 装備5 */
+    /**
+     * 装備5
+     */
     @FXML
     private TableColumn<ShipItem, Integer> slot5;
 
-    /** 補強 */
+    /**
+     * 補強
+     */
     @FXML
     private TableColumn<ShipItem, Integer> slotEx;
 
-    /** 艦娘達 */
+    /**
+     * 艦娘達
+     */
     private final Supplier<List<Ship>> shipSupplier;
 
-    /** 艦娘達 */
+    /**
+     * 艦娘達
+     */
     private final ObservableList<ShipItem> shipItems = FXCollections.observableArrayList();
 
-    /** フィルター */
+    /**
+     * フィルター
+     */
     private final FilteredList<ShipItem> filteredShipItems = new FilteredList<>(this.shipItems);
 
-    /** 画面更新が有効 */
+    /**
+     * 画面更新が有効
+     */
     private boolean enable;
 
-    /** フィルターの更新停止 */
+    /**
+     * フィルターの更新停止
+     */
     private boolean disableFilterUpdate;
 
-    /** 艦娘一覧のハッシュ・コード */
+    /**
+     * 艦娘一覧のハッシュ・コード
+     */
     private int shipsHashCode;
 
-    /** 艦隊名 */
+    /**
+     * 艦隊名
+     */
     private final String fleetName;
 
-    /** パラメータによるフィルター */
+    /**
+     * パラメータによるフィルター
+     */
     private List<ParameterFilterPane.ShipItemParameterFilterPane> parameterFilters;
 
     /**
@@ -370,15 +513,15 @@ public class ShipTablePane extends VBox {
     public ShipTablePane(DeckPort port) {
         this(() -> {
             Map<Integer, Ship> shipMap = ShipCollection.get()
-                    .getShipMap();
+                .getShipMap();
             DeckPort newPort = DeckPortCollection.get()
-                    .getDeckPortMap()
-                    .get(port.getId());
+                .getDeckPortMap()
+                .get(port.getId());
             if (newPort != null) {
                 return newPort.getShip().stream()
-                        .map(shipMap::get)
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList());
+                    .map(shipMap::get)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
             }
             return Collections.emptyList();
         }, port.getName());
@@ -401,7 +544,6 @@ public class ShipTablePane extends VBox {
             LoggerHolder.get().error("FXMLのロードに失敗しました", e);
         }
     }
-
 
 
     @FXML
@@ -555,7 +697,6 @@ public class ShipTablePane extends VBox {
 
     /**
      * 画面を更新する
-     *
      */
     public void update() {
         try {
@@ -570,8 +711,8 @@ public class ShipTablePane extends VBox {
 
                 this.shipItems.clear();
                 this.shipItems.addAll(ships.stream()
-                        .map(ShipItem::toShipItem)
-                        .collect(Collectors.toList()));
+                    .map(ShipItem::toShipItem)
+                    .collect(Collectors.toList()));
 
                 this.updateLabel();
             }
@@ -641,19 +782,19 @@ public class ShipTablePane extends VBox {
     @FXML
     void addLabel() {
         if (this.table.getSelectionModel()
-                .getSelectedItems()
-                .isEmpty()) {
+            .getSelectedItems()
+            .isEmpty()) {
             Tools.Controls.alert(AlertType.INFORMATION,
-                    "艦娘が選ばれていません",
-                    "ラベルを追加する艦娘を選択してください",
-                    this.getScene().getWindow());
+                "艦娘が選ばれていません",
+                "ラベルを追加する艦娘を選択してください",
+                this.getScene().getWindow());
             return;
         }
         String shipNames = this.table.getSelectionModel()
-                .getSelectedItems()
-                .stream()
-                .map(ship -> Ships.shipMst(ship.getShip()).map(ShipMst::getName).orElse(""))
-                .collect(Collectors.joining(","));
+            .getSelectedItems()
+            .stream()
+            .map(ship -> Ships.shipMst(ship.getShip()).map(ShipMst::getName).orElse(""))
+            .collect(Collectors.joining(","));
         if (shipNames.length() > 50) {
             shipNames = shipNames.substring(0, 50) + "...";
         }
@@ -670,12 +811,12 @@ public class ShipTablePane extends VBox {
             String label = result.get();
             if (!label.isEmpty()) {
                 val labelMap = ShipLabelCollection.get()
-                        .getLabels();
+                    .getLabels();
                 val selections = this.table.getSelectionModel()
-                        .getSelectedItems();
+                    .getSelectedItems();
                 for (ShipItem ship : selections) {
                     ship.labelProperty().get()
-                            .add(label);
+                        .add(label);
                     val labels = labelMap.computeIfAbsent(ship.getId(), k -> new LinkedHashSet<>());
                     labels.add(label);
                 }
@@ -689,26 +830,26 @@ public class ShipTablePane extends VBox {
     @FXML
     void removeLabel() {
         if (this.table.getSelectionModel()
-                .getSelectedItems()
-                .isEmpty()) {
+            .getSelectedItems()
+            .isEmpty()) {
             Tools.Controls.alert(AlertType.INFORMATION,
-                    "艦娘が選ばれていません",
-                    "ラベルを除去する艦娘を選択してください",
-                    this.getScene().getWindow());
+                "艦娘が選ばれていません",
+                "ラベルを除去する艦娘を選択してください",
+                this.getScene().getWindow());
             return;
         }
         String shipNames = this.table.getSelectionModel()
-                .getSelectedItems()
-                .stream()
-                .map(ship -> Ships.shipMst(ship.getShip()).map(ShipMst::getName).orElse(""))
-                .collect(Collectors.joining(","));
+            .getSelectedItems()
+            .stream()
+            .map(ship -> Ships.shipMst(ship.getShip()).map(ShipMst::getName).orElse(""))
+            .collect(Collectors.joining(","));
         if (shipNames.length() > 50) {
             shipNames = shipNames.substring(0, 50) + "...";
         }
 
         Set<String> labels = new TreeSet<>();
         val selections = this.table.getSelectionModel()
-                .getSelectedItems();
+            .getSelectedItems();
         for (ShipItem ship : selections) {
             labels.addAll(ship.getLabel());
         }
@@ -724,10 +865,10 @@ public class ShipTablePane extends VBox {
             String label = result.get();
             if (!label.isEmpty()) {
                 val labelMap = ShipLabelCollection.get()
-                        .getLabels();
+                    .getLabels();
                 for (ShipItem ship : selections) {
                     ship.labelProperty().get()
-                            .remove(label);
+                        .remove(label);
                     labelMap.computeIfPresent(ship.getId(), (k, v) -> {
                         v.remove(label);
                         if (v.isEmpty())
@@ -773,11 +914,11 @@ public class ShipTablePane extends VBox {
     void kancolleFleetanalysis() {
         try {
             List<KancolleFleetanalysisItem> list = ShipCollection.get().getShipMap().values().stream()
-                    .filter(ship -> ship.getLocked())
-                    .map(KancolleFleetanalysisItem::toItem)
-                    .sorted(Comparator.comparing(KancolleFleetanalysisItem::getId)
-                            .thenComparing(Comparator.comparing(KancolleFleetanalysisItem::getLv)))
-                    .collect(Collectors.toList());
+                .filter(ship -> ship.getLocked())
+                .map(KancolleFleetanalysisItem::toItem)
+                .sorted(Comparator.comparing(KancolleFleetanalysisItem::getId)
+                    .thenComparing(Comparator.comparing(KancolleFleetanalysisItem::getLv)))
+                .collect(Collectors.toList());
             ObjectMapper mapper = new ObjectMapper();
             String input = mapper.writeValueAsString(list);
 
@@ -812,7 +953,7 @@ public class ShipTablePane extends VBox {
     void columnVisible() {
         try {
             TableTool.showVisibleSetting(this.table, this.getClass().toString() + "#" + "table",
-                    (Stage) this.getScene().getWindow());
+                (Stage) this.getScene().getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -820,29 +961,30 @@ public class ShipTablePane extends VBox {
 
     /**
      * 艦種フィルタのチェックボックス
+     *
      * @return 艦種フィルタのチェックボックス
      */
     private List<CheckBox> typeCheckBox() {
         return Arrays.asList(
-                this.escort,
-                this.destroyer,
-                this.lightCruiser,
-                this.torpedoCruiser,
-                this.heavyCruiser,
-                this.flyingDeckCruiser,
-                this.seaplaneTender,
-                this.escortCarrier,
-                this.carrier,
-                this.armoredcarrier,
-                this.battleship,
-                this.flyingDeckBattleship,
-                this.submarine,
-                this.carrierSubmarine,
-                this.landingship,
-                this.repairship,
-                this.submarineTender,
-                this.trainingShip,
-                this.supply);
+            this.escort,
+            this.destroyer,
+            this.lightCruiser,
+            this.torpedoCruiser,
+            this.heavyCruiser,
+            this.flyingDeckCruiser,
+            this.seaplaneTender,
+            this.escortCarrier,
+            this.carrier,
+            this.armoredcarrier,
+            this.battleship,
+            this.flyingDeckBattleship,
+            this.submarine,
+            this.carrierSubmarine,
+            this.landingship,
+            this.repairship,
+            this.submarineTender,
+            this.trainingShip,
+            this.supply);
     }
 
     /**
@@ -865,6 +1007,7 @@ public class ShipTablePane extends VBox {
 
     /**
      * 艦娘フィルターを作成する
+     *
      * @return 艦娘フィルター
      */
     private Predicate<ShipItem> createFilter() {
@@ -872,18 +1015,18 @@ public class ShipTablePane extends VBox {
 
         if (this.textFilter.isSelected()) {
             filter = ShipFilter.TextFilter.builder()
-                    .text(this.textValue.getText())
-                    .build();
+                .text(this.textValue.getText())
+                .build();
         }
         if (this.typeFilter.isSelected()) {
             Set<String> types = this.typeCheckBox().stream()
-                    .filter(CheckBox::isSelected)
-                    .map(CheckBox::getText)
-                    .collect(Collectors.toSet());
+                .filter(CheckBox::isSelected)
+                .map(CheckBox::getText)
+                .collect(Collectors.toSet());
 
             filter = this.filterAnd(filter, ShipFilter.TypeFilter.builder()
-                    .types(types)
-                    .build());
+                .types(types)
+                .build());
         }
         for (Predicate<ShipItem> parameterFilter : this.parameterFilters.stream().map(ParameterFilterPane::filterProperty).map(ReadOnlyObjectProperty::get)
             .filter(Objects::nonNull).collect(Collectors.toList())) {
@@ -891,18 +1034,18 @@ public class ShipTablePane extends VBox {
         }
         if (this.labelFilter.isSelected()) {
             filter = this.filterAnd(filter, ShipFilter.LabelFilter.builder()
-                    .labelValue(this.labelValue.getValue())
-                    .build());
+                .labelValue(this.labelValue.getValue())
+                .build());
         }
         if (this.slotExFilter.isSelected()) {
             filter = this.filterAnd(filter, ShipFilter.SlotExFilter.builder()
-                    .slotEx(this.slotExValue.isSelected())
-                    .build());
+                .slotEx(this.slotExValue.isSelected())
+                .build());
         }
         if (this.missionFilter.isSelected()) {
             filter = this.filterAnd(filter, ShipFilter.MissionFilter.builder()
-                    .mission(this.missionValue.isSelected())
-                    .build());
+                .mission(this.missionValue.isSelected())
+                .build());
         }
         return filter;
     }
@@ -919,8 +1062,8 @@ public class ShipTablePane extends VBox {
      */
     private void loadConfig() {
         AppShipTableTabConfig config = AppShipTableConfig.get()
-                .getTabConfig()
-                .get(this.fleetName);
+            .getTabConfig()
+            .get(this.fleetName);
 
         if (config == null) {
             return;
@@ -971,8 +1114,8 @@ public class ShipTablePane extends VBox {
      */
     private void saveConfig() {
         AppShipTableTabConfig config = AppShipTableConfig.get()
-                .getTabConfig()
-                .getOrDefault(this.fleetName, new AppShipTableTabConfig());
+            .getTabConfig()
+            .getOrDefault(this.fleetName, new AppShipTableTabConfig());
 
         if (this.disableFilterUpdate) {
             return;
@@ -988,9 +1131,9 @@ public class ShipTablePane extends VBox {
         // 艦種
         config.setTypeEnabled(this.typeFilter.isSelected());
         config.setTypeValue(this.typeCheckBox().stream()
-                .filter(CheckBox::isSelected)
-                .map(CheckBox::getText)
-                .collect(Collectors.toList()));
+            .filter(CheckBox::isSelected)
+            .map(CheckBox::getText)
+            .collect(Collectors.toList()));
 
         // パラメーターフィルター
         config.setParameterFilters(this.parameterFilters.stream()
@@ -1010,13 +1153,12 @@ public class ShipTablePane extends VBox {
         config.setMissionValue(this.missionValue.isSelected());
 
         AppShipTableConfig.get()
-                .getTabConfig()
-                .put(this.fleetName, config);
+            .getTabConfig()
+            .put(this.fleetName, config);
     }
 
     /**
      * 艦娘画像のセル
-     *
      */
     private static class ShipImageCell extends TableCell<ShipItem, Ship> {
         @Override
@@ -1030,8 +1172,8 @@ public class ShipTablePane extends VBox {
                     this.setGraphic(Tools.Controls.zoomImage(new ImageView(Ships.shipWithItemImage(ship))));
                 }
                 this.setText(Ships.shipMst(ship)
-                        .map(ShipMst::getName)
-                        .orElse(""));
+                    .map(ShipMst::getName)
+                    .orElse(""));
             } else {
                 this.setGraphic(null);
                 this.setText(null);
@@ -1041,12 +1183,11 @@ public class ShipTablePane extends VBox {
 
     /**
      * 装備画像のセル
-     *
      */
     private static class ItemImageCell extends TableCell<ShipItem, Integer> {
 
         private Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
 
         @Override
         protected void updateItem(Integer itemId, boolean empty) {
@@ -1088,7 +1229,6 @@ public class ShipTablePane extends VBox {
 
     /**
      * コンディションのセル
-     *
      */
     private static class CondCell extends TableCell<ShipItem, Integer> {
         @Override
@@ -1115,7 +1255,6 @@ public class ShipTablePane extends VBox {
 
     /**
      * ラベルのセル
-     *
      */
     class LabelCell extends TableCell<ShipItem, Set<String>> {
         @Override
@@ -1178,8 +1317,8 @@ public class ShipTablePane extends VBox {
         public static void copyAll() {
             ClipboardContent content = new ClipboardContent();
             content.putString(text(ShipCollection.get()
-                    .getShipMap()
-                    .values()));
+                .getShipMap()
+                .values()));
             Clipboard.getSystemClipboard().setContent(content);
         }
 
@@ -1191,9 +1330,9 @@ public class ShipTablePane extends VBox {
         public static void displayCopy(TableView<ShipItem> table) {
             ClipboardContent content = new ClipboardContent();
             content.putString(text(table.getItems()
-                    .stream()
-                    .map(ShipItem::getShip)
-                    .collect(Collectors.toList())));
+                .stream()
+                .map(ShipItem::getShip)
+                .collect(Collectors.toList())));
             Clipboard.getSystemClipboard().setContent(content);
         }
 
@@ -1205,10 +1344,10 @@ public class ShipTablePane extends VBox {
         public static void selectionCopy(TableView<ShipItem> table) {
             ClipboardContent content = new ClipboardContent();
             content.putString(text(table.getSelectionModel()
-                    .getSelectedItems()
-                    .stream()
-                    .map(ShipItem::getShip)
-                    .collect(Collectors.toList())));
+                .getSelectedItems()
+                .stream()
+                .map(ShipItem::getShip)
+                .collect(Collectors.toList())));
             Clipboard.getSystemClipboard().setContent(content);
         }
 
@@ -1238,33 +1377,33 @@ public class ShipTablePane extends VBox {
             for (Set<Integer> list : new HashSet<>(groupMap.values())) {
                 // グループの中で改装レベルが最も小さい艦を選択
                 ShipMst root = list.stream()
-                        .map(shipMstMap::get)
-                        .filter(m -> m.getAftershipid() != 0)
-                        .sorted(Comparator.comparing(ShipMst::getAfterlv))
-                        .findFirst()
-                        .get();
+                    .map(shipMstMap::get)
+                    .filter(m -> m.getAftershipid() != 0)
+                    .sorted(Comparator.comparing(ShipMst::getAfterlv))
+                    .findFirst()
+                    .get();
                 ShipMst after = root;
                 // 選択した艦を親にしてaftershipidを順に辿っていく
                 int index = 0;
                 while (after != null && !map.containsKey(after.getId())) {
                     int afterlv = Optional.ofNullable(after.getAfterlv())
-                            .filter(v -> v > 0)
-                            .orElse(Integer.MAX_VALUE);
+                        .filter(v -> v > 0)
+                        .orElse(Integer.MAX_VALUE);
                     map.put(after.getId(), new Kanmusu(root.getId(), ++index, afterlv));
                     after = shipMstMap.get(after.getAftershipid());
                 }
             }
             return ".2|" + ships.stream()
-                    .filter(s -> map.containsKey(s.getShipId()))
-                    .map(s -> new Value(map.get(s.getShipId()), s.getLv()))
-                    .sorted(Comparator.comparing(v -> v.ship.id))
-                    .collect(Collectors.groupingBy(v -> v.ship.id, LinkedHashMap::new, Collectors.toList()))
-                    .entrySet().stream()
-                    .map(e -> e.getKey() + ":" + e.getValue().stream()
-                            .sorted(Comparator.comparing(Value::getLv, Comparator.reverseOrder()))
-                            .map(Value::toString)
-                            .collect(Collectors.joining(",")))
-                    .collect(Collectors.joining("|"));
+                .filter(s -> map.containsKey(s.getShipId()))
+                .map(s -> new Value(map.get(s.getShipId()), s.getLv()))
+                .sorted(Comparator.comparing(v -> v.ship.id))
+                .collect(Collectors.groupingBy(v -> v.ship.id, LinkedHashMap::new, Collectors.toList()))
+                .entrySet().stream()
+                .map(e -> e.getKey() + ":" + e.getValue().stream()
+                    .sorted(Comparator.comparing(Value::getLv, Comparator.reverseOrder()))
+                    .map(Value::toString)
+                    .collect(Collectors.joining(",")))
+                .collect(Collectors.joining("|"));
         }
 
         @Data

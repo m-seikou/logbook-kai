@@ -51,8 +51,8 @@ public class PropertyDialog<T> {
     private ObservableList<Item> getProperties(T bean) {
         ObservableList<Item> properties = BeanPropertyUtils.getProperties(bean);
         List<String> fields = Arrays.stream(bean.getClass().getDeclaredFields())
-                .map(Field::getName)
-                .collect(Collectors.toList());
+            .map(Field::getName)
+            .collect(Collectors.toList());
         properties.sort(Comparator.comparing(p -> fields.indexOf(((BeanProperty) p).getName())));
         return properties;
     }

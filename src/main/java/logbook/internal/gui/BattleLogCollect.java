@@ -8,51 +8,77 @@ import logbook.internal.BattleLogs.IUnit;
 
 /**
  * 集計行
- *
  */
 public class BattleLogCollect {
 
-    /** 集計  */
+    /**
+     * 集計
+     */
     private final StringProperty unit = new SimpleStringProperty();
 
-    /** 出撃 （ボスカウントを"-"にするため String のままにする） */
+    /**
+     * 出撃 （ボスカウントを"-"にするため String のままにする）
+     */
     private final SimpleStringProperty start = new SimpleStringProperty();
 
-    /** 勝利  */
+    /**
+     * 勝利
+     */
     private final IntegerProperty win = new SimpleIntegerProperty();
 
-    /** S勝利 */
+    /**
+     * S勝利
+     */
     private final IntegerProperty s = new SimpleIntegerProperty();
 
-    /** A勝利 */
+    /**
+     * A勝利
+     */
     private final IntegerProperty a = new SimpleIntegerProperty();
 
-    /** B勝利 */
+    /**
+     * B勝利
+     */
     private final IntegerProperty b = new SimpleIntegerProperty();
 
-    /** C敗北 */
+    /**
+     * C敗北
+     */
     private final IntegerProperty c = new SimpleIntegerProperty();
 
-    /** D敗北 */
+    /**
+     * D敗北
+     */
     private final IntegerProperty d = new SimpleIntegerProperty();
 
-    /** 集計単位 */
+    /**
+     * 集計単位
+     */
     private IUnit collectUnit;
 
-    /** 海域 */
+    /**
+     * 海域
+     */
     private String area;
 
-    /** 海域短縮名 */
+    /**
+     * 海域短縮名
+     */
     private String areaShortName;
 
-    /** ボス */
+    /**
+     * ボス
+     */
     private boolean boss;
 
-    /** 海域ソート順 */
+    /**
+     * 海域ソート順
+     */
     private int areaSortOrder;
-    
+
     /**
      * 集計を取得します。
+     *
      * @return 集計
      */
     public String getUnit() {
@@ -61,6 +87,7 @@ public class BattleLogCollect {
 
     /**
      * 集計を設定します。
+     *
      * @param unit 集計
      */
     public void setUnit(String unit) {
@@ -69,6 +96,7 @@ public class BattleLogCollect {
 
     /**
      * 集計を取得します。
+     *
      * @return 集計
      */
     public StringProperty unitProperty() {
@@ -77,6 +105,7 @@ public class BattleLogCollect {
 
     /**
      * 出撃を取得します。
+     *
      * @return 出撃
      */
     public String getStart() {
@@ -85,14 +114,16 @@ public class BattleLogCollect {
 
     /**
      * 出撃を設定します。
+     *
      * @param start 出撃
      */
     public void setStart(String start) {
-        this.start .set(start);
+        this.start.set(start);
     }
 
     /**
      * 出撃を取得します。
+     *
      * @return 出撃
      */
     public StringProperty startProperty() {
@@ -101,6 +132,7 @@ public class BattleLogCollect {
 
     /**
      * 勝利を取得します。
+     *
      * @return 勝利
      */
     public int getWin() {
@@ -109,6 +141,7 @@ public class BattleLogCollect {
 
     /**
      * 勝利を設定します。
+     *
      * @param win 勝利
      */
     public void setWin(int win) {
@@ -117,6 +150,7 @@ public class BattleLogCollect {
 
     /**
      * 勝利を取得します。
+     *
      * @return 勝利
      */
     public IntegerProperty winProperty() {
@@ -125,6 +159,7 @@ public class BattleLogCollect {
 
     /**
      * S勝利を取得します。
+     *
      * @return S勝利
      */
     public int getS() {
@@ -133,6 +168,7 @@ public class BattleLogCollect {
 
     /**
      * S勝利を設定します。
+     *
      * @param s S勝利
      */
     public void setS(int s) {
@@ -141,6 +177,7 @@ public class BattleLogCollect {
 
     /**
      * S勝利を取得します。
+     *
      * @return S勝利
      */
     public IntegerProperty sProperty() {
@@ -149,6 +186,7 @@ public class BattleLogCollect {
 
     /**
      * A勝利を取得します。
+     *
      * @return A勝利
      */
     public int getA() {
@@ -157,6 +195,7 @@ public class BattleLogCollect {
 
     /**
      * A勝利を設定します。
+     *
      * @param a A勝利
      */
     public void setA(int a) {
@@ -165,6 +204,7 @@ public class BattleLogCollect {
 
     /**
      * A勝利を取得します。
+     *
      * @return A勝利
      */
     public IntegerProperty aProperty() {
@@ -173,6 +213,7 @@ public class BattleLogCollect {
 
     /**
      * B勝利を取得します。
+     *
      * @return B勝利
      */
     public int getB() {
@@ -181,6 +222,7 @@ public class BattleLogCollect {
 
     /**
      * B勝利を設定します。
+     *
      * @param b B勝利
      */
     public void setB(int b) {
@@ -189,6 +231,7 @@ public class BattleLogCollect {
 
     /**
      * B勝利を取得します。
+     *
      * @return B勝利
      */
     public IntegerProperty bProperty() {
@@ -197,6 +240,7 @@ public class BattleLogCollect {
 
     /**
      * C敗北を取得します。
+     *
      * @return C敗北
      */
     public int getC() {
@@ -205,6 +249,7 @@ public class BattleLogCollect {
 
     /**
      * C敗北を設定します。
+     *
      * @param c C敗北
      */
     public void setC(int c) {
@@ -213,6 +258,7 @@ public class BattleLogCollect {
 
     /**
      * C敗北を取得します。
+     *
      * @return C敗北
      */
     public IntegerProperty cProperty() {
@@ -221,6 +267,7 @@ public class BattleLogCollect {
 
     /**
      * D敗北を取得します。
+     *
      * @return D敗北
      */
     public int getD() {
@@ -229,6 +276,7 @@ public class BattleLogCollect {
 
     /**
      * D敗北を設定します。
+     *
      * @param d D敗北
      */
     public void setD(int d) {
@@ -237,6 +285,7 @@ public class BattleLogCollect {
 
     /**
      * D敗北を取得します。
+     *
      * @return D敗北
      */
     public IntegerProperty dProperty() {
@@ -245,6 +294,7 @@ public class BattleLogCollect {
 
     /**
      * 集計単位を取得します。
+     *
      * @return 集計単位
      */
     public IUnit getCollectUnit() {
@@ -253,6 +303,7 @@ public class BattleLogCollect {
 
     /**
      * 集計単位を設定します。
+     *
      * @param collectUnit 集計単位
      */
     public void setCollectUnit(IUnit collectUnit) {
@@ -261,6 +312,7 @@ public class BattleLogCollect {
 
     /**
      * 海域を取得します。
+     *
      * @return 海域
      */
     public String getArea() {
@@ -269,6 +321,7 @@ public class BattleLogCollect {
 
     /**
      * 海域を設定します。
+     *
      * @param area 海域
      */
     public void setArea(String area) {
@@ -277,6 +330,7 @@ public class BattleLogCollect {
 
     /**
      * 海域短縮名を取得します。
+     *
      * @return 海域短縮名
      */
     public String getAreaShortName() {
@@ -285,6 +339,7 @@ public class BattleLogCollect {
 
     /**
      * 海域短縮名を設定します。
+     *
      * @param areaShortName 海域短縮名
      */
     public void setAreaShortName(String areaShortName) {
@@ -293,6 +348,7 @@ public class BattleLogCollect {
 
     /**
      * ボスを取得します。
+     *
      * @return ボス
      */
     public boolean isBoss() {
@@ -301,6 +357,7 @@ public class BattleLogCollect {
 
     /**
      * ボスを設定します。
+     *
      * @param boss ボス
      */
     public void setBoss(boolean boss) {
@@ -309,6 +366,7 @@ public class BattleLogCollect {
 
     /**
      * 海域ソート順を取得します。
+     *
      * @return ソート順
      */
     public int getAreaSortOrder() {
@@ -317,6 +375,7 @@ public class BattleLogCollect {
 
     /**
      * 海域ソート順を設定します。
+     *
      * @param areaSortOrder ソート順
      */
     public void setAreaSortOrder(int areaSortOrder) {

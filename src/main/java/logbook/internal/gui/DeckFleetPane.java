@@ -17,27 +17,36 @@ import lombok.Getter;
 
 /**
  * 編成記録の艦隊ペイン
- *
  */
 public class DeckFleetPane extends VBox {
 
-    /** 艦隊名 */
+    /**
+     * 艦隊名
+     */
     @FXML
     @Getter
     private TextField fleetName;
 
-    /** 艦娘達 */
+    /**
+     * 艦娘達
+     */
     @FXML
     private TilePane ships;
 
-    /** メモ */
+    /**
+     * メモ
+     */
     @FXML
     private TextArea fleetDescription;
 
-    /** 艦隊 */
+    /**
+     * 艦隊
+     */
     private AppDeckFleet fleet = new AppDeckFleet();
 
-    /** 変更検知 */
+    /**
+     * 変更検知
+     */
     @Getter
     private BooleanProperty modified = new SimpleBooleanProperty(false);
 

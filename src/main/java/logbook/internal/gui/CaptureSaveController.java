@@ -38,11 +38,12 @@ import logbook.internal.gui.ScreenCapture.ImageData;
 
 /**
  * キャプチャ
- *
  */
 public class CaptureSaveController extends WindowController {
 
-    /** ファイル名日付書式 */
+    /**
+     * ファイル名日付書式
+     */
     static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss.SSS");
 
     @FXML
@@ -63,7 +64,9 @@ public class CaptureSaveController extends WindowController {
     @FXML
     private ImageView image;
 
-    /** 画像リスト */
+    /**
+     * 画像リスト
+     */
     private ObservableList<ImageData> images;
 
     @FXML
@@ -96,9 +99,9 @@ public class CaptureSaveController extends WindowController {
             dc.setTitle("キャプチャの保存先");
             // 覚えた保存先をセット
             File initDir = Optional.ofNullable(AppConfig.get().getCaptureDir())
-                    .map(File::new)
-                    .filter(File::isDirectory)
-                    .orElse(null);
+                .map(File::new)
+                .filter(File::isDirectory)
+                .orElse(null);
             if (initDir != null) {
                 dc.setInitialDirectory(initDir);
             }
@@ -121,9 +124,9 @@ public class CaptureSaveController extends WindowController {
                         super.succeeded();
 
                         Tools.Controls.alert(AlertType.INFORMATION,
-                                "キャプチャが保存されました",
-                                "キャプチャが保存されました",
-                                CaptureSaveController.this.getWindow());
+                            "キャプチャが保存されました",
+                            "キャプチャが保存されました",
+                            CaptureSaveController.this.getWindow());
                     }
 
                     @Override
@@ -132,10 +135,10 @@ public class CaptureSaveController extends WindowController {
                         Throwable t = this.getException();
 
                         Tools.Controls.alert(AlertType.ERROR,
-                                "キャプチャの保存先に失敗しました",
-                                "キャプチャの保存先に失敗しました",
-                                t,
-                                CaptureSaveController.this.getWindow());
+                            "キャプチャの保存先に失敗しました",
+                            "キャプチャの保存先に失敗しました",
+                            t,
+                            CaptureSaveController.this.getWindow());
                     }
                 };
                 ThreadManager.getExecutorService().execute(task);
@@ -147,7 +150,7 @@ public class CaptureSaveController extends WindowController {
      * JPEGファイルとして保存します
      *
      * @param selections 画像ファイル
-     * @param dir ディレクトリ
+     * @param dir        ディレクトリ
      * @throws IOException 入出力例外
      */
     private void saveJpeg(List<ImageData> selections, Path dir) throws IOException {
@@ -157,9 +160,9 @@ public class CaptureSaveController extends WindowController {
             ImageData top = selections.get(0);
             Path to = dir.resolve(DATE_FORMAT.format(top.getDateTime()) + "." + top.getFormat());
             List<byte[]> bytes = selections.stream()
-                    .map(ImageData::getImage)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+                .map(ImageData::getImage)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
             try (OutputStream out = Files.newOutputStream(to)) {
                 out.write(ScreenCapture.encode(ScreenCapture.tileImage(bytes, column), top.getFormat()));
             }
@@ -181,10 +184,10 @@ public class CaptureSaveController extends WindowController {
         this.images = images;
         this.list.setItems(this.images);
         this.list.getCheckModel()
-                .checkAll();
+            .checkAll();
         this.list.getSelectionModel()
-                .selectedItemProperty()
-                .addListener(this::viewImage);
+            .selectedItemProperty()
+            .addListener(this::viewImage);
         this.getWindow().addEventHandler(WindowEvent.WINDOW_HIDDEN, this::onclose);
     }
 

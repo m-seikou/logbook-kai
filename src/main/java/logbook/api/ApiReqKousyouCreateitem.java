@@ -14,7 +14,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_kousyou/createitem
- *
  */
 @API("/kcsapi/api_req_kousyou/createitem")
 public class ApiReqKousyouCreateitem implements APIListenerSpi {
@@ -29,7 +28,7 @@ public class ApiReqKousyouCreateitem implements APIListenerSpi {
             for (SlotItem item : createitem.getGetItems()) {
                 if (item != null && item.getId() > 0) {
                     Map<Integer, SlotItem> map = SlotItemCollection.get()
-                            .getSlotitemMap();
+                        .getSlotitemMap();
                     item.setLevel(0);
                     item.setLocked(false);
                     map.put(item.getId(), item);
@@ -37,7 +36,7 @@ public class ApiReqKousyouCreateitem implements APIListenerSpi {
                 // 開発ログに書き込む
                 createitem.setSlotItem(item);
                 LogWriter.getInstance(CreateitemLogFormat::new)
-                        .write(createitem);
+                    .write(createitem);
             }
         }
     }

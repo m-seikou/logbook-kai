@@ -7,7 +7,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_kousyou/remodel_slotlist
- *
  */
 @API("/kcsapi/api_req_kousyou/remodel_slotlist")
 public class ApiReqKousyouRemodelSlotlist implements APIListenerSpi {

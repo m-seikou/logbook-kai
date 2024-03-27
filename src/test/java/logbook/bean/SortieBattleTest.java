@@ -16,6 +16,7 @@ public class SortieBattleTest {
 
     /**
      * {@link logbook.bean.SortieBattle#toBattle(javax.json.JsonObject)} のためのテスト・メソッド。
+     *
      * @throws IOException
      */
     @Test
@@ -24,7 +25,7 @@ public class SortieBattleTest {
         try (Reader reader = Files.newBufferedReader(p)) {
             try (JsonReader jsonReader = Json.createReader(reader)) {
                 JsonObject json = jsonReader.readObject()
-                        .getJsonObject("api_data");
+                    .getJsonObject("api_data");
                 SortieBattle.toBattle(json);
             }
         }

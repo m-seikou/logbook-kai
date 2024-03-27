@@ -18,31 +18,41 @@ import lombok.Setter;
 
 /**
  * 所有装備一覧の詳細
- *
  */
 public class DetailItem {
 
-    /** 装備ID */
+    /**
+     * 装備ID
+     */
     @Getter
     @Setter
     private Integer id;
 
-    /** 熟練度 */
+    /**
+     * 熟練度
+     */
     private IntegerProperty alv = new SimpleIntegerProperty();
 
-    /** 改修Lv */
+    /**
+     * 改修Lv
+     */
     private IntegerProperty level = new SimpleIntegerProperty();
 
-    /** 所持艦娘 */
+    /**
+     * 所持艦娘
+     */
     private ObjectProperty<Ship> ship = new SimpleObjectProperty<Ship>();
 
-    /** 所持艦娘ID */
+    /**
+     * 所持艦娘ID
+     */
     @Getter
     @Setter
     private Integer shipId;
 
     /**
      * 熟練度を取得します。
+     *
      * @return 熟練度
      */
     public IntegerProperty alvProperty() {
@@ -51,6 +61,7 @@ public class DetailItem {
 
     /**
      * 熟練度を取得します。
+     *
      * @return 熟練度
      */
     public Integer getAlv() {
@@ -59,6 +70,7 @@ public class DetailItem {
 
     /**
      * 熟練度を設定します。
+     *
      * @param alv 熟練度
      */
     public void setAlv(Integer alv) {
@@ -67,6 +79,7 @@ public class DetailItem {
 
     /**
      * 改修Lvを取得します。
+     *
      * @return 改修Lv
      */
     public IntegerProperty levelProperty() {
@@ -75,6 +88,7 @@ public class DetailItem {
 
     /**
      * 改修Lvを取得します。
+     *
      * @return 改修Lv
      */
     public Integer getLevel() {
@@ -83,6 +97,7 @@ public class DetailItem {
 
     /**
      * 改修Lvを設定します。
+     *
      * @param level 改修Lv
      */
     public void setLevel(Integer level) {
@@ -91,6 +106,7 @@ public class DetailItem {
 
     /**
      * 所持艦娘を取得します。
+     *
      * @return 所持艦娘
      */
     public ObjectProperty<Ship> shipProperty() {
@@ -99,6 +115,7 @@ public class DetailItem {
 
     /**
      * 所持艦娘を取得します。
+     *
      * @return 所持艦娘
      */
     public Ship getShip() {
@@ -107,6 +124,7 @@ public class DetailItem {
 
     /**
      * 所持艦娘を設定します。
+     *
      * @param ship 所持艦娘
      */
     public void setShip(Ship ship) {
@@ -116,18 +134,18 @@ public class DetailItem {
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(Optional.ofNullable(this.alv.get())
-                        .filter(v -> v > 0)
-                        .map(v -> Messages.getString("item.alv", v)) //$NON-NLS-1$
-                        .orElse(""))
-                .add(Optional.ofNullable(this.level.get())
-                        .filter(v -> v > 0)
-                        .map(v -> Messages.getString("item.level", v)) //$NON-NLS-1$
-                        .orElse(""))
-                .add(Optional.ofNullable(this.ship.get())
-                        .map(Ships::toName)
-                        .orElse("未所持"))
-                .toString();
+            .add(Optional.ofNullable(this.alv.get())
+                .filter(v -> v > 0)
+                .map(v -> Messages.getString("item.alv", v)) //$NON-NLS-1$
+                .orElse(""))
+            .add(Optional.ofNullable(this.level.get())
+                .filter(v -> v > 0)
+                .map(v -> Messages.getString("item.level", v)) //$NON-NLS-1$
+                .orElse(""))
+            .add(Optional.ofNullable(this.ship.get())
+                .map(Ships::toName)
+                .orElse("未所持"))
+            .toString();
     }
 
     /**
@@ -148,11 +166,11 @@ public class DetailItem {
         // 装備している艦娘を探す
         Predicate<Ship> filter = e -> e.getSlot().contains(id) || id.equals(e.getSlotEx());
         Optional<Ship> op = ShipCollection.get()
-                .getShipMap()
-                .values()
-                .stream()
-                .filter(filter)
-                .findAny();
+            .getShipMap()
+            .values()
+            .stream()
+            .filter(filter)
+            .findAny();
         if (op.isPresent()) {
             Ship ship = op.get();
             // 艦娘

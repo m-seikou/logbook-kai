@@ -97,7 +97,7 @@ public class MainMenuController extends WindowController {
     void battleStatus(ActionEvent e) {
         try {
             BattleLog log = AppCondition.get()
-                    .getBattleResult();
+                .getBattleResult();
             if (log == null || log.getBattle() == null) {
                 // 直近のログファイルからロード
                 Path dir = Paths.get(AppConfig.get().getReportPath());
@@ -105,8 +105,8 @@ public class MainMenuController extends WindowController {
                 if (Files.exists(path)) {
                     try (Stream<String> lines = Files.lines(path, LogWriter.DEFAULT_CHARSET)) {
                         BattleLogs.SimpleBattleLog battleLog = lines.skip(1).reduce((first, second) -> second)
-                                .map(BattleLogs.SimpleBattleLog::new)
-                                .orElse(null);
+                            .map(BattleLogs.SimpleBattleLog::new)
+                            .orElse(null);
                         if (battleLog != null) {
                             log = BattleLogs.readByDateString(BattleLogDetail.toBattleLogDetail(battleLog).getDate());
                         }
@@ -118,10 +118,10 @@ public class MainMenuController extends WindowController {
             if (log != null && log.getBattle() != null) {
                 BattleLog sendLog = log;
                 InternalFXMLLoader.showWindow("logbook/gui/battle_detail.fxml", this.parentController.getWindow(),
-                        "現在の戦闘", c -> {
-                            ((BattleDetail) c).setInterval(() -> AppCondition.get().getBattleResult());
-                            ((BattleDetail) c).setData(sendLog);
-                        }, null);
+                    "現在の戦闘", c -> {
+                        ((BattleDetail) c).setInterval(() -> AppCondition.get().getBattleResult());
+                        ((BattleDetail) c).setData(sendLog);
+                    }, null);
             } else {
                 Tools.Controls.alert(AlertType.INFORMATION, "現在の戦闘", "戦闘のデータがありません", this.parentController.getWindow());
             }
@@ -129,6 +129,7 @@ public class MainMenuController extends WindowController {
             LoggerHolder.get().error("詳細の表示に失敗しました", ex);
         }
     }
+
     /**
      * 過去の戦闘
      *
@@ -139,29 +140,28 @@ public class MainMenuController extends WindowController {
         FileChooser fileDialog = new FileChooser();
         fileDialog.setInitialDirectory(Paths.get(AppConfig.get().getBattleLogDir()).toFile());
         File file = fileDialog.showOpenDialog(this.parentController.getWindow());
-        if (file.exists()){
-            showBattleResult(file.toPath(),this.parentController.getWindow());
-        }else{
+        if (file.exists()) {
+            showBattleResult(file.toPath(), this.parentController.getWindow());
+        } else {
             Tools.Controls.alert(AlertType.INFORMATION, "現在の戦闘", "戦闘のデータがありません 3", this.parentController.getWindow());
         }
     }
 
     /**
-     *
      * @param path 実存するファイルパス
      */
-    static void showBattleResult(Path path, Stage parent){
+    static void showBattleResult(Path path, Stage parent) {
         try {
             BattleLog log = BattleLogs.read(path);
             InternalFXMLLoader.showWindow(
-                    "logbook/gui/battle_detail.fxml",
-                    parent,
-                    "現在の戦闘",
-                    c -> {
-                        ((BattleDetail) c).setInterval(() -> AppCondition.get().getBattleResult());
-                        ((BattleDetail) c).setData(log);
-                    },
-                    null);
+                "logbook/gui/battle_detail.fxml",
+                parent,
+                "現在の戦闘",
+                c -> {
+                    ((BattleDetail) c).setInterval(() -> AppCondition.get().getBattleResult());
+                    ((BattleDetail) c).setData(log);
+                },
+                null);
         } catch (Exception ex) {
             LoggerHolder.get().error("詳細の表示に失敗しました", ex);
         }
@@ -178,10 +178,10 @@ public class MainMenuController extends WindowController {
             BattleLog log = AppCondition.get().getPracticeBattleResult();
             if (log != null && log.getBattle() != null) {
                 InternalFXMLLoader.showWindow("logbook/gui/battle_detail.fxml", this.parentController.getWindow(),
-                        "演習詳細", "practice", null, c -> {
-                            ((BattleDetail) c).setInterval(() -> AppCondition.get().getPracticeBattleResult());
-                            ((BattleDetail) c).setData(log);
-                        }, null);
+                    "演習詳細", "practice", null, c -> {
+                        ((BattleDetail) c).setInterval(() -> AppCondition.get().getPracticeBattleResult());
+                        ((BattleDetail) c).setData(log);
+                    }, null);
             } else {
                 Tools.Controls.alert(AlertType.INFORMATION, "演習詳細", "演習のデータがありません", this.parentController.getWindow());
             }
@@ -411,16 +411,16 @@ public class MainMenuController extends WindowController {
     void version(ActionEvent e) {
         try {
             InternalFXMLLoader.showWindow("logbook/gui/version.fxml", this.parentController.getWindow(), "バージョン情報",
-                    root -> new Scene(root, Color.TRANSPARENT),
-                    null,
-                    stage -> {
-                        stage.initStyle(StageStyle.TRANSPARENT);
-                        stage.focusedProperty().addListener((ob, o, n) -> {
-                            if (!n) {
-                                stage.close();
-                            }
-                        });
+                root -> new Scene(root, Color.TRANSPARENT),
+                null,
+                stage -> {
+                    stage.initStyle(StageStyle.TRANSPARENT);
+                    stage.focusedProperty().addListener((ob, o, n) -> {
+                        if (!n) {
+                            stage.close();
+                        }
                     });
+                });
         } catch (Exception ex) {
             LoggerHolder.get().error("設定の初期化に失敗しました", ex);
         }

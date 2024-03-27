@@ -9,7 +9,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_kousyou/createship
- *
  */
 @API("/kcsapi/api_req_kousyou/createship")
 public class ApiReqKousyouCreateship implements APIListenerSpi {
@@ -18,8 +17,8 @@ public class ApiReqKousyouCreateship implements APIListenerSpi {
     public void accept(JsonObject json, RequestMetaData req, ResponseMetaData res) {
         Createship createship = Createship.toCreateship(req);
         CreateshipCollection.get()
-                .getCreateshipMap()
-                .put(createship.getKdockId(), createship);
+            .getCreateshipMap()
+            .put(createship.getKdockId(), createship);
     }
 
 }

@@ -29,105 +29,167 @@ import logbook.internal.Ships;
 
 /**
  * 所有艦娘
- *
  */
 public class ShipItem {
 
-    /** ID */
+    /**
+     * ID
+     */
     private IntegerProperty id = new SimpleIntegerProperty();
 
-    /** 艦隊 */
+    /**
+     * 艦隊
+     */
     private StringProperty fleet = new SimpleStringProperty();
 
-    /** 艦娘 */
+    /**
+     * 艦娘
+     */
     private ObjectProperty<Ship> ship = new SimpleObjectProperty<>();
 
-    /** 艦種 */
+    /**
+     * 艦種
+     */
     private StringProperty type = new SimpleStringProperty();
 
-    /** Lv */
+    /**
+     * Lv
+     */
     private IntegerProperty lv = new SimpleIntegerProperty();
 
-    /** 経験値 */
+    /**
+     * 経験値
+     */
     private IntegerProperty exp = new SimpleIntegerProperty();
 
-    /** Next */
+    /**
+     * Next
+     */
     private IntegerProperty next = new SimpleIntegerProperty();
 
-    /** cond */
+    /**
+     * cond
+     */
     private IntegerProperty cond = new SimpleIntegerProperty();
 
-    /** ラベル */
+    /**
+     * ラベル
+     */
     private ObjectProperty<Set<String>> label = new SimpleObjectProperty<>();
 
-    /** 制空 */
+    /**
+     * 制空
+     */
     private IntegerProperty seiku = new SimpleIntegerProperty();
 
-    /** 砲戦火力 */
+    /**
+     * 砲戦火力
+     */
     private IntegerProperty hPower = new SimpleIntegerProperty();
 
-    /** 雷戦火力 */
+    /**
+     * 雷戦火力
+     */
     private IntegerProperty rPower = new SimpleIntegerProperty();
 
-    /** 夜戦火力 */
+    /**
+     * 夜戦火力
+     */
     private IntegerProperty yPower = new SimpleIntegerProperty();
 
-    /** 対潜火力 */
+    /**
+     * 対潜火力
+     */
     private IntegerProperty tPower = new SimpleIntegerProperty();
 
-    /** 火力 */
+    /**
+     * 火力
+     */
     private IntegerProperty karyoku = new SimpleIntegerProperty();
 
-    /** 雷装 */
+    /**
+     * 雷装
+     */
     private IntegerProperty raisou = new SimpleIntegerProperty();
 
-    /** 対空 */
+    /**
+     * 対空
+     */
     private IntegerProperty taiku = new SimpleIntegerProperty();
 
-    /** 対潜 */
+    /**
+     * 対潜
+     */
     private IntegerProperty tais = new SimpleIntegerProperty();
 
-    /** 索敵 */
+    /**
+     * 索敵
+     */
     private IntegerProperty sakuteki = new SimpleIntegerProperty();
 
-    /** 運 */
+    /**
+     * 運
+     */
     private IntegerProperty lucky = new SimpleIntegerProperty();
 
-    /** 耐久 */
+    /**
+     * 耐久
+     */
     private IntegerProperty maxhp = new SimpleIntegerProperty();
 
-    /** 装甲 */
+    /**
+     * 装甲
+     */
     private IntegerProperty soukou = new SimpleIntegerProperty();
 
-    /** 回避 */
+    /**
+     * 回避
+     */
     private IntegerProperty kaihi = new SimpleIntegerProperty();
 
-    /** 速力 */
+    /**
+     * 速力
+     */
     private IntegerProperty soku = new SimpleIntegerProperty();
 
-    /** 射程 */
+    /**
+     * 射程
+     */
     private IntegerProperty leng = new SimpleIntegerProperty();
 
-    /** 装備1 */
+    /**
+     * 装備1
+     */
     private IntegerProperty slot1 = new SimpleIntegerProperty();
 
-    /** 装備2 */
+    /**
+     * 装備2
+     */
     private IntegerProperty slot2 = new SimpleIntegerProperty();
 
-    /** 装備3 */
+    /**
+     * 装備3
+     */
     private IntegerProperty slot3 = new SimpleIntegerProperty();
 
-    /** 装備4 */
+    /**
+     * 装備4
+     */
     private IntegerProperty slot4 = new SimpleIntegerProperty();
 
-    /** 装備5 */
+    /**
+     * 装備5
+     */
     private IntegerProperty slot5 = new SimpleIntegerProperty();
 
-    /** 補強 */
+    /**
+     * 補強
+     */
     private IntegerProperty slotEx = new SimpleIntegerProperty();
 
     /**
      * IDを取得します。
+     *
      * @return ID
      */
     public IntegerProperty idProperty() {
@@ -136,6 +198,7 @@ public class ShipItem {
 
     /**
      * IDを取得します。
+     *
      * @return ID
      */
     public Integer getId() {
@@ -144,6 +207,7 @@ public class ShipItem {
 
     /**
      * IDを設定します。
+     *
      * @param id ID
      */
     public void setId(Integer id) {
@@ -152,6 +216,7 @@ public class ShipItem {
 
     /**
      * 艦隊を取得します。
+     *
      * @return 艦隊
      */
     public StringProperty fleetProperty() {
@@ -160,6 +225,7 @@ public class ShipItem {
 
     /**
      * 艦隊を取得します。
+     *
      * @return 艦隊
      */
     public String getFleet() {
@@ -168,6 +234,7 @@ public class ShipItem {
 
     /**
      * 艦隊を設定します。
+     *
      * @param fleet 艦隊
      */
     public void setFleet(String fleet) {
@@ -176,6 +243,7 @@ public class ShipItem {
 
     /**
      * 艦娘を取得します。
+     *
      * @return 艦娘
      */
     public ObjectProperty<Ship> shipProperty() {
@@ -184,6 +252,7 @@ public class ShipItem {
 
     /**
      * 艦娘を取得します。
+     *
      * @return 艦娘
      */
     public Ship getShip() {
@@ -192,6 +261,7 @@ public class ShipItem {
 
     /**
      * 艦娘を設定します。
+     *
      * @param ship 艦娘
      */
     public void setShip(Ship ship) {
@@ -200,6 +270,7 @@ public class ShipItem {
 
     /**
      * 艦種を取得します。
+     *
      * @return 艦種
      */
     public StringProperty typeProperty() {
@@ -208,6 +279,7 @@ public class ShipItem {
 
     /**
      * 艦種を取得します。
+     *
      * @return 艦種
      */
     public String getType() {
@@ -216,6 +288,7 @@ public class ShipItem {
 
     /**
      * 艦種を設定します。
+     *
      * @param type 艦種
      */
     public void setType(String type) {
@@ -224,6 +297,7 @@ public class ShipItem {
 
     /**
      * Lvを取得します。
+     *
      * @return Lv
      */
     public IntegerProperty lvProperty() {
@@ -232,6 +306,7 @@ public class ShipItem {
 
     /**
      * Lvを取得します。
+     *
      * @return Lv
      */
     public Integer getLv() {
@@ -240,6 +315,7 @@ public class ShipItem {
 
     /**
      * Lvを設定します。
+     *
      * @param lv Lv
      */
     public void setLv(Integer lv) {
@@ -248,6 +324,7 @@ public class ShipItem {
 
     /**
      * 経験値を取得します。
+     *
      * @return 経験値
      */
     public IntegerProperty expProperty() {
@@ -256,6 +333,7 @@ public class ShipItem {
 
     /**
      * 経験値を取得します。
+     *
      * @return 経験値
      */
     public Integer getExp() {
@@ -264,6 +342,7 @@ public class ShipItem {
 
     /**
      * 経験値を設定します。
+     *
      * @param exp 経験値
      */
     public void setExp(Integer exp) {
@@ -272,6 +351,7 @@ public class ShipItem {
 
     /**
      * Nextを取得します。
+     *
      * @return Next
      */
     public IntegerProperty nextProperty() {
@@ -280,6 +360,7 @@ public class ShipItem {
 
     /**
      * Nextを取得します。
+     *
      * @return Next
      */
     public Integer getNext() {
@@ -288,6 +369,7 @@ public class ShipItem {
 
     /**
      * Nextを設定します。
+     *
      * @param next Next
      */
     public void setNext(Integer next) {
@@ -296,6 +378,7 @@ public class ShipItem {
 
     /**
      * condを取得します。
+     *
      * @return cond
      */
     public IntegerProperty condProperty() {
@@ -304,6 +387,7 @@ public class ShipItem {
 
     /**
      * condを取得します。
+     *
      * @return cond
      */
     public Integer getCond() {
@@ -312,6 +396,7 @@ public class ShipItem {
 
     /**
      * condを設定します。
+     *
      * @param cond cond
      */
     public void setCond(Integer cond) {
@@ -320,6 +405,7 @@ public class ShipItem {
 
     /**
      * ラベルを取得します。
+     *
      * @return ラベル
      */
     public ObjectProperty<Set<String>> labelProperty() {
@@ -328,6 +414,7 @@ public class ShipItem {
 
     /**
      * ラベルを取得します。
+     *
      * @return ラベル
      */
     public Set<String> getLabel() {
@@ -336,6 +423,7 @@ public class ShipItem {
 
     /**
      * ラベルを設定します。
+     *
      * @param label ラベル
      */
     public void setLabel(Set<String> label) {
@@ -344,6 +432,7 @@ public class ShipItem {
 
     /**
      * 制空を取得します。
+     *
      * @return 制空
      */
     public IntegerProperty seikuProperty() {
@@ -352,6 +441,7 @@ public class ShipItem {
 
     /**
      * 制空を取得します。
+     *
      * @return 制空
      */
     public Integer getSeiku() {
@@ -360,6 +450,7 @@ public class ShipItem {
 
     /**
      * 制空を設定します。
+     *
      * @param seiku 制空
      */
     public void setSeiku(Integer seiku) {
@@ -368,6 +459,7 @@ public class ShipItem {
 
     /**
      * 砲戦火力を取得します。
+     *
      * @return 砲戦火力
      */
     public IntegerProperty hPowerProperty() {
@@ -376,6 +468,7 @@ public class ShipItem {
 
     /**
      * 砲戦火力を取得します。
+     *
      * @return 砲戦火力
      */
     public Integer getHPower() {
@@ -384,6 +477,7 @@ public class ShipItem {
 
     /**
      * 砲戦火力を設定します。
+     *
      * @param hPower 砲戦火力
      */
     public void setHPower(Integer hPower) {
@@ -392,6 +486,7 @@ public class ShipItem {
 
     /**
      * 雷戦火力を取得します。
+     *
      * @return 雷戦火力
      */
     public IntegerProperty rPowerProperty() {
@@ -400,6 +495,7 @@ public class ShipItem {
 
     /**
      * 雷戦火力を取得します。
+     *
      * @return 雷戦火力
      */
     public Integer getRPower() {
@@ -408,6 +504,7 @@ public class ShipItem {
 
     /**
      * 雷戦火力を設定します。
+     *
      * @param rPower 雷戦火力
      */
     public void setRPower(Integer rPower) {
@@ -416,6 +513,7 @@ public class ShipItem {
 
     /**
      * 夜戦火力を取得します。
+     *
      * @return 夜戦火力
      */
     public IntegerProperty yPowerProperty() {
@@ -424,6 +522,7 @@ public class ShipItem {
 
     /**
      * 夜戦火力を取得します。
+     *
      * @return 夜戦火力
      */
     public Integer getYPower() {
@@ -432,6 +531,7 @@ public class ShipItem {
 
     /**
      * 夜戦火力を設定します。
+     *
      * @param yPower 夜戦火力
      */
     public void setYPower(Integer yPower) {
@@ -440,6 +540,7 @@ public class ShipItem {
 
     /**
      * 対潜火力を取得します。
+     *
      * @return 対潜火力
      */
     public IntegerProperty tPowerProperty() {
@@ -448,6 +549,7 @@ public class ShipItem {
 
     /**
      * 対潜火力を取得します。
+     *
      * @return 対潜火力
      */
     public Integer getTPower() {
@@ -456,6 +558,7 @@ public class ShipItem {
 
     /**
      * 対潜火力を設定します。
+     *
      * @param tPower 対潜火力
      */
     public void setTPower(Integer tPower) {
@@ -464,6 +567,7 @@ public class ShipItem {
 
     /**
      * 火力を取得します。
+     *
      * @return 火力
      */
     public IntegerProperty karyokuProperty() {
@@ -472,6 +576,7 @@ public class ShipItem {
 
     /**
      * 火力を取得します。
+     *
      * @return 火力
      */
     public Integer getKaryoku() {
@@ -480,6 +585,7 @@ public class ShipItem {
 
     /**
      * 火力を設定します。
+     *
      * @param karyoku 火力
      */
     public void setKaryoku(Integer karyoku) {
@@ -488,6 +594,7 @@ public class ShipItem {
 
     /**
      * 雷装を取得します。
+     *
      * @return 雷装
      */
     public IntegerProperty raisouProperty() {
@@ -496,6 +603,7 @@ public class ShipItem {
 
     /**
      * 雷装を取得します。
+     *
      * @return 雷装
      */
     public Integer getRaisou() {
@@ -504,6 +612,7 @@ public class ShipItem {
 
     /**
      * 雷装を設定します。
+     *
      * @param raisou 雷装
      */
     public void setRaisou(Integer raisou) {
@@ -512,6 +621,7 @@ public class ShipItem {
 
     /**
      * 対空を取得します。
+     *
      * @return 対空
      */
     public IntegerProperty taikuProperty() {
@@ -520,6 +630,7 @@ public class ShipItem {
 
     /**
      * 対空を取得します。
+     *
      * @return 対空
      */
     public Integer getTaiku() {
@@ -528,6 +639,7 @@ public class ShipItem {
 
     /**
      * 対空を設定します。
+     *
      * @param taiku 対空
      */
     public void setTaiku(Integer taiku) {
@@ -536,6 +648,7 @@ public class ShipItem {
 
     /**
      * 対潜を取得します。
+     *
      * @return 対潜
      */
     public IntegerProperty taisProperty() {
@@ -544,6 +657,7 @@ public class ShipItem {
 
     /**
      * 対潜を取得します。
+     *
      * @return 対潜
      */
     public Integer getTais() {
@@ -552,6 +666,7 @@ public class ShipItem {
 
     /**
      * 対潜を設定します。
+     *
      * @param tais 対潜
      */
     public void setTais(Integer tais) {
@@ -560,6 +675,7 @@ public class ShipItem {
 
     /**
      * 索敵を取得します。
+     *
      * @return 索敵
      */
     public IntegerProperty sakutekiProperty() {
@@ -568,6 +684,7 @@ public class ShipItem {
 
     /**
      * 索敵を取得します。
+     *
      * @return 索敵
      */
     public Integer getSakuteki() {
@@ -576,6 +693,7 @@ public class ShipItem {
 
     /**
      * 索敵を設定します。
+     *
      * @param sakuteki 索敵
      */
     public void setSakuteki(Integer sakuteki) {
@@ -584,6 +702,7 @@ public class ShipItem {
 
     /**
      * 運を取得します。
+     *
      * @return 運
      */
     public IntegerProperty luckyProperty() {
@@ -592,6 +711,7 @@ public class ShipItem {
 
     /**
      * 運を取得します。
+     *
      * @return 運
      */
     public Integer getLucky() {
@@ -600,6 +720,7 @@ public class ShipItem {
 
     /**
      * 運を設定します。
+     *
      * @param lucky 運
      */
     public void setLucky(Integer lucky) {
@@ -608,6 +729,7 @@ public class ShipItem {
 
     /**
      * 耐久を取得します。
+     *
      * @return 耐久
      */
     public IntegerProperty maxhpProperty() {
@@ -616,6 +738,7 @@ public class ShipItem {
 
     /**
      * 耐久を取得します。
+     *
      * @return 耐久
      */
     public Integer getMaxhp() {
@@ -624,6 +747,7 @@ public class ShipItem {
 
     /**
      * 耐久を設定します。
+     *
      * @param maxhp 耐久
      */
     public void setMaxhp(Integer maxhp) {
@@ -632,6 +756,7 @@ public class ShipItem {
 
     /**
      * 装甲を取得します。
+     *
      * @return 装甲
      */
     public IntegerProperty soukouProperty() {
@@ -640,6 +765,7 @@ public class ShipItem {
 
     /**
      * 装甲を取得します。
+     *
      * @return 装甲
      */
     public Integer getSoukou() {
@@ -648,6 +774,7 @@ public class ShipItem {
 
     /**
      * 装甲を設定します。
+     *
      * @param soukou 装甲
      */
     public void setSoukou(Integer soukou) {
@@ -656,6 +783,7 @@ public class ShipItem {
 
     /**
      * 回避を取得します。
+     *
      * @return 回避
      */
     public IntegerProperty kaihiProperty() {
@@ -664,6 +792,7 @@ public class ShipItem {
 
     /**
      * 回避を取得します。
+     *
      * @return 回避
      */
     public Integer getKaihi() {
@@ -672,6 +801,7 @@ public class ShipItem {
 
     /**
      * 回避を設定します。
+     *
      * @param kaihi 回避
      */
     public void setKaihi(Integer kaihi) {
@@ -680,6 +810,7 @@ public class ShipItem {
 
     /**
      * 速力を取得します。
+     *
      * @return 速力
      */
     public IntegerProperty sokuProperty() {
@@ -688,6 +819,7 @@ public class ShipItem {
 
     /**
      * 速力を取得します。
+     *
      * @return 速力
      */
     public Integer getSoku() {
@@ -696,6 +828,7 @@ public class ShipItem {
 
     /**
      * 速力を設定します。
+     *
      * @param soku 速力
      */
     public void setSoku(Integer soku) {
@@ -704,6 +837,7 @@ public class ShipItem {
 
     /**
      * 射程を取得します。
+     *
      * @return 射程
      */
     public IntegerProperty lengProperty() {
@@ -712,6 +846,7 @@ public class ShipItem {
 
     /**
      * 射程を取得します。
+     *
      * @return 射程
      */
     public Integer getLeng() {
@@ -720,6 +855,7 @@ public class ShipItem {
 
     /**
      * 射程を設定します。
+     *
      * @param leng 射程
      */
     public void setLeng(Integer leng) {
@@ -728,6 +864,7 @@ public class ShipItem {
 
     /**
      * 装備1を取得します。
+     *
      * @return 装備1
      */
     public IntegerProperty slot1Property() {
@@ -736,6 +873,7 @@ public class ShipItem {
 
     /**
      * 装備1を取得します。
+     *
      * @return 装備1
      */
     public Integer getSlot1() {
@@ -744,6 +882,7 @@ public class ShipItem {
 
     /**
      * 装備1を設定します。
+     *
      * @param slot1 装備1
      */
     public void setSlot1(Integer slot1) {
@@ -752,6 +891,7 @@ public class ShipItem {
 
     /**
      * 装備2を取得します。
+     *
      * @return 装備2
      */
     public IntegerProperty slot2Property() {
@@ -760,6 +900,7 @@ public class ShipItem {
 
     /**
      * 装備2を取得します。
+     *
      * @return 装備2
      */
     public Integer getSlot2() {
@@ -768,6 +909,7 @@ public class ShipItem {
 
     /**
      * 装備2を設定します。
+     *
      * @param slot2 装備2
      */
     public void setSlot2(Integer slot2) {
@@ -776,6 +918,7 @@ public class ShipItem {
 
     /**
      * 装備3を取得します。
+     *
      * @return 装備3
      */
     public IntegerProperty slot3Property() {
@@ -784,6 +927,7 @@ public class ShipItem {
 
     /**
      * 装備3を取得します。
+     *
      * @return 装備3
      */
     public Integer getSlot3() {
@@ -792,6 +936,7 @@ public class ShipItem {
 
     /**
      * 装備3を設定します。
+     *
      * @param slot3 装備3
      */
     public void setSlot3(Integer slot3) {
@@ -800,6 +945,7 @@ public class ShipItem {
 
     /**
      * 装備4を取得します。
+     *
      * @return 装備4
      */
     public IntegerProperty slot4Property() {
@@ -808,6 +954,7 @@ public class ShipItem {
 
     /**
      * 装備4を取得します。
+     *
      * @return 装備4
      */
     public Integer getSlot4() {
@@ -816,6 +963,7 @@ public class ShipItem {
 
     /**
      * 装備4を設定します。
+     *
      * @param slot4 装備4
      */
     public void setSlot4(Integer slot4) {
@@ -824,6 +972,7 @@ public class ShipItem {
 
     /**
      * 装備5を取得します。
+     *
      * @return 装備5
      */
     public IntegerProperty slot5Property() {
@@ -832,6 +981,7 @@ public class ShipItem {
 
     /**
      * 装備5を取得します。
+     *
      * @return 装備5
      */
     public Integer getSlot5() {
@@ -840,6 +990,7 @@ public class ShipItem {
 
     /**
      * 装備5を設定します。
+     *
      * @param slot5 装備5
      */
     public void setSlot5(Integer slot5) {
@@ -848,6 +999,7 @@ public class ShipItem {
 
     /**
      * 補強を取得します。
+     *
      * @return 補強
      */
     public IntegerProperty slotExProperty() {
@@ -856,6 +1008,7 @@ public class ShipItem {
 
     /**
      * 補強を取得します。
+     *
      * @return 補強
      */
     public Integer getSlotEx() {
@@ -864,6 +1017,7 @@ public class ShipItem {
 
     /**
      * 補強を設定します。
+     *
      * @param slotEx 補強
      */
     public void setSlotEx(Integer slotEx) {
@@ -873,7 +1027,7 @@ public class ShipItem {
     @Override
     public String toString() {
         Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
 
         // 装備の名前
         Function<Integer, String> slotItemName = itemId -> {
@@ -881,40 +1035,40 @@ public class ShipItem {
         };
 
         return new StringJoiner("\t")
-                .add(Integer.toString(this.id.get()))
-                .add(this.fleet.get())
-                .add(Optional.ofNullable(this.ship.get())
-                        .map(s -> Ships.shipMst(s).map(ShipMst::getName).orElse(""))
-                        .orElse(""))
-                .add(this.type.get())
-                .add(Integer.toString(this.lv.get()))
-                .add(Integer.toString(this.exp.get()))
-                .add(Integer.toString(this.next.get()))
-                .add(Integer.toString(this.cond.get()))
-                .add(this.label.get().stream().collect(Collectors.joining(" ")))
-                .add(Integer.toString(this.seiku.get()))
-                .add(Integer.toString(this.hPower.get()))
-                .add(Integer.toString(this.rPower.get()))
-                .add(Integer.toString(this.yPower.get()))
-                .add(Integer.toString(this.tPower.get()))
-                .add(Integer.toString(this.karyoku.get()))
-                .add(Integer.toString(this.raisou.get()))
-                .add(Integer.toString(this.taiku.get()))
-                .add(Integer.toString(this.tais.get()))
-                .add(Integer.toString(this.sakuteki.get()))
-                .add(Integer.toString(this.lucky.get()))
-                .add(Integer.toString(this.maxhp.get()))
-                .add(Integer.toString(this.soukou.get()))
-                .add(Integer.toString(this.kaihi.get()))
-                .add(Ships.sokuText(this.soku.get()))
-                .add(Ships.lengText(this.leng.get()))
-                .add(slotItemName.apply(this.slot1.get()))
-                .add(slotItemName.apply(this.slot2.get()))
-                .add(slotItemName.apply(this.slot3.get()))
-                .add(slotItemName.apply(this.slot4.get()))
-                .add(slotItemName.apply(this.slot5.get()))
-                .add(slotItemName.apply(this.slotEx.get()))
-                .toString();
+            .add(Integer.toString(this.id.get()))
+            .add(this.fleet.get())
+            .add(Optional.ofNullable(this.ship.get())
+                .map(s -> Ships.shipMst(s).map(ShipMst::getName).orElse(""))
+                .orElse(""))
+            .add(this.type.get())
+            .add(Integer.toString(this.lv.get()))
+            .add(Integer.toString(this.exp.get()))
+            .add(Integer.toString(this.next.get()))
+            .add(Integer.toString(this.cond.get()))
+            .add(this.label.get().stream().collect(Collectors.joining(" ")))
+            .add(Integer.toString(this.seiku.get()))
+            .add(Integer.toString(this.hPower.get()))
+            .add(Integer.toString(this.rPower.get()))
+            .add(Integer.toString(this.yPower.get()))
+            .add(Integer.toString(this.tPower.get()))
+            .add(Integer.toString(this.karyoku.get()))
+            .add(Integer.toString(this.raisou.get()))
+            .add(Integer.toString(this.taiku.get()))
+            .add(Integer.toString(this.tais.get()))
+            .add(Integer.toString(this.sakuteki.get()))
+            .add(Integer.toString(this.lucky.get()))
+            .add(Integer.toString(this.maxhp.get()))
+            .add(Integer.toString(this.soukou.get()))
+            .add(Integer.toString(this.kaihi.get()))
+            .add(Ships.sokuText(this.soku.get()))
+            .add(Ships.lengText(this.leng.get()))
+            .add(slotItemName.apply(this.slot1.get()))
+            .add(slotItemName.apply(this.slot2.get()))
+            .add(slotItemName.apply(this.slot3.get()))
+            .add(slotItemName.apply(this.slot4.get()))
+            .add(slotItemName.apply(this.slot5.get()))
+            .add(slotItemName.apply(this.slotEx.get()))
+            .toString();
     }
 
     /**
@@ -925,8 +1079,8 @@ public class ShipItem {
      */
     public static ShipItem toShipItem(Ship ship) {
         String type = Ships.stype(ship)
-                .map(Stype::getName)
-                .orElse("");
+            .map(Stype::getName)
+            .orElse("");
         ShipItem shipItem = new ShipItem();
         shipItem.setId(ship.getId());
         shipItem.setFleet(Ships.deckPort(ship).map(DeckPort::getId).map(Object::toString).orElse(""));
@@ -942,8 +1096,8 @@ public class ShipItem {
             label.add(area.toString());
         }
         Set<String> shipLabels = ShipLabelCollection.get()
-                .getLabels()
-                .get(ship.getId());
+            .getLabels()
+            .get(ship.getId());
         if (shipLabels != null) {
             label.addAll(shipLabels);
         }

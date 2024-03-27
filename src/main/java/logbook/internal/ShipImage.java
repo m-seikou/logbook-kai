@@ -28,118 +28,194 @@ import logbook.bean.SlotitemMstCollection;
 
 class ShipImage {
 
-    /** 画像キャッシュ(艦) */
+    /**
+     * 画像キャッシュ(艦)
+     */
     private static final ReferenceCache<String, Image> BASE_CACHE = new ReferenceCache<>(120);
 
-    /** 画像キャッシュ(アイコン類) */
+    /**
+     * 画像キャッシュ(アイコン類)
+     */
     private static final ReferenceCache<String, Image> COMMON_CACHE = new ReferenceCache<>(32);
 
-    /** 画像キャッシュ(HPゲージ) */
+    /**
+     * 画像キャッシュ(HPゲージ)
+     */
     private static final ReferenceCache<Double, Image> HPGAUGE_CACHE = new ReferenceCache<>(50);
 
-    /** 画像キャッシュ(経験値ゲージ) */
+    /**
+     * 画像キャッシュ(経験値ゲージ)
+     */
     private static final ReferenceCache<Double, Image> EXPGAUGE_CACHE = new ReferenceCache<>(50);
 
-    /** 艦娘画像ファイル名(健在・小破) */
-    private static final String[] NORMAL = { "1.png", "1.jpg" };
+    /**
+     * 艦娘画像ファイル名(健在・小破)
+     */
+    private static final String[] NORMAL = {"1.png", "1.jpg"};
 
-    /** 艦娘画像ファイル名(中破・大破) */
-    private static final String[] DAMAGED = { "3.png", "3.jpg", "1.png", "1.jpg" };
+    /**
+     * 艦娘画像ファイル名(中破・大破)
+     */
+    private static final String[] DAMAGED = {"3.png", "3.jpg", "1.png", "1.jpg"};
 
-    /** 艦娘画像ファイル名(健在・小破) */
-    private static final String[] STANDING_NORMAL = { "17.png", "17.jpg" };
+    /**
+     * 艦娘画像ファイル名(健在・小破)
+     */
+    private static final String[] STANDING_NORMAL = {"17.png", "17.jpg"};
 
-    /** 艦娘画像ファイル名(中破・大破) */
-    private static final String[] STANDING_DAMAGED = { "19.png", "19.jpg" };
+    /**
+     * 艦娘画像ファイル名(中破・大破)
+     */
+    private static final String[] STANDING_DAMAGED = {"19.png", "19.jpg"};
 
-    /** 小破バナーアイコン */
+    /**
+     * 小破バナーアイコン
+     */
     private static final String MC_BANNER_ICON0 = "common_misc/common_misc_112.png";
 
-    /** 中破バナーアイコン */
+    /**
+     * 中破バナーアイコン
+     */
     private static final String MC_BANNER_ICON1 = "common_misc/common_misc_104.png";
 
-    /** 大破バナーアイコン */
+    /**
+     * 大破バナーアイコン
+     */
     private static final String MC_BANNER_ICON2 = "common_misc/common_misc_116.png";
 
-    /** 撃沈バナーアイコン */
+    /**
+     * 撃沈バナーアイコン
+     */
     private static final String MC_BANNER_ICON3 = "common_misc/common_misc_107.png";
 
-    /** 修復バナーアイコン */
+    /**
+     * 修復バナーアイコン
+     */
     private static final String MC_BANNER_ICON4 = "common_misc/common_misc_115.png";
 
-    /** 遠征バナーアイコン */
+    /**
+     * 遠征バナーアイコン
+     */
     private static final String MC_BANNER_ICON5 = "common_misc/common_misc_105.png";
 
-    /** 退避バナーアイコン */
+    /**
+     * 退避バナーアイコン
+     */
     private static final String MC_BANNER_ICON10 = "common_misc/common_misc_117.png";
 
-    /** 小破汚れ */
+    /**
+     * 小破汚れ
+     */
     private static final String MC_BANNER_SMOKE_IMG0 = "common_misc/common_misc_101.png";
 
-    /** 中破汚れ */
+    /**
+     * 中破汚れ
+     */
     private static final String MC_BANNER_SMOKE_IMG1 = "common_misc/common_misc_102.png";
 
-    /** 大破汚れ */
+    /**
+     * 大破汚れ
+     */
     private static final String MC_BANNER_SMOKE_IMG2 = "common_misc/common_misc_103.png";
 
-    /** 疲労オレンジ背景 */
+    /**
+     * 疲労オレンジ背景
+     */
     private static final String COMMON_MISC_39 = "common_misc/common_misc_39.png";
 
-    /** 疲労オレンジ顔 */
+    /**
+     * 疲労オレンジ顔
+     */
     private static final String COMMON_MISC_117 = "common_misc/common_misc_119.png";
 
-    /** 疲労赤背景 */
+    /**
+     * 疲労赤背景
+     */
     private static final String COMMON_MISC_40 = "common_misc/common_misc_40.png";
 
-    /** 疲労赤顔 */
+    /**
+     * 疲労赤顔
+     */
     private static final String COMMON_MISC_118 = "common_misc/common_misc_120.png";
 
-    /** 小破バッチ */
+    /**
+     * 小破バッチ
+     */
     private static final Layer SLIGHT_DAMAGE_BADGE = new Layer(0, 0, Paths.get("common", MC_BANNER_ICON0));
 
-    /** 中破バッチ */
+    /**
+     * 中破バッチ
+     */
     private static final Layer HALF_DAMAGE_BADGE = new Layer(0, 0, Paths.get("common", MC_BANNER_ICON1));
 
-    /** 大破バッチ */
+    /**
+     * 大破バッチ
+     */
     private static final Layer BADLY_DAMAGE_BADGE = new Layer(0, 0, Paths.get("common", MC_BANNER_ICON2));
 
-    /** 撃沈バッチ */
+    /**
+     * 撃沈バッチ
+     */
     private static final Layer LOST_BADGE = new Layer(0, 0, Paths.get("common", MC_BANNER_ICON3));
 
-    /** 修復バッチ */
+    /**
+     * 修復バッチ
+     */
     private static final Layer NDOCK_BADGE = new Layer(0, 0, Paths.get("common", MC_BANNER_ICON4));
 
-    /** 遠征バッチ */
+    /**
+     * 遠征バッチ
+     */
     private static final Layer MISSION_BADGE = new Layer(0, 0, Paths.get("common", MC_BANNER_ICON5));
 
-    /** 退避バッチ */
+    /**
+     * 退避バッチ
+     */
     private static final Layer ESCAPE_BADGE = new Layer(0, 0, Paths.get("common", MC_BANNER_ICON10));
 
-    /** 小破汚れ */
+    /**
+     * 小破汚れ
+     */
     private static final Layer SLIGHT_DAMAGE_BACKGROUND = new Layer(0, 0, Paths.get("common", MC_BANNER_SMOKE_IMG0));
 
-    /** 中破汚れ */
+    /**
+     * 中破汚れ
+     */
     private static final Layer HALF_DAMAGE_BACKGROUND = new Layer(0, 0, Paths.get("common", MC_BANNER_SMOKE_IMG1));
 
-    /** 大破汚れ */
+    /**
+     * 大破汚れ
+     */
     private static final Layer BADLY_DAMAGE_BACKGROUND = new Layer(0, 0, Paths.get("common", MC_BANNER_SMOKE_IMG2));
 
-    /** 疲労オレンジ背景 */
+    /**
+     * 疲労オレンジ背景
+     */
     private static final Layer ORANGE_BACKGROUND = new Layer(150, 0, Paths.get("common", COMMON_MISC_39));
 
-    /** 疲労オレンジ顔 */
+    /**
+     * 疲労オレンジ顔
+     */
     private static final Layer ORANGE_FACE = new Layer(214, 18, Paths.get("common", COMMON_MISC_117));
 
-    /** 疲労赤背景 */
+    /**
+     * 疲労赤背景
+     */
     private static final Layer RED_BACKGROUND = new Layer(150, 0, Paths.get("common", COMMON_MISC_40));
 
-    /** 疲労赤顔 */
+    /**
+     * 疲労赤顔
+     */
     private static final Layer RED_FACE = new Layer(214, 18, Paths.get("common", COMMON_MISC_118));
 
-    /** 出撃札 */
+    /**
+     * 出撃札
+     */
     private static final String JOIN_BANNER = "common_event/common_event_{0}.png";
 
-    /** 装備アイコンのサイズ */
+    /**
+     * 装備アイコンのサイズ
+     */
     private static final int ITEM_ICON_SIZE = 32;
 
     /**
@@ -181,15 +257,15 @@ class ShipImage {
     /**
      * キャラクターの画像を作成します
      *
-     * @param chara キャラクター
-     * @param addItem 装備画像を追加します
+     * @param chara      キャラクター
+     * @param addItem    装備画像を追加します
      * @param applyState 遠征や入渠、退避のバナーアイコンを追加する
-     * @param itemMap 装備Map
-     * @param escape 退避艦ID
+     * @param itemMap    装備Map
+     * @param escape     退避艦ID
      * @return 艦娘の画像
      */
     static Image get(Chara chara, boolean addItem, boolean applyState,
-            Map<Integer, SlotItem> itemMap, Set<Integer> escape) {
+                     Map<Integer, SlotItem> itemMap, Set<Integer> escape) {
         boolean visibleExpGauge = AppConfig.get().isVisibleExpGauge();
         return get(chara, addItem, applyState, true, true, true, visibleExpGauge, itemMap, escape);
     }
@@ -197,20 +273,20 @@ class ShipImage {
     /**
      * キャラクターの画像を作成します
      *
-     * @param chara キャラクター
-     * @param addItem 装備画像を追加します
+     * @param chara      キャラクター
+     * @param addItem    装備画像を追加します
      * @param applyState 遠征や入渠、退避のバナーアイコンを追加する
-     * @param banner バナーアイコンを追加する
-     * @param cond コンディションを反映する
-     * @param hpGauge HPゲージを反映する
-     * @param expGauge 経験値ゲージを反映する
-     * @param itemMap 装備Map
-     * @param escape 退避艦ID
+     * @param banner     バナーアイコンを追加する
+     * @param cond       コンディションを反映する
+     * @param hpGauge    HPゲージを反映する
+     * @param expGauge   経験値ゲージを反映する
+     * @param itemMap    装備Map
+     * @param escape     退避艦ID
      * @return 艦娘の画像
      */
     static Image get(Chara chara, boolean addItem, boolean applyState, boolean banner, boolean cond, boolean hpGauge,
-            boolean expGauge,
-            Map<Integer, SlotItem> itemMap, Set<Integer> escape) {
+                     boolean expGauge,
+                     Map<Integer, SlotItem> itemMap, Set<Integer> escape) {
         Canvas canvas = new Canvas(240, 60);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
@@ -224,12 +300,12 @@ class ShipImage {
 
             // 入渠中
             boolean isOnNdock = applyState && isShip && NdockCollection.get()
-                    .getNdockSet()
-                    .contains(chara.asShip().getId());
+                .getNdockSet()
+                .contains(chara.asShip().getId());
             // 遠征中
             boolean isMission = applyState && isShip && DeckPortCollection.get()
-                    .getMissionShips()
-                    .contains(chara.asShip().getId());
+                .getMissionShips()
+                .contains(chara.asShip().getId());
             // 退避
             boolean isEscape = isShip && Ships.isEscape(chara.asShip(), escape);
 
@@ -242,7 +318,7 @@ class ShipImage {
                 } else if (isEscape) {
                     layers.add(ESCAPE_BADGE);
                     gc.applyEffect(new ColorAdjust(0, -1, 0, 0));
-                } else if(chara.getMaxhp().equals(Chara.HP_N_A)){
+                } else if (chara.getMaxhp().equals(Chara.HP_N_A)) {
                     //do nothing
                 } else if (Ships.isSlightDamage(chara)) {
                     layers.add(SLIGHT_DAMAGE_BADGE);
@@ -295,11 +371,11 @@ class ShipImage {
                     if (ship.getSlotEx() != 0) {
                         // 補強増設は0(未開放)以外の場合
                         layers.add(
-                                new Layer(x, y, ITEM_ICON_SIZE, ITEM_ICON_SIZE, itemIcon(ship.getSlotEx(), itemMap)));
+                            new Layer(x, y, ITEM_ICON_SIZE, ITEM_ICON_SIZE, itemIcon(ship.getSlotEx(), itemMap)));
                     }
                 } else {
                     Map<Integer, SlotitemMst> map = SlotitemMstCollection.get()
-                            .getSlotitemMap();
+                        .getSlotitemMap();
                     for (Integer itemId : chara.getSlot()) {
                         Image icon = Items.borderedItemImage(map.get(itemId));
                         // 装備アイコン
@@ -365,9 +441,10 @@ class ShipImage {
 
     /**
      * HPゲージ
-     * @param chara キャラクター
+     *
+     * @param chara  キャラクター
      * @param canvas Canvas
-     * @param gc GraphicsContext
+     * @param gc     GraphicsContext
      */
     private static void writeHpGauge(Chara chara, Canvas canvas, GraphicsContext gc) {
         double w = canvas.getWidth();
@@ -379,9 +456,10 @@ class ShipImage {
 
     /**
      * 経験値ゲージ
-     * @param ship キャラクター
+     *
+     * @param ship   キャラクター
      * @param canvas Canvas
-     * @param gc GraphicsContext
+     * @param gc     GraphicsContext
      */
     private static void writeExpGauge(Ship ship, Canvas canvas, GraphicsContext gc) {
         double w = canvas.getWidth() - 7;
@@ -408,16 +486,17 @@ class ShipImage {
 
     /**
      * ゲージを作成する
-     * @param width ゲージの幅
-     * @param height ゲージの高さ
-     * @param per 割合
+     *
+     * @param width     ゲージの幅
+     * @param height    ゲージの高さ
+     * @param per       割合
      * @param colorFunc 色
-     * @param cache キャッシュ
+     * @param cache     キャッシュ
      * @return ゲージのImage
      */
     private static Image createGauge(double width, double height, double per,
-            Function<Double, Color> colorFunc,
-            ReferenceCache<Double, Image> cache) {
+                                     Function<Double, Color> colorFunc,
+                                     ReferenceCache<Double, Image> cache) {
         double size = (int) Math.max((Math.max(width, height) * per), 0);
         return cache.get(size, key -> {
             Canvas canvas = new Canvas(width, height);
@@ -444,7 +523,7 @@ class ShipImage {
     /**
      * 画像レイヤーを適用します
      *
-     * @param gc GraphicsContext
+     * @param gc     GraphicsContext
      * @param layers 画像レイヤー
      */
     private static void applyLayers(GraphicsContext gc, List<Layer> layers) {
@@ -473,6 +552,7 @@ class ShipImage {
 
     /**
      * キャラクター画像へのパスを返します。
+     *
      * @param chara キャラクター
      * @return キャラクター画像へのパス
      */
@@ -482,6 +562,7 @@ class ShipImage {
 
     /**
      * キャラクター画像へのパスを返します(立ち絵)。
+     *
      * @param chara キャラクター
      * @return キャラクター画像へのパス(立ち絵)
      */
@@ -501,7 +582,7 @@ class ShipImage {
             Path dir = ShipMst.getResourcePathDir(mst.get());
             String[] names;
             if ((chara.isShip() || chara.isFriend() || chara.isPractice())
-                    && (Ships.isHalfDamage(chara) || Ships.isBadlyDamage(chara) || Ships.isLost(chara))) {
+                && (Ships.isHalfDamage(chara) || Ships.isBadlyDamage(chara) || Ships.isLost(chara))) {
                 names = damaged;
             } else {
                 names = normal;
@@ -519,7 +600,7 @@ class ShipImage {
     /**
      * 装備アイコンを返します
      *
-     * @param itemId 装備ID
+     * @param itemId  装備ID
      * @param itemMap 装備Map
      */
     private static Image itemIcon(Integer itemId, Map<Integer, SlotItem> itemMap) {
@@ -542,26 +623,37 @@ class ShipImage {
 
     /**
      * レイヤー
-     *
      */
     private static class Layer {
 
-        /** X座標 */
+        /**
+         * X座標
+         */
         private final double x;
 
-        /** Y座標 */
+        /**
+         * Y座標
+         */
         private final double y;
 
-        /** width */
+        /**
+         * width
+         */
         private final double w;
 
-        /** height */
+        /**
+         * height
+         */
         private final double h;
 
-        /** 画像ファイル名 */
+        /**
+         * 画像ファイル名
+         */
         private final Path path;
 
-        /** 画像 */
+        /**
+         * 画像
+         */
         private final Image img;
 
         private Layer(double x, double y, Path path) {

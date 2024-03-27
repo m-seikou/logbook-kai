@@ -13,11 +13,17 @@ import lombok.Builder;
  * @param <T> 比較するパラメータの型
  */
 public class ComparableFilter<S, T extends Comparable<T>> implements Predicate<S> {
-    /** ShipItem からパラメータに変換する mapper */
+    /**
+     * ShipItem からパラメータに変換する mapper
+     */
     private Function<S, T> mapper;
-    /** 比較対象の値 */
+    /**
+     * 比較対象の値
+     */
     private T value;
-    /** 演算子 */
+    /**
+     * 演算子
+     */
     private Operator type;
 
     @Override

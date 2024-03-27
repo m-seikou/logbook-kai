@@ -17,7 +17,6 @@ import lombok.Builder;
 
 /**
  * 所有艦娘一覧のフィルター
- *
  */
 @FunctionalInterface
 public interface ShipFilter extends Predicate<ShipItem> {
@@ -25,7 +24,9 @@ public interface ShipFilter extends Predicate<ShipItem> {
     @Builder
     public static class TypeFilter implements ShipFilter {
 
-        /** 艦種 */
+        /**
+         * 艦種
+         */
         private Set<String> types;
 
         @Override
@@ -39,10 +40,14 @@ public interface ShipFilter extends Predicate<ShipItem> {
     @Builder
     public static class CondFilter implements ShipFilter {
 
-        /** コンディション */
+        /**
+         * コンディション
+         */
         private int conditionValue;
 
-        /** コンディション条件 */
+        /**
+         * コンディション条件
+         */
         private Operator conditionType;
 
         @Override
@@ -56,10 +61,14 @@ public interface ShipFilter extends Predicate<ShipItem> {
     @Builder
     public static class LevelFilter implements ShipFilter {
 
-        /** レベル */
+        /**
+         * レベル
+         */
         private int levelValue;
 
-        /** レベル条件 */
+        /**
+         * レベル条件
+         */
         private Operator levelType;
 
         @Override
@@ -74,7 +83,9 @@ public interface ShipFilter extends Predicate<ShipItem> {
     public static class LabelFilter implements ShipFilter {
         public static String NO_LABEL = "";
 
-        /** ラベル */
+        /**
+         * ラベル
+         */
         private String labelValue;
 
         @Override
@@ -92,7 +103,9 @@ public interface ShipFilter extends Predicate<ShipItem> {
     @Builder
     public static class SlotExFilter implements ShipFilter {
 
-        /** 補強増設 */
+        /**
+         * 補強増設
+         */
         private boolean slotEx;
 
         @Override
@@ -106,7 +119,9 @@ public interface ShipFilter extends Predicate<ShipItem> {
     @Builder
     public static class TextFilter implements ShipFilter {
 
-        /** テキスト */
+        /**
+         * テキスト
+         */
         private String text;
 
         @Override
@@ -116,16 +131,16 @@ public interface ShipFilter extends Predicate<ShipItem> {
             if (this.text.isEmpty())
                 return true;
             Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                    .getSlotitemMap();
+                .getSlotitemMap();
             List<Supplier<String>> texts = Arrays.asList(
-                    () -> Ships.shipMst(ship.getShip()).map(ShipMst::getName).orElse(""),
-                    () -> ship.getType(),
-                    () -> Items.slotitemMst(itemMap.get(ship.getSlot1())).map(SlotitemMst::getName).orElse(""),
-                    () -> Items.slotitemMst(itemMap.get(ship.getSlot2())).map(SlotitemMst::getName).orElse(""),
-                    () -> Items.slotitemMst(itemMap.get(ship.getSlot3())).map(SlotitemMst::getName).orElse(""),
-                    () -> Items.slotitemMst(itemMap.get(ship.getSlot4())).map(SlotitemMst::getName).orElse(""),
-                    () -> Items.slotitemMst(itemMap.get(ship.getSlot5())).map(SlotitemMst::getName).orElse(""),
-                    () -> Items.slotitemMst(itemMap.get(ship.getSlotEx())).map(SlotitemMst::getName).orElse(""));
+                () -> Ships.shipMst(ship.getShip()).map(ShipMst::getName).orElse(""),
+                () -> ship.getType(),
+                () -> Items.slotitemMst(itemMap.get(ship.getSlot1())).map(SlotitemMst::getName).orElse(""),
+                () -> Items.slotitemMst(itemMap.get(ship.getSlot2())).map(SlotitemMst::getName).orElse(""),
+                () -> Items.slotitemMst(itemMap.get(ship.getSlot3())).map(SlotitemMst::getName).orElse(""),
+                () -> Items.slotitemMst(itemMap.get(ship.getSlot4())).map(SlotitemMst::getName).orElse(""),
+                () -> Items.slotitemMst(itemMap.get(ship.getSlot5())).map(SlotitemMst::getName).orElse(""),
+                () -> Items.slotitemMst(itemMap.get(ship.getSlotEx())).map(SlotitemMst::getName).orElse(""));
             for (Supplier<String> supplier : texts) {
                 if (supplier.get().contains(this.text)) {
                     return true;
@@ -138,7 +153,9 @@ public interface ShipFilter extends Predicate<ShipItem> {
     @Builder
     public static class MissionFilter implements ShipFilter {
 
-        /** 遠征 */
+        /**
+         * 遠征
+         */
         private boolean mission;
 
         @Override
@@ -146,8 +163,8 @@ public interface ShipFilter extends Predicate<ShipItem> {
             if (ship == null)
                 return false;
             return this.mission == DeckPortCollection.get()
-                    .getMissionShips()
-                    .contains(ship.getId());
+                .getMissionShips()
+                .contains(ship.getId());
         }
     }
 }

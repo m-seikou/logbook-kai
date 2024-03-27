@@ -22,7 +22,6 @@ import logbook.internal.Ships;
 
 /**
  * 艦隊タブポップアップ
- *
  */
 public class FleetTabShipPopup extends VBox {
 
@@ -44,7 +43,7 @@ public class FleetTabShipPopup extends VBox {
     private final Chara chara;
 
     private final Map<Integer, SlotItem> itemMap;
-    
+
     /**
      * 艦隊タブポップアップのコンストラクタ
      *
@@ -57,7 +56,7 @@ public class FleetTabShipPopup extends VBox {
     /**
      * 艦隊タブポップアップのコンストラクタ
      *
-     * @param chara キャラクター
+     * @param chara   キャラクター
      * @param itemMap 装備マップ
      */
     public FleetTabShipPopup(Chara chara, Map<Integer, SlotItem> itemMap) {
@@ -78,17 +77,17 @@ public class FleetTabShipPopup extends VBox {
         if (this.chara.isShip()) {
             Ship ship = this.chara.asShip();
             Ships.shipMst(this.chara).map(ShipMst::getFuelMax).ifPresent(max -> {
-                this.fuel.setText(ship.getFuel()*100/max+"%");
-                this.fuelDesc.setText("("+ship.getFuel()+"/"+max+")");
+                this.fuel.setText(ship.getFuel() * 100 / max + "%");
+                this.fuelDesc.setText("(" + ship.getFuel() + "/" + max + ")");
             });
             Ships.shipMst(this.chara).map(ShipMst::getBullMax).ifPresent(max -> {
-                this.bull.setText(ship.getBull()*100/max+"%");
-                this.bullDesc.setText("("+ship.getBull()+"/"+max+")");
+                this.bull.setText(ship.getBull() * 100 / max + "%");
+                this.bullDesc.setText("(" + ship.getBull() + "/" + max + ")");
             });
             int maxPlane = Ships.shipMst(this.chara)
-                    .map(ShipMst::getMaxeq)
-                    .map(eq -> eq.stream().filter(e -> e > 0).mapToInt(Integer::intValue).sum())
-                    .orElse(0);
+                .map(ShipMst::getMaxeq)
+                .map(eq -> eq.stream().filter(e -> e > 0).mapToInt(Integer::intValue).sum())
+                .orElse(0);
             if (maxPlane == 0) {
                 this.planeBox.setVisible(false);
                 this.planeBox.setManaged(false);
@@ -97,8 +96,8 @@ public class FleetTabShipPopup extends VBox {
                 if (total >= maxPlane) {
                     this.plane.setText("なし");
                 } else {
-                    this.plane.setText((maxPlane-total) + "機");
-                    this.planeDesc.setText("(要ボーキ"+(maxPlane-total)*5 + ")");
+                    this.plane.setText((maxPlane - total) + "機");
+                    this.planeDesc.setText("(要ボーキ" + (maxPlane - total) * 5 + ")");
                 }
             }
             for (int i = 0; i < ship.getSlotnum(); i++) {
@@ -129,7 +128,6 @@ public class FleetTabShipPopup extends VBox {
 
     /**
      * 艦隊タブポップアップの装備
-     *
      */
     private static class FleetTabShipPopupItem extends HBox {
 
@@ -147,13 +145,19 @@ public class FleetTabShipPopup extends VBox {
         @FXML
         private Label name;
 
-        /** キャラクター */
+        /**
+         * キャラクター
+         */
         private Chara chara;
 
-        /** スロット番号 */
+        /**
+         * スロット番号
+         */
         private int slotIndex;
 
-        /** 装備マップ */
+        /**
+         * 装備マップ
+         */
         private final Map<Integer, SlotItem> itemMap;
 
         /**
@@ -168,7 +172,7 @@ public class FleetTabShipPopup extends VBox {
         /**
          * 艦隊タブポップアップのコンストラクタ
          *
-         * @param chara キャラクター
+         * @param chara     キャラクター
          * @param slotIndex スロット番号
          */
         public FleetTabShipPopupItem(Chara chara, Map<Integer, SlotItem> itemMap, int slotIndex) {
@@ -191,14 +195,14 @@ public class FleetTabShipPopup extends VBox {
                 Ship ship = this.chara.asShip();
 
                 Integer itemId = this.slotIndex == SLOT_EX
-                        ? ship.getSlotEx() : this.chara.getSlot().get(this.slotIndex);
+                    ? ship.getSlotEx() : this.chara.getSlot().get(this.slotIndex);
 
                 SlotItem item = this.itemMap.get(itemId);
 
                 Integer slotEq = Ships.shipMst(this.chara)
-                        .map(ShipMst::getMaxeq)
-                        .map(eq -> eq.size() > this.slotIndex ? eq.get(this.slotIndex) : 0)
-                        .orElse(0);
+                    .map(ShipMst::getMaxeq)
+                    .map(eq -> eq.size() > this.slotIndex ? eq.get(this.slotIndex) : 0)
+                    .orElse(0);
                 if (slotEq != null && slotEq > 0) {
                     Integer onslot = ship.getOnslot().get(this.slotIndex);
 
@@ -219,8 +223,8 @@ public class FleetTabShipPopup extends VBox {
 
                     // 特定の装備以外は搭載機数をグレー表示にする
                     boolean isOnslot = Items.slotitemMst(item)
-                            .map(Items::isAircraft)
-                            .orElse(false);
+                        .map(Items::isAircraft)
+                        .orElse(false);
                     if (!isOnslot) {
                         this.onslot.getStyleClass().add("disabled");
                     }
@@ -229,8 +233,8 @@ public class FleetTabShipPopup extends VBox {
                 }
             } else {
                 SlotitemMst item = SlotitemMstCollection.get()
-                        .getSlotitemMap()
-                        .get(this.chara.getSlot().get(this.slotIndex));
+                    .getSlotitemMap()
+                    .get(this.chara.getSlot().get(this.slotIndex));
                 this.image.setImage(Items.itemImage(item));
                 this.name.setText(item.getName());
             }
@@ -239,7 +243,6 @@ public class FleetTabShipPopup extends VBox {
 
     /**
      * 艦隊タブポップアップの発動率
-     *
      */
     private static class FleetTabShipPopupRate extends HBox {
 
@@ -249,10 +252,14 @@ public class FleetTabShipPopup extends VBox {
         @FXML
         private Label percent;
 
-        /** 発動率 */
+        /**
+         * 発動率
+         */
         private double rate;
 
-        /** 種類 */
+        /**
+         * 種類
+         */
         private String name;
 
         /**

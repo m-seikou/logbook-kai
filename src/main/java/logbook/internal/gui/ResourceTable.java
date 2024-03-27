@@ -11,38 +11,57 @@ import logbook.internal.Tuple.Pair;
 
 /**
  * 資材ログのテーブル行
- *
  */
 public class ResourceTable {
 
-    /** 日付 */
+    /**
+     * 日付
+     */
     private StringProperty date = new SimpleStringProperty();
 
-    /** 燃料 */
+    /**
+     * 燃料
+     */
     private ObjectProperty<Pair<Integer, Integer>> fuel = new SimpleObjectProperty<>();
 
-    /** 弾薬 */
+    /**
+     * 弾薬
+     */
     private ObjectProperty<Pair<Integer, Integer>> ammo = new SimpleObjectProperty<>();
 
-    /** 鋼材 */
+    /**
+     * 鋼材
+     */
     private ObjectProperty<Pair<Integer, Integer>> metal = new SimpleObjectProperty<>();
 
-    /** ボーキサイト */
+    /**
+     * ボーキサイト
+     */
     private ObjectProperty<Pair<Integer, Integer>> bauxite = new SimpleObjectProperty<>();
 
-    /** 高速修復材 */
+    /**
+     * 高速修復材
+     */
     private ObjectProperty<Pair<Integer, Integer>> bucket = new SimpleObjectProperty<>();
 
-    /** 高速建造材 */
+    /**
+     * 高速建造材
+     */
     private ObjectProperty<Pair<Integer, Integer>> burner = new SimpleObjectProperty<>();
 
-    /** 開発資材 */
+    /**
+     * 開発資材
+     */
     private ObjectProperty<Pair<Integer, Integer>> research = new SimpleObjectProperty<>();
 
-    /** 改修資材 */
+    /**
+     * 改修資材
+     */
     private ObjectProperty<Pair<Integer, Integer>> improve = new SimpleObjectProperty<>();
 
-    /**日付を取得します。
+    /**
+     * 日付を取得します。
+     *
      * @return 日付
      */
     public StringProperty dateProperty() {
@@ -51,6 +70,7 @@ public class ResourceTable {
 
     /**
      * 日付を取得します。
+     *
      * @return 日付
      */
     public String getDate() {
@@ -59,6 +79,7 @@ public class ResourceTable {
 
     /**
      * 日付を設定します。
+     *
      * @param date 日付
      */
     public void setDate(String date) {
@@ -67,6 +88,7 @@ public class ResourceTable {
 
     /**
      * 燃料を取得します。
+     *
      * @return 燃料
      */
     public ObjectProperty<Pair<Integer, Integer>> fuelProperty() {
@@ -75,6 +97,7 @@ public class ResourceTable {
 
     /**
      * 燃料を取得します。
+     *
      * @return 燃料
      */
     public Pair<Integer, Integer> getFuel() {
@@ -83,6 +106,7 @@ public class ResourceTable {
 
     /**
      * 燃料を設定します。
+     *
      * @param fuel 燃料
      */
     public void setFuel(Integer fuel, Integer diff) {
@@ -91,6 +115,7 @@ public class ResourceTable {
 
     /**
      * 弾薬を取得します。
+     *
      * @return 弾薬
      */
     public ObjectProperty<Pair<Integer, Integer>> ammoProperty() {
@@ -99,6 +124,7 @@ public class ResourceTable {
 
     /**
      * 弾薬を取得します。
+     *
      * @return 弾薬
      */
     public Pair<Integer, Integer> getAmmo() {
@@ -107,6 +133,7 @@ public class ResourceTable {
 
     /**
      * 弾薬を設定します。
+     *
      * @param ammo 弾薬
      */
     public void setAmmo(Integer ammo, Integer diff) {
@@ -115,6 +142,7 @@ public class ResourceTable {
 
     /**
      * 鋼材を取得します。
+     *
      * @return 鋼材
      */
     public ObjectProperty<Pair<Integer, Integer>> metalProperty() {
@@ -123,6 +151,7 @@ public class ResourceTable {
 
     /**
      * 鋼材を取得します。
+     *
      * @return 鋼材
      */
     public Pair<Integer, Integer> getMetal() {
@@ -131,6 +160,7 @@ public class ResourceTable {
 
     /**
      * 鋼材を設定します。
+     *
      * @param metal 鋼材
      */
     public void setMetal(Integer metal, Integer diff) {
@@ -139,6 +169,7 @@ public class ResourceTable {
 
     /**
      * ボーキサイトを取得します。
+     *
      * @return ボーキサイト
      */
     public ObjectProperty<Pair<Integer, Integer>> bauxiteProperty() {
@@ -147,6 +178,7 @@ public class ResourceTable {
 
     /**
      * ボーキサイトを取得します。
+     *
      * @return ボーキサイト
      */
     public Pair<Integer, Integer> getBauxite() {
@@ -155,6 +187,7 @@ public class ResourceTable {
 
     /**
      * ボーキサイトを設定します。
+     *
      * @param bauxite ボーキサイト
      */
     public void setBauxite(Integer bauxite, Integer diff) {
@@ -163,6 +196,7 @@ public class ResourceTable {
 
     /**
      * 高速修復材を取得します。
+     *
      * @return 高速修復材
      */
     public ObjectProperty<Pair<Integer, Integer>> bucketProperty() {
@@ -171,6 +205,7 @@ public class ResourceTable {
 
     /**
      * 高速修復材を取得します。
+     *
      * @return 高速修復材
      */
     public Pair<Integer, Integer> getBucket() {
@@ -179,6 +214,7 @@ public class ResourceTable {
 
     /**
      * 高速修復材を設定します。
+     *
      * @param bucket 高速修復材
      */
     public void setBucket(Integer bauxite, Integer diff) {
@@ -187,6 +223,7 @@ public class ResourceTable {
 
     /**
      * 高速建造材を取得します。
+     *
      * @return 高速建造材
      */
     public ObjectProperty<Pair<Integer, Integer>> burnerProperty() {
@@ -195,6 +232,7 @@ public class ResourceTable {
 
     /**
      * 高速建造材を取得します。
+     *
      * @return 高速建造材
      */
     public Pair<Integer, Integer> getBurner() {
@@ -203,6 +241,7 @@ public class ResourceTable {
 
     /**
      * 高速建造材を設定します。
+     *
      * @param burner 高速建造材
      */
     public void setBurner(Integer burner, Integer diff) {
@@ -211,6 +250,7 @@ public class ResourceTable {
 
     /**
      * 開発資材を取得します。
+     *
      * @return 開発資材
      */
     public ObjectProperty<Pair<Integer, Integer>> researchProperty() {
@@ -219,6 +259,7 @@ public class ResourceTable {
 
     /**
      * 開発資材を取得します。
+     *
      * @return 開発資材
      */
     public Pair<Integer, Integer> getResearch() {
@@ -227,6 +268,7 @@ public class ResourceTable {
 
     /**
      * 開発資材を設定します。
+     *
      * @param research 開発資材
      */
     public void setResearch(Integer research, Integer diff) {
@@ -235,6 +277,7 @@ public class ResourceTable {
 
     /**
      * 改修資材を取得します。
+     *
      * @return 改修資材
      */
     public ObjectProperty<Pair<Integer, Integer>> improveProperty() {
@@ -243,6 +286,7 @@ public class ResourceTable {
 
     /**
      * 改修資材を取得します。
+     *
      * @return 改修資材
      */
     public Pair<Integer, Integer> getImprove() {
@@ -251,6 +295,7 @@ public class ResourceTable {
 
     /**
      * 改修資材を設定します。
+     *
      * @param improve 改修資材
      */
     public void setImprove(Integer improve, Integer diff) {
@@ -260,21 +305,23 @@ public class ResourceTable {
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(this.date.get())
-                .add(this.fuel.get().toString())
-                .add(this.ammo.get().toString())
-                .add(this.metal.get().toString())
-                .add(this.bauxite.get().toString())
-                .add(this.bucket.get().toString())
-                .add(this.burner.get().toString())
-                .add(this.research.get().toString())
-                .add(this.improve.get().toString())
-                .toString();
+            .add(this.date.get())
+            .add(this.fuel.get().toString())
+            .add(this.ammo.get().toString())
+            .add(this.metal.get().toString())
+            .add(this.bauxite.get().toString())
+            .add(this.bucket.get().toString())
+            .add(this.burner.get().toString())
+            .add(this.research.get().toString())
+            .add(this.improve.get().toString())
+            .toString();
     }
 
     static final class Part extends Pair<Integer, Integer> {
 
-        /** 資材テーブルに表示する資材のフォーマット */
+        /**
+         * 資材テーブルに表示する資材のフォーマット
+         */
         private static final MessageFormat COMPARE_FORMAT = new MessageFormat("{0,number,0}({1,number,+0;-0})");
 
         Part(Integer _1, Integer _2) {
@@ -283,9 +330,9 @@ public class ResourceTable {
 
         @Override
         public String toString() {
-            return COMPARE_FORMAT.format(new Integer[] {
-                    this.get1(),
-                    this.get2()
+            return COMPARE_FORMAT.format(new Integer[]{
+                this.get1(),
+                this.get2()
             });
         }
     }

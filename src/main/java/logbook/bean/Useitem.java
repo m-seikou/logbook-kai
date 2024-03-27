@@ -12,10 +12,14 @@ public class Useitem implements Serializable {
 
     private static final long serialVersionUID = 3756342448962760487L;
 
-    /** api_id */
+    /**
+     * api_id
+     */
     private Integer id;
 
-    /** api_count */
+    /**
+     * api_count
+     */
     private Integer count;
 
     /**
@@ -27,8 +31,8 @@ public class Useitem implements Serializable {
     public static Useitem toUseitem(JsonObject json) {
         Useitem bean = new Useitem();
         JsonHelper.bind(json)
-                .setInteger("api_id", bean::setId)
-                .setInteger("api_count", bean::setCount);
+            .setInteger("api_id", bean::setId)
+            .setInteger("api_count", bean::setCount);
         return bean;
     }
 }

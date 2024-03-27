@@ -40,36 +40,51 @@ import logbook.plugin.lifecycle.StartUp;
 
 /**
  * UIコントローラー
- *
  */
 public class MainController extends WindowController {
 
-    /** 装備|母港枠の警告cssクラス名 */
+    /**
+     * 装備|母港枠の警告cssクラス名
+     */
     private static final String FULLY_CLASS = "fully";
 
-    /** 通知 */
+    /**
+     * 通知
+     */
     private static final Duration NOTIFY = Duration.ofMinutes(1);
 
     private String itemFormat;
 
     private String shipFormat;
 
-    /** 艦隊コレクションのハッシュ・コード */
+    /**
+     * 艦隊コレクションのハッシュ・コード
+     */
     private long portHashCode;
 
-    /** 入渠ドックコレクションのハッシュ・コード */
+    /**
+     * 入渠ドックコレクションのハッシュ・コード
+     */
     private long ndockHashCode;
 
-    /** 任務コレクションのハッシュ・コード */
+    /**
+     * 任務コレクションのハッシュ・コード
+     */
     private long questHashCode;
 
-    /** 戦果のハッシュ・コード */
+    /**
+     * 戦果のハッシュ・コード
+     */
     private long achievementHashCode;
 
-    /** 遠征通知のタイムスタンプ */
+    /**
+     * 遠征通知のタイムスタンプ
+     */
     private final Map<Integer, Long> timeStampMission = new HashMap<>();
 
-    /** 入渠通知のタイムスタンプ */
+    /**
+     * 入渠通知のタイムスタンプ
+     */
     private final Map<Integer, Long> timeStampNDock = new HashMap<>();
 
     @FXML
@@ -137,20 +152,20 @@ public class MainController extends WindowController {
             Timeline timeline = new Timeline(1);
             timeline.setCycleCount(Animation.INDEFINITE);
             timeline.getKeyFrames().add(new KeyFrame(
-                    javafx.util.Duration.seconds(1),
-                    this::update));
+                javafx.util.Duration.seconds(1),
+                this::update));
 
             // 古い任務を除く
             AppQuestCollection.get()
-                    .update();
+                .update();
 
             timeline.play();
 
             // 開始処理
             PluginServices.instances(StartUp.class)
-                    .map(Thread::new)
-                    .peek(t -> t.setDaemon(true))
-                    .forEach(Thread::start);
+                .map(Thread::new)
+                .peek(t -> t.setDaemon(true))
+                .forEach(Thread::start);
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -186,6 +201,7 @@ public class MainController extends WindowController {
 
     /**
      * アイテム一覧
+     *
      * @param e ActionEvent
      */
     public void useitems(ActionEvent e) {
@@ -235,10 +251,10 @@ public class MainController extends WindowController {
         // 装備
         Map<Integer, SlotitemMst> itemMst = SlotitemMstCollection.get().getSlotitemMap();
         long slotItem = SlotItemCollection.get().getSlotitemMap().values().stream()
-                .filter(item -> !itemMst.get(item.getSlotitemId()).is(SlotItemType.応急修理要員, SlotItemType.補給物資, SlotItemType.戦闘糧食))
-                .count();
+            .filter(item -> !itemMst.get(item.getSlotitemId()).is(SlotItemType.応急修理要員, SlotItemType.補給物資, SlotItemType.戦闘糧食))
+            .count();
         Integer maxSlotItem = Basic.get()
-                .getMaxSlotitem();
+            .getMaxSlotitem();
         this.item.setText(MessageFormat.format(this.itemFormat, slotItem, maxSlotItem));
 
         boolean itemFully = maxSlotItem - slotItem <= AppConfig.get().getItemFullyThreshold();
@@ -252,10 +268,10 @@ public class MainController extends WindowController {
 
         // 艦娘
         Integer chara = ShipCollection.get()
-                .getShipMap()
-                .size();
+            .getShipMap()
+            .size();
         Integer maxChara = Basic.get()
-                .getMaxChara();
+            .getMaxChara();
         this.ship.setText(MessageFormat.format(this.shipFormat, chara, maxChara));
 
         boolean shipFully = maxChara - chara <= AppConfig.get().getShipFullyThreshold();
@@ -291,16 +307,16 @@ public class MainController extends WindowController {
         AppExpRecords records = AppExpRecords.get();
         if (records.getExp12h() != null) {
             ZonedDateTime start = Instant.ofEpochMilli(records.getTime12h()).atZone(JST);
-            this.achievementLabel2.setText(start.format(dateFormatter) + "(" + (start.getHour()+2) + "- )");
-            this.achievementValue2.setText(format.format((exp - records.getExp12h())*7f/10000));
+            this.achievementLabel2.setText(start.format(dateFormatter) + "(" + (start.getHour() + 2) + "- )");
+            this.achievementValue2.setText(format.format((exp - records.getExp12h()) * 7f / 10000));
         } else {
             this.achievementLabel2.setText("");
             this.achievementValue2.setText("");
         }
         if (records.getExp1d() != null && records.getTime1d() != records.getTime12h()) {
             ZonedDateTime start = Instant.ofEpochMilli(records.getTime1d()).atZone(JST);
-            this.achievementLabel1.setText(start.format(dateFormatter) + "(" + (start.getHour()+2) + "-" + (start.getHour()/12*12+14)+")");
-            this.achievementValue1.setText(format.format((records.getExp12h()-records.getExp1d())*7f/10000));
+            this.achievementLabel1.setText(start.format(dateFormatter) + "(" + (start.getHour() + 2) + "-" + (start.getHour() / 12 * 12 + 14) + ")");
+            this.achievementValue1.setText(format.format((records.getExp12h() - records.getExp1d()) * 7f / 10000));
         } else {
             this.achievementLabel1.setText("");
             this.achievementValue1.setText("");
@@ -312,7 +328,7 @@ public class MainController extends WindowController {
      */
     private void checkPort() {
         Map<Integer, DeckPort> ports = DeckPortCollection.get()
-                .getDeckPortMap();
+            .getDeckPortMap();
         boolean show = AppConfig.get().isShowMission();
         long newHashCode = hashCode(ports, show);
         boolean change = this.portHashCode != newHashCode;
@@ -329,13 +345,13 @@ public class MainController extends WindowController {
      */
     private void fleetTab(boolean change) {
         Map<Integer, DeckPort> ports = DeckPortCollection.get()
-                .getDeckPortMap();
+            .getDeckPortMap();
         ObservableList<Tab> tabs = this.fleetTab.getTabs();
         if (change) {
             int tabsize = (int) tabs.stream()
-                    .map(Tab::getContent)
-                    .filter(e -> e instanceof FleetTabPane)
-                    .count();
+                .map(Tab::getContent)
+                .filter(e -> e instanceof FleetTabPane)
+                .count();
             if (ports.size() != tabsize) {
                 tabs.removeIf(e -> e.getContent() instanceof FleetTabPane);
                 for (DeckPort port : ports.values()) {
@@ -344,7 +360,7 @@ public class MainController extends WindowController {
                     tab.setClosable(false);
                     tab.getStyleClass().removeIf(s -> !s.equals("tab"));
                     Optional.ofNullable(pane.tabStyle())
-                            .ifPresent(tab::setStyle);
+                        .ifPresent(tab::setStyle);
                     tabs.add(tab);
                 }
             } else {
@@ -364,7 +380,7 @@ public class MainController extends WindowController {
                         pane.update(port);
                         tab.getStyleClass().removeIf(s -> !s.equals("tab"));
                         Optional.ofNullable(pane.tabStyle())
-                                .ifPresent(tab::setStyle);
+                            .ifPresent(tab::setStyle);
                     }
                 }
             }
@@ -376,7 +392,7 @@ public class MainController extends WindowController {
                     pane.update();
                     tab.getStyleClass().removeIf(s -> !s.equals("tab"));
                     Optional.ofNullable(pane.tabStyle())
-                            .ifPresent(tab::setStyle);
+                        .ifPresent(tab::setStyle);
                 }
             }
         }
@@ -386,7 +402,7 @@ public class MainController extends WindowController {
      * 遠征の更新
      *
      * @param change 艦隊の変更フラグ
-     * @param show 表示するフラグ
+     * @param show   表示するフラグ
      */
     private void mission(boolean change, boolean show) {
         ObservableList<Node> mission = this.missionbox.getChildren();
@@ -395,12 +411,12 @@ public class MainController extends WindowController {
             this.missionPane.setManaged(show);
 
             Map<Integer, DeckPort> ports = DeckPortCollection.get()
-                    .getDeckPortMap();
+                .getDeckPortMap();
             mission.clear();
             ports.values().stream()
-                    .skip(1)
-                    .map(MissionPane::new)
-                    .forEach(mission::add);
+                .skip(1)
+                .map(MissionPane::new)
+                .forEach(mission::add);
         } else {
             for (Node node : mission) {
                 if (node instanceof MissionPane) {
@@ -434,7 +450,7 @@ public class MainController extends WindowController {
      */
     private void ndock() {
         Map<Integer, Ndock> ndockMap = NdockCollection.get()
-                .getNdockMap();
+            .getNdockMap();
         ObservableList<Node> ndock = this.ndockbox.getChildren();
         boolean show = AppConfig.get().isShowNdock();
         long newHashCode = hashCode(ndockMap, show);
@@ -445,10 +461,10 @@ public class MainController extends WindowController {
             // ハッシュ・コードが変わっている場合入渠ドックの更新
             ndock.clear();
             ndockMap.values()
-                    .stream()
-                    .filter(n -> 1 < n.getCompleteTime())
-                    .map(NdockPane::new)
-                    .forEach(ndock::add);
+                .stream()
+                .filter(n -> 1 < n.getCompleteTime())
+                .map(NdockPane::new)
+                .forEach(ndock::add);
             // ハッシュ・コードの更新
             this.ndockHashCode = newHashCode;
         } else {
@@ -466,7 +482,7 @@ public class MainController extends WindowController {
      */
     private void quest() {
         Map<Integer, AppQuest> questMap = AppQuestCollection.get()
-                .getQuest();
+            .getQuest();
         boolean show = AppConfig.get().isShowQuest();
         long newHashCode = hashCode(questMap, show);
         if (this.questHashCode != newHashCode) {
@@ -476,11 +492,11 @@ public class MainController extends WindowController {
             ObservableList<Node> quest = this.questbox.getChildren();
             quest.clear();
             questMap.values()
-                    .stream()
-                    // 受諾中の任務を上に持ってくる
-                    .sorted(Comparator.comparing(AppQuest::isActive).reversed())
-                    .map(QuestPane::new)
-                    .forEach(quest::add);
+                .stream()
+                // 受諾中の任務を上に持ってくる
+                .sorted(Comparator.comparing(AppQuest::isActive).reversed())
+                .map(QuestPane::new)
+                .forEach(quest::add);
             // ハッシュ・コードの更新
             this.questHashCode = newHashCode;
         }
@@ -491,7 +507,7 @@ public class MainController extends WindowController {
      */
     private void checkNotifyMission() {
         Map<Integer, DeckPort> ports = DeckPortCollection.get()
-                .getDeckPortMap();
+            .getDeckPortMap();
         for (DeckPort port : ports.values()) {
             // 0=未出撃, 1=遠征中, 2=遠征帰還, 3=遠征中止
             int state = port.getMission().get(0).intValue();
@@ -537,7 +553,7 @@ public class MainController extends WindowController {
      */
     private void checkNotifyNdock() {
         Map<Integer, Ndock> ndockMap = NdockCollection.get()
-                .getNdockMap();
+            .getNdockMap();
 
         for (Ndock ndock : ndockMap.values()) {
             // 完了時間
@@ -567,11 +583,11 @@ public class MainController extends WindowController {
     private void pushNotifyNdock(Ndock ndock) {
         if (AppConfig.get().isUseToast()) {
             Ship ship = ShipCollection.get()
-                    .getShipMap()
-                    .get(ndock.getShipId());
+                .getShipMap()
+                .get(ndock.getShipId());
             String name = Ships.shipMst(ship)
-                    .map(ShipMst::getName)
-                    .orElse("");
+                .map(ShipMst::getName)
+                .orElse("");
             String message = Messages.getString("ship.ndock", name, ship.getLv()); //$NON-NLS-1$
 
             ImageView img = new ImageView(Ships.shipWithItemImage(ship));
@@ -590,9 +606,9 @@ public class MainController extends WindowController {
     /**
      * 通知するか判断します
      *
-     * @param now 残り時間
+     * @param now       残り時間
      * @param timeStamp 前回の通知の時間
-     * @param remind リマインド
+     * @param remind    リマインド
      */
     private boolean requireNotify(Duration now, long timeStamp, boolean remind) {
         if (now.compareTo(NOTIFY) <= 0) {
@@ -635,14 +651,14 @@ public class MainController extends WindowController {
     private void sendBouyomiMissionComplete(DeckPort port) {
         int target = port.getMission().get(1).intValue();
         Optional<Mission> mission = Optional.ofNullable(MissionCollection.get()
-                .getMissionMap()
-                .get(target));
+            .getMissionMap()
+            .get(target));
         String missionName = mission.map(Mission::getName).orElse("");
 
         BouyomiChanUtils.speak(Type.MissionComplete,
-                Tuple.of("${fleetName}", port.getName()),
-                Tuple.of("${fleetNumber}", String.valueOf(port.getId())),
-                Tuple.of("${missionName}", missionName));
+            Tuple.of("${fleetName}", port.getName()),
+            Tuple.of("${fleetNumber}", String.valueOf(port.getId())),
+            Tuple.of("${missionName}", missionName));
     }
 
     /**
@@ -652,19 +668,19 @@ public class MainController extends WindowController {
      */
     private void sendBouyomiNdockComplete(Ndock ndock) {
         Ship ship = ShipCollection.get()
-                .getShipMap()
-                .get(ndock.getShipId());
+            .getShipMap()
+            .get(ndock.getShipId());
 
         String hiragana = Ships.shipMst(ship)
-                .map(ShipMst::getYomi)
-                .orElse("");
+            .map(ShipMst::getYomi)
+            .orElse("");
         String kanji = Ships.shipMst(ship)
-                .map(ShipMst::getName)
-                .orElse("");
+            .map(ShipMst::getName)
+            .orElse("");
 
         BouyomiChanUtils.speak(Type.NdockComplete,
-                Tuple.of("${hiraganaName}", hiragana),
-                Tuple.of("${kanjiName}", kanji));
+            Tuple.of("${hiraganaName}", hiragana),
+            Tuple.of("${kanjiName}", kanji));
     }
 
     private static long hashCode(Map<?, ?> map, boolean show) {

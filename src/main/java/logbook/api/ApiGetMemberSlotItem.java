@@ -11,7 +11,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/slot_item
- *
  */
 @API("/kcsapi/api_get_member/slot_item")
 public class ApiGetMemberSlotItem implements APIListenerSpi {
@@ -21,7 +20,7 @@ public class ApiGetMemberSlotItem implements APIListenerSpi {
         JsonArray array = json.getJsonArray("api_data");
         if (array != null) {
             SlotItemCollection.get()
-                    .setSlotitemMap(JsonHelper.toMap(array, SlotItem::getId, SlotItem::toSlotItem));
+                .setSlotitemMap(JsonHelper.toMap(array, SlotItem::getId, SlotItem::toSlotItem));
         }
     }
 

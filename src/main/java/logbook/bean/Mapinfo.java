@@ -13,20 +13,25 @@ import lombok.Data;
 
 /**
  * /kcsapi/api_get_member/mapinfo
- *
  */
 @Data
 public class Mapinfo implements Serializable {
 
     private static final long serialVersionUID = -4796721957493046860L;
 
-    /** api_map_info */
+    /**
+     * api_map_info
+     */
     private List<MapInfo> mapInfo = new ArrayList<>();
 
-    /** api_air_base */
+    /**
+     * api_air_base
+     */
     private List<AirBase> airBase = new ArrayList<>();
 
-    /** 最終更新時刻 */
+    /**
+     * 最終更新時刻
+     */
     private long lastModified;
 
     /**
@@ -37,19 +42,29 @@ public class Mapinfo implements Serializable {
 
         private static final long serialVersionUID = 7388484486155838098L;
 
-        /** api_id */
+        /**
+         * api_id
+         */
         private Integer id;
 
-        /** api_cleared */
+        /**
+         * api_cleared
+         */
         private Integer cleared;
 
-        /** api_exboss_flag */
+        /**
+         * api_exboss_flag
+         */
         private Integer exbossFlag;
 
-        /** api_defeat_count */
+        /**
+         * api_defeat_count
+         */
         private Integer defeatCount;
 
-        /** api_air_base_decks */
+        /**
+         * api_air_base_decks
+         */
         private Integer airBaseDecks;
 
         /**
@@ -61,11 +76,11 @@ public class Mapinfo implements Serializable {
         public static MapInfo toMapInfo(JsonValue json) {
             MapInfo bean = new MapInfo();
             JsonHelper.bind((JsonObject) json)
-                    .setInteger("api_id", bean::setId)
-                    .setInteger("api_cleared", bean::setCleared)
-                    .setInteger("api_exboss_flag", bean::setExbossFlag)
-                    .setInteger("api_defeat_count", bean::setDefeatCount)
-                    .setInteger("api_air_base_decks", bean::setAirBaseDecks);
+                .setInteger("api_id", bean::setId)
+                .setInteger("api_cleared", bean::setCleared)
+                .setInteger("api_exboss_flag", bean::setExbossFlag)
+                .setInteger("api_defeat_count", bean::setDefeatCount)
+                .setInteger("api_air_base_decks", bean::setAirBaseDecks);
             return bean;
         }
     }
@@ -78,22 +93,34 @@ public class Mapinfo implements Serializable {
 
         private static final long serialVersionUID = 2290504744869571586L;
 
-        /** api_area_id */
+        /**
+         * api_area_id
+         */
         private Integer areaId;
 
-        /** api_rid */
+        /**
+         * api_rid
+         */
         private Integer rid;
 
-        /** api_name */
+        /**
+         * api_name
+         */
         private String name;
 
-        /** api_distance */
+        /**
+         * api_distance
+         */
         private Distance distance;
 
-        /** api_action_kind */
+        /**
+         * api_action_kind
+         */
         private Integer actionKind;
 
-        /** api_plane_info */
+        /**
+         * api_plane_info
+         */
         private List<PlaneInfo> planeInfo;
 
         /**
@@ -105,12 +132,12 @@ public class Mapinfo implements Serializable {
         public static AirBase toAirBase(JsonValue json) {
             AirBase bean = new AirBase();
             JsonHelper.bind((JsonObject) json)
-                    .setInteger("api_area_id", bean::setAreaId)
-                    .setInteger("api_rid", bean::setRid)
-                    .setString("api_name", bean::setName)
-                    .set("api_distance", bean::setDistance, Distance::toDistance)
-                    .setInteger("api_action_kind", bean::setActionKind)
-                    .set("api_plane_info", bean::setPlaneInfo, JsonHelper.toList(PlaneInfo::toPlaneInfo));
+                .setInteger("api_area_id", bean::setAreaId)
+                .setInteger("api_rid", bean::setRid)
+                .setString("api_name", bean::setName)
+                .set("api_distance", bean::setDistance, Distance::toDistance)
+                .setInteger("api_action_kind", bean::setActionKind)
+                .set("api_plane_info", bean::setPlaneInfo, JsonHelper.toList(PlaneInfo::toPlaneInfo));
             return bean;
         }
     }
@@ -123,10 +150,14 @@ public class Mapinfo implements Serializable {
 
         private static final long serialVersionUID = -6938404167175752929L;
 
-        /** api_base */
+        /**
+         * api_base
+         */
         private Integer base;
 
-        /** api_bonus */
+        /**
+         * api_bonus
+         */
         private Integer bonus;
 
         /**
@@ -138,8 +169,8 @@ public class Mapinfo implements Serializable {
         public static Distance toDistance(JsonValue json) {
             Distance bean = new Distance();
             JsonHelper.bind((JsonObject) json)
-                    .setInteger("api_base", bean::setBase)
-                    .setInteger("api_bonus", bean::setBonus);
+                .setInteger("api_base", bean::setBase)
+                .setInteger("api_bonus", bean::setBonus);
             return bean;
         }
     }
@@ -152,22 +183,34 @@ public class Mapinfo implements Serializable {
 
         private static final long serialVersionUID = 2943711012497557057L;
 
-        /** api_squadron_id */
+        /**
+         * api_squadron_id
+         */
         private Integer squadronId;
 
-        /** api_state */
+        /**
+         * api_state
+         */
         private Integer state;
 
-        /** api_slotid */
+        /**
+         * api_slotid
+         */
         private Integer slotid;
 
-        /** api_count */
+        /**
+         * api_count
+         */
         private Integer count;
 
-        /** api_max_count */
+        /**
+         * api_max_count
+         */
         private Integer maxCount;
 
-        /** api_cond */
+        /**
+         * api_cond
+         */
         private Integer cond;
 
         /**
@@ -179,12 +222,12 @@ public class Mapinfo implements Serializable {
         public static PlaneInfo toPlaneInfo(JsonValue json) {
             PlaneInfo bean = new PlaneInfo();
             JsonHelper.bind((JsonObject) json)
-                    .setInteger("api_squadron_id", bean::setSquadronId)
-                    .setInteger("api_state", bean::setState)
-                    .setInteger("api_slotid", bean::setSlotid)
-                    .setInteger("api_count", bean::setCount)
-                    .setInteger("api_max_count", bean::setMaxCount)
-                    .setInteger("api_cond", bean::setCond);
+                .setInteger("api_squadron_id", bean::setSquadronId)
+                .setInteger("api_state", bean::setState)
+                .setInteger("api_slotid", bean::setSlotid)
+                .setInteger("api_count", bean::setCount)
+                .setInteger("api_max_count", bean::setMaxCount)
+                .setInteger("api_cond", bean::setCond);
             return bean;
         }
     }
@@ -193,7 +236,7 @@ public class Mapinfo implements Serializable {
      * アプリケーションのデフォルト設定ディレクトリから<code>Mapinfo</code>を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(Mapinfo.class, Mapinfo::new)</code>
+     * <code>Config.getDefault().get(Mapinfo.class, Mapinfo::new)</code>
      * </blockquote>
      *
      * @return <code>Mapinfo</code>

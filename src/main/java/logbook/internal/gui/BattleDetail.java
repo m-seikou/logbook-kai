@@ -55,128 +55,193 @@ import lombok.Getter;
 
 /**
  * 戦況表示
- *
  */
 public class BattleDetail extends WindowController {
-    /** 戦闘ログ */
+    /**
+     * 戦闘ログ
+     */
     private BattleLog log;
 
-    /** 出撃/進撃 */
+    /**
+     * 出撃/進撃
+     */
     private MapStartNext last;
 
-    /** 連合艦隊 */
+    /**
+     * 連合艦隊
+     */
     private CombinedType combinedType;
 
-    /** 艦隊スナップショット */
+    /**
+     * 艦隊スナップショット
+     */
     private Map<Integer, List<Ship>> deckMap;
 
-    /** 装備スナップショット */
+    /**
+     * 装備スナップショット
+     */
     private Map<Integer, SlotItem> itemMap;
 
-    /** 退避艦IDスナップショット */
+    /**
+     * 退避艦IDスナップショット
+     */
     private Set<Integer> escape;
 
-    /** 戦闘 */
+    /**
+     * 戦闘
+     */
     private IFormation battle;
 
-    /** 夜戦 */
+    /**
+     * 夜戦
+     */
     private IMidnightBattle midnight;
 
-    /** 戦果報告 */
+    /**
+     * 戦果報告
+     */
     private BattleResult result;
 
-    /** 戦闘回数 */
+    /**
+     * 戦闘回数
+     */
     private Integer battleCount;
 
-    /** ルート */
+    /**
+     * ルート
+     */
     private List<String> routeList;
 
-    /** ルート要素 */
+    /**
+     * ルート要素
+     */
     @FXML
     private VBox detail;
 
-    /** フェーズ */
+    /**
+     * フェーズ
+     */
     @FXML
     private VBox phase;
 
-    /** ルート情報 */
+    /**
+     * ルート情報
+     */
     @FXML
     private HBox routeInfo;
 
-    /** マス */
+    /**
+     * マス
+     */
     @FXML
     private Label mapcell;
 
-    /** ルート */
+    /**
+     * ルート
+     */
     @FXML
     private Label route;
 
-    /** 艦隊行動: */
+    /**
+     * 艦隊行動:
+     */
     @FXML
     private Label intercept;
 
-    /** 味方陣形 */
+    /**
+     * 味方陣形
+     */
     @FXML
     private Label fFormation;
 
-    /** 味方陣形 */
+    /**
+     * 味方陣形
+     */
     @FXML
     private Label eFormation;
 
-    /** 制空値計 */
+    /**
+     * 制空値計
+     */
     @FXML
     private Label seiku;
 
-    /** 味方触接 */
+    /**
+     * 味方触接
+     */
     @FXML
     private Label dispSeiku;
 
-    /** 味方触接アイコン */
+    /**
+     * 味方触接アイコン
+     */
     @FXML
     private ImageView fTouchPlaneImage;
 
-    /** 味方触接 */
+    /**
+     * 味方触接
+     */
     @FXML
     private Label fTouchPlane;
 
-    /** 敵触接アイコン */
+    /**
+     * 敵触接アイコン
+     */
     @FXML
     private ImageView eTouchPlaneImage;
 
-    /** 敵触接 */
+    /**
+     * 敵触接
+     */
     @FXML
     private Label eTouchPlane;
 
-    /** 対空CI */
+    /**
+     * 対空CI
+     */
     @FXML
     private Label tykuCI;
 
-    /** 評価 */
+    /**
+     * 評価
+     */
     @FXML
     private Label judge;
 
-    /** 基本経験値 */
+    /**
+     * 基本経験値
+     */
     @FXML
     private Label baseExp;
 
-    /** 獲得経験値 */
+    /**
+     * 獲得経験値
+     */
     @FXML
     private Label shipExp;
 
-    /** 提督経験値 */
+    /**
+     * 提督経験値
+     */
     @FXML
     private Label exp;
 
-    /** 演習かどうか */
+    /**
+     * 演習かどうか
+     */
     private boolean isPractice;
 
-    /** 周期タイマー */
+    /**
+     * 周期タイマー
+     */
     private Timeline timeline = new Timeline();
 
     @FXML
     private Label smokeType;
 
-    /** ハッシュ・コード */
+    /**
+     * ハッシュ・コード
+     */
     private int hashCode;
 
     /**
@@ -187,7 +252,7 @@ public class BattleDetail extends WindowController {
     void setInterval(Supplier<BattleLog> supplier) {
         this.timeline.setCycleCount(Animation.INDEFINITE);
         this.timeline.getKeyFrames().add(new KeyFrame(javafx.util.Duration.millis(1000),
-                e -> this.setData(supplier.get())));
+            e -> this.setData(supplier.get())));
         this.timeline.play();
     }
 
@@ -218,21 +283,22 @@ public class BattleDetail extends WindowController {
 
     /**
      * 戦況表示
-     * @param last 出撃/進撃
+     *
+     * @param last         出撃/進撃
      * @param combinedType 連合艦隊
-     * @param deckMap 艦隊スナップショット
-     * @param escape 退避艦IDスナップショット
-     * @param itemMap 装備
-     * @param battle 戦闘
-     * @param midnight 夜戦
-     * @param result 戦果報告 
-     * @param battleCount 戦闘回数
-     * @param route ルート
-     * @param isPractice 演習かどうか
+     * @param deckMap      艦隊スナップショット
+     * @param escape       退避艦IDスナップショット
+     * @param itemMap      装備
+     * @param battle       戦闘
+     * @param midnight     夜戦
+     * @param result       戦果報告
+     * @param battleCount  戦闘回数
+     * @param route        ルート
+     * @param isPractice   演習かどうか
      */
     void setData(MapStartNext last, CombinedType combinedType, Map<Integer, List<Ship>> deckMap, Set<Integer> escape,
-            Map<Integer, SlotItem> itemMap, IFormation battle, IMidnightBattle midnight, BattleResult result,
-            Integer battleCount, List<String> route, boolean isPractice) {
+                 Map<Integer, SlotItem> itemMap, IFormation battle, IMidnightBattle midnight, BattleResult result,
+                 Integer battleCount, List<String> route, boolean isPractice) {
         int hashCode = Objects.hash(last, battle, midnight, result);
         if (this.hashCode == hashCode) {
             return;
@@ -287,15 +353,15 @@ public class BattleDetail extends WindowController {
         if (this.last != null) {
             boolean boss = this.last.getNo().equals(this.last.getBosscellNo()) || this.last.getEventId() == 5;
             this.mapcell.setText(this.last.getMapareaId()
-                    + "-" + this.last.getMapinfoNo()
-                    + "-" + Mapping.getCell(this.last.getMapareaId(), this.last.getMapinfoNo(), this.last.getNo())
-                    + (boss ? "(ボス)" : ""));
+                + "-" + this.last.getMapinfoNo()
+                + "-" + Mapping.getCell(this.last.getMapareaId(), this.last.getMapinfoNo(), this.last.getNo())
+                + (boss ? "(ボス)" : ""));
             // ルート
             if (this.routeList != null) {
                 this.route.setText(this.routeList.stream()
-                        .map(Mapping::getCell)
-                        .collect(Collectors.joining("→"))
-                        + Optional.ofNullable(this.battleCount).map(v -> "(戦闘" + v + "回)").orElse(""));
+                    .map(Mapping::getCell)
+                    .collect(Collectors.joining("→"))
+                    + Optional.ofNullable(this.battleCount).map(v -> "(戦闘" + v + "回)").orElse(""));
             } else {
                 this.route.setText("");
             }
@@ -313,19 +379,19 @@ public class BattleDetail extends WindowController {
         // 制空値計
         if (this.battle instanceof CombinedBattleEachBattle) {
             int friend = ps.getAfterFriend().stream()
-                    .filter(Objects::nonNull)
-                    .mapToInt(Ships::airSuperiority)
-                    .sum();
+                .filter(Objects::nonNull)
+                .mapToInt(Ships::airSuperiority)
+                .sum();
             int friendCombined = ps.getAfterFriendCombined().stream()
-                    .filter(Objects::nonNull)
-                    .mapToInt(Ships::airSuperiority)
-                    .sum();
+                .filter(Objects::nonNull)
+                .mapToInt(Ships::airSuperiority)
+                .sum();
             this.seiku.setText((friend + friendCombined) + "(" + friend + "+" + friendCombined + ")");
         } else {
             this.seiku.setText(Integer.toString(ps.getAfterFriend().stream()
-                    .filter(Objects::nonNull)
-                    .mapToInt(Ships::airSuperiority)
-                    .sum()));
+                .filter(Objects::nonNull)
+                .mapToInt(Ships::airSuperiority)
+                .sum()));
         }
 
         // 初期化
@@ -356,7 +422,7 @@ public class BattleDetail extends WindowController {
 
         if (stage1 != null) {
             Map<Integer, SlotitemMst> slotitemMst = SlotitemMstCollection.get()
-                    .getSlotitemMap();
+                .getSlotitemMap();
             // 制空権
             this.dispSeiku.setText(BattleTypes.DispSeiku.toDispSeiku(stage1.getDispSeiku()).toString());
             this.dispSeiku.getStyleClass().add("dispseiku" + stage1.getDispSeiku());
@@ -370,7 +436,7 @@ public class BattleDetail extends WindowController {
                     this.fTouchPlaneImage.setFitHeight(24);
                 }
                 this.fTouchPlane.setText(fTouchPlaneItem.getName()
-                        + "(+" + (int) (Ships.touchPlaneAttackCompensation(fTouchPlaneItem) * 100) + "%)");
+                    + "(+" + (int) (Ships.touchPlaneAttackCompensation(fTouchPlaneItem) * 100) + "%)");
             } else {
                 this.fTouchPlaneImage.setFitWidth(0);
                 this.fTouchPlaneImage.setFitHeight(0);
@@ -386,7 +452,7 @@ public class BattleDetail extends WindowController {
                     this.eTouchPlaneImage.setFitHeight(24);
                 }
                 this.eTouchPlane.setText(eTouchPlaneItem.getName()
-                        + "(+" + (int) (Ships.touchPlaneAttackCompensation(eTouchPlaneItem) * 100) + "%)");
+                    + "(+" + (int) (Ships.touchPlaneAttackCompensation(eTouchPlaneItem) * 100) + "%)");
             } else {
                 this.eTouchPlaneImage.setFitWidth(0);
                 this.eTouchPlaneImage.setFitHeight(0);
@@ -410,7 +476,7 @@ public class BattleDetail extends WindowController {
             ship = ps.getAfterFriendCombined().get(idx - 6);
         }
         this.tykuCI.setText(Ships.toName(ship)
-                + " (第" + stage2.getAirFire().getKind() + "種)");
+            + " (第" + stage2.getAirFire().getKind() + "種)");
     }
 
     /**
@@ -484,27 +550,27 @@ public class BattleDetail extends WindowController {
         // 評価判定
         judge.setAfter(ps, this.battle);
         this.judge.setText(String.valueOf(judge.getRank())
-                + "(味方損害率:" + BigDecimal.valueOf(judge.getFriendDamageRatio()).setScale(3, RoundingMode.FLOOR)
-                + "/敵損害率:" + BigDecimal.valueOf(judge.getEnemyDamageRatio()).setScale(3, RoundingMode.FLOOR) + ")");
+            + "(味方損害率:" + BigDecimal.valueOf(judge.getFriendDamageRatio()).setScale(3, RoundingMode.FLOOR)
+            + "/敵損害率:" + BigDecimal.valueOf(judge.getEnemyDamageRatio()).setScale(3, RoundingMode.FLOOR) + ")");
 
         // 経験値
         if (this.result != null) {
             this.baseExp.setText(String.valueOf(this.result.getGetBaseExp()));
             this.shipExp.setText(String.valueOf(this.result.getGetShipExp().stream()
+                .mapToInt(Integer::intValue)
+                .filter(i -> i > 0)
+                .sum()
+                + Optional.ofNullable(this.result.getGetShipExpCombined())
+                .map(v -> v.stream()
                     .mapToInt(Integer::intValue)
                     .filter(i -> i > 0)
-                    .sum()
-                    + Optional.ofNullable(this.result.getGetShipExpCombined())
-                            .map(v -> v.stream()
-                                    .mapToInt(Integer::intValue)
-                                    .filter(i -> i > 0)
-                                    .sum())
-                            .orElse(0)));
+                    .sum())
+                .orElse(0)));
             this.exp.setText(this.result.getGetExp()
-                    + "(" + BigDecimal.valueOf(this.result.getGetExp())
-                            .divide(BigDecimal.valueOf(1428.571), 3, RoundingMode.FLOOR)
-                            .toPlainString()
-                    + ")");
+                + "(" + BigDecimal.valueOf(this.result.getGetExp())
+                .divide(BigDecimal.valueOf(1428.571), 3, RoundingMode.FLOOR)
+                .toPlainString()
+                + ")");
         } else {
             this.baseExp.setText("?");
             this.shipExp.setText("?");
@@ -515,7 +581,8 @@ public class BattleDetail extends WindowController {
 
     /**
      * 基地航空隊戦フェイズ(噴式強襲)
-     * @param ps フェーズ
+     *
+     * @param ps     フェーズ
      * @param phases 表示ノード
      */
     private void airBaseInjectionAttack(PhaseState ps, List<Node> phases) {
@@ -545,7 +612,8 @@ public class BattleDetail extends WindowController {
 
     /**
      * 航空戦フェイズ(噴式強襲)
-     * @param ps フェーズ
+     *
+     * @param ps     フェーズ
      * @param phases 表示ノード
      */
     private void injectionKouku(PhaseState ps, List<Node> phases) {
@@ -576,12 +644,13 @@ public class BattleDetail extends WindowController {
 
     /**
      * 基地航空隊戦フェイズ
-     * @param ps フェーズ
+     *
+     * @param ps     フェーズ
      * @param phases 表示ノード
      */
     private void airBaseAttack(PhaseState ps, List<Node> phases) {
         // 基地航空隊戦フェイズ
-        if (!this.battle.isIAirBaseAttack() || this.battle.asIAirBaseAttack().getAirBaseAttack() == null){
+        if (!this.battle.isIAirBaseAttack() || this.battle.asIAirBaseAttack().getAirBaseAttack() == null) {
             return;
         }
         // 基地航空隊戦フェイズ適用
@@ -605,12 +674,13 @@ public class BattleDetail extends WindowController {
 
     /**
      * 航空戦フェイズ
-     * @param ps フェーズ
+     *
+     * @param ps     フェーズ
      * @param phases 表示ノード
      */
     private void kouku(PhaseState ps, List<Node> phases) {
         // 航空戦フェイズ
-        if (!this.battle.isIKouku() || this.battle.asIKouku().getKouku() == null){
+        if (!this.battle.isIKouku() || this.battle.asIKouku().getKouku() == null) {
             return;
         }
         // 航空戦フェイズ適用
@@ -635,7 +705,8 @@ public class BattleDetail extends WindowController {
 
     /**
      * 支援フェイズ
-     * @param ps フェーズ
+     *
+     * @param ps     フェーズ
      * @param phases 表示ノード
      */
     private void support(PhaseState ps, List<Node> phases) {
@@ -654,7 +725,8 @@ public class BattleDetail extends WindowController {
 
     /**
      * 砲雷撃戦フェイズ
-     * @param ps フェーズ
+     *
+     * @param ps     フェーズ
      * @param phases 表示ノード
      */
     private void sortieHougeki(PhaseState ps, List<Node> phases) {
@@ -673,7 +745,8 @@ public class BattleDetail extends WindowController {
 
     /**
      * 航空戦
-     * @param ps フェーズ
+     *
+     * @param ps     フェーズ
      * @param phases 表示ノード
      */
     private void airbattle(PhaseState ps, List<Node> phases) {
@@ -706,7 +779,8 @@ public class BattleDetail extends WindowController {
 
     /**
      * 夜戦支援
-     * @param ps フェーズ
+     *
+     * @param ps     フェーズ
      * @param phases 表示ノード
      */
     private void nSupport(PhaseState ps, List<Node> phases) {
@@ -723,7 +797,8 @@ public class BattleDetail extends WindowController {
 
     /**
      * 特殊夜戦
-     * @param ps フェーズ
+     *
+     * @param ps     フェーズ
      * @param phases 表示ノード
      */
     private void midnightBattle(PhaseState ps, List<Node> phases) {
@@ -751,7 +826,8 @@ public class BattleDetail extends WindowController {
 
     /**
      * 夜戦(友軍艦隊)
-     * @param ps フェーズ
+     *
+     * @param ps     フェーズ
      * @param phases 表示ノード
      */
     private void friendlyHougeki(PhaseState ps, List<Node> phases) {
@@ -770,7 +846,8 @@ public class BattleDetail extends WindowController {
 
     /**
      * 夜戦
-     * @param ps フェーズ
+     *
+     * @param ps     フェーズ
      * @param phases 表示ノード
      */
     private void midnight(PhaseState ps, List<Node> phases) {
@@ -789,8 +866,9 @@ public class BattleDetail extends WindowController {
 
     /**
      * 支援共通
-     * @param ps フェーズ
-     * @param phases 表示ノード
+     *
+     * @param ps      フェーズ
+     * @param phases  表示ノード
      * @param support 支援
      */
     private void setSupportPhase(PhaseState ps, List<Node> phases, SupportInfo support) {
@@ -845,20 +923,27 @@ public class BattleDetail extends WindowController {
 
         private int afterEnemyAliveCount;
 
-        /** 味方損害率 */
+        /**
+         * 味方損害率
+         */
         @Getter
         private double friendDamageRatio;
 
-        /** 敵損害率 */
+        /**
+         * 敵損害率
+         */
         @Getter
         private double enemyDamageRatio;
 
-        /** 勝敗 */
+        /**
+         * 勝敗
+         */
         @Getter
         private Rank rank;
 
         /**
          * 戦闘前の状態を設定します。
+         *
          * @param ps フェイズ
          */
         public void setBefore(PhaseState ps) {
@@ -870,6 +955,7 @@ public class BattleDetail extends WindowController {
 
         /**
          * 戦闘後の状態を設定します。
+         *
          * @param ps フェイズ
          */
         public void setAfter(PhaseState ps, IFormation battle) {
@@ -884,7 +970,8 @@ public class BattleDetail extends WindowController {
 
         /**
          * 勝敗判定
-         * @param ps フェイズ
+         *
+         * @param ps     フェイズ
          * @param battle 戦闘
          * @return ランク
          */
@@ -915,14 +1002,14 @@ public class BattleDetail extends WindowController {
                             return Rank.S勝利;
                         }
                     } else if (this.beforeEnemyAliveCount > 1
-                            && (this.beforeEnemyAliveCount
-                                    - this.afterEnemyAliveCount) >= (int) (this.beforeEnemyAliveCount * 0.7D)) {
+                        && (this.beforeEnemyAliveCount
+                        - this.afterEnemyAliveCount) >= (int) (this.beforeEnemyAliveCount * 0.7D)) {
                         return Rank.A勝利;
                     }
                 }
                 if (Ships.isLost(ps.getAfterEnemy().get(0))
-                        && (this.beforeFriendAliveCount - this.afterFriendAliveCount) < (this.beforeEnemyAliveCount
-                                - this.afterEnemyAliveCount)) {
+                    && (this.beforeFriendAliveCount - this.afterFriendAliveCount) < (this.beforeEnemyAliveCount
+                    - this.afterEnemyAliveCount)) {
                     return Rank.B戦術的勝利;
                 }
                 if (this.beforeFriendAliveCount == 1 && Ships.isBadlyDamage(ps.getAfterFriend().get(0))) {
@@ -943,8 +1030,9 @@ public class BattleDetail extends WindowController {
 
         /**
          * 損害率を計算する
+         *
          * @param before 前HP
-         * @param after 後HP
+         * @param after  後HP
          * @return 損害率
          */
         private double damageRatio(double before, double after) {

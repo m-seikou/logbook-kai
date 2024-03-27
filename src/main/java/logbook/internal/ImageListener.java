@@ -103,8 +103,8 @@ public class ImageListener implements ContentListenerSpi {
         String shipid = uri.substring(nameIndex + 1, extIndex);
 
         ShipMst shipMst = ShipMstCollection.get()
-                .getShipMap()
-                .get(Integer.parseInt(shipid));
+            .getShipMap()
+            .get(Integer.parseInt(shipid));
         if (response.getResponseBody().isPresent()) {
             // 画像ファイルを再圧縮するオプション
             InputStream is;
@@ -115,7 +115,7 @@ public class ImageListener implements ContentListenerSpi {
                 is = response.getResponseBody().get();
             }
             Path path = ShipMst.getResourcePathDir(shipMst)
-                    .resolve(name);
+                .resolve(name);
             this.write(is, path);
         }
     }
@@ -162,8 +162,8 @@ public class ImageListener implements ContentListenerSpi {
             FileTime imageTime = Files.getLastModifiedTime(imageSrc);
             FileTime jsonTime = Files.getLastModifiedTime(jsonSrc);
             if (Duration.between(imageTime.toInstant(), jsonTime.toInstant())
-                    .abs()
-                    .compareTo(Duration.ofMinutes(10)) > 0) {
+                .abs()
+                .compareTo(Duration.ofMinutes(10)) > 0) {
                 return;
             }
         } catch (Exception e) {

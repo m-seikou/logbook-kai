@@ -22,20 +22,27 @@ import logbook.internal.Time;
 
 /**
  * 入渠ドック
- *
  */
 public class NdockPane extends HBox {
 
-    /** 入渠ドック */
+    /**
+     * 入渠ドック
+     */
     private final Ndock ndock;
 
-    /** 色変化1段階目 */
+    /**
+     * 色変化1段階目
+     */
     private final Duration stage1 = Duration.ofMinutes(40);
 
-    /** 色変化2段階目 */
+    /**
+     * 色変化2段階目
+     */
     private final Duration stage2 = Duration.ofMinutes(20);
 
-    /** 色変化3段階目 */
+    /**
+     * 色変化3段階目
+     */
     private final Duration stage3 = Duration.ofMinutes(10);
 
     @FXML
@@ -69,8 +76,8 @@ public class NdockPane extends HBox {
         try {
             // 艦娘
             Ship ship = ShipCollection.get()
-                    .getShipMap()
-                    .get(this.ndock.getShipId());
+                .getShipMap()
+                .get(this.ndock.getShipId());
             // 艦娘画像
             this.ship.setImage(Ships.shipWithItemImage(ship));
             // 名前
@@ -79,14 +86,14 @@ public class NdockPane extends HBox {
             // マウスオーバーでのポップアップ
             PopOver<Ndock> popover = new PopOver<>((node, ndock) -> {
                 ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(this.ndock.getCompleteTime()),
-                        ZoneOffset.systemDefault());
+                    ZoneOffset.systemDefault());
                 String message;
                 if (dateTime.toLocalDate().equals(ZonedDateTime.now().toLocalDate())) {
                     message = "今日 " + DateTimeFormatter.ofPattern("H時m分s秒").format(dateTime)
-                            + " 頃にお風呂からあがります";
+                        + " 頃にお風呂からあがります";
                 } else {
                     message = DateTimeFormatter.ofPattern("M月d日 H時m分s秒").format(dateTime)
-                            + " 頃にお風呂からあがります";
+                        + " 頃にお風呂からあがります";
                 }
                 return new PopOverPane(this.name.getText(), message);
             });

@@ -48,152 +48,225 @@ import lombok.Getter;
 
 /**
  * 編成記録の艦娘ペイン
- *
  */
 public class DeckShipPane extends VBox {
 
-    /** 装備のStringConverter */
+    /**
+     * 装備のStringConverter
+     */
     private static StringConverter<SlotitemMst> itemNameStringConverter = ToStringConverter.of(SlotitemMst::getName);
 
-    /** 艦娘画像 */
+    /**
+     * 艦娘画像
+     */
     @FXML
     private ImageView shipImage;
 
-    /** 艦娘Lv */
+    /**
+     * 艦娘Lv
+     */
     @FXML
     private Label shipLv;
 
-    /** 艦娘選択 */
+    /**
+     * 艦娘選択
+     */
     @FXML
     private Button shipButton;
 
-    /** 装備1画像 */
+    /**
+     * 装備1画像
+     */
     @FXML
     private ImageView itemImage1;
 
-    /** 装備1名前 */
+    /**
+     * 装備1名前
+     */
     @FXML
     private Label itemName1;
 
-    /** 装備1改修レベル */
+    /**
+     * 装備1改修レベル
+     */
     @FXML
     private Label itemLv1;
 
-    /** 装備1選択肢 */
+    /**
+     * 装備1選択肢
+     */
     @FXML
     private ComboBox<SlotitemMst> itemList1;
 
-    /** 装備1改修レベル選択肢 */
+    /**
+     * 装備1改修レベル選択肢
+     */
     @FXML
     private ComboBox<Integer> itemLvList1;
 
-    /** 装備2画像 */
+    /**
+     * 装備2画像
+     */
     @FXML
     private ImageView itemImage2;
 
-    /** 装備2名前 */
+    /**
+     * 装備2名前
+     */
     @FXML
     private Label itemName2;
 
-    /** 装備2改修レベル */
+    /**
+     * 装備2改修レベル
+     */
     @FXML
     private Label itemLv2;
 
-    /** 装備2選択肢 */
+    /**
+     * 装備2選択肢
+     */
     @FXML
     private ComboBox<SlotitemMst> itemList2;
 
-    /** 装備2改修レベル選択肢 */
+    /**
+     * 装備2改修レベル選択肢
+     */
     @FXML
     private ComboBox<Integer> itemLvList2;
 
-    /** 装備3画像 */
+    /**
+     * 装備3画像
+     */
     @FXML
     private ImageView itemImage3;
 
-    /** 装備3名前 */
+    /**
+     * 装備3名前
+     */
     @FXML
     private Label itemName3;
 
-    /** 装備3改修レベル */
+    /**
+     * 装備3改修レベル
+     */
     @FXML
     private Label itemLv3;
 
-    /** 装備3選択肢 */
+    /**
+     * 装備3選択肢
+     */
     @FXML
     private ComboBox<SlotitemMst> itemList3;
 
-    /** 装備3改修レベル選択肢 */
+    /**
+     * 装備3改修レベル選択肢
+     */
     @FXML
     private ComboBox<Integer> itemLvList3;
 
-    /** 装備4画像 */
+    /**
+     * 装備4画像
+     */
     @FXML
     private ImageView itemImage4;
 
-    /** 装備4名前 */
+    /**
+     * 装備4名前
+     */
     @FXML
     private Label itemName4;
 
-    /** 装備4改修レベル */
+    /**
+     * 装備4改修レベル
+     */
     @FXML
     private Label itemLv4;
 
-    /** 装備4選択肢 */
+    /**
+     * 装備4選択肢
+     */
     @FXML
     private ComboBox<SlotitemMst> itemList4;
 
-    /** 装備4改修レベル選択肢 */
+    /**
+     * 装備4改修レベル選択肢
+     */
     @FXML
     private ComboBox<Integer> itemLvList4;
 
-    /** 装備5画像 */
+    /**
+     * 装備5画像
+     */
     @FXML
     private ImageView itemImage5;
 
-    /** 装備5名前 */
+    /**
+     * 装備5名前
+     */
     @FXML
     private Label itemName5;
 
-    /** 装備5改修レベル */
+    /**
+     * 装備5改修レベル
+     */
     @FXML
     private Label itemLv5;
 
-    /** 装備5選択肢 */
+    /**
+     * 装備5選択肢
+     */
     @FXML
     private ComboBox<SlotitemMst> itemList5;
 
-    /** 装備5改修レベル選択肢 */
+    /**
+     * 装備5改修レベル選択肢
+     */
     @FXML
     private ComboBox<Integer> itemLvList5;
 
-    /** 装備Ex画像 */
+    /**
+     * 装備Ex画像
+     */
     @FXML
     private ImageView itemImage6;
 
-    /** 装備Ex名前 */
+    /**
+     * 装備Ex名前
+     */
     @FXML
     private Label itemName6;
 
-    /** 装備Ex改修レベル */
+    /**
+     * 装備Ex改修レベル
+     */
     @FXML
     private Label itemLv6;
 
-    /** 装備Ex選択肢 */
+    /**
+     * 装備Ex選択肢
+     */
     @FXML
     private ComboBox<SlotitemMst> itemList6;
 
-    /** 装備Ex改修レベル選択肢 */
+    /**
+     * 装備Ex改修レベル選択肢
+     */
     @FXML
     private ComboBox<Integer> itemLvList6;
 
-    /** 選択した艦娘 */
+    /**
+     * 選択した艦娘
+     */
     private ObjectProperty<Integer> selectedShip = new SimpleObjectProperty<>(0);
 
-    /** 艦娘 */
+    /**
+     * 艦娘
+     */
     private AppDeckShip ship = new AppDeckShip();
 
-    /** 変更検知 */
+    /**
+     * 変更検知
+     */
     @Getter
     private BooleanProperty modified = new SimpleBooleanProperty(false);
 
@@ -227,17 +300,17 @@ public class DeckShipPane extends VBox {
 
             this.ship.getItems().clear();
             this.ship.getItems().add(Optional.ofNullable(this.itemList1.getValue())
-                    .map(SlotitemMst::getId).orElse(null));
+                .map(SlotitemMst::getId).orElse(null));
             this.ship.getItems().add(Optional.ofNullable(this.itemList2.getValue())
-                    .map(SlotitemMst::getId).orElse(null));
+                .map(SlotitemMst::getId).orElse(null));
             this.ship.getItems().add(Optional.ofNullable(this.itemList3.getValue())
-                    .map(SlotitemMst::getId).orElse(null));
+                .map(SlotitemMst::getId).orElse(null));
             this.ship.getItems().add(Optional.ofNullable(this.itemList4.getValue())
-                    .map(SlotitemMst::getId).orElse(null));
+                .map(SlotitemMst::getId).orElse(null));
             this.ship.getItems().add(Optional.ofNullable(this.itemList5.getValue())
-                    .map(SlotitemMst::getId).orElse(null));
+                .map(SlotitemMst::getId).orElse(null));
             this.ship.getItems().add(Optional.ofNullable(this.itemList6.getValue())
-                    .map(SlotitemMst::getId).orElse(null));
+                .map(SlotitemMst::getId).orElse(null));
 
             this.ship.getItemLvs().clear();
             this.ship.getItemLvs().add(this.itemLvList1.getValue());
@@ -298,13 +371,13 @@ public class DeckShipPane extends VBox {
         ObservableList<ShipItem> ships = FXCollections.observableArrayList();
         ships.add(new ShipItem());
         ships.addAll(ShipCollection.get()
-                .getShipMap()
-                .values()
-                .stream()
-                .sorted(Comparator.comparing(Ship::getShipId))
-                .sorted(Comparator.comparing(Ship::getLv).reversed())
-                .map(ShipItem::toShipItem)
-                .collect(Collectors.toList()));
+            .getShipMap()
+            .values()
+            .stream()
+            .sorted(Comparator.comparing(Ship::getShipId))
+            .sorted(Comparator.comparing(Ship::getLv).reversed())
+            .map(ShipItem::toShipItem)
+            .collect(Collectors.toList()));
 
         FilteredList<ShipItem> filtered = new FilteredList<>(ships);
         TextFlow textFlow = new TextFlow();
@@ -314,18 +387,18 @@ public class DeckShipPane extends VBox {
             checkBox.selectedProperty().addListener((ov, o, n) -> {
                 Set<String> types = new HashSet<>();
                 textFlow.getChildrenUnmodifiable()
-                        .stream()
-                        .filter(node -> node instanceof CheckBox)
-                        .map(node -> (CheckBox) node)
-                        .filter(CheckBox::isSelected)
-                        .map(CheckBox::getText)
-                        .map(ShipTypeGroup::valueOf)
-                        .map(ShipTypeGroup::shipTypes)
-                        .forEach(types::addAll);
+                    .stream()
+                    .filter(node -> node instanceof CheckBox)
+                    .map(node -> (CheckBox) node)
+                    .filter(CheckBox::isSelected)
+                    .map(CheckBox::getText)
+                    .map(ShipTypeGroup::valueOf)
+                    .map(ShipTypeGroup::shipTypes)
+                    .forEach(types::addAll);
 
                 filtered.setPredicate(ShipFilter.TypeFilter.builder()
-                        .types(types)
-                        .build());
+                    .types(types)
+                    .build());
             });
             textFlow.getChildren().add(checkBox);
         }
@@ -347,8 +420,8 @@ public class DeckShipPane extends VBox {
      * 艦娘が選ばれたときのリスナー
      *
      * @param ov 値が変更されたObservableValueoldValue
-     * @param o 古い値
-     * @param n 新しい値
+     * @param o  古い値
+     * @param n  新しい値
      */
     private void shipChangeListener(ObservableValue<? extends Integer> ov, Integer o, Integer n) {
         if (this.initialized) {
@@ -393,16 +466,16 @@ public class DeckShipPane extends VBox {
     /**
      * 指定された装備をセットする
      *
-     * @param item 装備
-     * @param itemList 装備コンボボックス
+     * @param item       装備
+     * @param itemList   装備コンボボックス
      * @param itemLvList 装備改修コンボボックス
      */
     private void presetItem(SlotItem item, ComboBox<SlotitemMst> itemList, ComboBox<Integer> itemLvList) {
         Items.slotitemMst(item)
-                .ifPresent(itemList.getSelectionModel()::select);
+            .ifPresent(itemList.getSelectionModel()::select);
         Optional.ofNullable(item)
-                .map(SlotItem::getLevel)
-                .ifPresent(itemLvList.getSelectionModel()::select);
+            .map(SlotItem::getLevel)
+            .ifPresent(itemLvList.getSelectionModel()::select);
     }
 
     /**
@@ -426,15 +499,15 @@ public class DeckShipPane extends VBox {
         });
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get().getSlotitemMap();
         list.getItems().addAll(SlotItemCollection.get()
-                .getSlotitemMap()
-                .values()
-                .stream()
-                .map(SlotItem::getSlotitemId)
-                .distinct()
-                .map(itemMstMap::get)
-                .sorted(Comparator.comparing(SlotitemMst::getName))
-                .sorted(Comparator.comparing(m -> m.getType().get(3)))
-                .collect(Collectors.toList()));
+            .getSlotitemMap()
+            .values()
+            .stream()
+            .map(SlotItem::getSlotitemId)
+            .distinct()
+            .map(itemMstMap::get)
+            .sorted(Comparator.comparing(SlotitemMst::getName))
+            .sorted(Comparator.comparing(m -> m.getType().get(3)))
+            .collect(Collectors.toList()));
     }
 
     /**
@@ -482,7 +555,6 @@ public class DeckShipPane extends VBox {
 
     /**
      * 装備のListCell
-     *
      */
     static class ItemNameCell extends ListCell<SlotitemMst> {
         @Override
@@ -508,7 +580,6 @@ public class DeckShipPane extends VBox {
 
     /**
      * 装備改修レベルのStringConverter
-     *
      */
     static class ItemLevelStringConverter extends StringConverter<Integer> {
 

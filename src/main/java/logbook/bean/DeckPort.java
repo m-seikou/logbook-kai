@@ -16,26 +16,35 @@ import lombok.Data;
 
 /**
  * api_deck_port
- *
  */
 @Data
 public class DeckPort implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -7415061750561409381L;
 
-    /** api_flagship */
+    /**
+     * api_flagship
+     */
     private Integer flagship;
 
-    /** api_id */
+    /**
+     * api_id
+     */
     private Integer id;
 
-    /** api_mission */
+    /**
+     * api_mission
+     */
     private List<Long> mission;
 
-    /** api_name */
+    /**
+     * api_name
+     */
     private String name;
 
-    /** api_ship */
+    /**
+     * api_ship
+     */
     private List<Integer> ship;
 
     @Override
@@ -56,7 +65,7 @@ public class DeckPort implements Serializable, Cloneable {
     public List<Ship> getBadlyShips() {
         return getBadlyShips(false);
     }
-    
+
     /**
      * 大破した艦娘を返します
      *
@@ -65,13 +74,13 @@ public class DeckPort implements Serializable, Cloneable {
     public List<Ship> getBadlyShips(boolean ignoreFlagship) {
         Map<Integer, Ship> shipMap = ShipCollection.get().getShipMap();
         return this.getShip()
-                .stream()
-                .map(shipMap::get)
-                .skip(ignoreFlagship ? 1:0)
-                .filter(Objects::nonNull)
-                .filter(Ships::isBadlyDamage)
-                .filter(s -> !Ships.isEscape(s))
-                .collect(Collectors.toList());
+            .stream()
+            .map(shipMap::get)
+            .skip(ignoreFlagship ? 1 : 0)
+            .filter(Objects::nonNull)
+            .filter(Ships::isBadlyDamage)
+            .filter(s -> !Ships.isEscape(s))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -83,11 +92,11 @@ public class DeckPort implements Serializable, Cloneable {
     public static DeckPort toDeckPort(JsonObject json) {
         DeckPort bean = new DeckPort();
         JsonHelper.bind(json)
-                .setInteger("api_flagship", bean::setFlagship)
-                .setInteger("api_id", bean::setId)
-                .setLongList("api_mission", bean::setMission)
-                .setString("api_name", bean::setName)
-                .setIntegerList("api_ship", bean::setShip);
+            .setInteger("api_flagship", bean::setFlagship)
+            .setInteger("api_id", bean::setId)
+            .setLongList("api_mission", bean::setMission)
+            .setString("api_name", bean::setName)
+            .setIntegerList("api_ship", bean::setShip);
         return bean;
     }
 

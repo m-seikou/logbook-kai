@@ -26,7 +26,6 @@ import logbook.plugin.PluginServices;
 
 /**
  * 任務
- *
  */
 public class QuestPane extends HBox {
 
@@ -77,58 +76,58 @@ public class QuestPane extends HBox {
             Quest quest = this.quest.getQuest();
 
             switch (quest.getCategory()) {
-            case 1:
-                this.getStyleClass().add("deck");
-                break;
-            case 2:
-            case 8:
-            case 9:
-                this.getStyleClass().add("sortie");
-                break;
-            case 3:
-                this.getStyleClass().add("practice");
-                break;
-            case 4:
-                this.getStyleClass().add("mission");
-                break;
-            case 5:
-                this.getStyleClass().add("supply");
-                break;
-            case 6:
-                this.getStyleClass().add("kousyou");
-                break;
-            case 7:
-                this.getStyleClass().add("kaisou");
-                break;
-            default:
-                break;
+                case 1:
+                    this.getStyleClass().add("deck");
+                    break;
+                case 2:
+                case 8:
+                case 9:
+                    this.getStyleClass().add("sortie");
+                    break;
+                case 3:
+                    this.getStyleClass().add("practice");
+                    break;
+                case 4:
+                    this.getStyleClass().add("mission");
+                    break;
+                case 5:
+                    this.getStyleClass().add("supply");
+                    break;
+                case 6:
+                    this.getStyleClass().add("kousyou");
+                    break;
+                case 7:
+                    this.getStyleClass().add("kaisou");
+                    break;
+                default:
+                    break;
             }
             if (!this.quest.isActive()) {
                 this.getStyleClass().add("inactive");
             }
             switch (quest.getProgressFlag()) {
-            case 1:
-                this.progress.setStartAngle(90);
-                this.progress.setRadiusX(5);
-                this.progress.setRadiusY(5);
-                this.progress.setLength(360 * 0.5);
-                break;
-            case 2:
-                this.progress.setStartAngle(45);
-                this.progress.setRadiusX(5);
-                this.progress.setRadiusY(5);
-                this.progress.setLength(360 * 0.8);
-                break;
-            default:
-                if (quest.getState() == 3) {
+                case 1:
+                    this.progress.setStartAngle(90);
                     this.progress.setRadiusX(5);
                     this.progress.setRadiusY(5);
-                } else {
-                    this.progress.setRadiusX(2);
-                    this.progress.setRadiusY(2);
-                }
-                this.progress.setLength(360);
-                break;
+                    this.progress.setLength(360 * 0.5);
+                    break;
+                case 2:
+                    this.progress.setStartAngle(45);
+                    this.progress.setRadiusX(5);
+                    this.progress.setRadiusY(5);
+                    this.progress.setLength(360 * 0.8);
+                    break;
+                default:
+                    if (quest.getState() == 3) {
+                        this.progress.setRadiusX(5);
+                        this.progress.setRadiusY(5);
+                    } else {
+                        this.progress.setRadiusX(2);
+                        this.progress.setRadiusY(2);
+                    }
+                    this.progress.setLength(360);
+                    break;
             }
             this.name.setText(quest.getTitle());
             this.detail.setText(quest.getDetail().replaceAll("<br>", ""));
@@ -145,27 +144,27 @@ public class QuestPane extends HBox {
     @FXML
     void remove(ActionEvent event) {
         AppQuestCollection.get()
-                .getQuest()
-                .remove(this.quest.getNo());
+            .getQuest()
+            .remove(this.quest.getNo());
     }
 
     @FXML
     void removeAll(ActionEvent event) {
         AppQuestCollection.get()
-                .getQuest()
-                .clear();
+            .getQuest()
+            .clear();
     }
 
     @FXML
     void search(ActionEvent event) {
         try {
             ThreadManager.getExecutorService()
-                    .submit(() -> {
-                        Desktop.getDesktop()
-                                .browse(URI.create("https://www.google.co.jp/search?q="
-                                        + URLEncoder.encode(this.quest.getQuest().getTitle(), "UTF-8")));
-                        return null;
-                    });
+                .submit(() -> {
+                    Desktop.getDesktop()
+                        .browse(URI.create("https://www.google.co.jp/search?q="
+                            + URLEncoder.encode(this.quest.getQuest().getTitle(), "UTF-8")));
+                    return null;
+                });
         } catch (Exception e) {
             LoggerHolder.get().warn("ブラウザを開けませんでした", e);
         }
@@ -186,9 +185,9 @@ public class QuestPane extends HBox {
     void condition(ActionEvent event) {
         try {
             InternalFXMLLoader.showWindow("logbook/gui/quest_progress.fxml", (Stage) this.getScene().getWindow(),
-                    this.quest.getQuest().getTitle(), c -> {
-                        ((QuestProgress) c).setQuest(this.quest);
-                    }, null);
+                this.quest.getQuest().getTitle(), c -> {
+                    ((QuestProgress) c).setQuest(this.quest);
+                }, null);
         } catch (IOException e) {
             LoggerHolder.get().warn("進捗を開けませんでした", e);
         }

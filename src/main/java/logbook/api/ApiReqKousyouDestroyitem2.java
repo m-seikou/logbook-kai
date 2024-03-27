@@ -11,7 +11,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_kousyou/destroyitem2
- *
  */
 @API("/kcsapi/api_req_kousyou/destroyitem2")
 public class ApiReqKousyouDestroyitem2 implements APIListenerSpi {
@@ -21,7 +20,7 @@ public class ApiReqKousyouDestroyitem2 implements APIListenerSpi {
         String apiSlotitemIds = req.getParameter("api_slotitem_ids");
         if (apiSlotitemIds != null) {
             Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                    .getSlotitemMap();
+                .getSlotitemMap();
             for (String apiSlotitemId : apiSlotitemIds.split(",")) {
                 Integer itemId = Integer.valueOf(apiSlotitemId);
                 // 装備を廃棄する

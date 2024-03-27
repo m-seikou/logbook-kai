@@ -8,7 +8,6 @@ import java.util.stream.StreamSupport;
 
 /**
  * サービスプロバイダに関するメソッドを集めたクラス
- *
  */
 public final class PluginServices {
 
@@ -28,7 +27,7 @@ public final class PluginServices {
     /**
      * サービスプロバイダを取得します。
      *
-     * @param <T> サービスプロバイダ
+     * @param <T>   サービスプロバイダ
      * @param clazz プラグインのインターフェイス
      * @return clazzで指定されたサービスプロバイダインスタンス
      */
@@ -63,7 +62,7 @@ public final class PluginServices {
     /**
      * 任務のリソースを取得します。
      * （どのコードが任務のリソースを使用しているかわかりやすくするため専用のメソッドを用意）
-     * 
+     *
      * @param questNo 任務No
      * @return リソースを読み込むためのURL
      */
@@ -73,7 +72,7 @@ public final class PluginServices {
 
     /**
      * 任務のリソースを読み込む入力ストリームを返します。
-     *（どのコードが任務のリソースを使用しているかわかりやすくするため専用のメソッドを用意）
+     * （どのコードが任務のリソースを使用しているかわかりやすくするため専用のメソッドを用意）
      *
      * @param questNo 任務No
      * @return リソースを読み込むための入力ストリーム

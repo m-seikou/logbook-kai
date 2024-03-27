@@ -7,12 +7,11 @@ import logbook.bean.AppItemTableConfig;
 
 /**
  * 所有装備一覧のUIコントローラー(親)
- *
  */
 public class ItemController extends WindowController {
     @FXML
     private TabPane tab;
-    
+
     @FXML
     private ItemItemController itemController;
 

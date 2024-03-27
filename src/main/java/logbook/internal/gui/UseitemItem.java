@@ -22,16 +22,24 @@ import logbook.bean.UseitemMst;
  */
 public class UseitemItem {
 
-    /** ID */
+    /**
+     * ID
+     */
     private IntegerProperty id = new SimpleIntegerProperty();
 
-    /** 名前 */
+    /**
+     * 名前
+     */
     private StringProperty name = new SimpleStringProperty();
 
-    /** 個数 */
+    /**
+     * 個数
+     */
     private IntegerProperty count = new SimpleIntegerProperty();
 
-    /** 説明 */
+    /**
+     * 説明
+     */
     private StringProperty description = new SimpleStringProperty();
 
     public Integer getId() {
@@ -82,10 +90,14 @@ public class UseitemItem {
         return this.description;
     }
 
-    /** Useitem API での ID と material ID のマッピング */
+    /**
+     * Useitem API での ID と material ID のマッピング
+     */
     private static final Map<Integer, Integer> MATERIALS_MAP = new HashMap<>();
-    
-    /** Useitem API での ID と Slotitem ID のマッピング */
+
+    /**
+     * Useitem API での ID と Slotitem ID のマッピング
+     */
     private static final Map<Integer, Integer> ITEMS_MAP = new HashMap<>();
 
     static {
@@ -104,7 +116,7 @@ public class UseitemItem {
         ITEMS_MAP.put(69, 150);  // 秋刀魚の缶詰
         ITEMS_MAP.put(76, 241);  // 特別なおにぎり
     }
-    
+
     public static UseitemItem toUseitemItem(UseitemMst item) {
         UseitemItem ret = new UseitemItem();
         ret.setId(item.getId());
@@ -117,7 +129,7 @@ public class UseitemItem {
             }
             ret.setDescription(sb.toString());
         }
-        
+
         if (MATERIALS_MAP.containsKey(item.getId())) {
             // 資材系
             ret.setCount(Optional.ofNullable(MATERIALS_MAP.get(item.getId()))
@@ -130,9 +142,9 @@ public class UseitemItem {
         } else if (ITEMS_MAP.containsKey(item.getId())) {
             // 装備系
             final int slotitemId = ITEMS_MAP.get(item.getId());
-            ret.setCount((int)SlotItemCollection.get().getSlotitemMap().values().stream()
-                    .filter(slotitem -> slotitem.getSlotitemId() == slotitemId)
-                    .count());
+            ret.setCount((int) SlotItemCollection.get().getSlotitemMap().values().stream()
+                .filter(slotitem -> slotitem.getSlotitemId() == slotitemId)
+                .count());
         } else {
             // その他の純粋なアイテム
             Optional.ofNullable(UseitemCollection.get().getUseitemMap().get(item.getId()))
@@ -141,14 +153,14 @@ public class UseitemItem {
         }
         return ret;
     }
-    
+
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(Integer.toString(this.id.get()))
-                .add(this.name.get())
-                .add(Optional.ofNullable(this.count.get()).map(c -> Integer.toString(c)).orElse("-"))
-                .add(this.description.get())
-                .toString();
+            .add(Integer.toString(this.id.get()))
+            .add(this.name.get())
+            .add(Optional.ofNullable(this.count.get()).map(c -> Integer.toString(c)).orElse("-"))
+            .add(this.description.get())
+            .toString();
     }
 }

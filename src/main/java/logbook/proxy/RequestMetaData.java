@@ -7,24 +7,26 @@ import java.util.Optional;
 
 /**
  * リクエストに含まれている情報を ContentListener に提供するオブジェクト
- *
  */
 public interface RequestMetaData {
 
     /**
      * リクエストに含まれるメッセージボディの MIME タイプを返します
+     *
      * @return メッセージボディの MIME タイプ
      */
     String getContentType();
 
     /**
      * このリクエストを生成した HTTP メソッドの名前を返します
+     *
      * @return HTTP メソッド
      */
     String getMethod();
 
     /**
      * このリクエストから取得できるパラメータを返します
+     *
      * @return パラメータのMap
      */
     Map<String, List<String>> getParameterMap();
@@ -55,18 +57,21 @@ public interface RequestMetaData {
 
     /**
      * リクエストされた URL のパスの後ろに含まれているクエリ文字列を返します
+     *
      * @return クエリ文字列
      */
     String getQueryString();
 
     /**
      * この HTTP リクエストの最初の行にある、リクエストの URL のうちプロトコル名からクエリ文字列までの部分を返します
+     *
      * @return URI
      */
     String getRequestURI();
 
     /**
      * リクエストに含まれるメッセージボディを返します
+     *
      * @return リクエストに含まれるメッセージボディ
      */
     Optional<InputStream> getRequestBody();

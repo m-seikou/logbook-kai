@@ -19,17 +19,18 @@ import lombok.val;
 
 /**
  * 任務の受託期間を管理します。
- *
  */
 @Data
 public class AppQuestDuration {
 
-    /** 期限をキーにするマップ */
+    /**
+     * 期限をキーにするマップ
+     */
     private ConcurrentHashMap<String, Map<Integer, List<Duration>>> map = new ConcurrentHashMap<>();
 
     /**
      * 受託します。
-     * 
+     *
      * @param quest 任務
      */
     @JsonIgnore
@@ -58,7 +59,7 @@ public class AppQuestDuration {
         // 期限切れの削除
         String now = Logs.nowString();
         val iterator = this.map.entrySet().iterator();
-        for (; iterator.hasNext();) {
+        for (; iterator.hasNext(); ) {
             val entry = iterator.next();
             if (now.compareTo(entry.getKey()) > 0) {
                 iterator.remove();
@@ -68,7 +69,7 @@ public class AppQuestDuration {
 
     /**
      * 受託を停止します。
-     * 
+     *
      * @param questId 任務ID
      */
     @JsonIgnore
@@ -90,7 +91,7 @@ public class AppQuestDuration {
 
     /**
      * 受託を完了します。
-     * 
+     *
      * @param questId
      */
     @JsonIgnore
@@ -148,7 +149,6 @@ public class AppQuestDuration {
 
     /**
      * 受託期間
-     *
      */
     @Data
     public static class Duration {
@@ -160,7 +160,7 @@ public class AppQuestDuration {
      * アプリケーションのデフォルト設定ディレクトリから<code>AppQuestCondition</code>を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(AppQuestCondition.class, AppQuestCondition::new)</code>
+     * <code>Config.getDefault().get(AppQuestCondition.class, AppQuestCondition::new)</code>
      * </blockquote>
      *
      * @return <code>AppQuestCondition</code>

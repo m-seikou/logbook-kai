@@ -51,49 +51,76 @@ public class MissionLogs {
         }
         try (Stream<String> lines = tmp) {
             return lines.skip(1)
-                    .filter(l -> !l.isEmpty())
-                    .map(mapper)
-                    .filter(Objects::nonNull)
-                    .filter(filter)
-                    .collect(Collectors.toList());
+                .filter(l -> !l.isEmpty())
+                .map(mapper)
+                .filter(Objects::nonNull)
+                .filter(filter)
+                .collect(Collectors.toList());
         }
     }
-    
+
 
     /**
      * 遠征統計のベース
-     *
      */
     @Data
     public static class SimpleMissionLog {
 
-        /** 日付文字列 */
+        /**
+         * 日付文字列
+         */
         private String dateString;
-        /** 日付 */
+        /**
+         * 日付
+         */
         private ZonedDateTime date;
-        /** 結果 */
+        /**
+         * 結果
+         */
         private String result;
-        /** 海域 */
+        /**
+         * 海域
+         */
         private String area;
-        /** 遠征名 */
+        /**
+         * 遠征名
+         */
         private String name;
-        /** 燃料 */
+        /**
+         * 燃料
+         */
         private int fuel;
-        /** 弾薬 */
+        /**
+         * 弾薬
+         */
         private int ammo;
-        /** 鋼材 */
+        /**
+         * 鋼材
+         */
         private int metal;
-        /** ボーキ */
+        /**
+         * ボーキ
+         */
         private int bauxite;
-        /** アイテム1名前 */
+        /**
+         * アイテム1名前
+         */
         private String item1name = "";
-        /** アイテム1個数 */
+        /**
+         * アイテム1個数
+         */
         private int item1count;
-        /** アイテム2名前 */
+        /**
+         * アイテム2名前
+         */
         private String item2name = "";
-        /** アイテム2個数 */
+        /**
+         * アイテム2個数
+         */
         private int item2count;
-        /** 取得経験値計 */
+        /**
+         * 取得経験値計
+         */
         private int exp;
 
         /**
@@ -103,13 +130,13 @@ public class MissionLogs {
          */
         public SimpleMissionLog(String line) {
             String[] columns = line.split(",", -1);
-            
+
             this.setDateString(columns[0]);
             // 任務の更新時間が午前5時のため
             // 日付文字列を日本時間として解釈した後、GMT+04:00のタイムゾーンに変更します
             TemporalAccessor ta = Logs.DATE_FORMAT.parse(columns[0]);
             ZonedDateTime date = ZonedDateTime.of(LocalDateTime.from(ta), ZoneId.of("Asia/Tokyo"))
-                    .withZoneSameInstant(ZoneId.of("GMT+04:00"));
+                .withZoneSameInstant(ZoneId.of("GMT+04:00"));
             this.setDate(date);
             this.setResult(columns[1]);
             this.setArea(columns[2]);

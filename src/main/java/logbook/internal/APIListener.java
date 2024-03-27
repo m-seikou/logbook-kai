@@ -27,7 +27,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * APIを受け取りJSONをAPIListenerSpiを実装したサービスプロバイダに送ります
- *
  */
 public final class APIListener implements ContentListenerSpi {
 
@@ -42,15 +41,15 @@ public final class APIListener implements ContentListenerSpi {
             API target = impl.getClass().getAnnotation(API.class);
             if (target != null) {
                 return Arrays.stream(target.value())
-                        .map(k -> Tuple.of(k, impl));
+                    .map(k -> Tuple.of(k, impl));
             } else {
                 this.all.add(Tuple.of(null, impl));
             }
             return Stream.empty();
         };
         this.services = PluginServices.instances(APIListenerSpi.class)
-                .flatMap(mapper)
-                .collect(Collectors.groupingBy(Pair::getKey));
+            .flatMap(mapper)
+            .collect(Collectors.groupingBy(Pair::getKey));
         this.isDebugEnabled = LoggerHolder.get().isDebugEnabled();
     }
 
@@ -125,12 +124,12 @@ public final class APIListener implements ContentListenerSpi {
     }
 
     private void createTask(Pair<String, APIListenerSpi> pair, JsonObject json, RequestMetaData req,
-            ResponseMetaData res) {
+                            ResponseMetaData res) {
         try {
             if (this.isDebugEnabled) {
                 String className = pair.getValue().getClass().getName();
                 LoggerHolder.get().debug(Messages.getString("APIListener.0"), //$NON-NLS-1$
-                        className, req.getRequestURI());
+                    className, req.getRequestURI());
             }
             pair.getValue().accept(json, req, res);
         } catch (Exception e) {

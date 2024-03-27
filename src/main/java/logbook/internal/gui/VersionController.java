@@ -27,7 +27,6 @@ import logbook.plugin.PluginServices;
 
 /**
  * バージョン情報
- *
  */
 public class VersionController extends WindowController {
 
@@ -49,16 +48,16 @@ public class VersionController extends WindowController {
     void initialize() {
         try {
             this.appName.setText(Optional.ofNullable(this.getClass().getPackage())
-                    .map(Package::getImplementationTitle)
-                    .orElse(""));
+                .map(Package::getImplementationTitle)
+                .orElse(""));
             this.appVersion.setText(Version.getCurrent().toString());
             this.appName2.setText(Optional.ofNullable(this.getClass().getPackage())
-                    .map(Package::getImplementationTitle)
-                    .orElse(""));
+                .map(Package::getImplementationTitle)
+                .orElse(""));
             try (InputStream in = PluginServices.getResourceAsStream("LICENSE")) {
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
                     this.licensetext.setText(reader.lines()
-                            .collect(Collectors.joining("\n")));
+                        .collect(Collectors.joining("\n")));
                 }
             }
         } catch (Exception e) {
@@ -75,11 +74,11 @@ public class VersionController extends WindowController {
     void visibleDownloadSite(ActionEvent event) {
         try {
             ThreadManager.getExecutorService()
-                    .submit(() -> {
-                        Desktop.getDesktop()
-                                .browse(URI.create("https://github.com/" + CheckUpdate.REPOSITORY_PATH + "/releases"));
-                        return null;
-                    });
+                .submit(() -> {
+                    Desktop.getDesktop()
+                        .browse(URI.create("https://github.com/" + CheckUpdate.REPOSITORY_PATH + "/releases"));
+                    return null;
+                });
         } catch (Exception e) {
             LoggerHolder.get().warn("ブラウザの起動で例外", e);
         }
@@ -89,11 +88,11 @@ public class VersionController extends WindowController {
     void visibleIssue(ActionEvent event) {
         try {
             ThreadManager.getExecutorService()
-                    .submit(() -> {
-                        Desktop.getDesktop()
-                                .browse(URI.create("https://github.com/" + CheckUpdate.REPOSITORY_PATH + "/issues"));
-                        return null;
-                    });
+                .submit(() -> {
+                    Desktop.getDesktop()
+                        .browse(URI.create("https://github.com/" + CheckUpdate.REPOSITORY_PATH + "/issues"));
+                    return null;
+                });
         } catch (Exception e) {
             LoggerHolder.get().warn("ブラウザの起動で例外", e);
         }

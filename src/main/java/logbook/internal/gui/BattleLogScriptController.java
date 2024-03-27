@@ -37,7 +37,6 @@ import logbook.plugin.PluginServices;
 
 /**
  * 高度な集計
- *
  */
 public class BattleLogScriptController extends WindowController {
 
@@ -86,7 +85,7 @@ public class BattleLogScriptController extends WindowController {
         StringBuilder sb = new StringBuilder();
         URL sample = PluginServices.getResource("logbook/gui/battlelog_script_sample.js");
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(sample.openStream(), StandardCharsets.UTF_8))) {
+            new InputStreamReader(sample.openStream(), StandardCharsets.UTF_8))) {
             int len = 0;
             char[] buf = new char[1024];
             while ((len = reader.read(buf)) > 0) {
@@ -104,7 +103,7 @@ public class BattleLogScriptController extends WindowController {
     void remove() {
         ButtonType result = Tools.Controls.alert(AlertType.CONFIRMATION,
                 "スクリプトの削除", "このスクリプトを削除しますか？", this.getWindow())
-                .orElse(null);
+            .orElse(null);
         if (!ButtonType.OK.equals(result)) {
             return;
         }
@@ -136,7 +135,7 @@ public class BattleLogScriptController extends WindowController {
         if (!this.current.getScript().equals(this.editor.get())) {
             ButtonType result = Tools.Controls.alert(AlertType.CONFIRMATION,
                     "スクリプトの保存", "スクリプトは保存されていません。\n保存せず実行しますか？", this.getWindow())
-                    .orElse(null);
+                .orElse(null);
             if (!ButtonType.OK.equals(result)) {
                 return;
             }

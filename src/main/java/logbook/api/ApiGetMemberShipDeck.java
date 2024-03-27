@@ -15,7 +15,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/ship_deck
- *
  */
 @API("/kcsapi/api_get_member/ship_deck")
 public class ApiGetMemberShipDeck implements APIListenerSpi {
@@ -41,9 +40,9 @@ public class ApiGetMemberShipDeck implements APIListenerSpi {
 
         // 差し替え
         Map<Integer, Ship> map = ShipCollection.get()
-                .getShipMap();
+            .getShipMap();
         map.putAll(JsonHelper.toMap(array, Ship::getId, Ship::toShip));
-        
+
         // 以下のコードは実際動いてなかった（setCondUpdateTime() にたどり着くことがなかった）。
         // 理由は上で before に差し替え前の ShipMap を保持しているが、
         // 差し替え後の ShipMap (map) も同じ ShipCollection.get().getShipMap() を参照しており、
@@ -73,7 +72,7 @@ public class ApiGetMemberShipDeck implements APIListenerSpi {
      */
     private void apiDeckData(JsonArray array) {
         Map<Integer, DeckPort> map = DeckPortCollection.get()
-                .getDeckPortMap();
+            .getDeckPortMap();
         map.putAll(JsonHelper.toMap(array, DeckPort::getId, DeckPort::toDeckPort));
     }
 }

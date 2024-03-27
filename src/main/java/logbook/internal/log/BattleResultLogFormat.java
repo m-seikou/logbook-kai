@@ -28,7 +28,6 @@ import logbook.internal.Ships;
 
 /**
  * 海戦・ドロップ報告書
- *
  */
 public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
 
@@ -40,42 +39,42 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
     @Override
     public String header() {
         return new StringJoiner(",")
-                .add("日付")
-                .add("海域").add("マス").add("ボス").add("ランク")
-                .add("艦隊行動").add("味方陣形").add("敵陣形")
-                .add("制空権")
-                .add("味方触接")
-                .add("敵触接")
-                .add("敵艦隊")
-                .add("ドロップ艦種").add("ドロップ艦娘")
-                .add("味方艦1").add("味方艦1HP")
-                .add("味方艦2").add("味方艦2HP")
-                .add("味方艦3").add("味方艦3HP")
-                .add("味方艦4").add("味方艦4HP")
-                .add("味方艦5").add("味方艦5HP")
-                .add("味方艦6").add("味方艦6HP")
-                .add("味方艦7").add("味方艦7HP")
-                .add("味方艦8").add("味方艦8HP")
-                .add("味方艦9").add("味方艦9HP")
-                .add("味方艦10").add("味方艦10HP")
-                .add("味方艦11").add("味方艦11HP")
-                .add("味方艦12").add("味方艦12HP")
-                .add("敵艦1").add("敵艦1HP")
-                .add("敵艦2").add("敵艦2HP")
-                .add("敵艦3").add("敵艦3HP")
-                .add("敵艦4").add("敵艦4HP")
-                .add("敵艦5").add("敵艦5HP")
-                .add("敵艦6").add("敵艦6HP")
-                .add("敵艦7").add("敵艦7HP")
-                .add("敵艦8").add("敵艦8HP")
-                .add("敵艦9").add("敵艦9HP")
-                .add("敵艦10").add("敵艦10HP")
-                .add("敵艦11").add("敵艦11HP")
-                .add("敵艦12").add("敵艦12HP")
-                .add("ドロップアイテム")
-                .add("艦娘経験値")
-                .add("提督経験値")
-                .toString();
+            .add("日付")
+            .add("海域").add("マス").add("ボス").add("ランク")
+            .add("艦隊行動").add("味方陣形").add("敵陣形")
+            .add("制空権")
+            .add("味方触接")
+            .add("敵触接")
+            .add("敵艦隊")
+            .add("ドロップ艦種").add("ドロップ艦娘")
+            .add("味方艦1").add("味方艦1HP")
+            .add("味方艦2").add("味方艦2HP")
+            .add("味方艦3").add("味方艦3HP")
+            .add("味方艦4").add("味方艦4HP")
+            .add("味方艦5").add("味方艦5HP")
+            .add("味方艦6").add("味方艦6HP")
+            .add("味方艦7").add("味方艦7HP")
+            .add("味方艦8").add("味方艦8HP")
+            .add("味方艦9").add("味方艦9HP")
+            .add("味方艦10").add("味方艦10HP")
+            .add("味方艦11").add("味方艦11HP")
+            .add("味方艦12").add("味方艦12HP")
+            .add("敵艦1").add("敵艦1HP")
+            .add("敵艦2").add("敵艦2HP")
+            .add("敵艦3").add("敵艦3HP")
+            .add("敵艦4").add("敵艦4HP")
+            .add("敵艦5").add("敵艦5HP")
+            .add("敵艦6").add("敵艦6HP")
+            .add("敵艦7").add("敵艦7HP")
+            .add("敵艦8").add("敵艦8HP")
+            .add("敵艦9").add("敵艦9HP")
+            .add("敵艦10").add("敵艦10HP")
+            .add("敵艦11").add("敵艦11HP")
+            .add("敵艦12").add("敵艦12HP")
+            .add("ドロップアイテム")
+            .add("艦娘経験値")
+            .add("提督経験値")
+            .toString();
     }
 
     @Override
@@ -107,12 +106,12 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
         Format format = new Format();
         format.日付 = log.getTime();
         format.海域 = new StringBuilder(32)
-                .append(log.getNext().get(0).getMapareaId())
-                .append("-")
-                .append(log.getNext().get(0).getMapinfoNo())
-                .append(" ")
-                .append(result.getQuestName())
-                .toString();
+            .append(log.getNext().get(0).getMapareaId())
+            .append("-")
+            .append(log.getNext().get(0).getMapinfoNo())
+            .append(" ")
+            .append(result.getQuestName())
+            .toString();
         format.マス = String.valueOf(log.getNext().get(log.getNext().size() - 1).getNo());
         format.ボス = bossText.apply(log);
         format.ランク = result.getWinRank();
@@ -126,14 +125,14 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
             if (kouku != null && kouku.getStage1() != null) {
                 Stage1 stage1 = kouku.getStage1();
                 Map<Integer, SlotitemMst> slotitemMst = SlotitemMstCollection.get()
-                        .getSlotitemMap();
+                    .getSlotitemMap();
                 format.制空権 = BattleTypes.DispSeiku.toDispSeiku(stage1.getDispSeiku()).toString();
                 format.味方触接 = Optional.ofNullable(slotitemMst.get(stage1.getTouchPlane().get(0)))
-                        .map(SlotitemMst::getName)
-                        .orElse("");
+                    .map(SlotitemMst::getName)
+                    .orElse("");
                 format.敵触接 = Optional.ofNullable(slotitemMst.get(stage1.getTouchPlane().get(1)))
-                        .map(SlotitemMst::getName)
-                        .orElse("");
+                    .map(SlotitemMst::getName)
+                    .orElse("");
             }
         }
         format.敵艦隊 = result.getEnemyInfo().getDeckName();
@@ -173,7 +172,7 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
                     if (ship != null) {
                         format.味方艦[i + 6] = Ships.toName(ship);
                         format.味方艦HP[i + 6] = combinedBattle.getFNowHpsCombined().get(i) + "/"
-                                + combinedBattle.getFMaxHpsCombined().get(i);
+                            + combinedBattle.getFMaxHpsCombined().get(i);
                     }
                 }
             }
@@ -183,8 +182,8 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
         for (int i = 0; i < 6; i++) {
             if (enemyFleet.size() > i) {
                 ShipMst shipMst = ShipMstCollection.get()
-                        .getShipMap()
-                        .get(enemyFleet.get(i));
+                    .getShipMap()
+                    .get(enemyFleet.get(i));
 
                 if (shipMst != null) {
                     String flagship = shipMst.getYomi();
@@ -204,8 +203,8 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
             for (int i = 0; i < 6; i++) {
                 if (enemyFleetCombined.size() > i) {
                     ShipMst shipMst = ShipMstCollection.get()
-                            .getShipMap()
-                            .get(enemyFleetCombined.get(i));
+                        .getShipMap()
+                        .get(enemyFleetCombined.get(i));
 
                     if (shipMst != null) {
                         String flagship = shipMst.getYomi();
@@ -217,28 +216,28 @@ public class BattleResultLogFormat extends LogFormatBase<BattleLog> {
                         }
                         format.敵艦[i + 6] = name;
                         format.敵艦HP[i + 6] = ((ICombinedEcBattle) battle).getENowHpsCombined().get(i) + "/"
-                                + ((ICombinedEcBattle) battle).getEMaxHpsCombined().get(i);
+                            + ((ICombinedEcBattle) battle).getEMaxHpsCombined().get(i);
                     }
                 }
             }
         }
         // ドロップアイテム
         format.ドロップアイテム = Optional.ofNullable(result.getGetUseitem())
-                .map(BattleResult.Useitem::getUseitemId)
-                .map(id -> Optional.ofNullable(UseitemMstCollection.get().getUseitemMap().get(id)))
-                .map(o -> o.map(UseitemMst::getName).orElse("不明"))
-                .orElse("");
+            .map(BattleResult.Useitem::getUseitemId)
+            .map(id -> Optional.ofNullable(UseitemMstCollection.get().getUseitemMap().get(id)))
+            .map(o -> o.map(UseitemMst::getName).orElse("不明"))
+            .orElse("");
         // 経験値
         format.艦娘経験値 = Integer.toString(result.getGetShipExp().stream()
+            .mapToInt(Integer::intValue)
+            .filter(i -> i > 0)
+            .sum()
+            + Optional.ofNullable(result.getGetShipExpCombined())
+            .map(v -> v.stream()
                 .mapToInt(Integer::intValue)
                 .filter(i -> i > 0)
-                .sum()
-                + Optional.ofNullable(result.getGetShipExpCombined())
-                        .map(v -> v.stream()
-                                .mapToInt(Integer::intValue)
-                                .filter(i -> i > 0)
-                                .sum())
-                        .orElse(0));
+                .sum())
+            .orElse(0));
         format.提督経験値 = String.valueOf(result.getGetExp());
         return format.toString();
     }

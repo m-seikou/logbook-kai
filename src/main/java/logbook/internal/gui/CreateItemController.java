@@ -71,66 +71,93 @@ import lombok.val;
 
 /**
  * 開発ログ
- *
  */
 public class CreateItemController extends WindowController {
 
     @FXML
     private SplitPane splitPane;
 
-    /** 集計 */
+    /**
+     * 集計
+     */
     @FXML
     private TreeTableView<CreateItemCollect> collect;
 
-    /** 集計 */
+    /**
+     * 集計
+     */
     @FXML
     private TreeTableColumn<CreateItemCollect, String> unit;
 
-    /** 件数 */
+    /**
+     * 件数
+     */
     @FXML
     private TreeTableColumn<CreateItemCollect, Integer> count;
 
-    /** 割合 */
+    /**
+     * 割合
+     */
     @FXML
     private TreeTableColumn<CreateItemCollect, String> ratio;
 
-    /** トグルボタン */
+    /**
+     * トグルボタン
+     */
     @FXML
     private ToggleGroup group;
 
-    /** 装備→投入資材 */
+    /**
+     * 装備→投入資材
+     */
     @FXML
     private ToggleButton buttonItemRecipe;
 
-    /** 投入資材→装備 */
+    /**
+     * 投入資材→装備
+     */
     @FXML
     private ToggleButton buttonRecipeItem;
 
-    /** 明細 */
+    /**
+     * 明細
+     */
     @FXML
     private TableView<CreateItem> detail;
 
-    /** 行番号 */
+    /**
+     * 行番号
+     */
     @FXML
     private TableColumn<BattleLogDetail, Integer> row;
 
-    /** 日付 */
+    /**
+     * 日付
+     */
     @FXML
     private TableColumn<CreateItem, String> date;
 
-    /** 装備 */
+    /**
+     * 装備
+     */
     @FXML
     private TableColumn<CreateItem, String> item;
 
-    /** 種類 */
+    /**
+     * 種類
+     */
     @FXML
     private TableColumn<CreateItem, String> type;
 
-    /** 投入資材 */
+    /**
+     * 投入資材
+     */
     @FXML
     private TableColumn<CreateItem, Recipe> recipe;
 
-    /** 秘書艦 */
+    /**
+     * 秘書艦
+     */
     @FXML
     private TableColumn<CreateItem, String> secretary;
 
@@ -172,10 +199,10 @@ public class CreateItemController extends WindowController {
                 return true;
             });
             this.collect.getSelectionModel()
-                    .selectedItemProperty()
-                    .addListener(this::detail);
+                .selectedItemProperty()
+                .addListener(this::detail);
             this.group.selectedToggleProperty()
-                    .addListener(this::changeType);
+                .addListener(this::changeType);
             this.setCollect(this.buttonItemRecipe);
             loadConfig();
             TreeTableTool.setVisible(this.collect, this.getClass() + "#" + "collect");
@@ -183,13 +210,13 @@ public class CreateItemController extends WindowController {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
     }
-    
+
     private void sortItems(List<TreeTableColumn<CreateItemCollect, ?>> sortOrder, List<TreeItem<CreateItemCollect>> items) {
         items.sort((o1, o2) -> {
             CreateItemCollect c1 = o1.getValue();
             CreateItemCollect c2 = o2.getValue();
             int diff = 0;
-            for (TreeTableColumn<CreateItemCollect, ?> order: sortOrder) {
+            for (TreeTableColumn<CreateItemCollect, ?> order : sortOrder) {
                 if (order == this.unit) {
                     diff = c1.getUnit().compareTo(c2.getUnit());
                 } else if (order == this.count) {
@@ -231,7 +258,7 @@ public class CreateItemController extends WindowController {
     void columnVisibleDetail(ActionEvent event) {
         try {
             TableTool.showVisibleSetting(this.detail, this.getClass() + "#" + "detail",
-                    this.getWindow());
+                this.getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -239,29 +266,31 @@ public class CreateItemController extends WindowController {
 
     /**
      * 集計単位からアイコンを引くためのMap
+     *
      * @return type3
      */
     private Map<String, SlotitemMst> unitToType3() {
         val type2To3 = SlotitemMstCollection.get().getSlotitemMap()
-                .values()
-                .stream()
-                .collect(toMap(item -> item.getType().get(2), Function.identity(), (a, b) -> a));
+            .values()
+            .stream()
+            .collect(toMap(item -> item.getType().get(2), Function.identity(), (a, b) -> a));
         Map<String, SlotitemMst> unitToType3 = SlotitemEquiptypeCollection.get()
-                .getEquiptypeMap()
+            .getEquiptypeMap()
+            .values()
+            .stream()
+            .filter(e -> type2To3.containsKey(e.getId()))
+            .collect(toMap(SlotitemEquiptype::getName, item -> type2To3.get(item.getId())));
+        unitToType3.putAll(
+            SlotitemMstCollection.get().getSlotitemMap()
                 .values()
                 .stream()
-                .filter(e -> type2To3.containsKey(e.getId()))
-                .collect(toMap(SlotitemEquiptype::getName, item -> type2To3.get(item.getId())));
-        unitToType3.putAll(
-                SlotitemMstCollection.get().getSlotitemMap()
-                        .values()
-                        .stream()
-                        .collect(toMap(SlotitemMst::getName, Function.identity(), (a, b) -> a)));
+                .collect(toMap(SlotitemMst::getName, Function.identity(), (a, b) -> a)));
         return unitToType3;
     }
 
     /**
      * 集計する
+     *
      * @param button 集計タイプ
      */
     private void setCollect(Toggle button) {
@@ -270,41 +299,41 @@ public class CreateItemController extends WindowController {
         try {
             List<CreateItem> logs;
             Map<String, Integer> map = SlotitemEquiptypeCollection.get().getEquiptypeMap().values().stream()
-                .collect(Collectors.toMap(SlotitemEquiptype::getName, SlotitemEquiptype::getId)); 
+                .collect(Collectors.toMap(SlotitemEquiptype::getName, SlotitemEquiptype::getId));
             try (Stream<String> lines = Files.lines(logFile, LogWriter.DEFAULT_CHARSET)) {
                 logs = lines.skip(1)
-                        .map(CreateItem::parse)
-                        .filter(Objects::nonNull)
-                        .map(item -> item.setEquipType(map.getOrDefault(item.getType(), -1)))
-                        .collect(toList());
+                    .map(CreateItem::parse)
+                    .filter(Objects::nonNull)
+                    .map(item -> item.setEquipType(map.getOrDefault(item.getType(), -1)))
+                    .collect(toList());
             }
 
             Map<Recipe, Long> count = logs.stream()
-                    .collect(groupingBy(CreateItem::getRecipe, counting()));
+                .collect(groupingBy(CreateItem::getRecipe, counting()));
 
             Map<?, ?> grouping = Collections.emptyMap();
             CreateItemCollect rootCollect = new CreateItemCollect();
             if (button == this.buttonItemRecipe) {
                 rootCollect.setUnit("全件 (成功のみ)");
                 grouping = logs.stream()
-                        .filter(item -> !item.getItem().isEmpty())
-                        .sorted(Comparator.comparing(CreateItem::getEquipType)
-                                .thenComparing(CreateItem::getItem)
-                                .thenComparing(CreateItem::getRecipe))
-                        .collect(groupingBy((item) -> Tuple.of(item.getEquipType(), item.getType()), LinkedHashMap::new,
-                                groupingBy(CreateItem::getItem, LinkedHashMap::new,
-                                        groupingBy(CreateItem::getRecipe, LinkedHashMap::new,
-                                                toList()))));
+                    .filter(item -> !item.getItem().isEmpty())
+                    .sorted(Comparator.comparing(CreateItem::getEquipType)
+                        .thenComparing(CreateItem::getItem)
+                        .thenComparing(CreateItem::getRecipe))
+                    .collect(groupingBy((item) -> Tuple.of(item.getEquipType(), item.getType()), LinkedHashMap::new,
+                        groupingBy(CreateItem::getItem, LinkedHashMap::new,
+                            groupingBy(CreateItem::getRecipe, LinkedHashMap::new,
+                                toList()))));
             }
             if (button == this.buttonRecipeItem) {
                 rootCollect.setUnit("全件 (失敗も含む)");
                 grouping = logs.stream()
-                        .sorted(Comparator.comparing(CreateItem::getRecipe)
-                                .thenComparing(CreateItem::getType)
-                                .thenComparing(CreateItem::getItem))
-                        .collect(groupingBy(CreateItem::getRecipe, LinkedHashMap::new,
-                                groupingBy(CreateItem::getItem, LinkedHashMap::new,
-                                        toList())));
+                    .sorted(Comparator.comparing(CreateItem::getRecipe)
+                        .thenComparing(CreateItem::getType)
+                        .thenComparing(CreateItem::getItem))
+                    .collect(groupingBy(CreateItem::getRecipe, LinkedHashMap::new,
+                        groupingBy(CreateItem::getItem, LinkedHashMap::new,
+                            toList())));
             }
 
             TreeItem<CreateItemCollect> root = this.collect.getRoot();
@@ -327,6 +356,7 @@ public class CreateItemController extends WindowController {
 
     /**
      * 左ペインに表示するツリーを構築する
+     *
      * @param parent
      * @param count
      * @param recipe
@@ -334,9 +364,9 @@ public class CreateItemController extends WindowController {
      */
     @SuppressWarnings("unchecked")
     private void setUnit(TreeItem<CreateItemCollect> parent,
-            Map<Recipe, Long> count,
-            Recipe recipe,
-            Map<?, ?> grouping) {
+                         Map<Recipe, Long> count,
+                         Recipe recipe,
+                         Map<?, ?> grouping) {
         for (val entry : grouping.entrySet()) {
             Object key = entry.getKey();
             Object value = entry.getValue();
@@ -344,7 +374,7 @@ public class CreateItemController extends WindowController {
             if (key instanceof Recipe) {
                 recipe = (Recipe) key;
             } else if (key instanceof Tuple.Pair) {
-                pair = (Tuple.Pair<Integer, String>)key;
+                pair = (Tuple.Pair<Integer, String>) key;
             }
             CreateItemCollect item = new CreateItemCollect();
             if ("".equals(key)) {
@@ -362,10 +392,10 @@ public class CreateItemController extends WindowController {
                 int size = rows.size();
                 long total = count.get(recipe);
                 double ratio = BigDecimal.valueOf(size)
-                        .divide(BigDecimal.valueOf(total), 4, RoundingMode.FLOOR)
-                        .multiply(BigDecimal.valueOf(100))
-                        .setScale(2)
-                        .doubleValue();
+                    .divide(BigDecimal.valueOf(total), 4, RoundingMode.FLOOR)
+                    .multiply(BigDecimal.valueOf(100))
+                    .setScale(2)
+                    .doubleValue();
                 item.setCount(size);
                 item.setRatio(ratio);
 
@@ -383,7 +413,7 @@ public class CreateItemController extends WindowController {
             }
         }
     }
-    
+
     private static void setCount(TreeItem<CreateItemCollect> item) {
         item.getValue().setCount(item.getChildren().stream().map(TreeItem::getValue).mapToInt(CreateItemCollect::getCount).sum());
     }
@@ -407,17 +437,17 @@ public class CreateItemController extends WindowController {
      * 右ペインに詳細表示するリスナー
      *
      * @param observable 値が変更されたObservableValue
-     * @param oldValue 古い値
-     * @param value 新しい値
+     * @param oldValue   古い値
+     * @param value      新しい値
      */
     private void detail(ObservableValue<? extends TreeItem<CreateItemCollect>> observable,
-            TreeItem<CreateItemCollect> oldValue, TreeItem<CreateItemCollect> value) {
+                        TreeItem<CreateItemCollect> oldValue, TreeItem<CreateItemCollect> value) {
         if (value != null) {
             this.detailItems.clear();
             addItems(this.detailItems, value);
         }
     }
-    
+
     private void addItems(List<CreateItem> list, TreeItem<CreateItemCollect> value) {
         Optional<List<CreateItem>> v = Optional.ofNullable(this.detailList.get(value.getValue()));
         if (v.isPresent()) {
@@ -431,11 +461,11 @@ public class CreateItemController extends WindowController {
      * 集計タイプの変更
      *
      * @param observable 値が変更されたObservableValue
-     * @param oldValue 古い値
-     * @param value 新しい値
+     * @param oldValue   古い値
+     * @param value      新しい値
      */
     private void changeType(ObservableValue<? extends Toggle> observable,
-            Toggle oldValue, Toggle value) {
+                            Toggle oldValue, Toggle value) {
         this.setCollect(value);
         saveConfig();
     }
@@ -495,26 +525,39 @@ public class CreateItemController extends WindowController {
      */
     public static class CreateItem {
 
-        /** 日付 */
+        /**
+         * 日付
+         */
         private StringProperty date = new SimpleStringProperty();
 
-        /** 装備 */
+        /**
+         * 装備
+         */
         private StringProperty item = new SimpleStringProperty();
 
-        /** 種類 */
+        /**
+         * 種類
+         */
         private StringProperty type = new SimpleStringProperty();
 
-        /** 投入資材 */
+        /**
+         * 投入資材
+         */
         private ObjectProperty<Recipe> recipe = new SimpleObjectProperty<Recipe>();
 
-        /** 秘書艦 */
+        /**
+         * 秘書艦
+         */
         private StringProperty secretary = new SimpleStringProperty();
 
-        /** SlotitemEquiptype */
+        /**
+         * SlotitemEquiptype
+         */
         private int equipType;
-        
+
         /**
          * 日付を取得します。
+         *
          * @return 日付
          */
         public StringProperty dateProperty() {
@@ -523,6 +566,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 日付を取得します。
+         *
          * @return 日付
          */
         public String getDate() {
@@ -531,6 +575,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 日付を設定します。
+         *
          * @param date 日付
          */
         public void setDate(String date) {
@@ -539,6 +584,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 装備を取得します。
+         *
          * @return 装備
          */
         public StringProperty itemProperty() {
@@ -547,6 +593,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 装備を取得します。
+         *
          * @return 装備
          */
         public String getItem() {
@@ -555,6 +602,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 装備を設定します。
+         *
          * @param item 装備
          */
         public void setItem(String item) {
@@ -563,6 +611,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 種類を取得します。
+         *
          * @return 種類
          */
         public StringProperty typeProperty() {
@@ -571,6 +620,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 種類を取得します。
+         *
          * @return 種類
          */
         public String getType() {
@@ -579,6 +629,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 種類を設定します。
+         *
          * @param type 種類
          */
         public void setType(String type) {
@@ -587,6 +638,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 投入資材を取得します。
+         *
          * @return 投入資材
          */
         public ObjectProperty<Recipe> recipeProperty() {
@@ -595,6 +647,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 投入資材を取得します。
+         *
          * @return 投入資材
          */
         public Recipe getRecipe() {
@@ -603,6 +656,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 投入資材を設定します。
+         *
          * @param recipe 投入資材
          */
         public void setRecipe(Recipe recipe) {
@@ -611,6 +665,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 秘書艦を取得します。
+         *
          * @return 秘書艦
          */
         public StringProperty secretaryProperty() {
@@ -619,6 +674,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 秘書艦を取得します。
+         *
          * @return 秘書艦
          */
         public String getSecretary() {
@@ -627,6 +683,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 秘書艦を設定します。
+         *
          * @param secretary 秘書艦
          */
         public void setSecretary(String secretary) {
@@ -645,12 +702,12 @@ public class CreateItemController extends WindowController {
         @Override
         public String toString() {
             return new StringJoiner("\t")
-                    .add(this.date.get())
-                    .add(this.item.get())
-                    .add(this.type.get())
-                    .add(String.valueOf(this.recipe.get()))
-                    .add(this.secretary.get())
-                    .toString();
+                .add(this.date.get())
+                .add(this.item.get())
+                .add(this.type.get())
+                .add(String.valueOf(this.recipe.get()))
+                .add(this.secretary.get())
+                .toString();
         }
 
         public static CreateItem parse(String line) {
@@ -674,20 +731,29 @@ public class CreateItemController extends WindowController {
      */
     public static class CreateItemCollect {
 
-        /** 単位 */
+        /**
+         * 単位
+         */
         private StringProperty unit = new SimpleStringProperty();
 
-        /** 回数 */
+        /**
+         * 回数
+         */
         private IntegerProperty count = new SimpleIntegerProperty();
 
-        /** 割合 */
+        /**
+         * 割合
+         */
         private Double ratio;
-        
-        /** ソート順 */
+
+        /**
+         * ソート順
+         */
         private int sortOrder;
 
         /**
          * 単位を取得します。
+         *
          * @return 単位
          */
         public StringProperty unitProperty() {
@@ -696,6 +762,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 単位を取得します。
+         *
          * @return 単位
          */
         public String getUnit() {
@@ -704,6 +771,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 単位を設定します。
+         *
          * @param unit 単位
          */
         public void setUnit(String unit) {
@@ -712,6 +780,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 回数を取得します。
+         *
          * @return 回数
          */
         public IntegerProperty countProperty() {
@@ -720,6 +789,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 回数を取得します。
+         *
          * @return 回数
          */
         public int getCount() {
@@ -728,6 +798,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 回数を設定します。
+         *
          * @param count 回数
          */
         public void setCount(int count) {
@@ -736,6 +807,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 割合を取得します。
+         *
          * @return 割合
          */
         public StringProperty ratioProperty() {
@@ -744,6 +816,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 割合を取得します。
+         *
          * @return 割合
          */
         public Double getRatio() {
@@ -752,6 +825,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * 割合を設定します。
+         *
          * @param ratio 割合
          */
         public void setRatio(Double ratio) {
@@ -760,6 +834,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * ソート順を取得します。
+         *
          * @return ソート順
          */
         public int getSortOrder() {
@@ -768,6 +843,7 @@ public class CreateItemController extends WindowController {
 
         /**
          * ソート順を設定します。
+         *
          * @param sortOrder ソート順
          */
         public void setSortOrder(int sortOrder) {
@@ -781,16 +857,24 @@ public class CreateItemController extends WindowController {
     @EqualsAndHashCode
     private static class Recipe implements Comparable<Recipe> {
 
-        /** 燃料 */
+        /**
+         * 燃料
+         */
         private final int fuel;
 
-        /** 弾薬 */
+        /**
+         * 弾薬
+         */
         private final int ammo;
 
-        /** 鋼材 */
+        /**
+         * 鋼材
+         */
         private final int metal;
 
-        /** ボーキサイト */
+        /**
+         * ボーキサイト
+         */
         private int bauxite;
 
         public Recipe(String fuel, String ammo, String metal, String bauxite) {

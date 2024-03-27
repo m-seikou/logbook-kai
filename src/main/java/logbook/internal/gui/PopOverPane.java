@@ -13,7 +13,6 @@ import logbook.internal.LoggerHolder;
 
 /**
  * {@link PopOver}のルートノードとして使用する。
- *
  */
 public class PopOverPane extends VBox {
 
@@ -28,7 +27,7 @@ public class PopOverPane extends VBox {
      * タイトルと内容テキストを持つ{@code PopOverPane}を作成します。
      *
      * @param title タイトル
-     * @param text 内容テキスト
+     * @param text  内容テキスト
      */
     public PopOverPane(String title, String text) {
         this(title, new Label(text));
@@ -37,7 +36,7 @@ public class PopOverPane extends VBox {
     /**
      * タイトルと内容ノードを持つ{@code PopOverPane}を作成します。
      *
-     * @param title タイトル
+     * @param title   タイトル
      * @param graphic 内容ノード
      */
     public PopOverPane(String title, Node graphic) {

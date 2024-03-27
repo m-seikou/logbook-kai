@@ -12,7 +12,6 @@ import logbook.internal.LoggerHolder;
 
 /**
  * Stage1 詳細
- *
  */
 public class BattleDetailPhaseStage1 extends VBox {
 
@@ -48,10 +47,11 @@ public class BattleDetailPhaseStage1 extends VBox {
     private Label dispSeiku;
 
     /**
-    * Stage1 詳細
-    * @param stage1 stage1
-    * @param friendName 味方の名前(僚艦/基地航空隊 等)
-    */
+     * Stage1 詳細
+     *
+     * @param stage1     stage1
+     * @param friendName 味方の名前(僚艦/基地航空隊 等)
+     */
     public BattleDetailPhaseStage1(Stage1 stage1, String friendName) {
         this.stage1 = stage1;
         this.friendName = friendName;

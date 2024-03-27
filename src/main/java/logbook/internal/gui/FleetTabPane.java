@@ -304,17 +304,17 @@ public class FleetTabPane extends ScrollPane {
      */
     public void update() {
         Map<Integer, Ship> shipMap = ShipCollection.get()
-                .getShipMap();
+            .getShipMap();
         this.shipList = this.port.getShip()
-                .stream()
-                .map(shipMap::get)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+            .stream()
+            .map(shipMap::get)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
 
         int ndocksHashCode = NdockCollection.get().getNdockSet().hashCode();
 
         if (this.portHashCode != this.port.hashCode() || this.shipsHashCode != this.shipList.hashCode()
-                || this.ndocksHashCode != ndocksHashCode || this.combinedFlag != AppCondition.get().isCombinedFlag()) {
+            || this.ndocksHashCode != ndocksHashCode || this.combinedFlag != AppCondition.get().isCombinedFlag()) {
             this.updateShips();
             this.portHashCode = this.port.hashCode();
             this.shipsHashCode = this.shipList.hashCode();
@@ -346,13 +346,13 @@ public class FleetTabPane extends ScrollPane {
             Path path = Ships.shipStandingPoseImagePath(ship);
             if (path != null) {
                 String sb = "-fx-background-image: url('" + path.toUri() + "');" +
-                        "-fx-background-position: " +
-                        Ships.shipMst(ship)
-                                .map(ShipMst::getId)
-                                .flatMap(id -> Optional.ofNullable(ShipgraphCollection.get().getShipgraphMap().get(id)))
-                                .map(g -> ((g.getWeda().get(0) * -1) + 100) + "px " + (g.getWeda().get(1) * -1) + "px")
-                                .orElse("center top") +
-                        ";";
+                    "-fx-background-position: " +
+                    Ships.shipMst(ship)
+                        .map(ShipMst::getId)
+                        .flatMap(id -> Optional.ofNullable(ShipgraphCollection.get().getShipgraphMap().get(id)))
+                        .map(g -> ((g.getWeda().get(0) * -1) + 100) + "px " + (g.getWeda().get(1) * -1) + "px")
+                        .orElse("center top") +
+                    ";";
                 this.setStyle(sb);
                 this.pseudoClassStateChanged(PseudoClass.getPseudoClass("enablebgimage"), true);
             } else {
@@ -367,17 +367,17 @@ public class FleetTabPane extends ScrollPane {
         this.message.setText(this.port.getName());
 
         List<Ship> withoutEscape = this.shipList.stream()
-                .filter(s -> !Ships.isEscape(s))
-                .collect(Collectors.toList());
+            .filter(s -> !Ships.isEscape(s))
+            .collect(Collectors.toList());
 
         // 制空値
         this.airSuperiority
-                .setText(Integer.toString(withoutEscape.stream()
-                        .mapToInt(Ships::airSuperiority)
-                        .sum()));
+            .setText(Integer.toString(withoutEscape.stream()
+                .mapToInt(Ships::airSuperiority)
+                .sum()));
         // 触接開始率
         this.touchPlaneStartProbability
-                .setText((int) Math.floor(Ships.touchPlaneStartProbability(withoutEscape) * 100) + "%");
+            .setText((int) Math.floor(Ships.touchPlaneStartProbability(withoutEscape) * 100) + "%");
         // 判定式(33)
         this.setDecision33();
         // 艦娘レベル計
@@ -416,8 +416,8 @@ public class FleetTabPane extends ScrollPane {
         ObservableList<Node> children = this.ships.getChildren();
         children.clear();
         this.shipList.stream()
-                .map(FleetTabShipPane::new)
-                .forEach(children::add);
+            .map(FleetTabShipPane::new)
+            .forEach(children::add);
 
         String left;
         String right;
@@ -439,8 +439,8 @@ public class FleetTabPane extends ScrollPane {
             left = Optional.ofNullable(conf.getTabColorNoDamage()).map(String::trim).filter(color -> color.length() > 0).orElse(null);
         }
         if (this.shipList.stream()
-                .anyMatch(ship -> !ship.getFuel().equals(Ships.shipMst(ship).map(ShipMst::getFuelMax).orElse(0)) ||
-                        !ship.getBull().equals(Ships.shipMst(ship).map(ShipMst::getBullMax).orElse(0)))) {
+            .anyMatch(ship -> !ship.getFuel().equals(Ships.shipMst(ship).map(ShipMst::getFuelMax).orElse(0)) ||
+                !ship.getBull().equals(Ships.shipMst(ship).map(ShipMst::getBullMax).orElse(0)))) {
             // 未補給時
             right = Optional.ofNullable(conf.getTabColorNeedRefuel()).map(String::trim).filter(color -> color.length() > 0).orElse("#FFF030");
         } else if (this.port.getId() > 1 && this.port.getMission().get(0) == 0L && (this.port.getId() != 2 || !AppCondition.get().isCombinedFlag())) {
@@ -455,14 +455,14 @@ public class FleetTabPane extends ScrollPane {
             this.tabStyle = "";
         } else {
             this.tabStyle = "-fx-background-color: -fx-outer-border, -fx-text-box-border, linear-gradient(from 40% 0% to 70% 100%, "
-                    + l.orElse("-fx-color") + ", " + r.orElse("-fx-color") + ");";
+                + l.orElse("-fx-color") + ", " + r.orElse("-fx-color") + ");";
         }
 
         // 疲労
         int minCond = this.shipList.stream()
-                .mapToInt(Ship::getCond)
-                .min()
-                .orElse(49);
+            .mapToInt(Ship::getCond)
+            .min()
+            .orElse(49);
         this.condRecoverEpoch = Long.MAX_VALUE;
         if (minCond < 49) {
 
@@ -482,7 +482,7 @@ public class FleetTabPane extends ScrollPane {
                 this.cond.setText(format.format(disp));
                 // 未出撃の時のみ通知する
                 if (AppConfig.get().isUseCondRecoverToast() && !AppCondition.get().isMapStart()
-                        && this.port.getMission().get(0).intValue() == 0) {  // (0=未出撃, 1=遠征中, 2=遠征帰還, 3=遠征中止)
+                    && this.port.getMission().get(0).intValue() == 0) {  // (0=未出撃, 1=遠征中, 2=遠征帰還, 3=遠征中止)
                     this.condRecoverEpoch = end;
                 }
             } else {
@@ -503,12 +503,12 @@ public class FleetTabPane extends ScrollPane {
         this.decision33.setText(String.format("%03.3f", decision33.get()));
         PopOver<Ships.Decision33> popover = new PopOver<>((node, data) -> {
             String content = new StringJoiner("\n")
-                    .add("判定式(33):" + data.get() + "(分岐点係数:" + data.getBranchCoefficient() + ")")
-                    .add("装備索敵:" + data.getItemView())
-                    .add("艦娘索敵:" + data.getShipView())
-                    .add("司令部スコア:" + data.getLevelScore())
-                    .add("艦隊スコア:" + data.getFleetScore())
-                    .toString();
+                .add("判定式(33):" + data.get() + "(分岐点係数:" + data.getBranchCoefficient() + ")")
+                .add("装備索敵:" + data.getItemView())
+                .add("艦娘索敵:" + data.getShipView())
+                .add("司令部スコア:" + data.getLevelScore())
+                .add("艦隊スコア:" + data.getFleetScore())
+                .toString();
             return new PopOverPane("判定式(33)", content);
         });
         popover.install(this.decision33, decision33);

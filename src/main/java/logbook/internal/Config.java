@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * アプリケーションの設定を読み書きします
- *
  */
 public final class Config {
 
@@ -46,9 +45,9 @@ public final class Config {
     /**
      * clazzで指定された型からインスタンスを復元します
      *
-     * @param <T> Bean型
+     * @param <T>   Bean型
      * @param clazz Bean型 Classオブジェクト
-     * @param def デフォルト値を供給するSupplier
+     * @param def   デフォルト値を供給するSupplier
      * @return 設定
      */
     @SuppressWarnings("unchecked")
@@ -71,7 +70,7 @@ public final class Config {
      */
     public synchronized void store() {
         this.map.entrySet()
-                .forEach(this::store);
+            .forEach(this::store);
     }
 
     private void store(Entry<Class<?>, ?> entry) {
@@ -81,7 +80,8 @@ public final class Config {
     private <T> T read(Class<T> clazz) {
         T instance = null;
         try {
-            tryRead: {
+            tryRead:
+            {
                 Path filepath = this.jsonPath(clazz);
                 // 通常ファイル読み込み
                 if (Files.isReadable(filepath) && (Files.size(filepath) > 0)) {

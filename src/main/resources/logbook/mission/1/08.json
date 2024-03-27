@@ -1,12 +1,26 @@
 /*観艦式*/
 {
-    "operator": "AND",
-    "conditions": [
-        {"type": "艦娘", "level": 6, "order": 1},
-        {"type": "艦娘"},
-        {"type": "艦娘"},
-        {"type": "艦娘"},
-        {"type": "艦娘"},
-        {"type": "艦娘"}
-    ]
+  "operator": "AND",
+  "conditions": [
+    {
+      "type": "艦娘",
+      "level": 6,
+      "order": 1
+    },
+    {
+      "type": "艦娘"
+    },
+    {
+      "type": "艦娘"
+    },
+    {
+      "type": "艦娘"
+    },
+    {
+      "type": "艦娘"
+    },
+    {
+      "type": "艦娘"
+    }
+  ]
 }

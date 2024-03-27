@@ -12,108 +12,170 @@ import lombok.Data;
 
 /**
  * 戦闘結果
- *
  */
 @Data
 public class BattleResult implements Serializable {
 
     private static final long serialVersionUID = 2163846602385545034L;
 
-    /** api_win_rank */
+    /**
+     * api_win_rank
+     */
     private String winRank;
 
-    /** api_get_exp */
+    /**
+     * api_get_exp
+     */
     private Integer getExp;
 
-    /** api_mvp */
+    /**
+     * api_mvp
+     */
     private Integer mvp;
 
-    /** api_member_lv */
+    /**
+     * api_member_lv
+     */
     private Integer memberLv;
 
-    /** api_member_exp */
+    /**
+     * api_member_exp
+     */
     private Integer memberExp;
 
-    /** api_get_base_exp */
+    /**
+     * api_get_base_exp
+     */
     private Integer getBaseExp;
 
-    /** api_get_ship_exp */
+    /**
+     * api_get_ship_exp
+     */
     private List<Integer> getShipExp;
 
-    /** api_get_exp_lvup */
+    /**
+     * api_get_exp_lvup
+     */
     private List<List<Integer>> getExpLvup;
 
-    /** api_dests */
+    /**
+     * api_dests
+     */
     private Integer dests;
 
-    /** api_destsf */
+    /**
+     * api_destsf
+     */
     private Integer destsf;
 
-    /** api_lost_flag */
+    /**
+     * api_lost_flag
+     */
     private List<Integer> lostFlag;
 
-    /** api_quest_name */
+    /**
+     * api_quest_name
+     */
     private String questName;
 
-    /** api_quest_level */
+    /**
+     * api_quest_level
+     */
     private Integer questLevel;
 
-    /** api_enemy_info */
+    /**
+     * api_enemy_info
+     */
     private BattleResult.EnemyInfo enemyInfo;
 
-    /** api_first_clear */
+    /**
+     * api_first_clear
+     */
     private Integer firstClear;
 
-    /** api_mapcell_incentive */
+    /**
+     * api_mapcell_incentive
+     */
     private Boolean mapcellIncentive;
 
-    /** api_get_flag */
+    /**
+     * api_get_flag
+     */
     private List<Integer> getFlag;
 
-    /** api_get_useitem */
+    /**
+     * api_get_useitem
+     */
     private Useitem getUseitem;
 
-    /** api_get_ship */
+    /**
+     * api_get_ship
+     */
     private BattleResult.GetShip getShip;
 
-    /** api_get_eventitem */
+    /**
+     * api_get_eventitem
+     */
     private List<BattleResult.GetEventitem> getEventitem;
 
-    /** api_get_exmap_rate */
+    /**
+     * api_get_exmap_rate
+     */
     private Integer getExmapRate;
 
-    /** api_get_exmap_useitem_id */
+    /**
+     * api_get_exmap_useitem_id
+     */
     private Integer getExmapUseitemId;
 
-    /** api_mvp_combined */
+    /**
+     * api_mvp_combined
+     */
     private Integer mvpCombined;
 
-    /** api_get_ship_exp_combined */
+    /**
+     * api_get_ship_exp_combined
+     */
     private List<Integer> getShipExpCombined;
 
-    /** api_get_exp_lvup_combined */
+    /**
+     * api_get_exp_lvup_combined
+     */
     private List<List<Integer>> getExpLvupCombined;
 
-    /** api_get_eventflag */
+    /**
+     * api_get_eventflag
+     */
     private Integer getEventflag;
 
-    /** api_escape_flag */
+    /**
+     * api_escape_flag
+     */
     private Boolean escapeFlag;
 
-    /** api_escape */
+    /**
+     * api_escape
+     */
     private BattleResult.Escape escape;
 
-    /** api_landing_hp */
+    /**
+     * api_landing_hp
+     */
     private BattleResult.LandingHp landingHp;
 
-    /** api_m1 */
+    /**
+     * api_m1
+     */
     private Integer m1;
 
-    /** api_m2 */
+    /**
+     * api_m2
+     */
     private Integer m2;
 
     /**
      * ギミック1が達成されたかを返します
+     *
      * @return
      */
     @JsonIgnore
@@ -123,6 +185,7 @@ public class BattleResult implements Serializable {
 
     /**
      * ギミック2が達成されたかを返します
+     *
      * @return
      */
     @JsonIgnore
@@ -138,13 +201,19 @@ public class BattleResult implements Serializable {
 
         private static final long serialVersionUID = -1884647867712526970L;
 
-        /** api_level */
+        /**
+         * api_level
+         */
         private String level;
 
-        /** api_rank */
+        /**
+         * api_rank
+         */
         private String rank;
 
-        /** api_deck_name */
+        /**
+         * api_deck_name
+         */
         private String deckName;
 
         /**
@@ -156,9 +225,9 @@ public class BattleResult implements Serializable {
         public static EnemyInfo toEnemyInfo(JsonObject json) {
             EnemyInfo bean = new EnemyInfo();
             JsonHelper.bind(json)
-                    .setString("api_level", bean::setLevel)
-                    .setString("api_rank", bean::setRank)
-                    .setString("api_deck_name", bean::setDeckName);
+                .setString("api_level", bean::setLevel)
+                .setString("api_rank", bean::setRank)
+                .setString("api_deck_name", bean::setDeckName);
             return bean;
         }
     }
@@ -171,16 +240,24 @@ public class BattleResult implements Serializable {
 
         private static final long serialVersionUID = 95363524139607534L;
 
-        /** api_ship_id */
+        /**
+         * api_ship_id
+         */
         private Integer shipId;
 
-        /** api_ship_type */
+        /**
+         * api_ship_type
+         */
         private String shipType;
 
-        /** api_ship_name */
+        /**
+         * api_ship_name
+         */
         private String shipName;
 
-        /** api_ship_getmes */
+        /**
+         * api_ship_getmes
+         */
         private String shipGetmes;
 
         /**
@@ -192,10 +269,10 @@ public class BattleResult implements Serializable {
         public static GetShip toGetShip(JsonObject json) {
             GetShip bean = new GetShip();
             JsonHelper.bind(json)
-                    .setInteger("api_ship_id", bean::setShipId)
-                    .setString("api_ship_type", bean::setShipType)
-                    .setString("api_ship_name", bean::setShipName)
-                    .setString("api_ship_getmes", bean::setShipGetmes);
+                .setInteger("api_ship_id", bean::setShipId)
+                .setString("api_ship_type", bean::setShipType)
+                .setString("api_ship_name", bean::setShipName)
+                .setString("api_ship_getmes", bean::setShipGetmes);
             return bean;
         }
     }
@@ -208,13 +285,19 @@ public class BattleResult implements Serializable {
 
         private static final long serialVersionUID = 3067459493591329375L;
 
-        /** api_type */
+        /**
+         * api_type
+         */
         private Integer type;
 
-        /** api_id */
+        /**
+         * api_id
+         */
         private Integer id;
 
-        /** api_value */
+        /**
+         * api_value
+         */
         private Integer value;
 
         /**
@@ -226,9 +309,9 @@ public class BattleResult implements Serializable {
         public static GetEventitem toGetEventitem(JsonObject json) {
             GetEventitem bean = new GetEventitem();
             JsonHelper.bind(json)
-                    .setInteger("api_type", bean::setType)
-                    .setInteger("api_id", bean::setId)
-                    .setInteger("api_value", bean::setValue);
+                .setInteger("api_type", bean::setType)
+                .setInteger("api_id", bean::setId)
+                .setInteger("api_value", bean::setValue);
             return bean;
         }
     }
@@ -241,10 +324,14 @@ public class BattleResult implements Serializable {
 
         private static final long serialVersionUID = 6425584217371037280L;
 
-        /** api_escape_idx */
+        /**
+         * api_escape_idx
+         */
         private List<Integer> escapeIdx;
 
-        /** api_tow_idx */
+        /**
+         * api_tow_idx
+         */
         private List<Integer> towIdx;
 
         /**
@@ -256,8 +343,8 @@ public class BattleResult implements Serializable {
         public static Escape toEscape(JsonObject json) {
             Escape bean = new Escape();
             JsonHelper.bind(json)
-                    .setIntegerList("api_escape_idx", bean::setEscapeIdx)
-                    .setIntegerList("api_tow_idx", bean::setTowIdx);
+                .setIntegerList("api_escape_idx", bean::setEscapeIdx)
+                .setIntegerList("api_tow_idx", bean::setTowIdx);
             return bean;
         }
     }
@@ -270,13 +357,19 @@ public class BattleResult implements Serializable {
 
         private static final long serialVersionUID = 126264574756473409L;
 
-        /** api_now_hp */
+        /**
+         * api_now_hp
+         */
         private Integer nowHp;
 
-        /** api_max_hp */
+        /**
+         * api_max_hp
+         */
         private Integer maxHp;
 
-        /** api_sub_value */
+        /**
+         * api_sub_value
+         */
         private Integer subValue;
 
         /**
@@ -288,9 +381,9 @@ public class BattleResult implements Serializable {
         public static LandingHp toLandingHp(JsonObject json) {
             LandingHp bean = new LandingHp();
             JsonHelper.bind(json)
-                    .setInteger("api_now_hp", bean::setNowHp)
-                    .setInteger("api_max_hp", bean::setMaxHp)
-                    .setInteger("api_sub_value", bean::setSubValue);
+                .setInteger("api_now_hp", bean::setNowHp)
+                .setInteger("api_max_hp", bean::setMaxHp)
+                .setInteger("api_sub_value", bean::setSubValue);
             return bean;
         }
     }
@@ -303,10 +396,14 @@ public class BattleResult implements Serializable {
 
         private static final long serialVersionUID = 3453865997555376359L;
 
-        /** api_useitem_id*/
+        /**
+         * api_useitem_id
+         */
         private Integer useitemId;
 
-        /** api_useitem_name */
+        /**
+         * api_useitem_name
+         */
         private String useitemName;
 
         /**
@@ -318,8 +415,8 @@ public class BattleResult implements Serializable {
         public static Useitem toUseitem(JsonObject json) {
             Useitem bean = new Useitem();
             JsonHelper.bind(json)
-                    .setInteger("api_useitem_id", bean::setUseitemId)
-                    .setString("api_useitem_name", bean::setUseitemName);
+                .setInteger("api_useitem_id", bean::setUseitemId)
+                .setString("api_useitem_name", bean::setUseitemName);
             return bean;
         }
     }
@@ -333,36 +430,36 @@ public class BattleResult implements Serializable {
     public static BattleResult toBattleResult(JsonObject json) {
         BattleResult bean = new BattleResult();
         JsonHelper.bind(json)
-                .setString("api_win_rank", bean::setWinRank)
-                .setInteger("api_get_exp", bean::setGetExp)
-                .setInteger("api_mvp", bean::setMvp)
-                .setInteger("api_member_lv", bean::setMemberLv)
-                .setInteger("api_member_exp", bean::setMemberExp)
-                .setInteger("api_get_base_exp", bean::setGetBaseExp)
-                .setIntegerList("api_get_ship_exp", bean::setGetShipExp)
-                .set("api_get_exp_lvup", bean::setGetExpLvup, JsonHelper.toList(JsonHelper::toIntegerList))
-                .setInteger("api_dests", bean::setDests)
-                .setInteger("api_destsf", bean::setDestsf)
-                .setString("api_quest_name", bean::setQuestName)
-                .setInteger("api_quest_level", bean::setQuestLevel)
-                .set("api_enemy_info", bean::setEnemyInfo, EnemyInfo::toEnemyInfo)
-                .setInteger("api_first_clear", bean::setFirstClear)
-                .setBoolean("api_mapcell_incentive", bean::setMapcellIncentive)
-                .setIntegerList("api_get_flag", bean::setGetFlag)
-                .set("api_get_useitem", bean::setGetUseitem, Useitem::toUseitem)
-                .set("api_get_ship", bean::setGetShip, GetShip::toGetShip)
-                .set("api_get_eventitem", bean::setGetEventitem, JsonHelper.toList(GetEventitem::toGetEventitem))
-                .setInteger("api_get_exmap_rate", bean::setGetExmapRate)
-                .setInteger("api_get_exmap_useitem_id", bean::setGetExmapUseitemId)
-                .setInteger("api_mvp_combined", bean::setMvpCombined)
-                .setIntegerList("api_get_ship_exp_combined", bean::setGetShipExpCombined)
-                .set("api_get_exp_lvup_combined", bean::setGetExpLvupCombined,
-                        JsonHelper.toList(JsonHelper::toIntegerList))
-                .setInteger("api_get_eventflag", bean::setGetEventflag)
-                .setBoolean("api_escape_flag", bean::setEscapeFlag)
-                .set("api_escape", bean::setEscape, Escape::toEscape)
-                .set("api_landing_hp", bean::setLandingHp, LandingHp::toLandingHp)
-                .setInteger("api_m1", bean::setM1);
+            .setString("api_win_rank", bean::setWinRank)
+            .setInteger("api_get_exp", bean::setGetExp)
+            .setInteger("api_mvp", bean::setMvp)
+            .setInteger("api_member_lv", bean::setMemberLv)
+            .setInteger("api_member_exp", bean::setMemberExp)
+            .setInteger("api_get_base_exp", bean::setGetBaseExp)
+            .setIntegerList("api_get_ship_exp", bean::setGetShipExp)
+            .set("api_get_exp_lvup", bean::setGetExpLvup, JsonHelper.toList(JsonHelper::toIntegerList))
+            .setInteger("api_dests", bean::setDests)
+            .setInteger("api_destsf", bean::setDestsf)
+            .setString("api_quest_name", bean::setQuestName)
+            .setInteger("api_quest_level", bean::setQuestLevel)
+            .set("api_enemy_info", bean::setEnemyInfo, EnemyInfo::toEnemyInfo)
+            .setInteger("api_first_clear", bean::setFirstClear)
+            .setBoolean("api_mapcell_incentive", bean::setMapcellIncentive)
+            .setIntegerList("api_get_flag", bean::setGetFlag)
+            .set("api_get_useitem", bean::setGetUseitem, Useitem::toUseitem)
+            .set("api_get_ship", bean::setGetShip, GetShip::toGetShip)
+            .set("api_get_eventitem", bean::setGetEventitem, JsonHelper.toList(GetEventitem::toGetEventitem))
+            .setInteger("api_get_exmap_rate", bean::setGetExmapRate)
+            .setInteger("api_get_exmap_useitem_id", bean::setGetExmapUseitemId)
+            .setInteger("api_mvp_combined", bean::setMvpCombined)
+            .setIntegerList("api_get_ship_exp_combined", bean::setGetShipExpCombined)
+            .set("api_get_exp_lvup_combined", bean::setGetExpLvupCombined,
+                JsonHelper.toList(JsonHelper::toIntegerList))
+            .setInteger("api_get_eventflag", bean::setGetEventflag)
+            .setBoolean("api_escape_flag", bean::setEscapeFlag)
+            .set("api_escape", bean::setEscape, Escape::toEscape)
+            .set("api_landing_hp", bean::setLandingHp, LandingHp::toLandingHp)
+            .setInteger("api_m1", bean::setM1);
         return bean;
     }
 }

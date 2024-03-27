@@ -7,29 +7,36 @@ import java.util.Optional;
 
 /**
  * Version info
- *
  */
 public final class Version implements Comparable<Version>, Serializable {
 
     private static final long serialVersionUID = 770093260258378309L;
 
-    /** UNKNOWN Version */
+    /**
+     * UNKNOWN Version
+     */
     public static final Version UNKNOWN = new Version(Integer.MAX_VALUE, 0, 0);
 
-    /** major */
+    /**
+     * major
+     */
     private final int major;
 
-    /** minor */
+    /**
+     * minor
+     */
     private final int minor;
 
-    /** revision */
+    /**
+     * revision
+     */
     private final int revision;
 
     /**
      * Version constructor
      *
-     * @param major Major
-     * @param minor Minor
+     * @param major    Major
+     * @param minor    Minor
      * @param revision Revision
      */
     public Version(int major, int minor, int revision) {
@@ -68,6 +75,7 @@ public final class Version implements Comparable<Version>, Serializable {
 
     /**
      * majorを取得します。
+     *
      * @return major
      */
     public int getMajor() {
@@ -76,6 +84,7 @@ public final class Version implements Comparable<Version>, Serializable {
 
     /**
      * minorを取得します。
+     *
      * @return minor
      */
     public int getMinor() {
@@ -84,6 +93,7 @@ public final class Version implements Comparable<Version>, Serializable {
 
     /**
      * revisionを取得します。
+     *
      * @return revision
      */
     public int getRevision() {
@@ -125,12 +135,13 @@ public final class Version implements Comparable<Version>, Serializable {
 
     /**
      * アプリケーションのバージョンを取得します
+     *
      * @return アプリケーションの現在のバージョン
      */
     public static Version getCurrent() {
         String version = Optional.ofNullable(Version.class.getPackage())
-                .map(Package::getImplementationVersion)
-                .orElse(null);
+            .map(Package::getImplementationVersion)
+            .orElse(null);
         if (version == null) {
             return UNKNOWN;
         }

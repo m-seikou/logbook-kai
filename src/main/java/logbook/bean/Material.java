@@ -9,17 +9,20 @@ import lombok.Data;
 
 /**
  * api_material
- *
  */
 @Data
 public class Material implements Serializable {
 
     private static final long serialVersionUID = -6919096591550530580L;
 
-    /** api_id */
+    /**
+     * api_id
+     */
     private Integer id;
 
-    /** api_value */
+    /**
+     * api_value
+     */
     private Integer value;
 
     /**
@@ -31,8 +34,8 @@ public class Material implements Serializable {
     public static Material toMaterial(JsonObject json) {
         Material bean = new Material();
         JsonHelper.bind(json)
-                .setInteger("api_id", bean::setId)
-                .setInteger("api_value", bean::setValue);
+            .setInteger("api_id", bean::setId)
+            .setInteger("api_value", bean::setValue);
         return bean;
     }
 }

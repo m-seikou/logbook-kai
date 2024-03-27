@@ -35,7 +35,7 @@ public class ToStringConverter<T> extends StringConverter<T> {
      * {@link Object#toString()}を使用して{@link StringConverter#toString(Object)}を実装します。
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>ToStringConverter.of(Object::toString)</code>
+     * <code>ToStringConverter.of(Object::toString)</code>
      * </blockquote>
      *
      * @return {@link Object#toString()}によって{@link StringConverter#toString(Object)}が実装された{@link StringConverter}
@@ -46,6 +46,7 @@ public class ToStringConverter<T> extends StringConverter<T> {
 
     /**
      * {@code converter}で指定された{@link Function}を使用して{@link StringConverter#toString(Object)}を実装します
+     *
      * @param converter {@link Function}
      * @return {@code converter}によって{@link StringConverter#toString(Object)}が実装された{@link StringConverter}
      */

@@ -29,7 +29,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_mission/start
- *
  */
 @API("/kcsapi/api_req_mission/start")
 public class ApiReqMissionStart implements APIListenerSpi {
@@ -46,12 +45,12 @@ public class ApiReqMissionStart implements APIListenerSpi {
                 Optional<MissionCondition> condition = Missions.getMissionCondition(missionId);
                 if (condition.isPresent()) {
                     Map<Integer, Ship> shipMap = ShipCollection.get()
-                            .getShipMap();
+                        .getShipMap();
                     List<Ship> fleet = DeckPortCollection.get().getDeckPortMap().get(deckId).getShip()
-                            .stream()
-                            .map(shipMap::get)
-                            .filter(Objects::nonNull)
-                            .collect(Collectors.toList());
+                        .stream()
+                        .map(shipMap::get)
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
 
                     if (!condition.get().test(fleet)) {
                         Integer id = missionId;
@@ -73,19 +72,19 @@ public class ApiReqMissionStart implements APIListenerSpi {
     /**
      * 遠征警告
      *
-     * @param deckId デッキID
+     * @param deckId    デッキID
      * @param missionId 遠征ID
      */
     private static void displayAlert(Integer deckId, Integer missionId) {
         StringBuilder sb = new StringBuilder();
         sb.append("「")
-                .append(DeckPortCollection.get().getDeckPortMap().get(deckId).getName())
-                .append("」")
-                .append("は")
-                .append("「")
-                .append(MissionCollection.get().getMissionMap().get(missionId).getName())
-                .append("」")
-                .append("の条件を満たしていません");
+            .append(DeckPortCollection.get().getDeckPortMap().get(deckId).getName())
+            .append("」")
+            .append("は")
+            .append("「")
+            .append(MissionCollection.get().getMissionMap().get(missionId).getName())
+            .append("」")
+            .append("の条件を満たしていません");
 
         Tools.Controls.showNotify(null, "遠征警告", sb.toString(), Duration.seconds(10));
     }
@@ -93,15 +92,15 @@ public class ApiReqMissionStart implements APIListenerSpi {
     /**
      * 棒読みちゃん連携
      *
-     * @param deckId デッキID
+     * @param deckId    デッキID
      * @param missionId 遠征ID
      */
     private static void sendBouyomi(Integer deckId, Integer missionId) {
         if (AppBouyomiConfig.get().isEnable()) {
             BouyomiChanUtils.speak(Type.MissionStartAlert,
-                    Tuple.of("${fleetName}", DeckPortCollection.get().getDeckPortMap().get(deckId).getName()),
-                    Tuple.of("${fleetNumber}", String.valueOf(deckId)),
-                    Tuple.of("${missionName}", MissionCollection.get().getMissionMap().get(missionId).getName()));
+                Tuple.of("${fleetName}", DeckPortCollection.get().getDeckPortMap().get(deckId).getName()),
+                Tuple.of("${fleetNumber}", String.valueOf(deckId)),
+                Tuple.of("${missionName}", MissionCollection.get().getMissionMap().get(missionId).getName()));
         }
     }
 }

@@ -14,7 +14,6 @@ import logbook.internal.Version;
 
 /**
  * JavaFx エントリ・ポイント クラス
- *
  */
 public class Main extends Application {
 
@@ -49,13 +48,13 @@ public class Main extends Application {
                 alert.getButtonTypes().clear();
                 alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
                 alert.showAndWait()
-                        .filter(ButtonType.NO::equals)
-                        .ifPresent(t -> e.consume());
+                    .filter(ButtonType.NO::equals)
+                    .ifPresent(t -> e.consume());
             }
             if (!e.isConsumed()) {
                 AppConfig.get()
-                        .getWindowLocationMap()
-                        .put(controller.getClass().getCanonicalName(), controller.getWindowLocation());
+                    .getWindowLocationMap()
+                    .put(controller.getClass().getCanonicalName(), controller.getWindowLocation());
             }
         });
         Tools.Windows.defaultOpenAction(controller, null);

@@ -13,64 +13,67 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.ToggleSwitch?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.ItemAirBaseController">
+<VBox xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="logbook.internal.gui.ItemAirBaseController">
     <children>
         <TitledPane fx:id="filter" animated="false" expanded="false" text="フィルター">
-           <content>
-              <VBox spacing="5">
-                 <children>
-                    <ToggleSwitch fx:id="disableGrouping" prefWidth="0.0" style="-fx-font-weight: bold;" text="同一装備、同一属性(改修値・熟練度)でグルーピングしない" />
-                    <FlowPane fx:id="filters" />
-                 </children>
-              </VBox>
-           </content>
+            <content>
+                <VBox spacing="5">
+                    <children>
+                        <ToggleSwitch fx:id="disableGrouping" prefWidth="0.0" style="-fx-font-weight: bold;"
+                                      text="同一装備、同一属性(改修値・熟練度)でグルーピングしない"/>
+                        <FlowPane fx:id="filters"/>
+                    </children>
+                </VBox>
+            </content>
         </TitledPane>
         <TableView fx:id="itemTable" VBox.vgrow="ALWAYS">
-          <columns>
-            <TableColumn fx:id="name" prefWidth="200.0" text="名称" />
-            <TableColumn fx:id="type" prefWidth="90.0" text="種類" />
-            <TableColumn fx:id="alv" prefWidth="35.0" text="熟練" />
-            <TableColumn fx:id="level" prefWidth="45.0" text="改修" />
-            <TableColumn fx:id="count" prefWidth="35.0" text="所持" />
-            <TableColumn prefWidth="75.0" text="中隊制空">
-             <columns>
-                <TableColumn fx:id="seiku" prefWidth="35.0" text="出撃" />
-                <TableColumn fx:id="interceptSeiku" prefWidth="35.0" text="防空" />
-             </columns>
-            </TableColumn>
-            <TableColumn prefWidth="75.0" text="戦闘行動半径">
-             <columns>
-                <TableColumn fx:id="distance" prefWidth="35.0" text="素" />
-                <TableColumn fx:id="distanceTaiteichan" prefWidth="45.0" text="+大艇" />
-                <TableColumn fx:id="distanceCatalina" prefWidth="45.0" text="+Cata" />
-             </columns>
-            </TableColumn>
-            <TableColumn fx:id="cost" prefWidth="60.0" text="配置コスト" />
-            <TableColumn fx:id="tyku" prefWidth="35.0" text="対空" />
-            <TableColumn fx:id="houm" prefWidth="35.0" text="対爆" />
-            <TableColumn fx:id="houk" prefWidth="35.0" text="迎撃" />
-            <TableColumn fx:id="raig" prefWidth="35.0" text="雷装" />
-            <TableColumn fx:id="baku" prefWidth="35.0" text="爆装" />
-            <TableColumn fx:id="tais" prefWidth="35.0" text="対潜" />
-            <TableColumn fx:id="saku" prefWidth="35.0" text="索敵" />
-          </columns>
-           <contextMenu>
-              <ContextMenu>
-                 <items>
-                    <MenuItem mnemonicParsing="false" onAction="#copyAirBase" text="クリップボードにコピー" />
-                    <MenuItem mnemonicParsing="false" onAction="#selectAllAirBase" text="すべてを選択" />
-                    <MenuItem mnemonicParsing="false" onAction="#storeAirBase" text="CSVファイルとして保存" />
-                    <SeparatorMenuItem mnemonicParsing="false" />
-                    <Menu mnemonicParsing="false" text="デッキビルダー形式（非公式）">
-                       <items>
-                          <MenuItem mnemonicParsing="false" onAction="#deckBuilderSelectionCopy" text="選択した機体をクリップボードにコピー" />
-                       </items>
-                    </Menu>
-                    <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem mnemonicParsing="false" onAction="#columnVisibleAirBase" text="列の表示・非表示" />
-                 </items>
-              </ContextMenu>
-           </contextMenu>
+            <columns>
+                <TableColumn fx:id="name" prefWidth="200.0" text="名称"/>
+                <TableColumn fx:id="type" prefWidth="90.0" text="種類"/>
+                <TableColumn fx:id="alv" prefWidth="35.0" text="熟練"/>
+                <TableColumn fx:id="level" prefWidth="45.0" text="改修"/>
+                <TableColumn fx:id="count" prefWidth="35.0" text="所持"/>
+                <TableColumn prefWidth="75.0" text="中隊制空">
+                    <columns>
+                        <TableColumn fx:id="seiku" prefWidth="35.0" text="出撃"/>
+                        <TableColumn fx:id="interceptSeiku" prefWidth="35.0" text="防空"/>
+                    </columns>
+                </TableColumn>
+                <TableColumn prefWidth="75.0" text="戦闘行動半径">
+                    <columns>
+                        <TableColumn fx:id="distance" prefWidth="35.0" text="素"/>
+                        <TableColumn fx:id="distanceTaiteichan" prefWidth="45.0" text="+大艇"/>
+                        <TableColumn fx:id="distanceCatalina" prefWidth="45.0" text="+Cata"/>
+                    </columns>
+                </TableColumn>
+                <TableColumn fx:id="cost" prefWidth="60.0" text="配置コスト"/>
+                <TableColumn fx:id="tyku" prefWidth="35.0" text="対空"/>
+                <TableColumn fx:id="houm" prefWidth="35.0" text="対爆"/>
+                <TableColumn fx:id="houk" prefWidth="35.0" text="迎撃"/>
+                <TableColumn fx:id="raig" prefWidth="35.0" text="雷装"/>
+                <TableColumn fx:id="baku" prefWidth="35.0" text="爆装"/>
+                <TableColumn fx:id="tais" prefWidth="35.0" text="対潜"/>
+                <TableColumn fx:id="saku" prefWidth="35.0" text="索敵"/>
+            </columns>
+            <contextMenu>
+                <ContextMenu>
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#copyAirBase" text="クリップボードにコピー"/>
+                        <MenuItem mnemonicParsing="false" onAction="#selectAllAirBase" text="すべてを選択"/>
+                        <MenuItem mnemonicParsing="false" onAction="#storeAirBase" text="CSVファイルとして保存"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <Menu mnemonicParsing="false" text="デッキビルダー形式（非公式）">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#deckBuilderSelectionCopy"
+                                          text="選択した機体をクリップボードにコピー"/>
+                            </items>
+                        </Menu>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#columnVisibleAirBase" text="列の表示・非表示"/>
+                    </items>
+                </ContextMenu>
+            </contextMenu>
         </TableView>
     </children>
 </VBox>

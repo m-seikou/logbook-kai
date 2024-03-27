@@ -12,49 +12,85 @@ import logbook.internal.Logs;
 
 /**
  * 戦闘ログの詳細行
- *
  */
 public class BattleLogDetail {
 
-    /** 日付 */
+    /**
+     * 日付
+     */
     private StringProperty date;
-    /** 海域 */
+    /**
+     * 海域
+     */
     private StringProperty area;
-    /** 海域短縮名 */
+    /**
+     * 海域短縮名
+     */
     private StringProperty areaShortName;
-    /** マス */
+    /**
+     * マス
+     */
     private StringProperty cell;
-    /** ボス */
+    /**
+     * ボス
+     */
     private StringProperty boss;
-    /** ランク */
+    /**
+     * ランク
+     */
     private StringProperty rank;
-    /** 艦隊行動 */
+    /**
+     * 艦隊行動
+     */
     private StringProperty intercept;
-    /** 味方陣形 */
+    /**
+     * 味方陣形
+     */
     private StringProperty fformation;
-    /** 敵陣形 */
+    /**
+     * 敵陣形
+     */
     private StringProperty eformation;
-    /** 制空権 */
+    /**
+     * 制空権
+     */
     private StringProperty dispseiku;
-    /** 味方触接 */
+    /**
+     * 味方触接
+     */
     private StringProperty ftouch;
-    /** 敵触接 */
+    /**
+     * 敵触接
+     */
     private StringProperty etouch;
-    /** 敵艦隊 */
+    /**
+     * 敵艦隊
+     */
     private StringProperty efleet;
-    /** ドロップ艦種 */
+    /**
+     * ドロップ艦種
+     */
     private StringProperty dropType;
-    /** ドロップ艦娘 */
+    /**
+     * ドロップ艦娘
+     */
     private StringProperty dropShip;
-    /** ドロップアイテム */
+    /**
+     * ドロップアイテム
+     */
     private StringProperty dropItem;
-    /** 艦娘経験値 */
+    /**
+     * 艦娘経験値
+     */
     private final IntegerProperty shipExp = new SimpleIntegerProperty();
-    /** 提督経験値 */
+    /**
+     * 提督経験値
+     */
     private final IntegerProperty exp = new SimpleIntegerProperty();
 
     /**
      * 日付を取得します。
+     *
      * @return 日付
      */
     public String getDate() {
@@ -63,6 +99,7 @@ public class BattleLogDetail {
 
     /**
      * 日付を設定します。
+     *
      * @param date 日付
      */
     public void setDate(String date) {
@@ -71,6 +108,7 @@ public class BattleLogDetail {
 
     /**
      * 日付を取得します。
+     *
      * @return 日付
      */
     public StringProperty dateProperty() {
@@ -79,6 +117,7 @@ public class BattleLogDetail {
 
     /**
      * 海域を取得します。
+     *
      * @return 海域
      */
     public String getArea() {
@@ -87,6 +126,7 @@ public class BattleLogDetail {
 
     /**
      * 海域を設定します。
+     *
      * @param area 海域
      */
     public void setArea(String area) {
@@ -95,6 +135,7 @@ public class BattleLogDetail {
 
     /**
      * 海域を取得します。
+     *
      * @return 海域
      */
     public StringProperty areaProperty() {
@@ -103,6 +144,7 @@ public class BattleLogDetail {
 
     /**
      * 海域短縮名を取得します。
+     *
      * @return 海域短縮名
      */
     public String getAreaShortName() {
@@ -111,6 +153,7 @@ public class BattleLogDetail {
 
     /**
      * 海域短縮名を設定します。
+     *
      * @param area 海域短縮名
      */
     public void setAreaShortName(String area) {
@@ -119,6 +162,7 @@ public class BattleLogDetail {
 
     /**
      * 海域短縮名を取得します。
+     *
      * @return 海域短縮名
      */
     public StringProperty areaShortNameProperty() {
@@ -127,6 +171,7 @@ public class BattleLogDetail {
 
     /**
      * マスを取得します。
+     *
      * @return マス
      */
     public String getCell() {
@@ -135,6 +180,7 @@ public class BattleLogDetail {
 
     /**
      * マスを設定します。
+     *
      * @param cell マス
      */
     public void setCell(String cell) {
@@ -143,6 +189,7 @@ public class BattleLogDetail {
 
     /**
      * マスを取得します。
+     *
      * @return マス
      */
     public StringProperty cellProperty() {
@@ -151,6 +198,7 @@ public class BattleLogDetail {
 
     /**
      * ボスを取得します。
+     *
      * @return ボス
      */
     public String getBoss() {
@@ -159,6 +207,7 @@ public class BattleLogDetail {
 
     /**
      * ボスを設定します。
+     *
      * @param boss ボス
      */
     public void setBoss(String boss) {
@@ -167,6 +216,7 @@ public class BattleLogDetail {
 
     /**
      * ボスを取得します。
+     *
      * @return ボス
      */
     public StringProperty bossProperty() {
@@ -175,6 +225,7 @@ public class BattleLogDetail {
 
     /**
      * ランクを取得します。
+     *
      * @return ランク
      */
     public String getRank() {
@@ -183,6 +234,7 @@ public class BattleLogDetail {
 
     /**
      * ランクを設定します。
+     *
      * @param rank ランク
      */
     public void setRank(String rank) {
@@ -191,6 +243,7 @@ public class BattleLogDetail {
 
     /**
      * ランクを取得します。
+     *
      * @return ランク
      */
     public StringProperty rankProperty() {
@@ -199,6 +252,7 @@ public class BattleLogDetail {
 
     /**
      * 艦隊行動を取得します。
+     *
      * @return 艦隊行動
      */
     public String getIntercept() {
@@ -207,6 +261,7 @@ public class BattleLogDetail {
 
     /**
      * 艦隊行動を設定します。
+     *
      * @param intercept 艦隊行動
      */
     public void setIntercept(String intercept) {
@@ -215,6 +270,7 @@ public class BattleLogDetail {
 
     /**
      * 艦隊行動を取得します。
+     *
      * @return 艦隊行動
      */
     public StringProperty interceptProperty() {
@@ -223,6 +279,7 @@ public class BattleLogDetail {
 
     /**
      * 味方陣形を取得します。
+     *
      * @return 味方陣形
      */
     public String getFformation() {
@@ -231,6 +288,7 @@ public class BattleLogDetail {
 
     /**
      * 味方陣形を設定します。
+     *
      * @param fformation 味方陣形
      */
     public void setFformation(String fformation) {
@@ -239,6 +297,7 @@ public class BattleLogDetail {
 
     /**
      * 味方陣形を取得します。
+     *
      * @return 味方陣形
      */
     public StringProperty fformationProperty() {
@@ -247,6 +306,7 @@ public class BattleLogDetail {
 
     /**
      * 敵陣形を取得します。
+     *
      * @return 敵陣形
      */
     public String getEformation() {
@@ -255,6 +315,7 @@ public class BattleLogDetail {
 
     /**
      * 敵陣形を設定します。
+     *
      * @param eformation 敵陣形
      */
     public void setEformation(String eformation) {
@@ -263,6 +324,7 @@ public class BattleLogDetail {
 
     /**
      * 敵陣形を取得します。
+     *
      * @return 敵陣形
      */
     public StringProperty eformationProperty() {
@@ -271,6 +333,7 @@ public class BattleLogDetail {
 
     /**
      * 制空権を取得します。
+     *
      * @return 制空権
      */
     public String getDispseiku() {
@@ -279,6 +342,7 @@ public class BattleLogDetail {
 
     /**
      * 制空権を設定します。
+     *
      * @param dispseiku 制空権
      */
     public void setDispseiku(String dispseiku) {
@@ -287,6 +351,7 @@ public class BattleLogDetail {
 
     /**
      * 制空権を取得します。
+     *
      * @return 制空権
      */
     public StringProperty dispseikuProperty() {
@@ -295,6 +360,7 @@ public class BattleLogDetail {
 
     /**
      * 味方触接を取得します。
+     *
      * @return 味方触接
      */
     public String getFtouch() {
@@ -303,6 +369,7 @@ public class BattleLogDetail {
 
     /**
      * 味方触接を設定します。
+     *
      * @param ftouch 味方触接
      */
     public void setFtouch(String ftouch) {
@@ -311,6 +378,7 @@ public class BattleLogDetail {
 
     /**
      * 味方触接を取得します。
+     *
      * @return 味方触接
      */
     public StringProperty ftouchProperty() {
@@ -319,6 +387,7 @@ public class BattleLogDetail {
 
     /**
      * 敵触接を取得します。
+     *
      * @return 敵触接
      */
     public String getEtouch() {
@@ -327,6 +396,7 @@ public class BattleLogDetail {
 
     /**
      * 敵触接を設定します。
+     *
      * @param etouch 敵触接
      */
     public void setEtouch(String etouch) {
@@ -335,6 +405,7 @@ public class BattleLogDetail {
 
     /**
      * 敵触接を取得します。
+     *
      * @return 敵触接
      */
     public StringProperty etouchProperty() {
@@ -343,6 +414,7 @@ public class BattleLogDetail {
 
     /**
      * 敵艦隊を取得します。
+     *
      * @return 敵艦隊
      */
     public String getEfleet() {
@@ -351,6 +423,7 @@ public class BattleLogDetail {
 
     /**
      * 敵艦隊を設定します。
+     *
      * @param efleet 敵艦隊
      */
     public void setEfleet(String efleet) {
@@ -359,6 +432,7 @@ public class BattleLogDetail {
 
     /**
      * 敵艦隊を取得します。
+     *
      * @return 敵艦隊
      */
     public StringProperty efleetProperty() {
@@ -367,6 +441,7 @@ public class BattleLogDetail {
 
     /**
      * ドロップ艦種を取得します。
+     *
      * @return ドロップ艦種
      */
     public String getDropType() {
@@ -375,6 +450,7 @@ public class BattleLogDetail {
 
     /**
      * ドロップ艦種を設定します。
+     *
      * @param dropType ドロップ艦種
      */
     public void setDropType(String dropType) {
@@ -383,6 +459,7 @@ public class BattleLogDetail {
 
     /**
      * ドロップ艦種を取得します。
+     *
      * @return ドロップ艦種
      */
     public StringProperty dropTypeProperty() {
@@ -391,6 +468,7 @@ public class BattleLogDetail {
 
     /**
      * ドロップ艦娘を取得します。
+     *
      * @return ドロップ艦娘
      */
     public String getDropShip() {
@@ -399,6 +477,7 @@ public class BattleLogDetail {
 
     /**
      * ドロップ艦娘を設定します。
+     *
      * @param dropShip ドロップ艦娘
      */
     public void setDropShip(String dropShip) {
@@ -407,6 +486,7 @@ public class BattleLogDetail {
 
     /**
      * ドロップ艦娘を取得します。
+     *
      * @return ドロップ艦娘
      */
     public StringProperty dropShipProperty() {
@@ -415,6 +495,7 @@ public class BattleLogDetail {
 
     /**
      * ドロップアイテムを取得します。
+     *
      * @return ドロップアイテム
      */
     public String getDropItem() {
@@ -423,6 +504,7 @@ public class BattleLogDetail {
 
     /**
      * ドロップアイテムを設定します。
+     *
      * @param dropItem ドロップアイテム
      */
     public void setDropItem(String dropItem) {
@@ -431,6 +513,7 @@ public class BattleLogDetail {
 
     /**
      * ドロップアイテムを取得します。
+     *
      * @return ドロップアイテム
      */
     public StringProperty dropItemProperty() {
@@ -439,6 +522,7 @@ public class BattleLogDetail {
 
     /**
      * 艦娘経験値を取得します。
+     *
      * @return 艦娘経験値
      */
     public int getShipExp() {
@@ -447,6 +531,7 @@ public class BattleLogDetail {
 
     /**
      * 艦娘経験値を設定します。
+     *
      * @param shipExp 艦娘経験値
      */
     public void setShipExp(int shipExp) {
@@ -455,6 +540,7 @@ public class BattleLogDetail {
 
     /**
      * 艦娘経験値を取得します。
+     *
      * @return 艦娘経験値
      */
     public IntegerProperty shipExpProperty() {
@@ -463,6 +549,7 @@ public class BattleLogDetail {
 
     /**
      * 提督経験値を取得します。
+     *
      * @return 提督経験値
      */
     public int getExp() {
@@ -471,6 +558,7 @@ public class BattleLogDetail {
 
     /**
      * 提督経験値を設定します。
+     *
      * @param exp 提督経験値
      */
     public void setExp(int exp) {
@@ -479,6 +567,7 @@ public class BattleLogDetail {
 
     /**
      * 提督経験値を取得します。
+     *
      * @return 提督経験値
      */
     public IntegerProperty expProperty() {
@@ -488,24 +577,24 @@ public class BattleLogDetail {
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(this.date.get())
-                .add(this.area.get())
-                .add(this.cell.get())
-                .add(this.boss.get())
-                .add(this.rank.get())
-                .add(this.intercept.get())
-                .add(this.fformation.get())
-                .add(this.eformation.get())
-                .add(this.dispseiku.get())
-                .add(this.ftouch.get())
-                .add(this.etouch.get())
-                .add(this.efleet.get())
-                .add(this.dropType.get())
-                .add(this.dropShip.get())
-                .add(this.dropItem.get())
-                .add(Integer.toString(this.shipExp.get()))
-                .add(Integer.toString(this.exp.get()))
-                .toString();
+            .add(this.date.get())
+            .add(this.area.get())
+            .add(this.cell.get())
+            .add(this.boss.get())
+            .add(this.rank.get())
+            .add(this.intercept.get())
+            .add(this.fformation.get())
+            .add(this.eformation.get())
+            .add(this.dispseiku.get())
+            .add(this.ftouch.get())
+            .add(this.etouch.get())
+            .add(this.efleet.get())
+            .add(this.dropType.get())
+            .add(this.dropShip.get())
+            .add(this.dropItem.get())
+            .add(Integer.toString(this.shipExp.get()))
+            .add(Integer.toString(this.exp.get()))
+            .toString();
     }
 
     /**

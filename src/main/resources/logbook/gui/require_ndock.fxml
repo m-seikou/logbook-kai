@@ -9,36 +9,39 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="ndockWindow" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.RequireNdockController">
-   <children>
-      <ToolBar prefHeight="40.0" prefWidth="200.0">
-         <items>
-            <CheckBox fx:id="includeNdock" mnemonicParsing="false" onAction="#update" text="入渠中" />
-            <CheckBox fx:id="slightDamage" mnemonicParsing="false" onAction="#update" selected="true" text="小破以下" />
-            <CheckBox fx:id="damage" mnemonicParsing="false" onAction="#update" selected="true" text="中破・大破" />
-         </items>
-      </ToolBar>
-      <TableView fx:id="table" VBox.vgrow="ALWAYS">
-        <columns>
-          <TableColumn fx:id="row" prefWidth="50.0" sortable="false" text="行番号" />
-          <TableColumn fx:id="deck" prefWidth="50.0" text="艦隊" />
-          <TableColumn fx:id="ship" prefWidth="260.0" text="艦娘" />
-          <TableColumn fx:id="lv" prefWidth="50.0" text="Lv" />
-          <TableColumn fx:id="time" prefWidth="100.0" text="時間" />
-          <TableColumn fx:id="end" prefWidth="100.0" text="今から" />
-          <TableColumn fx:id="fuel" prefWidth="50.0" text="燃料" />
-          <TableColumn fx:id="metal" prefWidth="50.0" text="鋼材" />
-        </columns>
-        <contextMenu>
-           <ContextMenu>
-             <items>
-               <MenuItem mnemonicParsing="false" onAction="#copy" text="クリップボードにコピー" />
-               <MenuItem mnemonicParsing="false" onAction="#selectAll" text="すべてを選択" />
-               <SeparatorMenuItem mnemonicParsing="false" />
-               <MenuItem mnemonicParsing="false" onAction="#columnVisible" text="列の表示・非表示" />
-             </items>
-           </ContextMenu>
-        </contextMenu>
-      </TableView>
-   </children>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+      prefWidth="800.0" styleClass="ndockWindow" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.162"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.RequireNdockController">
+    <children>
+        <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <items>
+                <CheckBox fx:id="includeNdock" mnemonicParsing="false" onAction="#update" text="入渠中"/>
+                <CheckBox fx:id="slightDamage" mnemonicParsing="false" onAction="#update" selected="true"
+                          text="小破以下"/>
+                <CheckBox fx:id="damage" mnemonicParsing="false" onAction="#update" selected="true" text="中破・大破"/>
+            </items>
+        </ToolBar>
+        <TableView fx:id="table" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="row" prefWidth="50.0" sortable="false" text="行番号"/>
+                <TableColumn fx:id="deck" prefWidth="50.0" text="艦隊"/>
+                <TableColumn fx:id="ship" prefWidth="260.0" text="艦娘"/>
+                <TableColumn fx:id="lv" prefWidth="50.0" text="Lv"/>
+                <TableColumn fx:id="time" prefWidth="100.0" text="時間"/>
+                <TableColumn fx:id="end" prefWidth="100.0" text="今から"/>
+                <TableColumn fx:id="fuel" prefWidth="50.0" text="燃料"/>
+                <TableColumn fx:id="metal" prefWidth="50.0" text="鋼材"/>
+            </columns>
+            <contextMenu>
+                <ContextMenu>
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#copy" text="クリップボードにコピー"/>
+                        <MenuItem mnemonicParsing="false" onAction="#selectAll" text="すべてを選択"/>
+                        <SeparatorMenuItem mnemonicParsing="false"/>
+                        <MenuItem mnemonicParsing="false" onAction="#columnVisible" text="列の表示・非表示"/>
+                    </items>
+                </ContextMenu>
+            </contextMenu>
+        </TableView>
+    </children>
 </VBox>

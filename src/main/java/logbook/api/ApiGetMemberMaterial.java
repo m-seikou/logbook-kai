@@ -17,7 +17,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/material
- *
  */
 @API("/kcsapi/api_get_member/material")
 public class ApiGetMemberMaterial implements APIListenerSpi {
@@ -29,12 +28,12 @@ public class ApiGetMemberMaterial implements APIListenerSpi {
             Map<Integer, Material> material = JsonHelper.toMap(array, Material::getId, Material::toMaterial);
             AppCondition.get().setMaterial(material);
             Duration duration = Duration.ofMillis(System.currentTimeMillis() - AppCondition.get()
-                    .getWroteMaterialLogLast());
+                .getWroteMaterialLogLast());
             if (duration.compareTo(Duration.ofSeconds(AppConfig.get().getMaterialLogInterval())) >= 0) {
                 LogWriter.getInstance(MaterialLogFormat::new)
-                        .write(material);
+                    .write(material);
                 AppCondition.get()
-                        .setWroteMaterialLogLast(System.currentTimeMillis());
+                    .setWroteMaterialLogLast(System.currentTimeMillis());
             }
         }
     }

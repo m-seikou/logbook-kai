@@ -15,22 +15,25 @@ import logbook.internal.ToStringConverter;
 
 /**
  * テーブル列の表示・非表示の設定ダイアログを表示する
- *
  */
 public class ColumnVisibleController extends WindowController {
 
-    /** テーブルのキー名 */
+    /**
+     * テーブルのキー名
+     */
     private String key;
 
-    /** リスト */
+    /**
+     * リスト
+     */
     @FXML
     private ListView<TableColumn<?, ?>> listView;
 
     @FXML
     void initialize() {
         this.listView.setCellFactory(
-                CheckBoxListCell.forListView(t -> t.visibleProperty(),
-                        ToStringConverter.of(Tools.Tables::getColumnName)));
+            CheckBoxListCell.forListView(t -> t.visibleProperty(),
+                ToStringConverter.of(Tools.Tables::getColumnName)));
     }
 
     /**
@@ -55,20 +58,20 @@ public class ColumnVisibleController extends WindowController {
     @FXML
     void resetWidth() {
         AppConfig.get()
-                .getColumnWidthMap()
-                .remove(this.key);
+            .getColumnWidthMap()
+            .remove(this.key);
         AppConfig.get()
-                .getColumnOrderMap()
-                .remove(this.key);
+            .getColumnOrderMap()
+            .remove(this.key);
         Tools.Controls.alert(AlertType.INFORMATION, "列幅・並び順をリセット", "列幅・並び順がリセットされました。\n再度ウインドウを開いたときに反映されます。",
-                this.getWindow());
+            this.getWindow());
     }
 
     /**
      * リストにアイテムを設定する
      *
      * @param table テーブル
-     * @param key テーブルのキー名
+     * @param key   テーブルのキー名
      */
     public void setData(TableView<?> table, String key) {
         this.key = key;
@@ -77,10 +80,10 @@ public class ColumnVisibleController extends WindowController {
         this.getWindow().addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, e -> {
             // 非表示にした列のSet
             Set<String> setting = this.listView.getItems()
-                    .stream()
-                    .filter(c -> !c.isVisible())
-                    .map(Tools.Tables::getColumnName)
-                    .collect(Collectors.toSet());
+                .stream()
+                .filter(c -> !c.isVisible())
+                .map(Tools.Tables::getColumnName)
+                .collect(Collectors.toSet());
             if (setting.isEmpty()) {
                 AppConfig.get().getColumnVisibleMap().remove(key);
             } else {

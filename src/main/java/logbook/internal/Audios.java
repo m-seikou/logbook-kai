@@ -14,7 +14,6 @@ import logbook.bean.AppConfig;
 
 /**
  * オーディオに関するメソッドを集めたクラス
- *
  */
 public final class Audios {
 
@@ -31,7 +30,7 @@ public final class Audios {
         if (Files.isDirectory(dir)) {
             try (DirectoryStream<Path> ds = Files.newDirectoryStream(dir, SUPPORTED_FILES)) {
                 List<Path> paths = StreamSupport.stream(ds.spliterator(), false)
-                        .collect(Collectors.toList());
+                    .collect(Collectors.toList());
                 if (paths.size() > 0) {
                     return paths.get((int) Math.floor(Math.random() * paths.size()));
                 }
@@ -42,7 +41,7 @@ public final class Audios {
 
     /**
      * デフォルトサウンドを取得します。
-     * 
+     *
      * @return デフォルトサウンドのパス、存在しない場合null
      * @throws IOException 入出力エラーが発生した場合
      */
@@ -59,7 +58,7 @@ public final class Audios {
 
     /**
      * デフォルトサウンドを再生するタスクを返します。
-     * 
+     *
      * @return デフォルトサウンドを再生するタスク
      */
     public static Runnable playDefaultNotifySound() {

@@ -120,11 +120,11 @@ public class MissionCondition implements TestAllPredicate<List<Ship>> {
         // 艦種条件
         if (result && this.shipType != null) {
             String stype = Ships.stype(ship)
-                    .map(Stype::getName)
-                    .orElse(null);
+                .map(Stype::getName)
+                .orElse(null);
             result &= this.shipType.contains(stype)
-                    || (this.shipType.contains("護衛空母")
-                            && Ships.shipMst(ship).map(ShipMst::getTais).orElse(null) != null);
+                || (this.shipType.contains("護衛空母")
+                && Ships.shipMst(ship).map(ShipMst::getTais).orElse(null) != null);
         }
         // レベル条件
         if (result && this.level != null) {
@@ -133,14 +133,14 @@ public class MissionCondition implements TestAllPredicate<List<Ship>> {
         // 装備条件
         if (result && this.item != null) {
             Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                    .getSlotitemMap();
+                .getSlotitemMap();
             result &= ship.getSlot().stream()
-                    .map(itemMap::get)
-                    .map(Items::slotitemMst)
-                    .map(i -> i.orElse(null))
-                    .filter(Objects::nonNull)
-                    .map(SlotitemMst::getName)
-                    .anyMatch(this.item::equals);
+                .map(itemMap::get)
+                .map(Items::slotitemMst)
+                .map(i -> i.orElse(null))
+                .filter(Objects::nonNull)
+                .map(SlotitemMst::getName)
+                .anyMatch(this.item::equals);
         }
         return result;
     }
@@ -161,8 +161,8 @@ public class MissionCondition implements TestAllPredicate<List<Ship>> {
         }
         if ("対潜".equals(this.countType)) {
             // 遠征のときは艦載機の対潜値は複雑な式となるので、最小見積もりとして0.65倍する（ことによって false positive をなくす）
-            current = this.fleetStatus(ships , ship -> Ships.getTaisen(ship)
-                    + Ships.sumItemParam(ship, (item) -> Items.isAircraft(item) ? (int)(item.getTais()*0.65) : item.getTais(), true));
+            current = this.fleetStatus(ships, ship -> Ships.getTaisen(ship)
+                + Ships.sumItemParam(ship, (item) -> Items.isAircraft(item) ? (int) (item.getTais() * 0.65) : item.getTais(), true));
         }
         if ("対空".equals(this.countType)) {
             current = this.fleetStatus(ships, ship -> ship.getTaiku().get(0));
@@ -172,30 +172,30 @@ public class MissionCondition implements TestAllPredicate<List<Ship>> {
         }
         if ("装備".equals(this.countType)) {
             Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                    .getSlotitemMap();
+                .getSlotitemMap();
             current = ships.stream()
-                    .filter(Objects::nonNull)
-                    .map(Ship::getSlot)
-                    .flatMap(Collection::stream)
-                    .map(itemMap::get)
-                    .map(Items::slotitemMst)
-                    .map(i -> i.orElse(null))
-                    .filter(Objects::nonNull)
-                    .map(SlotitemMst::getName)
-                    .filter(this.item::equals)
-                    .count();
+                .filter(Objects::nonNull)
+                .map(Ship::getSlot)
+                .flatMap(Collection::stream)
+                .map(itemMap::get)
+                .map(Items::slotitemMst)
+                .map(i -> i.orElse(null))
+                .filter(Objects::nonNull)
+                .map(SlotitemMst::getName)
+                .filter(this.item::equals)
+                .count();
         }
         if ("キラキラ".equals(this.countType)) {
             current = ships.stream()
-                    .filter(Objects::nonNull)
-                    .filter(ship -> ship.getCond() > 49)
-                    .count();
+                .filter(Objects::nonNull)
+                .filter(ship -> ship.getCond() > 49)
+                .count();
         }
         if ("旗艦レベル＋キラキラ".equals(this.countType)) {
             current = ships.stream()
-                    .filter(Objects::nonNull)
-                    .filter(ship -> ship.getCond() > 49)
-                    .count();
+                .filter(Objects::nonNull)
+                .filter(ship -> ship.getCond() > 49)
+                .count();
             this.value = 6;
             if (ships.size() > 0) {
                 int lv = ships.get(0).getLv();
@@ -213,15 +213,15 @@ public class MissionCondition implements TestAllPredicate<List<Ship>> {
     /**
      * ステータス合計
      *
-     * @param ships 艦隊
+     * @param ships    艦隊
      * @param function ステータス取得関数
      * @return ステータス合計
      */
     private int fleetStatus(List<Ship> ships, ToIntFunction<Ship> function) {
         return ships.stream()
-                .filter(Objects::nonNull)
-                .mapToInt(function)
-                .sum();
+            .filter(Objects::nonNull)
+            .mapToInt(function)
+            .sum();
     }
 
     /**

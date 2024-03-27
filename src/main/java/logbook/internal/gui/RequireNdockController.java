@@ -31,54 +31,75 @@ import logbook.internal.Time;
 
 /**
  * お風呂に入りたい艦娘のコントローラー
- *
  */
 public class RequireNdockController extends WindowController {
 
-    /** 入渠中 */
+    /**
+     * 入渠中
+     */
     @FXML
     private CheckBox includeNdock;
 
-    /** 小破以下 */
+    /**
+     * 小破以下
+     */
     @FXML
     private CheckBox slightDamage;
 
-    /** 中破・大破 */
+    /**
+     * 中破・大破
+     */
     @FXML
     private CheckBox damage;
 
     @FXML
     private TableView<RequireNdock> table;
 
-    /** 行番号 */
+    /**
+     * 行番号
+     */
     @FXML
     private TableColumn<RequireNdock, Integer> row;
 
-    /** 艦隊 */
+    /**
+     * 艦隊
+     */
     @FXML
     private TableColumn<RequireNdock, Integer> deck;
 
-    /** 艦娘 */
+    /**
+     * 艦娘
+     */
     @FXML
     private TableColumn<RequireNdock, Ship> ship;
 
-    /** Lv */
+    /**
+     * Lv
+     */
     @FXML
     private TableColumn<RequireNdock, Integer> lv;
 
-    /** 時間 */
+    /**
+     * 時間
+     */
     @FXML
     private TableColumn<RequireNdock, Duration> time;
 
-    /** 今から */
+    /**
+     * 今から
+     */
     @FXML
     private TableColumn<RequireNdock, String> end;
 
-    /** 燃料 */
+    /**
+     * 燃料
+     */
     @FXML
     private TableColumn<RequireNdock, Integer> fuel;
 
-    /** 鋼材 */
+    /**
+     * 鋼材
+     */
     @FXML
     private TableColumn<RequireNdock, Integer> metal;
 
@@ -127,8 +148,8 @@ public class RequireNdockController extends WindowController {
         this.timeline = new Timeline();
         this.timeline.setCycleCount(Timeline.INDEFINITE);
         this.timeline.getKeyFrames().add(new KeyFrame(
-                javafx.util.Duration.seconds(1),
-                this::update));
+            javafx.util.Duration.seconds(1),
+            this::update));
         this.timeline.play();
 
         this.update(null);
@@ -142,19 +163,19 @@ public class RequireNdockController extends WindowController {
     @FXML
     void update(ActionEvent e) {
         List<Ship> ndockList = ShipCollection.get()
-                .getShipMap()
-                .values()
-                .stream()
-                .filter(this::filter)
-                .collect(Collectors.toList());
+            .getShipMap()
+            .values()
+            .stream()
+            .filter(this::filter)
+            .collect(Collectors.toList());
         if (this.ndocksHashCode == ndockList.hashCode()) {
             this.ndocks.forEach(RequireNdock::update);
         } else {
             this.ndocks.clear();
             ndockList.stream()
-                    .sorted(Comparator.comparing(Ship::getNdockTime, Comparator.reverseOrder()))
-                    .map(RequireNdock::toRequireNdock)
-                    .forEach(this.ndocks::add);
+                .sorted(Comparator.comparing(Ship::getNdockTime, Comparator.reverseOrder()))
+                .map(RequireNdock::toRequireNdock)
+                .forEach(this.ndocks::add);
             this.ndocksHashCode = ndockList.hashCode();
         }
     }
@@ -182,7 +203,7 @@ public class RequireNdockController extends WindowController {
     void columnVisible() {
         try {
             TableTool.showVisibleSetting(this.table, this.getClass().toString() + "#" + "table",
-                    this.getWindow());
+                this.getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -190,6 +211,7 @@ public class RequireNdockController extends WindowController {
 
     /**
      * フィルター
+     *
      * @param ship 艦娘
      * @return フィルタ結果
      */
@@ -210,7 +232,6 @@ public class RequireNdockController extends WindowController {
 
     /**
      * 時間のセル
-     *
      */
     private static class TimeCell extends TableCell<RequireNdock, Duration> {
         @Override
@@ -227,7 +248,6 @@ public class RequireNdockController extends WindowController {
 
     /**
      * 艦娘画像のセル
-     *
      */
     private static class ShipImageCell extends TableCell<RequireNdock, Ship> {
         @Override
@@ -237,8 +257,8 @@ public class RequireNdockController extends WindowController {
             if (!empty) {
                 this.setGraphic(Tools.Controls.zoomImage(new ImageView(Ships.shipWithItemImage(ship))));
                 this.setText(Ships.shipMst(ship)
-                        .map(ShipMst::getName)
-                        .orElse(""));
+                    .map(ShipMst::getName)
+                    .orElse(""));
             } else {
                 this.setGraphic(null);
                 this.setText(null);

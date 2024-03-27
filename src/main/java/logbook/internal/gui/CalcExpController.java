@@ -88,19 +88,27 @@ public class CalcExpController extends WindowController {
     @FXML
     private TextField battleCount;
 
-    /** チャート */
+    /**
+     * チャート
+     */
     @FXML
     private LineChart<Number, Number> expChart;
 
-    /** チャートx軸 */
+    /**
+     * チャートx軸
+     */
     @FXML
     private NumberAxis xAxis;
 
-    /** チャートy軸 */
+    /**
+     * チャートy軸
+     */
     @FXML
     private NumberAxis yAxis;
 
-    /** 改装レベル不足の艦娘 */
+    /**
+     * 改装レベル不足の艦娘
+     */
     @FXML
     private TableView<ShortageShipItem> shortageShip;
 
@@ -116,16 +124,24 @@ public class CalcExpController extends WindowController {
     @FXML
     private TableColumn<ShortageShipItem, Integer> afterLv;
 
-    /** 艦娘のコンボボックスに表示する */
+    /**
+     * 艦娘のコンボボックスに表示する
+     */
     private ObservableList<ShipWrapper> ships = FXCollections.observableArrayList();
 
-    /** 改装レベル不足の艦娘 */
+    /**
+     * 改装レベル不足の艦娘
+     */
     private ObservableList<ShortageShipItem> item = FXCollections.observableArrayList();
 
-    /** 今の経験値 */
+    /**
+     * 今の経験値
+     */
     private int nowExpValue;
 
-    /** 目標経験値 */
+    /**
+     * 目標経験値
+     */
     private int goalExpValue;
 
     @FXML
@@ -161,35 +177,35 @@ public class CalcExpController extends WindowController {
 
         // イベントリスナー
         this.shipList.getSelectionModel()
-                .selectedItemProperty()
-                .addListener((ChangeListener<ShipWrapper>) this::changeShip);
+            .selectedItemProperty()
+            .addListener((ChangeListener<ShipWrapper>) this::changeShip);
         this.nowLv.getValueFactory()
-                .valueProperty()
-                .addListener((ChangeListener<Integer>) this::changeNowLv);
+            .valueProperty()
+            .addListener((ChangeListener<Integer>) this::changeNowLv);
         this.goalLv.getValueFactory()
-                .valueProperty()
-                .addListener((ChangeListener<Integer>) this::changeGoalLv);
+            .valueProperty()
+            .addListener((ChangeListener<Integer>) this::changeGoalLv);
         this.sea.getSelectionModel()
-                .selectedItemProperty()
-                .addListener((ChangeListener<AppSeaAreaExp>) (ov, o, n) -> this.changeSeaArea());
+            .selectedItemProperty()
+            .addListener((ChangeListener<AppSeaAreaExp>) (ov, o, n) -> this.changeSeaArea());
         this.rank.getSelectionModel()
-                .selectedItemProperty()
-                .addListener((ChangeListener<Rank>) (ov, o, n) -> this.update());
+            .selectedItemProperty()
+            .addListener((ChangeListener<Rank>) (ov, o, n) -> this.update());
         this.shortageShip.getSelectionModel()
-                .selectedItemProperty()
-                .addListener((ChangeListener<ShortageShipItem>) this::changeShip);
+            .selectedItemProperty()
+            .addListener((ChangeListener<ShortageShipItem>) this::changeShip);
 
         // 旗艦ID
         Integer flagShipId = DeckPortCollection.get()
-                .getDeckPortMap()
-                .get(1)
-                .getShip()
-                .get(0);
+            .getDeckPortMap()
+            .get(1)
+            .getShip()
+            .get(0);
         // 旗艦
         ShipWrapper flagShip = this.ships.stream()
-                .filter(w -> w.getShip().getId().equals(flagShipId))
-                .findAny()
-                .get();
+            .filter(w -> w.getShip().getId().equals(flagShipId))
+            .findAny()
+            .get();
         // 発火させるためにここでselect
         this.sea.getSelectionModel().select(AppConfig.get().getSeaAreaIndex());
         this.shipList.getSelectionModel().select(flagShip);
@@ -208,9 +224,9 @@ public class CalcExpController extends WindowController {
         this.shipList();
         // 選択する艦娘(更新時に艦娘がいなくなっている可能性を考慮)
         ShipWrapper select = this.ships.stream()
-                .filter(w -> w.getShip().getId().equals(selectId))
-                .findAny()
-                .orElse(this.ships.get(0));
+            .filter(w -> w.getShip().getId().equals(selectId))
+            .findAny()
+            .orElse(this.ships.get(0));
         this.shipList.getSelectionModel().select(select);
         this.update();
     }
@@ -264,8 +280,8 @@ public class CalcExpController extends WindowController {
         this.nowExp.setText(Integer.toString(this.nowExpValue));
 
         int afterLv = Ships.shipMst(newShip)
-                .map(ShipMst::getAfterlv)
-                .orElse(0);
+            .map(ShipMst::getAfterlv)
+            .orElse(0);
         int goal;
         if ((oldShip != null && !oldShip.getId().equals(newShip.getId())) || afterLv > newShip.getLv()) {
             goal = Math.min(Math.max(afterLv, newShip.getLv() + 1), ExpTable.maxLv());
@@ -284,7 +300,7 @@ public class CalcExpController extends WindowController {
      * From Combo
      */
     private void changeShip(ObservableValue<? extends ShipWrapper> observable, ShipWrapper oldValue,
-            ShipWrapper value) {
+                            ShipWrapper value) {
         if (value != null) {
             Ship oldShip = Optional.ofNullable(oldValue).map(ShipWrapper::getShip).orElse(null);
             Ship ship = value.getShip();
@@ -305,14 +321,14 @@ public class CalcExpController extends WindowController {
      * From Table
      */
     private void changeShip(ObservableValue<? extends ShortageShipItem> observable, ShortageShipItem oldValue,
-            ShortageShipItem value) {
+                            ShortageShipItem value) {
         if (value != null) {
             Ship oldShip = Optional.ofNullable(oldValue).map(ShortageShipItem::getShip).orElse(null);
             Ship ship = value.getShip();
             this.changeShip(oldShip, ship);
             // Combo の同じものを選択
             this.ships.filtered(sw -> sw.getShip().equals(ship))
-                    .forEach(this.shipList.getSelectionModel()::select);
+                .forEach(this.shipList.getSelectionModel()::select);
         }
     }
 
@@ -394,12 +410,12 @@ public class CalcExpController extends WindowController {
     private void shipList() {
         this.ships.clear();
         this.ships.addAll(ShipCollection.get()
-                .getShipMap()
-                .values()
-                .stream()
-                .sorted(Comparator.comparing(Ship::getLv).reversed())
-                .map(ShipWrapper::new)
-                .collect(Collectors.toList()));
+            .getShipMap()
+            .values()
+            .stream()
+            .sorted(Comparator.comparing(Ship::getLv).reversed())
+            .map(ShipWrapper::new)
+            .collect(Collectors.toList()));
 
     }
 
@@ -408,13 +424,13 @@ public class CalcExpController extends WindowController {
      */
     private void shortageShip() {
         this.item.addAll(ShipCollection.get()
-                .getShipMap()
-                .values()
-                .stream()
-                .map(ShortageShipItem::toShipItem)
-                .filter(item -> item.getAfterLv() > item.getLv())
-                .sorted(Comparator.comparing(ShortageShipItem::getLv).reversed())
-                .collect(Collectors.toList()));
+            .getShipMap()
+            .values()
+            .stream()
+            .map(ShortageShipItem::toShipItem)
+            .filter(item -> item.getAfterLv() > item.getLv())
+            .sorted(Comparator.comparing(ShortageShipItem::getLv).reversed())
+            .collect(Collectors.toList()));
     }
 
     /**
@@ -431,31 +447,31 @@ public class CalcExpController extends WindowController {
 
         if (goalLvValue <= 100) {
             total.getData().addAll(ExpTable.get().entrySet()
-                    .stream()
-                    .filter(e -> e.getKey() < 100)
-                    .map(e -> new XYChart.Data<Number, Number>(e.getKey(), e.getValue()))
-                    .collect(Collectors.toList()));
+                .stream()
+                .filter(e -> e.getKey() < 100)
+                .map(e -> new XYChart.Data<Number, Number>(e.getKey(), e.getValue()))
+                .collect(Collectors.toList()));
         } else {
             total.getData().addAll(ExpTable.get().entrySet()
-                    .stream()
-                    .map(e -> new XYChart.Data<Number, Number>(e.getKey(), e.getValue()))
-                    .collect(Collectors.toList()));
+                .stream()
+                .map(e -> new XYChart.Data<Number, Number>(e.getKey(), e.getValue()))
+                .collect(Collectors.toList()));
         }
         goal.getData().addAll(ExpTable.get().entrySet()
-                .stream()
-                .filter(e -> e.getKey() <= goalLvValue)
-                .map(e -> new XYChart.Data<Number, Number>(e.getKey(), e.getValue()))
-                .collect(Collectors.toList()));
+            .stream()
+            .filter(e -> e.getKey() <= goalLvValue)
+            .map(e -> new XYChart.Data<Number, Number>(e.getKey(), e.getValue()))
+            .collect(Collectors.toList()));
         now.getData().addAll(ExpTable.get().entrySet()
-                .stream()
-                .filter(e -> e.getKey() <= nowLvValue)
-                .map(e -> new XYChart.Data<Number, Number>(e.getKey(), e.getValue()))
-                .collect(Collectors.toList()));
+            .stream()
+            .filter(e -> e.getKey() <= nowLvValue)
+            .map(e -> new XYChart.Data<Number, Number>(e.getKey(), e.getValue()))
+            .collect(Collectors.toList()));
 
         if (ExpTable.get().containsKey(nowLvValue + 1)
-                && !ExpTable.get().get(nowLvValue).equals(ExpTable.get().get(nowLvValue + 1))) {
+            && !ExpTable.get().get(nowLvValue).equals(ExpTable.get().get(nowLvValue + 1))) {
             double per = ((double) nowExpValue - ExpTable.get().get(nowLvValue))
-                    / ((double) ExpTable.get().get(nowLvValue + 1) - ExpTable.get().get(nowLvValue));
+                / ((double) ExpTable.get().get(nowLvValue + 1) - ExpTable.get().get(nowLvValue));
 
             now.getData().add(new XYChart.Data<Number, Number>(nowLvValue + per, nowExpValue));
         }
@@ -467,10 +483,10 @@ public class CalcExpController extends WindowController {
     /**
      * 戦闘で得られる経験値を計算します
      *
-     * @param baseexp 海域Exp
-     * @param eval 評価倍率
+     * @param baseexp    海域Exp
+     * @param eval       評価倍率
      * @param isFlagship 旗艦
-     * @param isMvp MVP
+     * @param isMvp      MVP
      * @return 得られる経験値
      */
     private static int getExp(int baseexp, double eval, boolean isFlagship, boolean isMvp) {
@@ -488,17 +504,16 @@ public class CalcExpController extends WindowController {
      * 必要経験値を1回あたりの経験値で割った数値を計算します。端数は切り上げされます
      *
      * @param needexp 必要経験値
-     * @param exp 1回あたりの経験値
+     * @param exp     1回あたりの経験値
      * @return
      */
     private static int getCount(int needexp, int exp) {
         return BigDecimal.valueOf(needexp).divide(BigDecimal.valueOf(exp), RoundingMode.CEILING)
-                .intValue();
+            .intValue();
     }
 
     /**
      * 改装レベル不足の艦娘の一覧に表示する艦娘画像のセル
-     *
      */
     private static class ShipImageTableCell extends TableCell<ShortageShipItem, Ship> {
         @Override
@@ -508,8 +523,8 @@ public class CalcExpController extends WindowController {
             if (!empty) {
                 this.setGraphic(Tools.Controls.zoomImage(new ImageView(Ships.shipWithItemImage(ship))));
                 this.setText(Ships.shipMst(ship)
-                        .map(ShipMst::getName)
-                        .orElse(""));
+                    .map(ShipMst::getName)
+                    .orElse(""));
             } else {
                 this.setGraphic(null);
                 this.setText(null);
@@ -519,11 +534,12 @@ public class CalcExpController extends WindowController {
 
     /**
      * 艦娘のラッパー(toStringを実装)
-     *
      */
     private static class ShipWrapper {
 
-        /** 艦娘 */
+        /**
+         * 艦娘
+         */
         private Ship ship;
 
         public ShipWrapper(Ship ship) {
@@ -532,6 +548,7 @@ public class CalcExpController extends WindowController {
 
         /**
          * 艦娘を取得します。
+         *
          * @return 艦娘
          */
         public Ship getShip() {

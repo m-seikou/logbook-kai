@@ -16,7 +16,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/deck
- *
  */
 @API("/kcsapi/api_get_member/deck")
 public class ApiGetMemberDeck implements APIListenerSpi {
@@ -27,14 +26,14 @@ public class ApiGetMemberDeck implements APIListenerSpi {
         if (array != null) {
             Map<Integer, DeckPort> deckMap = JsonHelper.toMap(array, DeckPort::getId, DeckPort::toDeckPort);
             DeckPortCollection.get()
-                    .setDeckPortMap(deckMap);
+                .setDeckPortMap(deckMap);
             DeckPortCollection.get()
-                    .setMissionShips(deckMap.values()
-                            .stream()
-                            .filter(d -> d.getMission().get(0) != 0)
-                            .map(DeckPort::getShip)
-                            .flatMap(List::stream)
-                            .collect(Collectors.toCollection(LinkedHashSet::new)));
+                .setMissionShips(deckMap.values()
+                    .stream()
+                    .filter(d -> d.getMission().get(0) != 0)
+                    .map(DeckPort::getShip)
+                    .flatMap(List::stream)
+                    .collect(Collectors.toCollection(LinkedHashSet::new)));
         }
     }
 

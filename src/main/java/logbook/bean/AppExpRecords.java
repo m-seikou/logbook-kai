@@ -14,13 +14,21 @@ import lombok.Data;
  */
 @Data
 public class AppExpRecords {
-    /** この半日の基準戦果 (2時/14時を過ぎて最初の経験値） */
+    /**
+     * この半日の基準戦果 (2時/14時を過ぎて最初の経験値）
+     */
     private Long exp12h;
-    /** exp12h を設定した時刻 [ms] */
+    /**
+     * exp12h を設定した時刻 [ms]
+     */
     private long time12h;
-    /** この1日の基準戦果 */
+    /**
+     * この1日の基準戦果
+     */
     private Long exp1d;
-    /** exp1d を設定した時刻 [ms] */
+    /**
+     * exp1d を設定した時刻 [ms]
+     */
     private long time1d;
 
     public void update(Basic basic) {
@@ -62,7 +70,7 @@ public class AppExpRecords {
      * アプリケーションのデフォルト設定ディレクトリから{@link AppExpRecords}を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(AppExpRecords.class, AppExpRecords::new)</code>
+     * <code>Config.getDefault().get(AppExpRecords.class, AppExpRecords::new)</code>
      * </blockquote>
      *
      * @return {@link AppExpRecords}

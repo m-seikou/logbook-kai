@@ -18,7 +18,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/ndock
- *
  */
 @API("/kcsapi/api_get_member/ndock")
 public class ApiGetMemberNdock implements APIListenerSpi {
@@ -30,29 +29,29 @@ public class ApiGetMemberNdock implements APIListenerSpi {
             // 入渠
             Map<Integer, Ndock> map = JsonHelper.toMap(array, Ndock::getId, Ndock::toNdock);
             NdockCollection.get()
-                    .setNdockMap(map);
+                .setNdockMap(map);
             // 差し替え前
             Set<Integer> before = NdockCollection.get().getNdockSet();
             // 入渠中の艦娘
             NdockCollection.get()
-                    .setNdockSet(map.entrySet()
-                            .stream()
-                            .map(Map.Entry::getValue)
-                            .map(Ndock::getShipId)
-                            .collect(Collectors.toCollection(LinkedHashSet::new)));
+                .setNdockSet(map.entrySet()
+                    .stream()
+                    .map(Map.Entry::getValue)
+                    .map(Ndock::getShipId)
+                    .collect(Collectors.toCollection(LinkedHashSet::new)));
             // 差し替え前と異なっていたら補正
             before.removeAll(NdockCollection.get().getNdockSet());
             before.stream()
-                    .map(ShipCollection.get().getShipMap()::get)
-                    .filter(Objects::nonNull)
-                    .filter(ship -> ship.getNowhp() < ship.getMaxhp())
-                    .forEach(ship -> {
-                        ship.setNowhp(ship.getMaxhp());
-                        ship.setNdockTime(0);
-                        if (ship.getCond() < 40) {
-                            ship.setCond(40);
-                        }
-                    });
+                .map(ShipCollection.get().getShipMap()::get)
+                .filter(Objects::nonNull)
+                .filter(ship -> ship.getNowhp() < ship.getMaxhp())
+                .forEach(ship -> {
+                    ship.setNowhp(ship.getMaxhp());
+                    ship.setNdockTime(0);
+                    if (ship.getCond() < 40) {
+                        ship.setCond(40);
+                    }
+                });
         }
     }
 

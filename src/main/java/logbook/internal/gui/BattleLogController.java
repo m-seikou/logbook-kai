@@ -358,8 +358,8 @@ public class BattleLogController extends WindowController {
 
             // 選択された時のリスナーを設定
             this.collect.getSelectionModel()
-                    .selectedItemProperty()
-                    .addListener(this::detail);
+                .selectedItemProperty()
+                .addListener(this::detail);
 
             // 詳細
             this.detail.setRowFactory(tv -> {
@@ -371,9 +371,9 @@ public class BattleLogController extends WindowController {
                         if (log != null) {
                             try {
                                 InternalFXMLLoader.showWindow("logbook/gui/battle_detail.fxml", this.getWindow(),
-                                        "戦闘ログ", c -> {
-                                            ((BattleDetail) c).setData(log);
-                                        }, null);
+                                    "戦闘ログ", c -> {
+                                        ((BattleDetail) c).setData(log);
+                                    }, null);
                             } catch (Exception ex) {
                                 LoggerHolder.get().error("詳細の表示に失敗しました", ex);
                             }
@@ -505,19 +505,19 @@ public class BattleLogController extends WindowController {
 
     private static int getSortOrder(String areaShortName) {
         return Optional.ofNullable(areaShortName)
-                .map(AREA_SHORTNAME_PATTERN::matcher)
-                .filter(Matcher::matches)
-                .map(m -> {
-                    try {
-                        int mapArea = Integer.parseInt(m.group(1));
-                        int mapNo = Integer.parseInt(m.group(2));
-                        return mapArea * 1000 + mapNo;
-                    } catch (Throwable e) {
-                        // ignore parse error
-                        return null;
-                    }
-                })
-                .orElse(Integer.MAX_VALUE);
+            .map(AREA_SHORTNAME_PATTERN::matcher)
+            .filter(Matcher::matches)
+            .map(m -> {
+                try {
+                    int mapArea = Integer.parseInt(m.group(1));
+                    int mapNo = Integer.parseInt(m.group(2));
+                    return mapArea * 1000 + mapNo;
+                } catch (Throwable e) {
+                    // ignore parse error
+                    return null;
+                }
+            })
+            .orElse(Integer.MAX_VALUE);
     }
 
     /**
@@ -547,11 +547,11 @@ public class BattleLogController extends WindowController {
 
         // 海域の名前
         List<Triplet<String, String, Integer>> areaNames = list.stream()
-                .map(log -> Tuple.of(log.getArea(), log.getAreaShortName()))
-                .distinct()
-                .map(tuple -> Tuple.of(tuple.getKey(), tuple.getValue(), getSortOrder(tuple.getValue())))
-                .sorted(Comparator.comparing(Triplet::get3))
-                .collect(Collectors.toList());
+            .map(log -> Tuple.of(log.getArea(), log.getAreaShortName()))
+            .distinct()
+            .map(tuple -> Tuple.of(tuple.getKey(), tuple.getValue(), getSortOrder(tuple.getValue())))
+            .sorted(Comparator.comparing(Triplet::get3))
+            .collect(Collectors.toList());
         for (Triplet<String, String, Integer> name : areaNames) {
             String area = name.get1();
             String text;
@@ -615,8 +615,8 @@ public class BattleLogController extends WindowController {
             AppViewConfig.get().setBattleLogConfig(config);
         }
         config.setCustomUnits(this.userUnit.stream()
-                .map(u -> new BattleLogConfig.CustomUnit(u.getFrom().toLocalDate().toEpochDay(), u.getTo().toLocalDate().toEpochDay()))
-                .collect(Collectors.toList())
+            .map(u -> new BattleLogConfig.CustomUnit(u.getFrom().toLocalDate().toEpochDay(), u.getTo().toLocalDate().toEpochDay()))
+            .collect(Collectors.toList())
         );
     }
 
@@ -666,30 +666,30 @@ public class BattleLogController extends WindowController {
         TreeItem<BattleLogCollect> item = this.collect.getSelectionModel().getSelectedItem();
         if (item != null && this.userUnit.contains(item.getValue().getCollectUnit()) && this.collect.getRoot().getChildren().contains(item)) {
             Tools.Controls.alert(Alert.AlertType.CONFIRMATION, "削除", "集計(" + item.getValue().getUnit() + ")を削除してよろしいですか？", this.getWindow())
-                    .filter(op -> op == ButtonType.OK)
-                    .ifPresent(type -> {
-                        this.collect.getRoot().getChildren().remove(item);
-                        IUnit unit = item.getValue().getCollectUnit();
-                        this.userUnit.remove(unit);
-                        this.logMap.remove(unit);
-                        saveConfig();
-                    });
+                .filter(op -> op == ButtonType.OK)
+                .ifPresent(type -> {
+                    this.collect.getRoot().getChildren().remove(item);
+                    IUnit unit = item.getValue().getCollectUnit();
+                    this.userUnit.remove(unit);
+                    this.logMap.remove(unit);
+                    saveConfig();
+                });
         }
     }
 
     /**
      * 詳細を表示
      */
-    public void showResult(){
+    public void showResult() {
         Path dir = Paths.get(AppConfig.get().getBattleLogDir());
         BattleLogDetail selected = this.detail.getSelectionModel().getSelectedItem();
-        String ym = selected.getDate().substring(0,7);
-        Path full = Paths.get(dir.toString(), ym, selected.getDate().replace(":","-") + ".json");
-        if(!full.toFile().exists()){
-            Tools.Controls.alert(Alert.AlertType.WARNING, "過去の戦闘", "戦闘の記録が見つかりません",this.getWindow());
+        String ym = selected.getDate().substring(0, 7);
+        Path full = Paths.get(dir.toString(), ym, selected.getDate().replace(":", "-") + ".json");
+        if (!full.toFile().exists()) {
+            Tools.Controls.alert(Alert.AlertType.WARNING, "過去の戦闘", "戦闘の記録が見つかりません", this.getWindow());
             return;
         }
-        MainMenuController.showBattleResult(full,this.getWindow());
+        MainMenuController.showBattleResult(full, this.getWindow());
 
     }
 
@@ -744,7 +744,7 @@ public class BattleLogController extends WindowController {
     void columnVisibleAggregate() {
         try {
             TableTool.showVisibleSetting(this.aggregate, this.getClass().toString() + "#" + "aggregate",
-                    this.getWindow());
+                this.getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -757,9 +757,9 @@ public class BattleLogController extends WindowController {
     void script() {
         try {
             InternalFXMLLoader.showWindow("logbook/gui/battlelog_script.fxml", this.getWindow(),
-                    "高度な集計", c -> {
-                        ((BattleLogScriptController) c).setData(this.filteredDetails);
-                    }, null);
+                "高度な集計", c -> {
+                    ((BattleLogScriptController) c).setData(this.filteredDetails);
+                }, null);
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -787,12 +787,12 @@ public class BattleLogController extends WindowController {
             Predicate<BattleLogDetail> bossFilter = boss ? e -> e.getBoss().contains("ボス") : anyFilter;
 
             List<BattleLogDetail> values = this.logMap.get(collect.getCollectUnit())
-                    .stream()
-                    .map(BattleLogDetail::toBattleLogDetail)
-                    .filter(areaFilter)
-                    .filter(bossFilter)
-                    .sorted(Comparator.comparing(BattleLogDetail::getDate).reversed())
-                    .collect(Collectors.toList());
+                .stream()
+                .map(BattleLogDetail::toBattleLogDetail)
+                .filter(areaFilter)
+                .filter(bossFilter)
+                .sorted(Comparator.comparing(BattleLogDetail::getDate).reversed())
+                .collect(Collectors.toList());
             this.detailsSource.addAll(values);
             boolean userUnitRootSelected = this.userUnit.contains(collect.getCollectUnit()) && this.collect.getRoot().getChildren().contains(value);
             this.removeUnitButton.setDisable(!userUnitRootSelected);
@@ -852,21 +852,21 @@ public class BattleLogController extends WindowController {
             return str;
         }));
         comboBox.getItems().addAll(
-                table.getItems().stream()
-                        .map(column::getCellData)
-                        .filter(Objects::nonNull)
-                        .distinct()
-                        .sorted()
-                        .collect(Collectors.toList()));
+            table.getItems().stream()
+                .map(column::getCellData)
+                .filter(Objects::nonNull)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList()));
         box.getChildren().add(comboBox);
         this.filterPane.getChildren().add(box);
 
         comboBox.getCheckModel()
-                .getCheckedItems()
-                .addListener(listener);
+            .getCheckedItems()
+            .addListener(listener);
         Predicate<S> filter = o -> {
             return comboBox.getCheckModel().getCheckedItems().isEmpty()
-                    || comboBox.getCheckModel().getCheckedItems().contains(getter.apply(o));
+                || comboBox.getCheckModel().getCheckedItems().contains(getter.apply(o));
         };
         return filter;
     }
@@ -894,8 +894,8 @@ public class BattleLogController extends WindowController {
 
         // 列の選択が変更されたときに集計する
         this.aggregateType.getSelectionModel()
-                .selectedItemProperty()
-                .addListener(c -> this.aggregate());
+            .selectedItemProperty()
+            .addListener(c -> this.aggregate());
         // 右ペインの詳細が変化したときに集計する
         this.filteredDetails.addListener((ListChangeListener<Object>) c -> this.aggregate());
     }
@@ -914,18 +914,18 @@ public class BattleLogController extends WindowController {
      */
     private void aggregate() {
         String name = this.aggregateType.getSelectionModel()
-                .getSelectedItem();
+            .getSelectedItem();
         ObservableList<BattleLogDetailAggregate> items = FXCollections.observableArrayList();
         ObservableList<PieChart.Data> value = FXCollections.observableArrayList();
         if (name != null) {
             Function<BattleLogDetail, ?> getter = this.aggregateTypeMap.get(name);
             Map<String, Long> result = this.filteredDetails.stream()
-                    .map(getter)
-                    .map(String::valueOf)
-                    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+                .map(getter)
+                .map(String::valueOf)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
             double total = result.values().stream()
-                    .mapToLong(Long::longValue)
-                    .sum();
+                .mapToLong(Long::longValue)
+                .sum();
             for (Entry<String, Long> entry : result.entrySet()) {
                 String type = entry.getKey();
                 if (type.isEmpty()) {
@@ -983,7 +983,7 @@ public class BattleLogController extends WindowController {
                         if (item.equals(from) || item.equals(to)) {
                             this.getStyleClass().add("selected");
                         } else if ((from.compareTo(to) < 0 && item.compareTo(from) > 0 && item.compareTo(to) < 0)
-                                || (from.compareTo(to) > 0 && item.compareTo(from) < 0 && item.compareTo(to) > 0)) {
+                            || (from.compareTo(to) > 0 && item.compareTo(from) < 0 && item.compareTo(to) > 0)) {
                             this.getStyleClass().add("contains");
                         }
                     }

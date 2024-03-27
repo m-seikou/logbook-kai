@@ -20,17 +20,16 @@ import logbook.plugin.PluginServices;
 
 /**
  * 国際化対応
- *
  */
 public class Messages {
 
     private static final String BUNDLE_NAME = "logbook.messages"; //$NON-NLS-1$
 
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(
-            BUNDLE_NAME,
-            Locale.getDefault(),
-            PluginServices.getClassLoader(),
-            new UTF8Control());
+        BUNDLE_NAME,
+        Locale.getDefault(),
+        PluginServices.getClassLoader(),
+        new UTF8Control());
 
     private Messages() {
     }
@@ -54,10 +53,10 @@ public class Messages {
      * 指定されたキーの文字列を使ってMessageFormatを作成し、それを使用して指定された引数をフォーマットします
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>MessageFormat.format(Messages.getString(key), args)</code>
+     * <code>MessageFormat.format(Messages.getString(key), args)</code>
      * </blockquote>
      *
-     * @param key 目的の文字列のキー
+     * @param key  目的の文字列のキー
      * @param args フォーマットするオブジェクト
      * @return 指定されたキーの文字列
      */
@@ -81,12 +80,12 @@ public class Messages {
 
         @Override
         public ResourceBundle newBundle(
-                String baseName,
-                Locale locale,
-                String format,
-                ClassLoader loader,
-                boolean reload)
-                throws IOException {
+            String baseName,
+            Locale locale,
+            String format,
+            ClassLoader loader,
+            boolean reload)
+            throws IOException {
 
             String bundleName = this.toBundleName(baseName, locale);
             String resourceName = this.toResourceName(bundleName, "properties"); //$NON-NLS-1$

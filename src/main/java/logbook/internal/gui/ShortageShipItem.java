@@ -10,24 +10,32 @@ import logbook.internal.Ships;
 
 /**
  * 改装レベル不足の艦娘テーブルの行
- *
  */
 public class ShortageShipItem {
 
-    /** ID */
+    /**
+     * ID
+     */
     private IntegerProperty id = new SimpleIntegerProperty();
 
-    /** 艦娘 */
+    /**
+     * 艦娘
+     */
     private ObjectProperty<Ship> ship = new SimpleObjectProperty<Ship>();
 
-    /** Lv */
+    /**
+     * Lv
+     */
     private IntegerProperty lv = new SimpleIntegerProperty();
 
-    /** 改装Lv */
+    /**
+     * 改装Lv
+     */
     private IntegerProperty afterLv = new SimpleIntegerProperty();
 
     /**
      * IDを取得します。
+     *
      * @return ID
      */
     public IntegerProperty idProperty() {
@@ -36,6 +44,7 @@ public class ShortageShipItem {
 
     /**
      * IDを取得します。
+     *
      * @return ID
      */
     public Integer getId() {
@@ -44,6 +53,7 @@ public class ShortageShipItem {
 
     /**
      * IDを設定します。
+     *
      * @param id ID
      */
     public void setId(Integer id) {
@@ -52,6 +62,7 @@ public class ShortageShipItem {
 
     /**
      * 艦娘を取得します。
+     *
      * @return 艦娘
      */
     public ObjectProperty<Ship> shipProperty() {
@@ -60,6 +71,7 @@ public class ShortageShipItem {
 
     /**
      * 艦娘を取得します。
+     *
      * @return 艦娘
      */
     public Ship getShip() {
@@ -68,6 +80,7 @@ public class ShortageShipItem {
 
     /**
      * 艦娘を設定します。
+     *
      * @param ship 艦娘
      */
     public void setShip(Ship ship) {
@@ -76,6 +89,7 @@ public class ShortageShipItem {
 
     /**
      * Lvを取得します。
+     *
      * @return Lv
      */
     public IntegerProperty lvProperty() {
@@ -84,6 +98,7 @@ public class ShortageShipItem {
 
     /**
      * Lvを取得します。
+     *
      * @return Lv
      */
     public Integer getLv() {
@@ -92,6 +107,7 @@ public class ShortageShipItem {
 
     /**
      * Lvを設定します。
+     *
      * @param lv Lv
      */
     public void setLv(Integer lv) {
@@ -100,6 +116,7 @@ public class ShortageShipItem {
 
     /**
      * 改装Lvを取得します。
+     *
      * @return 改装Lv
      */
     public IntegerProperty afterLvProperty() {
@@ -108,6 +125,7 @@ public class ShortageShipItem {
 
     /**
      * 改装Lvを取得します。
+     *
      * @return 改装Lv
      */
     public Integer getAfterLv() {
@@ -116,6 +134,7 @@ public class ShortageShipItem {
 
     /**
      * 改装Lvを設定します。
+     *
      * @param afterLv 改装Lv
      */
     public void setAfterLv(Integer afterLv) {

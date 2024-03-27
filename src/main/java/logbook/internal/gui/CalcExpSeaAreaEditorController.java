@@ -23,22 +23,27 @@ import lombok.Setter;
 
 /**
  * 海域編集
- *
  */
 public class CalcExpSeaAreaEditorController extends WindowController {
 
     @FXML
     private TableView<SeaAreaExpItem> table;
 
-    /** 海域 */
+    /**
+     * 海域
+     */
     @FXML
     private TableColumn<SeaAreaExpItem, String> name;
 
-    /** 海域Exp */
+    /**
+     * 海域Exp
+     */
     @FXML
     private TableColumn<SeaAreaExpItem, Integer> exp;
 
-    /** 削除ボタン */
+    /**
+     * 削除ボタン
+     */
     @FXML
     private TableColumn<SeaAreaExpItem, String> cmd;
 
@@ -72,10 +77,10 @@ public class CalcExpSeaAreaEditorController extends WindowController {
         this.cmd.setCellFactory(p -> new CmdCell());
 
         this.table.setItems(AppSeaAreaExpCollection.get()
-                .getList()
-                .stream()
-                .map(SeaAreaExpItem::toItem)
-                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
+            .getList()
+            .stream()
+            .map(SeaAreaExpItem::toItem)
+            .collect(Collectors.toCollection(FXCollections::observableArrayList)));
     }
 
     @FXML
@@ -91,15 +96,14 @@ public class CalcExpSeaAreaEditorController extends WindowController {
     @Override
     protected void onWindowHidden(WindowEvent e) {
         AppSeaAreaExpCollection.get()
-                .setList(this.table.getItems().stream()
-                        .map(SeaAreaExpItem::toBean)
-                        .collect(Collectors.toList()));
+            .setList(this.table.getItems().stream()
+                .map(SeaAreaExpItem::toBean)
+                .collect(Collectors.toList()));
         this.apply.run();
     }
 
     /**
      * ボタンのセル
-     *
      */
     static class CmdCell extends TableCell<SeaAreaExpItem, String> {
         @Override
@@ -127,14 +131,19 @@ public class CalcExpSeaAreaEditorController extends WindowController {
      */
     public static class SeaAreaExpItem {
 
-        /** 海域 */
+        /**
+         * 海域
+         */
         private StringProperty name = new SimpleStringProperty();
 
-        /** 海域Exp */
+        /**
+         * 海域Exp
+         */
         private IntegerProperty exp = new SimpleIntegerProperty();
 
         /**
          * 海域を取得します。
+         *
          * @return 海域
          */
         public StringProperty nameProperty() {
@@ -143,6 +152,7 @@ public class CalcExpSeaAreaEditorController extends WindowController {
 
         /**
          * 海域を取得します。
+         *
          * @return 海域
          */
         public String getName() {
@@ -151,6 +161,7 @@ public class CalcExpSeaAreaEditorController extends WindowController {
 
         /**
          * 海域を設定します。
+         *
          * @param name 海域
          */
         public void setName(String name) {
@@ -159,6 +170,7 @@ public class CalcExpSeaAreaEditorController extends WindowController {
 
         /**
          * 海域Expを取得します。
+         *
          * @return 海域Exp
          */
         public IntegerProperty expProperty() {
@@ -167,6 +179,7 @@ public class CalcExpSeaAreaEditorController extends WindowController {
 
         /**
          * 海域Expを取得します。
+         *
          * @return 海域Exp
          */
         public Integer getExp() {
@@ -175,6 +188,7 @@ public class CalcExpSeaAreaEditorController extends WindowController {
 
         /**
          * 海域Expを設定します。
+         *
          * @param exp 海域Exp
          */
         public void setExp(Integer exp) {

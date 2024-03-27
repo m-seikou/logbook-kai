@@ -22,27 +22,38 @@ import lombok.Data;
 
 /**
  * 任務条件
- *
  */
 @Data
 public class AppQuestCondition implements Predicate<QuestCollect> {
 
-    /** 任務のタイプ(enum: 出撃, 遠征) */
+    /**
+     * 任務のタイプ(enum: 出撃, 遠征)
+     */
     private Type type;
 
-    /** 任務期間(文字列:単発,デイリー,ウィークリー,マンスリー,クオータリー) */
+    /**
+     * 任務期間(文字列:単発,デイリー,ウィークリー,マンスリー,クオータリー)
+     */
     private String resetType;
 
-    /** イヤリーのリセット月（イヤリー8月なら8） */
+    /**
+     * イヤリーのリセット月（イヤリー8月なら8）
+     */
     private Integer yearlyResetMonth;
 
-    /** フィルター条件 */
+    /**
+     * フィルター条件
+     */
     private FilterCondition filter;
 
-    /** 条件 */
+    /**
+     * 条件
+     */
     private List<Condition> conditions = new ArrayList<>();
 
-    /** 結果 */
+    /**
+     * 結果
+     */
     private Boolean result;
 
     public static AppQuestCondition loadFromResource(int questNo) {
@@ -67,7 +78,7 @@ public class AppQuestCondition implements Predicate<QuestCollect> {
     public boolean isCollectStypeInternal() {
         for (Condition condition : this.conditions) {
             if ((condition.result == null || condition.result == false)
-                    && (condition.stype != null && !condition.stype.isEmpty())) {
+                && (condition.stype != null && !condition.stype.isEmpty())) {
                 return true;
             }
         }
@@ -91,47 +102,65 @@ public class AppQuestCondition implements Predicate<QuestCollect> {
 
     /**
      * フィルター条件
-     *
      */
     @Data
     public static class FilterCondition {
 
-        /** 海域条件 */
+        /**
+         * 海域条件
+         */
         private Set<String> area;
 
-        /** 艦隊条件 */
+        /**
+         * 艦隊条件
+         */
         private FleetCondition fleet;
     }
 
     /**
      * フィルター条件:艦隊条件
-     *
      */
     @Data
     public static class FleetCondition implements Predicate<List<ShipMst>> {
 
-        /** 備考 */
+        /**
+         * 備考
+         */
         private String description;
 
-        /** 艦種 */
+        /**
+         * 艦種
+         */
         private LinkedHashSet<String> stype;
 
-        /** 艦名 */
+        /**
+         * 艦名
+         */
         private LinkedHashSet<String> name;
 
-        /** 艦種もしくは艦名のリストに含まれないものに一致 */
+        /**
+         * 艦種もしくは艦名のリストに含まれないものに一致
+         */
         private boolean difference;
 
-        /** カウント */
+        /**
+         * カウント
+         */
         private Integer count;
 
-        /** 序列(1:旗艦) */
+        /**
+         * 序列(1:旗艦)
+         */
         private Integer order;
 
-        /** 条件 */
+        /**
+         * 条件
+         */
         private List<FleetCondition> conditions;
 
-        /** 演算子(AND,OR,NAND,NOR,EQ(等しい),GE(以上),GT(より大きい),LE(以下),LT(より小さい),NE(等しくない)) */
+        /**
+         * 演算子(AND,OR,NAND,NOR,EQ(等しい),GE(以上),GT(より大きい),LE(以下),LT(より小さい),NE(等しくない))
+         */
         private String operator;
 
         @Override
@@ -196,8 +225,8 @@ public class AppQuestCondition implements Predicate<QuestCollect> {
             }
             if (this.stype != null) {
                 String stype = ship.asStype()
-                        .map(Stype::getName)
-                        .orElse(null);
+                    .map(Stype::getName)
+                    .orElse(null);
                 return this.stype.contains(stype) || this.stype.size() > 0 && this.stype.contains("*");
             }
             if (this.name != null) {
@@ -223,8 +252,8 @@ public class AppQuestCondition implements Predicate<QuestCollect> {
                     predicate = condition;
                 } else {
                     predicate = this.operator.endsWith("AND")
-                            ? predicate.and(condition)
-                            : predicate.or(condition);
+                        ? predicate.and(condition)
+                        : predicate.or(condition);
                 }
             }
             if ("NAND".equals(this.operator) || "NOR".equals(this.operator)) {
@@ -275,20 +304,20 @@ public class AppQuestCondition implements Predicate<QuestCollect> {
         private String toStringOperator() {
             StringBuilder sb = new StringBuilder();
             switch (this.operator) {
-            case "AND":
-                sb.append("次の条件を全て満たす");
-                break;
-            case "OR":
-                sb.append("次の条件のいずれか少なくとも1つを満たす");
-                break;
-            case "NAND":
-                sb.append("次の条件のいずれか少なくとも1つを満たさない");
-                break;
-            case "NOR":
-                sb.append("次の条件を全て満たさない");
-                break;
-            default:
-                break;
+                case "AND":
+                    sb.append("次の条件を全て満たす");
+                    break;
+                case "OR":
+                    sb.append("次の条件のいずれか少なくとも1つを満たす");
+                    break;
+                case "NAND":
+                    sb.append("次の条件のいずれか少なくとも1つを満たさない");
+                    break;
+                case "NOR":
+                    sb.append("次の条件を全て満たさない");
+                    break;
+                default:
+                    break;
             }
             if (this.description != null) {
                 sb.append("(" + this.description + ")");
@@ -307,34 +336,54 @@ public class AppQuestCondition implements Predicate<QuestCollect> {
     @Data
     public static class Condition implements Predicate<QuestCollect> {
 
-        /** 備考 */
+        /**
+         * 備考
+         */
         private String description;
 
-        /** 海域 */
+        /**
+         * 海域
+         */
         private LinkedHashSet<String> area;
 
-        /** マップセル(7-2の第1ボスならG、第2ボスならM) */
+        /**
+         * マップセル(7-2の第1ボスならG、第2ボスならM)
+         */
         private String cell;
 
-        /** 複数のマップセル(7-2の第1ボスならG、第2ボスならM) */
+        /**
+         * 複数のマップセル(7-2の第1ボスならG、第2ボスならM)
+         */
         private LinkedHashSet<String> cells;
 
-        /** 出撃 */
+        /**
+         * 出撃
+         */
         private boolean start;
 
-        /** ボス */
+        /**
+         * ボス
+         */
         private boolean boss;
 
-        /** ランク */
+        /**
+         * ランク
+         */
         private LinkedHashSet<String> rank;
 
-        /** 艦種 */
+        /**
+         * 艦種
+         */
         private LinkedHashSet<String> stype;
 
-        /** カウント */
+        /**
+         * カウント
+         */
         private int count;
-        
-        /** 遠征名 */
+
+        /**
+         * 遠征名
+         */
         private List<String> missions;
 
         private Boolean result;
@@ -363,19 +412,19 @@ public class AppQuestCondition implements Predicate<QuestCollect> {
                 } else {
                     List<String> labels = this.missions.stream()
                         .map(name -> MissionCollection.get().getMissionMap().values().stream()
-                                .filter(mission -> mission.getName().equals(name))
-                                .map(mission -> "「" + mission.getDispNo() + " " + mission.getName() + "」")
-                                .findAny()
-                                .orElse(name))
+                            .filter(mission -> mission.getName().equals(name))
+                            .map(mission -> "「" + mission.getDispNo() + " " + mission.getName() + "」")
+                            .findAny()
+                            .orElse(name))
                         .collect(Collectors.toList());
                     sb.append(String.join("または", labels));
                 }
                 sb.append("を").append(this.count).append("回成功");
             } else if (this.stype != null && !this.stype.isEmpty()) {
                 sb.append(this.stype.stream().collect(Collectors.joining("または")))
-                        .append("を")
-                        .append(this.count)
-                        .append("隻撃沈");
+                    .append("を")
+                    .append(this.count)
+                    .append("隻撃沈");
             } else {
                 if (this.area != null && !this.area.isEmpty()) {
                     sb.append(this.area.stream().collect(Collectors.joining("または")));
@@ -393,8 +442,8 @@ public class AppQuestCondition implements Predicate<QuestCollect> {
                         sb.append("ボス");
                     }
                     if (this.rank == null || this.rank.isEmpty()
-                            || this.rank.contains("E")
-                            || this.rank.contains("D")) {
+                        || this.rank.contains("E")
+                        || this.rank.contains("D")) {
                         // D以下
                         sb.append("戦闘");
                     } else if (this.rank.contains("C")) {
@@ -424,6 +473,7 @@ public class AppQuestCondition implements Predicate<QuestCollect> {
 
         /**
          * 遠征カウント
+         *
          * @param t 集計結果
          * @return カウント
          */
@@ -436,9 +486,10 @@ public class AppQuestCondition implements Predicate<QuestCollect> {
             }
         }
 
-        
+
         /**
          * カウント
+         *
          * @param t 集計結果
          * @return カウント
          */

@@ -10,7 +10,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_hensei/combined
- *
  */
 @API("/kcsapi/api_req_hensei/combined")
 public class ApiReqHenseiCombined implements APIListenerSpi {

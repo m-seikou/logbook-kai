@@ -4,7 +4,6 @@ import logbook.bean.SlotitemMst;
 
 /**
  * 装備種定数
- *
  */
 public enum SlotItemType {
 
@@ -84,10 +83,10 @@ public enum SlotItemType {
     public boolean equals(SlotitemMst item) {
         return item != null && this.item == item.getType().get(2);
     }
-    
+
     /**
      * 装備種定数を返します
-     * 
+     *
      * @return 装備種定数
      */
     public int getType() {

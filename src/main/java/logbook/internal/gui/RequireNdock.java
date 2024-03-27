@@ -21,33 +21,47 @@ import logbook.internal.Time;
 
 /**
  * お風呂に入りたい艦娘
- *
  */
 public class RequireNdock {
 
-    /** 艦隊 */
+    /**
+     * 艦隊
+     */
     private StringProperty deck = new SimpleStringProperty();
 
-    /** 艦娘 */
+    /**
+     * 艦娘
+     */
     private ObjectProperty<Ship> ship = new SimpleObjectProperty<Ship>();
 
-    /** Lv */
+    /**
+     * Lv
+     */
     private IntegerProperty lv = new SimpleIntegerProperty();
 
-    /** 時間 */
+    /**
+     * 時間
+     */
     private ObjectProperty<Duration> time = new SimpleObjectProperty<Duration>();
 
-    /** 今から */
+    /**
+     * 今から
+     */
     private StringProperty end = new SimpleStringProperty();
 
-    /** 燃料 */
+    /**
+     * 燃料
+     */
     private IntegerProperty fuel = new SimpleIntegerProperty();
 
-    /** 鋼材 */
+    /**
+     * 鋼材
+     */
     private IntegerProperty metal = new SimpleIntegerProperty();
 
     /**
      * 艦隊を取得します。
+     *
      * @return 艦隊
      */
     public StringProperty deckProperty() {
@@ -56,6 +70,7 @@ public class RequireNdock {
 
     /**
      * 艦隊を取得します。
+     *
      * @return 艦隊
      */
     public String getDeck() {
@@ -64,6 +79,7 @@ public class RequireNdock {
 
     /**
      * 艦隊を設定します。
+     *
      * @param deck 艦隊
      */
     public void setDeck(String deck) {
@@ -72,6 +88,7 @@ public class RequireNdock {
 
     /**
      * 艦娘を取得します。
+     *
      * @return 艦娘
      */
     public ObjectProperty<Ship> shipProperty() {
@@ -80,6 +97,7 @@ public class RequireNdock {
 
     /**
      * 艦娘を取得します。
+     *
      * @return 艦娘
      */
     public Ship getShip() {
@@ -88,6 +106,7 @@ public class RequireNdock {
 
     /**
      * 艦娘を設定します。
+     *
      * @param ship 艦娘
      */
     public void setShip(Ship ship) {
@@ -96,6 +115,7 @@ public class RequireNdock {
 
     /**
      * Lvを取得します。
+     *
      * @return Lv
      */
     public IntegerProperty lvProperty() {
@@ -104,6 +124,7 @@ public class RequireNdock {
 
     /**
      * Lvを取得します。
+     *
      * @return Lv
      */
     public Integer getLv() {
@@ -112,6 +133,7 @@ public class RequireNdock {
 
     /**
      * Lvを設定します。
+     *
      * @param lv Lv
      */
     public void setLv(Integer lv) {
@@ -120,6 +142,7 @@ public class RequireNdock {
 
     /**
      * 時間を取得します。
+     *
      * @return 時間
      */
     public ObjectProperty<Duration> timeProperty() {
@@ -128,6 +151,7 @@ public class RequireNdock {
 
     /**
      * 時間を取得します。
+     *
      * @return 時間
      */
     public Duration getTime() {
@@ -136,6 +160,7 @@ public class RequireNdock {
 
     /**
      * 時間を設定します。
+     *
      * @param time 時間
      */
     public void setTime(Duration time) {
@@ -144,6 +169,7 @@ public class RequireNdock {
 
     /**
      * 今からを取得します。
+     *
      * @return 今から
      */
     public StringProperty endProperty() {
@@ -152,6 +178,7 @@ public class RequireNdock {
 
     /**
      * 今からを取得します。
+     *
      * @return 今から
      */
     public String getEnd() {
@@ -160,6 +187,7 @@ public class RequireNdock {
 
     /**
      * 今からを設定します。
+     *
      * @param end 今から
      */
     public void setEnd(String end) {
@@ -168,6 +196,7 @@ public class RequireNdock {
 
     /**
      * 燃料を取得します。
+     *
      * @return 燃料
      */
     public IntegerProperty fuelProperty() {
@@ -176,6 +205,7 @@ public class RequireNdock {
 
     /**
      * 燃料を取得します。
+     *
      * @return 燃料
      */
     public Integer getFuel() {
@@ -184,6 +214,7 @@ public class RequireNdock {
 
     /**
      * 燃料を設定します。
+     *
      * @param fuel 燃料
      */
     public void setFuel(Integer fuel) {
@@ -192,6 +223,7 @@ public class RequireNdock {
 
     /**
      * 鋼材を取得します。
+     *
      * @return 鋼材
      */
     public IntegerProperty metalProperty() {
@@ -200,6 +232,7 @@ public class RequireNdock {
 
     /**
      * 鋼材を取得します。
+     *
      * @return 鋼材
      */
     public Integer getMetal() {
@@ -208,6 +241,7 @@ public class RequireNdock {
 
     /**
      * 鋼材を設定します。
+     *
      * @param metal 鋼材
      */
     public void setMetal(Integer metal) {
@@ -217,16 +251,16 @@ public class RequireNdock {
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(this.deck.get())
-                .add(Optional.ofNullable(this.ship.get())
-                        .map(s -> Ships.shipMst(s).map(ShipMst::getName).orElse(""))
-                        .orElse(""))
-                .add(Integer.toString(this.lv.get()))
-                .add(Time.toString(this.time.get(), "修復完了"))
-                .add(this.end.get())
-                .add(Integer.toString(this.fuel.get()))
-                .add(Integer.toString(this.metal.get()))
-                .toString();
+            .add(this.deck.get())
+            .add(Optional.ofNullable(this.ship.get())
+                .map(s -> Ships.shipMst(s).map(ShipMst::getName).orElse(""))
+                .orElse(""))
+            .add(Integer.toString(this.lv.get()))
+            .add(Time.toString(this.time.get(), "修復完了"))
+            .add(this.end.get())
+            .add(Integer.toString(this.fuel.get()))
+            .add(Integer.toString(this.metal.get()))
+            .toString();
     }
 
     /**

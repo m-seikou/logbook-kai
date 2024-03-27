@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * 艦種グループ
- *
  */
 public enum ShipTypeGroup {
 

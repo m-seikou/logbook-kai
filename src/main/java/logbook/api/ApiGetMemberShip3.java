@@ -18,7 +18,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/ship3
- *
  */
 @API("/kcsapi/api_get_member/ship3")
 public class ApiGetMemberShip3 implements APIListenerSpi {
@@ -36,13 +35,13 @@ public class ApiGetMemberShip3 implements APIListenerSpi {
      * api_data.api_ship_data
      *
      * @param array api_ship_data
-     * @param req リクエスト
+     * @param req   リクエスト
      */
     private void apiShipData(JsonArray array, RequestMetaData req) {
         Map<Integer, Ship> map = ShipCollection.get()
-                .getShipMap();
+            .getShipMap();
         if (!req.getParameterMap()
-                .containsKey("api_shipid")) {
+            .containsKey("api_shipid")) {
             // 艦娘の指定がない場合クリア
             map.clear();
         }
@@ -57,13 +56,13 @@ public class ApiGetMemberShip3 implements APIListenerSpi {
     private void apiDeckData(JsonArray array) {
         Map<Integer, DeckPort> deckMap = JsonHelper.toMap(array, DeckPort::getId, DeckPort::toDeckPort);
         DeckPortCollection.get()
-                .setDeckPortMap(deckMap);
+            .setDeckPortMap(deckMap);
         DeckPortCollection.get()
-                .setMissionShips(deckMap.values()
-                        .stream()
-                        .filter(d -> d.getMission().get(0) != 0)
-                        .map(DeckPort::getShip)
-                        .flatMap(List::stream)
-                        .collect(Collectors.toCollection(LinkedHashSet::new)));
+            .setMissionShips(deckMap.values()
+                .stream()
+                .filter(d -> d.getMission().get(0) != 0)
+                .map(DeckPort::getShip)
+                .flatMap(List::stream)
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 }

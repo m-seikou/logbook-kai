@@ -14,7 +14,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/require_info
- *
  */
 @API("/kcsapi/api_get_member/require_info")
 public class ApiGetMemberRequireInfo implements APIListenerSpi {
@@ -47,7 +46,7 @@ public class ApiGetMemberRequireInfo implements APIListenerSpi {
      */
     private void apiSlotItem(JsonArray array) {
         SlotItemCollection.get()
-                .setSlotitemMap(JsonHelper.toMap(array, SlotItem::getId, SlotItem::toSlotItem));
+            .setSlotitemMap(JsonHelper.toMap(array, SlotItem::getId, SlotItem::toSlotItem));
     }
 
     /**
@@ -57,7 +56,7 @@ public class ApiGetMemberRequireInfo implements APIListenerSpi {
      */
     private void apiUseitem(JsonArray array) {
         UseitemCollection.get()
-                .setUseitemMap(JsonHelper.toMap(array, Useitem::getId, Useitem::toUseitem));
+            .setUseitemMap(JsonHelper.toMap(array, Useitem::getId, Useitem::toUseitem));
     }
 
 }

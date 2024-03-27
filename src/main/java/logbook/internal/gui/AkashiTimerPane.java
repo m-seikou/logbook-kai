@@ -13,7 +13,6 @@ import logbook.internal.Time;
 
 /**
  * 泊地修理タイマー
- *
  */
 public class AkashiTimerPane extends AnchorPane {
 

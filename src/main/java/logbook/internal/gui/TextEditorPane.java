@@ -49,11 +49,11 @@ class TextEditorPane extends AnchorPane {
         WebEngine engine = this.webview.getEngine();
         engine.load(PluginServices.getResource("logbook/gui/text_editor_pane.html").toString());
         engine.getLoadWorker().stateProperty().addListener(
-                (ob, o, n) -> {
-                    if (n == Worker.State.SUCCEEDED) {
-                        this.setting();
-                    }
-                });
+            (ob, o, n) -> {
+                if (n == Worker.State.SUCCEEDED) {
+                    this.setting();
+                }
+            });
 
         KeyCombination copy = new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN);
         KeyCombination cut = new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN);
@@ -97,6 +97,7 @@ class TextEditorPane extends AnchorPane {
 
     /**
      * 言語を指定して開始します
+     *
      * @param lang 言語
      */
     public void start(String lang) {
@@ -106,6 +107,7 @@ class TextEditorPane extends AnchorPane {
 
     /**
      * エディタの内容を設定します
+     *
      * @param source エディタの内容
      */
     public void set(String source) {
@@ -115,6 +117,7 @@ class TextEditorPane extends AnchorPane {
 
     /**
      * エディタの内容を取得します
+     *
      * @return エディタの内容
      */
     public String get() {
@@ -125,6 +128,7 @@ class TextEditorPane extends AnchorPane {
 
     /**
      * エディタを読み取り専用にします
+     *
      * @param readOnly 読み取り専用
      */
     public void setReadOnly(boolean readOnly) {

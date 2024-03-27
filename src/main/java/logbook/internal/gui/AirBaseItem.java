@@ -20,81 +20,123 @@ import lombok.Setter;
 
 /**
  * 基地航空隊装備
- *
  */
 public class AirBaseItem implements Comparable<AirBaseItem> {
 
-    /** 装備定義 */
+    /**
+     * 装備定義
+     */
     private IntegerProperty id = new SimpleIntegerProperty();
 
-    /** ソート用 種別 */
+    /**
+     * ソート用 種別
+     */
     @Getter
     @Setter
     private Integer type2;
 
-    /** ソート用 種別 */
+    /**
+     * ソート用 種別
+     */
     @Getter
     @Setter
     private Integer type3;
 
-    /** 名称 */
+    /**
+     * 名称
+     */
     @Getter
     @Setter
     private String name;
 
-    /** 種別 */
+    /**
+     * 種別
+     */
     private StringProperty type = new SimpleStringProperty();
 
-    /** 熟練度 */
+    /**
+     * 熟練度
+     */
     private IntegerProperty alv = new SimpleIntegerProperty();
 
-    /** 改修Lv */
+    /**
+     * 改修Lv
+     */
     private IntegerProperty level = new SimpleIntegerProperty();
 
-    /** 個数 */
+    /**
+     * 個数
+     */
     private IntegerProperty count = new SimpleIntegerProperty();
 
-    /** 出撃時制空 */
+    /**
+     * 出撃時制空
+     */
     private IntegerProperty seiku = new SimpleIntegerProperty();
 
-    /** 防空時制空 */
+    /**
+     * 防空時制空
+     */
     private IntegerProperty interceptSeiku = new SimpleIntegerProperty();
 
-    /** 半径 */
+    /**
+     * 半径
+     */
     private IntegerProperty distance = new SimpleIntegerProperty();
 
-    /** 大艇入り半径 */
+    /**
+     * 大艇入り半径
+     */
     private IntegerProperty distanceTaiteichan = new SimpleIntegerProperty();
 
-    /** Catalina入り半径 */
+    /**
+     * Catalina入り半径
+     */
     private IntegerProperty distanceCatalina = new SimpleIntegerProperty();
 
-    /** 配置コスト */
+    /**
+     * 配置コスト
+     */
     private IntegerProperty cost = new SimpleIntegerProperty();
 
-    /** 対空 */
+    /**
+     * 対空
+     */
     private IntegerProperty tyku = new SimpleIntegerProperty();
 
-    /** 対爆 */
+    /**
+     * 対爆
+     */
     private IntegerProperty houm = new SimpleIntegerProperty();
 
-    /** 迎撃 */
+    /**
+     * 迎撃
+     */
     private IntegerProperty houk = new SimpleIntegerProperty();
 
-    /** 雷装 */
+    /**
+     * 雷装
+     */
     private IntegerProperty raig = new SimpleIntegerProperty();
 
-    /** 爆装 */
+    /**
+     * 爆装
+     */
     private IntegerProperty baku = new SimpleIntegerProperty();
 
-    /** 対潜 */
+    /**
+     * 対潜
+     */
     private IntegerProperty tais = new SimpleIntegerProperty();
 
-    /** 索敵 */
+    /**
+     * 索敵
+     */
     private IntegerProperty saku = new SimpleIntegerProperty();
 
     /**
      * 装備定義を取得します。
+     *
      * @return 装備定義
      */
     public IntegerProperty idProperty() {
@@ -103,6 +145,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 装備定義を取得します。
+     *
      * @return 装備定義
      */
     public Integer getId() {
@@ -111,6 +154,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 装備定義を設定します。
+     *
      * @param id 装備定義
      */
     public void setId(Integer id) {
@@ -119,6 +163,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 種別を取得します。
+     *
      * @return 種別
      */
     public StringProperty typeProperty() {
@@ -127,6 +172,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 種別を取得します。
+     *
      * @return 種別
      */
     public String getType() {
@@ -135,6 +181,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 種別を設定します。
+     *
      * @param type 種別
      */
     public void setType(String type) {
@@ -143,6 +190,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 熟練度を取得します。
+     *
      * @return 熟練度
      */
     public IntegerProperty alvProperty() {
@@ -151,6 +199,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 熟練度を取得します。
+     *
      * @return 熟練度
      */
     public Integer getAlv() {
@@ -159,6 +208,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 熟練度を設定します。
+     *
      * @param alv 熟練度
      */
     public void setAlv(Integer alv) {
@@ -167,6 +217,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 改修Lvを取得します。
+     *
      * @return 改修Lv
      */
     public IntegerProperty levelProperty() {
@@ -175,6 +226,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 改修Lvを取得します。
+     *
      * @return 改修Lv
      */
     public Integer getLevel() {
@@ -183,6 +235,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 改修Lvを設定します。
+     *
      * @param level 改修Lv
      */
     public void setLevel(Integer level) {
@@ -191,6 +244,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 個数を取得します。
+     *
      * @return 個数
      */
     public IntegerProperty countProperty() {
@@ -199,6 +253,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 個数を取得します。
+     *
      * @return 個数
      */
     public Integer getCount() {
@@ -207,6 +262,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 個数を設定します。
+     *
      * @param count 個数
      */
     public void setCount(Integer count) {
@@ -215,6 +271,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 出撃時制空を取得します。
+     *
      * @return 出撃時制空
      */
     public IntegerProperty seikuProperty() {
@@ -223,6 +280,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 出撃時制空を取得します。
+     *
      * @return 出撃時制空
      */
     public Integer getSeiku() {
@@ -231,6 +289,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 出撃時制空を設定します。
+     *
      * @param seiku 出撃時制空
      */
     public void setSeiku(Integer seiku) {
@@ -239,6 +298,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 防空時制空を取得します。
+     *
      * @return 防空時制空
      */
     public IntegerProperty interceptSeikuProperty() {
@@ -247,6 +307,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 防空時制空を取得します。
+     *
      * @return 防空時制空
      */
     public Integer getInterceptSeiku() {
@@ -255,6 +316,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 防空時制空を設定します。
+     *
      * @param interceptSeiku 防空時制空
      */
     public void setInterceptSeiku(Integer interceptSeiku) {
@@ -263,6 +325,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 半径を取得します。
+     *
      * @return 半径
      */
     public IntegerProperty distanceProperty() {
@@ -271,6 +334,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 半径を取得します。
+     *
      * @return 半径
      */
     public Integer getDistance() {
@@ -279,6 +343,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 半径を設定します。
+     *
      * @param distance 半径
      */
     public void setDistance(Integer distance) {
@@ -287,6 +352,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 大艇入り半径を取得します。
+     *
      * @return 大艇入り半径
      */
     public IntegerProperty distanceTaiteichanProperty() {
@@ -295,6 +361,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 大艇入り半径を取得します。
+     *
      * @return 大艇入り半径
      */
     public Integer getDistanceTaiteichan() {
@@ -303,6 +370,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 大艇入り半径を設定します。
+     *
      * @param distanceTaiteichan 大艇入り半径
      */
     public void setDistanceTaiteichan(Integer distanceTaiteichan) {
@@ -311,6 +379,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * Catalina入り半径を取得します。
+     *
      * @return Catalina入り半径
      */
     public IntegerProperty distanceCatalinaProperty() {
@@ -319,6 +388,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * Catalina入り半径を取得します。
+     *
      * @return Catalina入り半径
      */
     public Integer getDistanceCatalina() {
@@ -327,6 +397,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * Catalina入り半径を設定します。
+     *
      * @param distanceCatalina Catalina入り半径
      */
     public void setDistanceCatalina(Integer distanceCatalina) {
@@ -335,6 +406,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 配置コストを取得します。
+     *
      * @return 配置コスト
      */
     public IntegerProperty costProperty() {
@@ -343,6 +415,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 配置コストを取得します。
+     *
      * @return 配置コスト
      */
     public Integer getCost() {
@@ -351,6 +424,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 配置コストを設定します。
+     *
      * @param cost 配置コスト
      */
     public void setCost(Integer cost) {
@@ -359,6 +433,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 対空を取得します。
+     *
      * @return 対空
      */
     public IntegerProperty tykuProperty() {
@@ -367,6 +442,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 対空を取得します。
+     *
      * @return 対空
      */
     public Integer getTyku() {
@@ -375,6 +451,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 対空を設定します。
+     *
      * @param tyku 対空
      */
     public void setTyku(Integer tyku) {
@@ -383,6 +460,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 対爆を取得します。
+     *
      * @return 対爆
      */
     public IntegerProperty houmProperty() {
@@ -391,6 +469,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 対爆を取得します。
+     *
      * @return 対爆
      */
     public Integer getHoum() {
@@ -399,6 +478,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 対爆を設定します。
+     *
      * @param houm 対爆
      */
     public void setHoum(Integer houm) {
@@ -407,6 +487,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 迎撃を取得します。
+     *
      * @return 迎撃
      */
     public IntegerProperty houkProperty() {
@@ -415,6 +496,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 迎撃を取得します。
+     *
      * @return 迎撃
      */
     public Integer getHouk() {
@@ -423,6 +505,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 迎撃を設定します。
+     *
      * @param houk 迎撃
      */
     public void setHouk(Integer houk) {
@@ -431,6 +514,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 雷装を取得します。
+     *
      * @return 雷装
      */
     public IntegerProperty raigProperty() {
@@ -439,6 +523,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 雷装を取得します。
+     *
      * @return 雷装
      */
     public Integer getRaig() {
@@ -447,6 +532,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 雷装を設定します。
+     *
      * @param raig 雷装
      */
     public void setRaig(Integer raig) {
@@ -455,6 +541,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 爆装を取得します。
+     *
      * @return 爆装
      */
     public IntegerProperty bakuProperty() {
@@ -463,6 +550,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 爆装を取得します。
+     *
      * @return 爆装
      */
     public Integer getBaku() {
@@ -471,6 +559,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 爆装を設定します。
+     *
      * @param baku 爆装
      */
     public void setBaku(Integer baku) {
@@ -479,6 +568,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 対潜を取得します。
+     *
      * @return 対潜
      */
     public IntegerProperty taisProperty() {
@@ -487,6 +577,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 対潜を取得します。
+     *
      * @return 対潜
      */
     public Integer getTais() {
@@ -495,6 +586,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 対潜を設定します。
+     *
      * @param tais 対潜
      */
     public void setTais(Integer tais) {
@@ -503,6 +595,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 索敵を取得します。
+     *
      * @return 索敵
      */
     public IntegerProperty sakuProperty() {
@@ -511,6 +604,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 索敵を取得します。
+     *
      * @return 索敵
      */
     public Integer getSaku() {
@@ -519,6 +613,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
 
     /**
      * 索敵を設定します。
+     *
      * @param saku 索敵
      */
     public void setSaku(Integer saku) {
@@ -533,38 +628,38 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
     @Override
     public boolean equals(Object obj) {
         return (obj instanceof AirBaseItem)
-                && this.id.get() == ((AirBaseItem) obj).id.get()
-                && this.level.get() == ((AirBaseItem) obj).level.get()
-                && this.alv.get() == ((AirBaseItem) obj).alv.get();
+            && this.id.get() == ((AirBaseItem) obj).id.get()
+            && this.level.get() == ((AirBaseItem) obj).level.get()
+            && this.alv.get() == ((AirBaseItem) obj).alv.get();
     }
 
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(this.name)
-                .add(this.type.get())
-                .add(Optional.ofNullable(this.alv.get())
-                        .filter(v -> v > 0)
-                        .map(v -> Messages.getString("item.alv", v)) //$NON-NLS-1$
-                        .orElse(""))
-                .add(Optional.ofNullable(this.level.get())
-                        .filter(v -> v > 0)
-                        .map(v -> Messages.getString("item.level", v)) //$NON-NLS-1$
-                        .orElse(""))
-                .add(Integer.toString(this.count.get()))
-                .add(Integer.toString(this.seiku.get()))
-                .add(Integer.toString(this.interceptSeiku.get()))
-                .add(Integer.toString(this.distance.get()))
-                .add(Integer.toString(this.distanceTaiteichan.get()))
-                .add(Integer.toString(this.cost.get()))
-                .add(Integer.toString(this.tyku.get()))
-                .add(Integer.toString(this.houm.get()))
-                .add(Integer.toString(this.houk.get()))
-                .add(Integer.toString(this.raig.get()))
-                .add(Integer.toString(this.baku.get()))
-                .add(Integer.toString(this.tais.get()))
-                .add(Integer.toString(this.saku.get()))
-                .toString();
+            .add(this.name)
+            .add(this.type.get())
+            .add(Optional.ofNullable(this.alv.get())
+                .filter(v -> v > 0)
+                .map(v -> Messages.getString("item.alv", v)) //$NON-NLS-1$
+                .orElse(""))
+            .add(Optional.ofNullable(this.level.get())
+                .filter(v -> v > 0)
+                .map(v -> Messages.getString("item.level", v)) //$NON-NLS-1$
+                .orElse(""))
+            .add(Integer.toString(this.count.get()))
+            .add(Integer.toString(this.seiku.get()))
+            .add(Integer.toString(this.interceptSeiku.get()))
+            .add(Integer.toString(this.distance.get()))
+            .add(Integer.toString(this.distanceTaiteichan.get()))
+            .add(Integer.toString(this.cost.get()))
+            .add(Integer.toString(this.tyku.get()))
+            .add(Integer.toString(this.houm.get()))
+            .add(Integer.toString(this.houk.get()))
+            .add(Integer.toString(this.raig.get()))
+            .add(Integer.toString(this.baku.get()))
+            .add(Integer.toString(this.tais.get()))
+            .add(Integer.toString(this.saku.get()))
+            .toString();
     }
 
     @Override
@@ -581,9 +676,9 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
     public static AirBaseItem toAirBaseItem(SlotItem item) {
         SlotitemMst slotitem = Items.slotitemMst(item).get();
         String type = SlotitemEquiptypeCollection.get()
-                .getEquiptypeMap()
-                .get(slotitem.getType().get(2))
-                .getName();
+            .getEquiptypeMap()
+            .get(slotitem.getType().get(2))
+            .getName();
         int onslot = Items.isCombatAircraft(slotitem) ? 18 : 4;
         int distance = Optional.ofNullable(slotitem.getDistance()).orElse(0);
 
@@ -626,7 +721,7 @@ public class AirBaseItem implements Comparable<AirBaseItem> {
      */
     public static boolean isTarget(SlotItem item) {
         SlotitemMst slotitem = Items.slotitemMst(item)
-                .orElse(null);
+            .orElse(null);
         if (slotitem == null)
             return false;
         // 航空機である

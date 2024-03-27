@@ -19,6 +19,7 @@ public class AppSeaAreaExpCollection implements Serializable {
 
     /**
      * 海域経験値のデフォルト値
+     *
      * @return 海域経験値のデフォルト値
      */
     public static AppSeaAreaExpCollection getDefault() {
@@ -58,7 +59,7 @@ public class AppSeaAreaExpCollection implements Serializable {
      * アプリケーションのデフォルト設定ディレクトリから<code>AppSeaAreaExpCollection</code>を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(AppSeaAreaExpCollection.class, AppSeaAreaExpCollection::getDefault)</code>
+     * <code>Config.getDefault().get(AppSeaAreaExpCollection.class, AppSeaAreaExpCollection::getDefault)</code>
      * </blockquote>
      *
      * @return <code>AppSeaAreaExpCollection</code>

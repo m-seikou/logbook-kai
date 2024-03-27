@@ -13,7 +13,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_hokyu/charge
- *
  */
 @API("/kcsapi/api_req_hokyu/charge")
 public class ApiReqHokyuCharge implements APIListenerSpi {
@@ -23,7 +22,7 @@ public class ApiReqHokyuCharge implements APIListenerSpi {
         JsonObject data = json.getJsonObject("api_data");
         if (data != null) {
             Map<Integer, Ship> map = ShipCollection.get()
-                    .getShipMap();
+                .getShipMap();
 
             List<Ship> ships = JsonHelper.toList(data.getJsonArray("api_ship"), Ship::toShip);
             for (Ship ship : ships) {

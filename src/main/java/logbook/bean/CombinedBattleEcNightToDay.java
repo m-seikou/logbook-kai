@@ -19,150 +19,241 @@ import lombok.Data;
 
 /**
  * 夜戦→昼戦(vs連合艦隊)
- *
  */
 @Data
 public class CombinedBattleEcNightToDay implements ICombinedBattle, ICombinedEcBattle, IFormation,
-        INightToDayBattle, IAirBaseAttack, IKouku, ISortieHougeki, INSupport, ISupport, Serializable {
+    INightToDayBattle, IAirBaseAttack, IKouku, ISortieHougeki, INSupport, ISupport, Serializable {
 
     private static final long serialVersionUID = -364877629377359534L;
 
-    /** api_dock_id/api_deck_id */
+    /**
+     * api_dock_id/api_deck_id
+     */
     private Integer dockId;
 
-    /** api_formation */
+    /**
+     * api_formation
+     */
     private List<Integer> formation;
 
-    /** api_f_nowhps */
+    /**
+     * api_f_nowhps
+     */
     private List<Integer> fNowHps;
 
-    /** api_f_maxhps */
+    /**
+     * api_f_maxhps
+     */
     private List<Integer> fMaxHps;
 
-    /** api_f_nowhps_combined */
+    /**
+     * api_f_nowhps_combined
+     */
     private List<Integer> fNowHpsCombined;
 
-    /** api_f_maxhps_combined */
+    /**
+     * api_f_maxhps_combined
+     */
     private List<Integer> fMaxHpsCombined;
 
-    /** api_fParam */
+    /**
+     * api_fParam
+     */
     private List<List<Integer>> fParam;
 
-    /** api_fParam_combined */
+    /**
+     * api_fParam_combined
+     */
     private List<List<Integer>> fParamCombined;
 
-    /** api_ship_ke */
+    /**
+     * api_ship_ke
+     */
     private List<Integer> shipKe;
 
-    /** api_ship_lv */
+    /**
+     * api_ship_lv
+     */
     private List<Integer> shipLv;
 
-    /** api_ship_ke_combined */
+    /**
+     * api_ship_ke_combined
+     */
     private List<Integer> shipKeCombined;
 
-    /** api_ship_lv_combined */
+    /**
+     * api_ship_lv_combined
+     */
     private List<Integer> shipLvCombined;
 
-    /** api_e_nowhps */
+    /**
+     * api_e_nowhps
+     */
     private List<Integer> eNowHps;
 
-    /** api_e_maxhps */
+    /**
+     * api_e_maxhps
+     */
     private List<Integer> eMaxHps;
 
-    /** api_e_nowhps_combined */
+    /**
+     * api_e_nowhps_combined
+     */
     private List<Integer> eNowHpsCombined;
 
-    /** api_e_maxhps_combined */
+    /**
+     * api_e_maxhps_combined
+     */
     private List<Integer> eMaxHpsCombined;
 
-    /** api_eSlot */
+    /**
+     * api_eSlot
+     */
     private List<List<Integer>> eSlot;
 
-    /** api_eSlot_combined */
+    /**
+     * api_eSlot_combined
+     */
     private List<List<Integer>> eSlotCombined;
 
-    /** api_eParam */
+    /**
+     * api_eParam
+     */
     private List<List<Integer>> eParam;
 
-    /** api_eParam_combined */
+    /**
+     * api_eParam_combined
+     */
     private List<List<Integer>> eParamCombined;
 
-    /** api_touch_plane */
+    /**
+     * api_touch_plane
+     */
     private List<Integer> touchPlane;
 
-    /** api_flare_pos */
+    /**
+     * api_flare_pos
+     */
     private List<Integer> flarePos;
 
-    /** api_n_support_flag */
+    /**
+     * api_n_support_flag
+     */
     private Integer nSupportFlag;
 
-    /** api_n_support_info */
+    /**
+     * api_n_support_info
+     */
     private BattleTypes.SupportInfo nSupportInfo;
 
-    /** api_n_hougeki1 */
+    /**
+     * api_n_hougeki1
+     */
     private BattleTypes.MidnightHougeki nHougeki1;
 
-    /** api_n_hougeki2 */
+    /**
+     * api_n_hougeki2
+     */
     private BattleTypes.MidnightHougeki nHougeki2;
 
-    /** api_day_flag */
+    /**
+     * api_day_flag
+     */
     private Boolean dayFlag;
 
-    /** api_search */
+    /**
+     * api_search
+     */
     private List<Integer> search;
 
-    /** api_air_base_injection */
+    /**
+     * api_air_base_injection
+     */
     private BattleTypes.AirBaseAttack airBaseInjection;
 
-    /** api_air_base_attack */
+    /**
+     * api_air_base_attack
+     */
     private List<BattleTypes.AirBaseAttack> airBaseAttack;
 
-    /** api_stage_flag */
+    /**
+     * api_stage_flag
+     */
     private List<Integer> stageFlag;
 
-    /** api_injection_kouku */
+    /**
+     * api_injection_kouku
+     */
     private BattleTypes.Kouku injectionKouku;
 
-    /** api_kouku */
+    /**
+     * api_kouku
+     */
     private BattleTypes.Kouku kouku;
 
-    /** api_support_flag */
+    /**
+     * api_support_flag
+     */
     private Integer supportFlag;
 
-    /** api_support_info */
+    /**
+     * api_support_info
+     */
     private BattleTypes.SupportInfo supportInfo;
 
-    /** api_opening_taisen_flag */
+    /**
+     * api_opening_taisen_flag
+     */
     private Boolean openingTaisenFlag;
 
-    /** api_opening_taisen */
+    /**
+     * api_opening_taisen
+     */
     private BattleTypes.Hougeki openingTaisen;
 
-    /** api_opening_flag */
+    /**
+     * api_opening_flag
+     */
     private Boolean openingFlag;
 
-    /** api_opening_atack */
+    /**
+     * api_opening_atack
+     */
     private BattleTypes.OpeningRaigeki openingAttack;
 
-    /** api_hourai_flag */
+    /**
+     * api_hourai_flag
+     */
     private List<Integer> houraiFlag;
 
-    /** api_hougeki1 */
+    /**
+     * api_hougeki1
+     */
     private BattleTypes.Hougeki hougeki1;
 
-    /** api_hougeki2 */
+    /**
+     * api_hougeki2
+     */
     private BattleTypes.Hougeki hougeki2;
 
-    /** api_hougeki3(未使用) */
+    /**
+     * api_hougeki3(未使用)
+     */
     private BattleTypes.Hougeki hougeki3;
 
-    /** api_raigeki */
+    /**
+     * api_raigeki
+     */
     private BattleTypes.Raigeki raigeki;
 
-    /** api_midnight_flag(未使用) */
+    /**
+     * api_midnight_flag(未使用)
+     */
     private Boolean midnightFlag;
 
-    /** api_smoke_type */
+    /**
+     * api_smoke_type
+     */
     private Integer smokeType;
 
     /**
@@ -174,53 +265,53 @@ public class CombinedBattleEcNightToDay implements ICombinedBattle, ICombinedEcB
     public static CombinedBattleEcNightToDay toBattle(JsonObject json) {
         CombinedBattleEcNightToDay bean = new CombinedBattleEcNightToDay();
         JsonHelper.bind(json)
-                .setInteger("api_deck_id", bean::setDockId)
-                .setIntegerList("api_formation", bean::setFormation)
-                .setIntegerList("api_f_nowhps", bean::setFNowHps)
-                .setIntegerList("api_f_maxhps", bean::setFMaxHps)
-                .setIntegerList("api_f_nowhps_combined", bean::setFNowHpsCombined)
-                .setIntegerList("api_f_maxhps_combined", bean::setFMaxHpsCombined)
-                .set("api_fParam", bean::setFParam, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_fParam_combined", bean::setFParamCombined, JsonHelper.toList(JsonHelper::toIntegerList))
-                .setIntegerList("api_ship_ke", bean::setShipKe)
-                .setIntegerList("api_ship_lv", bean::setShipLv)
-                .setIntegerList("api_ship_ke_combined", bean::setShipKeCombined)
-                .setIntegerList("api_ship_lv_combined", bean::setShipLvCombined)
-                .setIntegerList("api_e_nowhps", bean::setENowHps)
-                .setIntegerList("api_e_maxhps", bean::setEMaxHps)
-                .setIntegerList("api_e_nowhps_combined", bean::setENowHpsCombined)
-                .setIntegerList("api_e_maxhps_combined", bean::setEMaxHpsCombined)
-                .set("api_eSlot", bean::setESlot, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_eSlot_combined", bean::setESlotCombined, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_eParam", bean::setEParam, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_eParam_combined", bean::setEParamCombined, JsonHelper.toList(JsonHelper::toIntegerList))
-                .setIntegerList("api_touch_plane", bean::setTouchPlane)
-                .setIntegerList("api_flare_pos", bean::setFlarePos)
-                .setInteger("api_n_support_flag", bean::setNSupportFlag)
-                .set("api_n_support_info", bean::setNSupportInfo, BattleTypes.SupportInfo::toSupportInfo)
-                .set("api_n_hougeki1", bean::setNHougeki1, BattleTypes.MidnightHougeki::toMidnightHougeki)
-                .set("api_n_hougeki2", bean::setNHougeki2, BattleTypes.MidnightHougeki::toMidnightHougeki)
-                .setBoolean("api_day_flag", bean::setDayFlag)
-                .setIntegerList("api_search", bean::setSearch)
-                .set("api_air_base_injection", bean::setAirBaseInjection,
-                        BattleTypes.AirBaseAttack::toAirBaseAttack)
-                .set("api_air_base_attack", bean::setAirBaseAttack,
-                        JsonHelper.toList(BattleTypes.AirBaseAttack::toAirBaseAttack))
-                .setIntegerList("api_stage_flag", bean::setStageFlag)
-                .set("api_injection_kouku", bean::setInjectionKouku, BattleTypes.Kouku::toKouku)
-                .set("api_kouku", bean::setKouku, BattleTypes.Kouku::toKouku)
-                .setInteger("api_support_flag", bean::setSupportFlag)
-                .set("api_support_info", bean::setSupportInfo, BattleTypes.SupportInfo::toSupportInfo)
-                .setBoolean("api_opening_taisen_flag", bean::setOpeningTaisenFlag)
-                .set("api_opening_taisen", bean::setOpeningTaisen, BattleTypes.Hougeki::toHougeki)
-                .setBoolean("api_opening_flag", bean::setOpeningFlag)
-                .set("api_opening_atack", bean::setOpeningAttack, BattleTypes.OpeningRaigeki::toRaigeki)
-                .setIntegerList("api_hourai_flag", bean::setHouraiFlag)
-                .set("api_hougeki1", bean::setHougeki1, BattleTypes.Hougeki::toHougeki)
-                .set("api_hougeki2", bean::setHougeki2, BattleTypes.Hougeki::toHougeki)
-                .set("api_hougeki3", bean::setHougeki3, BattleTypes.Hougeki::toHougeki)
-                .set("api_raigeki", bean::setRaigeki, BattleTypes.Raigeki::toRaigeki)
-                .setInteger("api_smoke_type", bean::setSmokeType)
+            .setInteger("api_deck_id", bean::setDockId)
+            .setIntegerList("api_formation", bean::setFormation)
+            .setIntegerList("api_f_nowhps", bean::setFNowHps)
+            .setIntegerList("api_f_maxhps", bean::setFMaxHps)
+            .setIntegerList("api_f_nowhps_combined", bean::setFNowHpsCombined)
+            .setIntegerList("api_f_maxhps_combined", bean::setFMaxHpsCombined)
+            .set("api_fParam", bean::setFParam, JsonHelper.toList(JsonHelper::toIntegerList))
+            .set("api_fParam_combined", bean::setFParamCombined, JsonHelper.toList(JsonHelper::toIntegerList))
+            .setIntegerList("api_ship_ke", bean::setShipKe)
+            .setIntegerList("api_ship_lv", bean::setShipLv)
+            .setIntegerList("api_ship_ke_combined", bean::setShipKeCombined)
+            .setIntegerList("api_ship_lv_combined", bean::setShipLvCombined)
+            .setIntegerList("api_e_nowhps", bean::setENowHps)
+            .setIntegerList("api_e_maxhps", bean::setEMaxHps)
+            .setIntegerList("api_e_nowhps_combined", bean::setENowHpsCombined)
+            .setIntegerList("api_e_maxhps_combined", bean::setEMaxHpsCombined)
+            .set("api_eSlot", bean::setESlot, JsonHelper.toList(JsonHelper::toIntegerList))
+            .set("api_eSlot_combined", bean::setESlotCombined, JsonHelper.toList(JsonHelper::toIntegerList))
+            .set("api_eParam", bean::setEParam, JsonHelper.toList(JsonHelper::toIntegerList))
+            .set("api_eParam_combined", bean::setEParamCombined, JsonHelper.toList(JsonHelper::toIntegerList))
+            .setIntegerList("api_touch_plane", bean::setTouchPlane)
+            .setIntegerList("api_flare_pos", bean::setFlarePos)
+            .setInteger("api_n_support_flag", bean::setNSupportFlag)
+            .set("api_n_support_info", bean::setNSupportInfo, BattleTypes.SupportInfo::toSupportInfo)
+            .set("api_n_hougeki1", bean::setNHougeki1, BattleTypes.MidnightHougeki::toMidnightHougeki)
+            .set("api_n_hougeki2", bean::setNHougeki2, BattleTypes.MidnightHougeki::toMidnightHougeki)
+            .setBoolean("api_day_flag", bean::setDayFlag)
+            .setIntegerList("api_search", bean::setSearch)
+            .set("api_air_base_injection", bean::setAirBaseInjection,
+                BattleTypes.AirBaseAttack::toAirBaseAttack)
+            .set("api_air_base_attack", bean::setAirBaseAttack,
+                JsonHelper.toList(BattleTypes.AirBaseAttack::toAirBaseAttack))
+            .setIntegerList("api_stage_flag", bean::setStageFlag)
+            .set("api_injection_kouku", bean::setInjectionKouku, BattleTypes.Kouku::toKouku)
+            .set("api_kouku", bean::setKouku, BattleTypes.Kouku::toKouku)
+            .setInteger("api_support_flag", bean::setSupportFlag)
+            .set("api_support_info", bean::setSupportInfo, BattleTypes.SupportInfo::toSupportInfo)
+            .setBoolean("api_opening_taisen_flag", bean::setOpeningTaisenFlag)
+            .set("api_opening_taisen", bean::setOpeningTaisen, BattleTypes.Hougeki::toHougeki)
+            .setBoolean("api_opening_flag", bean::setOpeningFlag)
+            .set("api_opening_atack", bean::setOpeningAttack, BattleTypes.OpeningRaigeki::toRaigeki)
+            .setIntegerList("api_hourai_flag", bean::setHouraiFlag)
+            .set("api_hougeki1", bean::setHougeki1, BattleTypes.Hougeki::toHougeki)
+            .set("api_hougeki2", bean::setHougeki2, BattleTypes.Hougeki::toHougeki)
+            .set("api_hougeki3", bean::setHougeki3, BattleTypes.Hougeki::toHougeki)
+            .set("api_raigeki", bean::setRaigeki, BattleTypes.Raigeki::toRaigeki)
+            .setInteger("api_smoke_type", bean::setSmokeType)
         ;
         return bean;
     }

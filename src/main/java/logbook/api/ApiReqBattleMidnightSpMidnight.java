@@ -19,7 +19,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_battle_midnight/sp_midnight
- *
  */
 @API("/kcsapi/api_req_battle_midnight/sp_midnight")
 public class ApiReqBattleMidnightSpMidnight implements APIListenerSpi {
@@ -43,8 +42,8 @@ public class ApiReqBattleMidnightSpMidnight implements APIListenerSpi {
                 }
                 // 出撃艦隊
                 Integer dockId = Optional.ofNullable(log.getBattle())
-                        .map(IFormation::getDockId)
-                        .orElse(1);
+                    .map(IFormation::getDockId)
+                    .orElse(1);
                 // 艦隊スナップショットを作る
                 BattleLog.snapshot(log, dockId);
                 if (AppConfig.get().isApplyBattle()) {
@@ -52,10 +51,10 @@ public class ApiReqBattleMidnightSpMidnight implements APIListenerSpi {
                     PhaseState p = new PhaseState(log);
                     p.apply(log.getBattle());
                     ShipCollection.get()
-                            .getShipMap()
-                            .putAll(p.getAfterFriend().stream()
-                                    .filter(Objects::nonNull)
-                                    .collect(Collectors.toMap(Ship::getId, v -> v)));
+                        .getShipMap()
+                        .putAll(p.getAfterFriend().stream()
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toMap(Ship::getId, v -> v)));
                 }
             }
         }

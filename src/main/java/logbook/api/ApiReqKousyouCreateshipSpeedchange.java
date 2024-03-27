@@ -7,7 +7,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_kousyou/createship_speedchange
- *
  */
 @API("/kcsapi/api_req_kousyou/createship_speedchange")
 public class ApiReqKousyouCreateshipSpeedchange implements APIListenerSpi {

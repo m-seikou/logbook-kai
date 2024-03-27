@@ -8,7 +8,7 @@ public class Time {
     /**
      * 時間のテキスト表現
      *
-     * @param d 期間
+     * @param d       期間
      * @param message {@code Duration}が0または負の場合のテキスト
      * @return 時間のテキスト表現
      */

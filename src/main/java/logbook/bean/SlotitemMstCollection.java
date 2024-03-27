@@ -9,21 +9,22 @@ import lombok.Data;
 
 /**
  * アイテムのコレクション
- *
  */
 @Data
 public class SlotitemMstCollection implements Serializable {
 
     private static final long serialVersionUID = 8409969154221160905L;
 
-    /** アイテム */
+    /**
+     * アイテム
+     */
     private Map<Integer, SlotitemMst> slotitemMap = new LinkedHashMap<>();
 
     /**
      * アプリケーションのデフォルト設定ディレクトリから{@link SlotitemMstCollection}を取得します、
      * これは次の記述と同等です
      * <blockquote>
-     *     <code>Config.getDefault().get(SlotitemMstCollection.class, SlotitemMstCollection::new)</code>
+     * <code>Config.getDefault().get(SlotitemMstCollection.class, SlotitemMstCollection::new)</code>
      * </blockquote>
      *
      * @return {@link SlotitemMstCollection}

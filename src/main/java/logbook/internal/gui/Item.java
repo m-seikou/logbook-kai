@@ -15,70 +15,104 @@ import lombok.Setter;
 
 /**
  * 所有装備
- *
  */
 public class Item implements Comparable<Item> {
 
-    /** 装備定義 */
+    /**
+     * 装備定義
+     */
     private IntegerProperty id = new SimpleIntegerProperty();
 
-    /** フィルター用 種別*/
+    /**
+     * フィルター用 種別
+     */
     @Getter
     @Setter
     private Integer type2;
 
-    /** ソート用 種別 */
+    /**
+     * ソート用 種別
+     */
     @Getter
     @Setter
     private Integer type3;
 
-    /** 名称 */
+    /**
+     * 名称
+     */
     @Getter
     @Setter
     private String name;
 
-    /** 種別 */
+    /**
+     * 種別
+     */
     private StringProperty type = new SimpleStringProperty();
 
-    /** 個数 */
+    /**
+     * 個数
+     */
     private IntegerProperty count = new SimpleIntegerProperty();
 
-    /** 火力 */
+    /**
+     * 火力
+     */
     private IntegerProperty houg = new SimpleIntegerProperty();
 
-    /** 命中 */
+    /**
+     * 命中
+     */
     private IntegerProperty houm = new SimpleIntegerProperty();
 
-    /** 射程 */
+    /**
+     * 射程
+     */
     private IntegerProperty leng = new SimpleIntegerProperty();
 
-    /** 運 */
+    /**
+     * 運
+     */
     private IntegerProperty luck = new SimpleIntegerProperty();
 
-    /** 回避 */
+    /**
+     * 回避
+     */
     private IntegerProperty houk = new SimpleIntegerProperty();
 
-    /** 爆装 */
+    /**
+     * 爆装
+     */
     private IntegerProperty baku = new SimpleIntegerProperty();
 
-    /** 雷装 */
+    /**
+     * 雷装
+     */
     private IntegerProperty raig = new SimpleIntegerProperty();
 
-    /** 索敵 */
+    /**
+     * 索敵
+     */
     private IntegerProperty saku = new SimpleIntegerProperty();
 
-    /** 対潜 */
+    /**
+     * 対潜
+     */
     private IntegerProperty tais = new SimpleIntegerProperty();
 
-    /** 対空 */
+    /**
+     * 対空
+     */
     private IntegerProperty tyku = new SimpleIntegerProperty();
 
-    /** 装甲 */
+    /**
+     * 装甲
+     */
     private IntegerProperty souk = new SimpleIntegerProperty();
 
 
     /**
      * 装備定義を取得します。
+     *
      * @return 装備定義
      */
     public IntegerProperty idProperty() {
@@ -87,6 +121,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 装備定義を取得します。
+     *
      * @return 装備定義
      */
     public Integer getId() {
@@ -95,6 +130,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 装備定義を設定します。
+     *
      * @param id 装備定義
      */
     public void setId(Integer id) {
@@ -103,6 +139,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 種別を取得します。
+     *
      * @return 種別
      */
     public StringProperty typeProperty() {
@@ -111,6 +148,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 種別を取得します。
+     *
      * @return 種別
      */
     public String getType() {
@@ -119,6 +157,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 種別を設定します。
+     *
      * @param type 種別
      */
     public void setType(String type) {
@@ -127,6 +166,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 個数を取得します。
+     *
      * @return 個数
      */
     public IntegerProperty countProperty() {
@@ -135,6 +175,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 個数を取得します。
+     *
      * @return 個数
      */
     public Integer getCount() {
@@ -143,6 +184,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 個数を設定します。
+     *
      * @param count 個数
      */
     public void setCount(Integer count) {
@@ -151,6 +193,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 火力を取得します。
+     *
      * @return 火力
      */
     public IntegerProperty hougProperty() {
@@ -159,6 +202,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 火力を取得します。
+     *
      * @return 火力
      */
     public Integer getHoug() {
@@ -167,6 +211,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 火力を設定します。
+     *
      * @param houg 火力
      */
     public void setHoug(Integer houg) {
@@ -175,6 +220,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 命中を取得します。
+     *
      * @return 命中
      */
     public IntegerProperty houmProperty() {
@@ -183,6 +229,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 命中を取得します。
+     *
      * @return 命中
      */
     public Integer getHoum() {
@@ -191,6 +238,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 命中を設定します。
+     *
      * @param houm 命中
      */
     public void setHoum(Integer houm) {
@@ -199,6 +247,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 射程を取得します。
+     *
      * @return 射程
      */
     public IntegerProperty lengProperty() {
@@ -207,6 +256,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 射程を取得します。
+     *
      * @return 射程
      */
     public Integer getLeng() {
@@ -215,6 +265,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 射程を設定します。
+     *
      * @param leng 射程
      */
     public void setLeng(Integer leng) {
@@ -223,6 +274,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 運を取得します。
+     *
      * @return 運
      */
     public IntegerProperty luckProperty() {
@@ -231,6 +283,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 運を取得します。
+     *
      * @return 運
      */
     public Integer getLuck() {
@@ -239,6 +292,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 運を設定します。
+     *
      * @param luck 運
      */
     public void setLuck(Integer luck) {
@@ -247,6 +301,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 回避を取得します。
+     *
      * @return 回避
      */
     public IntegerProperty houkProperty() {
@@ -255,6 +310,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 回避を取得します。
+     *
      * @return 回避
      */
     public Integer getHouk() {
@@ -263,6 +319,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 回避を設定します。
+     *
      * @param houk 回避
      */
     public void setHouk(Integer houk) {
@@ -271,6 +328,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 爆装を取得します。
+     *
      * @return 爆装
      */
     public IntegerProperty bakuProperty() {
@@ -279,6 +337,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 爆装を取得します。
+     *
      * @return 爆装
      */
     public Integer getBaku() {
@@ -287,6 +346,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 爆装を設定します。
+     *
      * @param baku 爆装
      */
     public void setBaku(Integer baku) {
@@ -295,6 +355,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 雷装を取得します。
+     *
      * @return 雷装
      */
     public IntegerProperty raigProperty() {
@@ -303,6 +364,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 雷装を取得します。
+     *
      * @return 雷装
      */
     public Integer getRaig() {
@@ -311,6 +373,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 雷装を設定します。
+     *
      * @param raig 雷装
      */
     public void setRaig(Integer raig) {
@@ -319,6 +382,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 索敵を取得します。
+     *
      * @return 索敵
      */
     public IntegerProperty sakuProperty() {
@@ -327,6 +391,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 索敵を取得します。
+     *
      * @return 索敵
      */
     public Integer getSaku() {
@@ -335,6 +400,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 索敵を設定します。
+     *
      * @param saku 索敵
      */
     public void setSaku(Integer saku) {
@@ -343,6 +409,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 対潜を取得します。
+     *
      * @return 対潜
      */
     public IntegerProperty taisProperty() {
@@ -351,6 +418,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 対潜を取得します。
+     *
      * @return 対潜
      */
     public Integer getTais() {
@@ -359,6 +427,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 対潜を設定します。
+     *
      * @param tais 対潜
      */
     public void setTais(Integer tais) {
@@ -367,6 +436,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 対空を取得します。
+     *
      * @return 対空
      */
     public IntegerProperty tykuProperty() {
@@ -375,6 +445,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 対空を取得します。
+     *
      * @return 対空
      */
     public Integer getTyku() {
@@ -383,6 +454,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 対空を設定します。
+     *
      * @param tyku 対空
      */
     public void setTyku(Integer tyku) {
@@ -391,6 +463,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 装甲を取得します。
+     *
      * @return 装甲
      */
     public IntegerProperty soukProperty() {
@@ -399,6 +472,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 装甲を取得します。
+     *
      * @return 装甲
      */
     public Integer getSouk() {
@@ -407,6 +481,7 @@ public class Item implements Comparable<Item> {
 
     /**
      * 装甲を設定します。
+     *
      * @param souk 装甲
      */
     public void setSouk(Integer souk) {
@@ -426,21 +501,21 @@ public class Item implements Comparable<Item> {
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(this.name)
-                .add(this.type.get())
-                .add(Integer.toString(this.count.get()))
-                .add(Integer.toString(this.houg.get()))
-                .add(Integer.toString(this.houm.get()))
-                .add(Integer.toString(this.leng.get()))
-                .add(Integer.toString(this.luck.get()))
-                .add(Integer.toString(this.houk.get()))
-                .add(Integer.toString(this.baku.get()))
-                .add(Integer.toString(this.raig.get()))
-                .add(Integer.toString(this.saku.get()))
-                .add(Integer.toString(this.tais.get()))
-                .add(Integer.toString(this.tyku.get()))
-                .add(Integer.toString(this.souk.get()))
-                .toString();
+            .add(this.name)
+            .add(this.type.get())
+            .add(Integer.toString(this.count.get()))
+            .add(Integer.toString(this.houg.get()))
+            .add(Integer.toString(this.houm.get()))
+            .add(Integer.toString(this.leng.get()))
+            .add(Integer.toString(this.luck.get()))
+            .add(Integer.toString(this.houk.get()))
+            .add(Integer.toString(this.baku.get()))
+            .add(Integer.toString(this.raig.get()))
+            .add(Integer.toString(this.saku.get()))
+            .add(Integer.toString(this.tais.get()))
+            .add(Integer.toString(this.tyku.get()))
+            .add(Integer.toString(this.souk.get()))
+            .toString();
     }
 
     @Override
@@ -456,15 +531,15 @@ public class Item implements Comparable<Item> {
      */
     public static Item toItem(SlotitemMst slotitem) {
         String type = SlotitemEquiptypeCollection.get()
-                .getEquiptypeMap()
-                .get(slotitem.getType().get(2))
-                .getName();
+            .getEquiptypeMap()
+            .get(slotitem.getType().get(2))
+            .getName();
         Integer count = (int) SlotItemCollection.get()
-                .getSlotitemMap()
-                .values()
-                .stream()
-                .filter(e -> e.getSlotitemId().equals(slotitem.getId()))
-                .count();
+            .getSlotitemMap()
+            .values()
+            .stream()
+            .filter(e -> e.getSlotitemId().equals(slotitem.getId()))
+            .count();
         Item item = new Item();
         item.setId(slotitem.getId());
         item.setType2(slotitem.getType().get(2));

@@ -12,26 +12,29 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.CheckListView?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="450.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.CaptureSaveController">
-   <children>
-      <ToolBar prefHeight="40.0" prefWidth="200.0">
-        <items>
-            <CheckBox fx:id="tile" mnemonicParsing="false" onAction="#tile" text="並べる" />
-            <TextField fx:id="tileCount" disable="true" prefWidth="40.0" text="3" />
-            <Label text="列" />
-            <Separator orientation="VERTICAL" />
-          <Button mnemonicParsing="false" onAction="#save" text="保存" />
-        </items>
-      </ToolBar>
-      <SplitPane fx:id="splitPane" dividerPositions="0.35" VBox.vgrow="ALWAYS">
-        <items>
-            <CheckListView fx:id="list" />
-            <ScrollPane fx:id="imageParent" hbarPolicy="NEVER" vbarPolicy="NEVER">
-               <content>
-                  <ImageView fx:id="image" fitHeight="120.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-               </content>
-            </ScrollPane>
-        </items>
-      </SplitPane>
-   </children>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"
+      prefWidth="450.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.162"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.CaptureSaveController">
+    <children>
+        <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <items>
+                <CheckBox fx:id="tile" mnemonicParsing="false" onAction="#tile" text="並べる"/>
+                <TextField fx:id="tileCount" disable="true" prefWidth="40.0" text="3"/>
+                <Label text="列"/>
+                <Separator orientation="VERTICAL"/>
+                <Button mnemonicParsing="false" onAction="#save" text="保存"/>
+            </items>
+        </ToolBar>
+        <SplitPane fx:id="splitPane" dividerPositions="0.35" VBox.vgrow="ALWAYS">
+            <items>
+                <CheckListView fx:id="list"/>
+                <ScrollPane fx:id="imageParent" hbarPolicy="NEVER" vbarPolicy="NEVER">
+                    <content>
+                        <ImageView fx:id="image" fitHeight="120.0" fitWidth="200.0" pickOnBounds="true"
+                                   preserveRatio="true"/>
+                    </content>
+                </ScrollPane>
+            </items>
+        </SplitPane>
+    </children>
 </VBox>

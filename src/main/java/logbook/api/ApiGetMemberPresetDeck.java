@@ -7,7 +7,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_get_member/preset_deck
- *
  */
 @API("/kcsapi/api_get_member/preset_deck")
 public class ApiGetMemberPresetDeck implements APIListenerSpi {

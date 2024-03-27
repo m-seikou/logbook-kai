@@ -15,7 +15,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_nyukyo/speedchange
- *
  */
 @API("/kcsapi/api_req_nyukyo/speedchange")
 public class ApiReqNyukyoSpeedchange implements APIListenerSpi {
@@ -23,12 +22,12 @@ public class ApiReqNyukyoSpeedchange implements APIListenerSpi {
     @Override
     public void accept(JsonObject json, RequestMetaData req, ResponseMetaData res) {
         Map<Integer, Ndock> ndockMap = NdockCollection.get()
-                .getNdockMap();
+            .getNdockMap();
         Integer ndockId = Integer.valueOf(req.getParameter("api_ndock_id"));
         Ndock ndock = ndockMap.get(ndockId);
 
         Map<Integer, Ship> shipMap = ShipCollection.get()
-                .getShipMap();
+            .getShipMap();
         Integer shipId = ndock.getShipId();
         Ship ship = shipMap.get(shipId).clone();
 
@@ -50,11 +49,11 @@ public class ApiReqNyukyoSpeedchange implements APIListenerSpi {
 
         // 入渠中の艦娘
         NdockCollection.get()
-                .setNdockSet(ndockMap.entrySet()
-                        .stream()
-                        .map(Map.Entry::getValue)
-                        .map(Ndock::getShipId)
-                        .collect(Collectors.toCollection(LinkedHashSet::new)));
+            .setNdockSet(ndockMap.entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .map(Ndock::getShipId)
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
 }

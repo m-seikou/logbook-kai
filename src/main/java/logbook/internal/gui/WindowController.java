@@ -7,15 +7,17 @@ import logbook.bean.WindowLocation;
 
 /**
  * ウインドウを持つコントローラー
- *
  */
 public abstract class WindowController {
 
-    /** このコントローラーに紐づくウインドウ */
+    /**
+     * このコントローラーに紐づくウインドウ
+     */
     private Stage window;
 
     /**
      * このコントローラーに紐づくウインドウを取得します。
+     *
      * @return このコントローラーに紐づくウインドウ
      */
     public Stage getWindow() {
@@ -24,6 +26,7 @@ public abstract class WindowController {
 
     /**
      * このコントローラーに紐づくウインドウを設定します。
+     *
      * @param window このコントローラーに紐づくウインドウ
      */
     public void setWindow(Stage window) {
@@ -32,15 +35,16 @@ public abstract class WindowController {
 
     /**
      * ウインドウの位置とサイズを設定します。
+     *
      * @param location ウインドウの位置とサイズ
      */
     public void setWindowLocation(WindowLocation location) {
         if (location != null) {
             boolean intersect = Screen.getScreens()
-                    .stream()
-                    .map(Screen::getVisualBounds)
-                    .anyMatch(r -> r.intersects(
-                            location.getX(), location.getY(), location.getWidth(), location.getHeight()));
+                .stream()
+                .map(Screen::getVisualBounds)
+                .anyMatch(r -> r.intersects(
+                    location.getX(), location.getY(), location.getWidth(), location.getHeight()));
 
             if (intersect) {
                 this.window.setX(location.getX());
@@ -53,6 +57,7 @@ public abstract class WindowController {
 
     /**
      * ウインドウの位置とサイズを取得します。
+     *
      * @return ウインドウの位置とサイズ
      */
     public WindowLocation getWindowLocation() {
@@ -66,6 +71,7 @@ public abstract class WindowController {
 
     /**
      * このウィンドウが非表示になった直後に処理するイベント・ハンドラ
+     *
      * @param e WindowEvent
      */
     protected void onWindowHidden(WindowEvent e) {
@@ -73,6 +79,7 @@ public abstract class WindowController {
 
     /**
      * このウィンドウを閉じるリクエストを処理するイベント・ハンドラ
+     *
      * @param e WindowEvent
      */
     protected void onWindowCloseRequest(WindowEvent e) {

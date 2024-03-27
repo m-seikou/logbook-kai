@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * ロギング
- *
  */
 public class LoggerHolder {
 

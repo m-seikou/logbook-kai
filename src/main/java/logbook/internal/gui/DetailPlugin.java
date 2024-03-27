@@ -6,27 +6,37 @@ import logbook.plugin.JarBasedPlugin;
 
 /**
  * プラグイン詳細
- *
  */
 public class DetailPlugin {
 
-    /** 名称 */
+    /**
+     * 名称
+     */
     private StringProperty name = new SimpleStringProperty();
 
-    /** 作者 */
+    /**
+     * 作者
+     */
     private StringProperty vendor = new SimpleStringProperty();
 
-    /** バージョン */
+    /**
+     * バージョン
+     */
     private StringProperty version = new SimpleStringProperty();
 
-    /** ライセンス */
+    /**
+     * ライセンス
+     */
     private StringProperty license = new SimpleStringProperty();
 
-    /** 場所 */
+    /**
+     * 場所
+     */
     private StringProperty location = new SimpleStringProperty();
 
     /**
      * 名称を取得します。
+     *
      * @return 名称
      */
     public StringProperty nameProperty() {
@@ -35,6 +45,7 @@ public class DetailPlugin {
 
     /**
      * 名称を取得します。
+     *
      * @return 名称
      */
     public String getName() {
@@ -43,6 +54,7 @@ public class DetailPlugin {
 
     /**
      * 名称を設定します。
+     *
      * @param name 名称
      */
     public void setName(String name) {
@@ -51,6 +63,7 @@ public class DetailPlugin {
 
     /**
      * 作者を取得します。
+     *
      * @return 作者
      */
     public StringProperty vendorProperty() {
@@ -59,6 +72,7 @@ public class DetailPlugin {
 
     /**
      * 作者を取得します。
+     *
      * @return 作者
      */
     public String getVendor() {
@@ -67,6 +81,7 @@ public class DetailPlugin {
 
     /**
      * 作者を設定します。
+     *
      * @param vendor 作者
      */
     public void setVendor(String vendor) {
@@ -75,6 +90,7 @@ public class DetailPlugin {
 
     /**
      * バージョンを取得します。
+     *
      * @return バージョン
      */
     public StringProperty versionProperty() {
@@ -83,6 +99,7 @@ public class DetailPlugin {
 
     /**
      * バージョンを取得します。
+     *
      * @return バージョン
      */
     public String getVersion() {
@@ -91,6 +108,7 @@ public class DetailPlugin {
 
     /**
      * バージョンを設定します。
+     *
      * @param version バージョン
      */
     public void setVersion(String version) {
@@ -99,6 +117,7 @@ public class DetailPlugin {
 
     /**
      * ライセンスを取得します。
+     *
      * @return ライセンス
      */
     public StringProperty licenseProperty() {
@@ -107,6 +126,7 @@ public class DetailPlugin {
 
     /**
      * ライセンスを取得します。
+     *
      * @return ライセンス
      */
     public String getLicense() {
@@ -115,6 +135,7 @@ public class DetailPlugin {
 
     /**
      * ライセンスを設定します。
+     *
      * @param license ライセンス
      */
     public void setLicense(String license) {
@@ -123,6 +144,7 @@ public class DetailPlugin {
 
     /**
      * 場所を取得します。
+     *
      * @return 場所
      */
     public StringProperty locationProperty() {
@@ -131,6 +153,7 @@ public class DetailPlugin {
 
     /**
      * 場所を取得します。
+     *
      * @return 場所
      */
     public String getLocation() {
@@ -139,6 +162,7 @@ public class DetailPlugin {
 
     /**
      * 場所を設定します。
+     *
      * @param location 場所
      */
     public void setLocation(String location) {
@@ -151,7 +175,7 @@ public class DetailPlugin {
      * @param plugin Jarファイルベースのプラグイン
      * @return プラグイン詳細
      */
-    public static DetailPlugin toDetailPlugin (JarBasedPlugin plugin) {
+    public static DetailPlugin toDetailPlugin(JarBasedPlugin plugin) {
         DetailPlugin detail = new DetailPlugin();
         detail.setName(plugin.getName());
         detail.setVendor(plugin.getVendor());

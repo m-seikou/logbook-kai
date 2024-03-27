@@ -11,21 +11,27 @@ import javafx.beans.property.StringProperty;
 
 /**
  * 右下ペインの集計行
- *
  */
 public class MissionAggregate {
 
-    /** 資材 */
+    /**
+     * 資材
+     */
     private StringProperty resource;
 
-    /** 個数 */
+    /**
+     * 個数
+     */
     private IntegerProperty count;
 
-    /** 平均 */
+    /**
+     * 平均
+     */
     private DoubleProperty average;
 
     /**
      * 資材を設定します。
+     *
      * @param resource 資材
      */
     public void setResource(String resource) {
@@ -34,6 +40,7 @@ public class MissionAggregate {
 
     /**
      * 資材を取得します。
+     *
      * @return 資材
      */
     public StringProperty resourceProperty() {
@@ -42,6 +49,7 @@ public class MissionAggregate {
 
     /**
      * 個数を設定します。
+     *
      * @param count 個数
      */
     public void setCount(Integer count) {
@@ -50,6 +58,7 @@ public class MissionAggregate {
 
     /**
      * 個数を取得します。
+     *
      * @return 個数
      */
     public IntegerProperty countProperty() {
@@ -58,6 +67,7 @@ public class MissionAggregate {
 
     /**
      * 平均を設定します。
+     *
      * @param average 平均
      */
     public void setAverage(Double average) {
@@ -66,6 +76,7 @@ public class MissionAggregate {
 
     /**
      * 平均を取得します。
+     *
      * @return 平均
      */
     public DoubleProperty averageProperty() {
@@ -75,9 +86,9 @@ public class MissionAggregate {
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(this.resource.get())
-                .add(Integer.toString(this.count.get()))
-                .add(Double.toString(this.average.get()))
-                .toString();
+            .add(this.resource.get())
+            .add(Integer.toString(this.count.get()))
+            .add(Double.toString(this.average.get()))
+            .toString();
     }
 }

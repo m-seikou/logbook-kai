@@ -1,42 +1,54 @@
 package logbook.internal;
 
 public enum Operator {
-    /** greater than or equal to */
+    /**
+     * greater than or equal to
+     */
     GE("以上") {
         @Override
         public <T extends Comparable<T>> boolean compare(T a, T b) {
             return a.compareTo(b) >= 0;
         }
     },
-    /** less than or equal to */
+    /**
+     * less than or equal to
+     */
     LE("以下") {
         @Override
         public <T extends Comparable<T>> boolean compare(T a, T b) {
             return a.compareTo(b) <= 0;
         }
     },
-    /** equal */
+    /**
+     * equal
+     */
     EQ("等しい") {
         @Override
         public <T extends Comparable<T>> boolean compare(T a, T b) {
             return a == b || a.compareTo(b) == 0;
         }
     },
-    /** not equal */
+    /**
+     * not equal
+     */
     NE("等しくない") {
         @Override
         public <T extends Comparable<T>> boolean compare(T a, T b) {
             return a != b && a.compareTo(b) != 0;
         }
     },
-    /** greater than */
+    /**
+     * greater than
+     */
     GT("より大きい") {
         @Override
         public <T extends Comparable<T>> boolean compare(T a, T b) {
             return a.compareTo(b) > 0;
         }
     },
-    /** less than */
+    /**
+     * less than
+     */
     LT("より小さい") {
         @Override
         public <T extends Comparable<T>> boolean compare(T a, T b) {

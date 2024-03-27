@@ -24,20 +24,27 @@ import logbook.internal.Time;
 
 /**
  * 艦隊
- *
  */
 public class MissionPane extends AnchorPane {
 
-    /** 艦隊 */
+    /**
+     * 艦隊
+     */
     private final DeckPort port;
 
-    /** 色変化1段階目 */
+    /**
+     * 色変化1段階目
+     */
     private final Duration stage1 = Duration.ofMinutes(20);
 
-    /** 色変化2段階目 */
+    /**
+     * 色変化2段階目
+     */
     private final Duration stage2 = Duration.ofMinutes(10);
 
-    /** 色変化3段階目 */
+    /**
+     * 色変化3段階目
+     */
     private final Duration stage3 = Duration.ofMinutes(1);
 
     @FXML
@@ -80,13 +87,13 @@ public class MissionPane extends AnchorPane {
                 long time = this.port.getMission().get(2);
                 if (time > 0) {
                     ZonedDateTime dateTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(time),
-                            ZoneOffset.systemDefault());
+                        ZoneOffset.systemDefault());
                     if (dateTime.toLocalDate().equals(ZonedDateTime.now().toLocalDate())) {
                         message = "今日 " + DateTimeFormatter.ofPattern("H時m分s秒").format(dateTime)
-                                + " 頃に帰投します";
+                            + " 頃に帰投します";
                     } else {
                         message = DateTimeFormatter.ofPattern("M月d日 H時m分s秒").format(dateTime)
-                                + " 頃に帰投します";
+                            + " 頃に帰投します";
                     }
                 } else {
                     message = "任務がありません";
@@ -124,12 +131,12 @@ public class MissionPane extends AnchorPane {
                 // 連合編成中
                 this.name.setText("(連合艦隊)");
                 this.time.setText(
-                        Optional.of(AppCondition.get().getCombinedType())
-                            .map(CombinedType::toCombinedType)
-                            .filter(type -> type != CombinedType.未結成)
-                            .map(CombinedType::toString)
-                            .orElse("<不明な連合艦隊タイプ>")
-                 );
+                    Optional.of(AppCondition.get().getCombinedType())
+                        .map(CombinedType::toCombinedType)
+                        .filter(type -> type != CombinedType.未結成)
+                        .map(CombinedType::toString)
+                        .orElse("<不明な連合艦隊タイプ>")
+                );
             } else {
                 // 遠征先
                 this.name.setText("<未出撃>");
@@ -140,8 +147,8 @@ public class MissionPane extends AnchorPane {
         } else {
             // 出撃(遠征中・遠征帰還・遠征中止)
             Optional<Mission> mission = Optional.ofNullable(MissionCollection.get()
-                    .getMissionMap()
-                    .get(target));
+                .getMissionMap()
+                .get(target));
 
             // 遠征の最大時間
             Duration max = Duration.ofMinutes(mission.map(Mission::getTime).orElse(0));

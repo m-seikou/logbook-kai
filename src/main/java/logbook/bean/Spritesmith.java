@@ -6,7 +6,6 @@ import lombok.Data;
 
 /**
  * スプライト情報
- *
  */
 @Data
 public class Spritesmith {

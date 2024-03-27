@@ -43,7 +43,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_start2
- *
  */
 @API("/kcsapi/api_start2/getData")
 public class ApiStart2 implements APIListenerSpi {
@@ -73,7 +72,7 @@ public class ApiStart2 implements APIListenerSpi {
      */
     private void apiMstShip(JsonArray array) {
         ShipMstCollection.get()
-                .setShipMap(JsonHelper.toMap(array, ShipMst::getId, ShipMst::toShip));
+            .setShipMap(JsonHelper.toMap(array, ShipMst::getId, ShipMst::toShip));
     }
 
     /**
@@ -83,7 +82,7 @@ public class ApiStart2 implements APIListenerSpi {
      */
     private void apiMstShipgraph(JsonArray array) {
         Map<Integer, ShipMst> map = ShipMstCollection.get()
-                .getShipMap();
+            .getShipMap();
         for (JsonValue val : array) {
             JsonObject json = (JsonObject) val;
             Integer key = json.getInt("api_id");
@@ -93,7 +92,7 @@ public class ApiStart2 implements APIListenerSpi {
             }
         }
         ShipgraphCollection.get()
-                .setShipgraphMap(JsonHelper.toMap(array, Shipgraph::getId, Shipgraph::toShipgraph));
+            .setShipgraphMap(JsonHelper.toMap(array, Shipgraph::getId, Shipgraph::toShipgraph));
     }
 
     /**
@@ -103,8 +102,8 @@ public class ApiStart2 implements APIListenerSpi {
      */
     private void apiMstSlotitemEquiptype(JsonArray array) {
         SlotitemEquiptypeCollection.get()
-                .setEquiptypeMap(
-                        JsonHelper.toMap(array, SlotitemEquiptype::getId, SlotitemEquiptype::toSlotitemEquiptype));
+            .setEquiptypeMap(
+                JsonHelper.toMap(array, SlotitemEquiptype::getId, SlotitemEquiptype::toSlotitemEquiptype));
     }
 
     /**
@@ -114,7 +113,7 @@ public class ApiStart2 implements APIListenerSpi {
      */
     private void apiMstStype(JsonArray array) {
         StypeCollection.get()
-                .setStypeMap(JsonHelper.toMap(array, Stype::getId, Stype::toStype));
+            .setStypeMap(JsonHelper.toMap(array, Stype::getId, Stype::toStype));
     }
 
     /**
@@ -124,7 +123,7 @@ public class ApiStart2 implements APIListenerSpi {
      */
     private void apiMstSlotitem(JsonArray array) {
         SlotitemMstCollection.get()
-                .setSlotitemMap(JsonHelper.toMap(array, SlotitemMst::getId, SlotitemMst::toSlotitem));
+            .setSlotitemMap(JsonHelper.toMap(array, SlotitemMst::getId, SlotitemMst::toSlotitem));
     }
 
     /**
@@ -134,7 +133,7 @@ public class ApiStart2 implements APIListenerSpi {
      */
     private void apiMstUseitem(JsonArray array) {
         UseitemMstCollection.get()
-                .setUseitemMap(JsonHelper.toMap(array, UseitemMst::getId, UseitemMst::toUseitem));
+            .setUseitemMap(JsonHelper.toMap(array, UseitemMst::getId, UseitemMst::toUseitem));
     }
 
     /**
@@ -144,7 +143,7 @@ public class ApiStart2 implements APIListenerSpi {
      */
     private void apiMstMission(JsonArray array) {
         MissionCollection.get()
-                .setMissionMap(JsonHelper.toMap(array, Mission::getId, Mission::toMission));
+            .setMissionMap(JsonHelper.toMap(array, Mission::getId, Mission::toMission));
     }
 
     /**
@@ -154,7 +153,7 @@ public class ApiStart2 implements APIListenerSpi {
      */
     private void apiMstMaparea(JsonArray array) {
         MapareaCollection.get()
-                .getMaparea().putAll(JsonHelper.toMap(array, Maparea::getId, Maparea::toMaparea));
+            .getMaparea().putAll(JsonHelper.toMap(array, Maparea::getId, Maparea::toMaparea));
     }
 
     /**
@@ -164,12 +163,12 @@ public class ApiStart2 implements APIListenerSpi {
      */
     private void apiMstMapinfo(JsonArray array) {
         MapinfoMstCollection.get()
-                .getMapinfo().putAll(JsonHelper.toMap(array, MapinfoMst::getId, MapinfoMst::toMapinfoMst));
+            .getMapinfo().putAll(JsonHelper.toMap(array, MapinfoMst::getId, MapinfoMst::toMapinfoMst));
     }
 
     /**
      * store
-     * 
+     *
      * @param obj api_data
      */
     private void store(JsonObject root) {
@@ -186,7 +185,7 @@ public class ApiStart2 implements APIListenerSpi {
                 }
 
                 JsonWriterFactory factory = Json
-                        .createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
+                    .createWriterFactory(Collections.singletonMap(JsonGenerator.PRETTY_PRINTING, true));
                 for (Entry<String, JsonValue> entry : root.entrySet()) {
                     String key = entry.getKey();
                     JsonValue val = entry.getValue();

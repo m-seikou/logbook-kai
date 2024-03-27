@@ -10,37 +10,51 @@ import lombok.Setter;
 
 /**
  * 集計行
- *
  */
 public class MissionLogCollect {
 
-    /** 集計  */
+    /**
+     * 集計
+     */
     private StringProperty unit;
 
-    /** 大成功 */
+    /**
+     * 大成功
+     */
     private IntegerProperty successGood;
 
-    /** 成功 */
+    /**
+     * 成功
+     */
     private IntegerProperty success;
 
-    /** 失敗 */
+    /**
+     * 失敗
+     */
     private IntegerProperty fail;
 
-    /** ソート順 */
+    /**
+     * ソート順
+     */
     private int sortOrder;
 
-    /** 集計単位 */
+    /**
+     * 集計単位
+     */
     @Getter
     @Setter
     private Unit collectUnit;
 
-    /** 遠征名 */
+    /**
+     * 遠征名
+     */
     @Getter
     @Setter
     private String name;
 
     /**
      * 集計を設定します。
+     *
      * @param unit 集計
      */
     public void setUnit(String unit) {
@@ -49,6 +63,7 @@ public class MissionLogCollect {
 
     /**
      * 集計を取得します。
+     *
      * @return 集計
      */
     public StringProperty unitProperty() {
@@ -57,6 +72,7 @@ public class MissionLogCollect {
 
     /**
      * 大成功を設定します。
+     *
      * @param successGood 大成功
      */
     public void setSuccessGood(Integer successGood) {
@@ -65,6 +81,7 @@ public class MissionLogCollect {
 
     /**
      * 大成功を取得します。
+     *
      * @return 大成功
      */
     public IntegerProperty successGoodProperty() {
@@ -73,6 +90,7 @@ public class MissionLogCollect {
 
     /**
      * 成功を設定します。
+     *
      * @param success 成功
      */
     public void setSuccess(Integer success) {
@@ -81,6 +99,7 @@ public class MissionLogCollect {
 
     /**
      * 成功を取得します。
+     *
      * @return 成功
      */
     public IntegerProperty successProperty() {
@@ -89,6 +108,7 @@ public class MissionLogCollect {
 
     /**
      * 失敗を設定します。
+     *
      * @param fail 失敗
      */
     public void setFail(Integer fail) {
@@ -97,6 +117,7 @@ public class MissionLogCollect {
 
     /**
      * 失敗を取得します。
+     *
      * @return 失敗
      */
     public IntegerProperty failProperty() {
@@ -105,6 +126,7 @@ public class MissionLogCollect {
 
     /**
      * ソート順を取得します。
+     *
      * @return ソート順
      */
     public int getSortOrder() {
@@ -113,6 +135,7 @@ public class MissionLogCollect {
 
     /**
      * ソート順を設定します。
+     *
      * @return ソート順
      */
     public void setSortOrder(int sortOrder) {

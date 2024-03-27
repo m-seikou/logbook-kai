@@ -9,7 +9,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_kaisou/slot_deprive
- *
  */
 @API("/kcsapi/api_req_kaisou/slot_deprive")
 public class ApiReqKaisouSlotDeprive implements APIListenerSpi {
@@ -29,6 +28,6 @@ public class ApiReqKaisouSlotDeprive implements APIListenerSpi {
     private void replace(JsonObject json) {
         Ship ship = Ship.toShip(json);
         ShipCollection.get()
-                .getShipMap().put(ship.getId(), ship);
+            .getShipMap().put(ship.getId(), ship);
     }
 }

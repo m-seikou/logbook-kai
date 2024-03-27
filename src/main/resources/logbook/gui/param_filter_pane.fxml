@@ -7,13 +7,13 @@
 <?import org.controlsfx.control.ToggleSwitch?>
 
 <fx:root prefWidth="120.0" type="GridPane" xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <HBox>
-         <ChoiceBox fx:id="parameter" disable="true" />
-         <ToggleSwitch fx:id="parameterFilter" prefWidth="0.0" />
-      </HBox>
-      <Spinner fx:id="parameterValue" disable="true" prefWidth="110.0"  GridPane.rowIndex="1"/>
-      <ChoiceBox fx:id="parameterValueChoice" disable="true" visible="false" prefWidth="110.0"  GridPane.rowIndex="1"/>
-      <ChoiceBox fx:id="parameterType" disable="true" prefWidth="110.0"  GridPane.rowIndex="2"/>
-   </children>
+    <children>
+        <HBox>
+            <ChoiceBox fx:id="parameter" disable="true"/>
+            <ToggleSwitch fx:id="parameterFilter" prefWidth="0.0"/>
+        </HBox>
+        <Spinner fx:id="parameterValue" disable="true" prefWidth="110.0" GridPane.rowIndex="1"/>
+        <ChoiceBox fx:id="parameterValueChoice" disable="true" visible="false" prefWidth="110.0" GridPane.rowIndex="1"/>
+        <ChoiceBox fx:id="parameterType" disable="true" prefWidth="110.0" GridPane.rowIndex="2"/>
+    </children>
 </fx:root>

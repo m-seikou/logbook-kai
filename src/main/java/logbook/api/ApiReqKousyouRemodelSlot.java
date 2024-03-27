@@ -13,7 +13,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_kousyou/remodel_slot
- *
  */
 @API("/kcsapi/api_req_kousyou/remodel_slot")
 public class ApiReqKousyouRemodelSlot implements APIListenerSpi {
@@ -23,7 +22,7 @@ public class ApiReqKousyouRemodelSlot implements APIListenerSpi {
         JsonObject data = json.getJsonObject("api_data");
         if (data != null) {
             Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                    .getSlotitemMap();
+                .getSlotitemMap();
 
             // 改修後装備
             JsonObject afterSlot = data.getJsonObject("api_after_slot");

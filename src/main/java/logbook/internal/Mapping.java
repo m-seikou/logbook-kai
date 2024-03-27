@@ -16,13 +16,14 @@ import logbook.plugin.PluginServices;
 
 /**
  * セルNoと記号のマッピング
- *
  */
 public class Mapping {
 
     private static Mapping INSTANCE = new Mapping();
 
-    /** セルNoと記号のマッピング*/
+    /**
+     * セルNoと記号のマッピング
+     */
     private Map<String, String> mapping;
 
     private Mapping() {
@@ -51,7 +52,7 @@ public class Mapping {
 
     /**
      * 対象セルの記号を返します
-     * 
+     *
      * @param key 海域-マップ番号-セル形式のキー
      * @return 対象セルの記号
      */
@@ -65,10 +66,10 @@ public class Mapping {
 
     /**
      * 対象セルの記号を返します
-     * 
+     *
      * @param mapareaId 海域
      * @param mapinfoNo マップ番号
-     * @param no セル
+     * @param no        セル
      * @return 対象セルの記号
      */
     public static String getCell(Integer mapareaId, Integer mapinfoNo, Integer no) {
@@ -82,14 +83,15 @@ public class Mapping {
 
     /**
      * 海域名と略称(例:1-5)のマッピングを返します
-     * @return 海域名と略称(例:1-5)のマッピング
+     *
+     * @return 海域名と略称(例 : 1 - 5)のマッピング
      */
     public static Map<String, String> fullNameToShort() {
         return MapinfoMstCollection.get()
-                .getMapinfo()
-                .values()
-                .stream()
-                .collect(Collectors.toMap(MapinfoMst::getName,
-                        m -> m.getMapareaId() + "-" + m.getNo(), (a, b) -> a));
+            .getMapinfo()
+            .values()
+            .stream()
+            .collect(Collectors.toMap(MapinfoMst::getName,
+                m -> m.getMapareaId() + "-" + m.getNo(), (a, b) -> a));
     }
 }

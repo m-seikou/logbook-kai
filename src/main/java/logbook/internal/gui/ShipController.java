@@ -32,7 +32,6 @@ import logbook.internal.Ships;
 
 /**
  * 所有艦娘一覧のコントローラ
- *
  */
 public class ShipController extends WindowController {
 
@@ -65,13 +64,13 @@ public class ShipController extends WindowController {
 
             ShipTablePane allPane = new ShipTablePane(() -> {
                 Map<Integer, Ship> shipMap = ShipCollection.get()
-                        .getShipMap();
+                    .getShipMap();
                 return shipMap.values().stream()
 //                      .sorted(Comparator.comparing(Ship::getLv).reversed()
 //                      .thenComparing(Comparator.comparing(Ship::getShipId)))
-                        .sorted(Comparator.comparingInt((Ship s) -> Ships.shipMst(s).map(ShipMst::getSortId).orElse(Integer.MAX_VALUE))
-                                .thenComparingInt(Ship::getId))
-                        .collect(Collectors.toList());
+                    .sorted(Comparator.comparingInt((Ship s) -> Ships.shipMst(s).map(ShipMst::getSortId).orElse(Integer.MAX_VALUE))
+                        .thenComparingInt(Ship::getId))
+                    .collect(Collectors.toList());
             }, "全員");
 
             this.tab.getTabs().add(new Tab("全員", allPane));
@@ -103,8 +102,8 @@ public class ShipController extends WindowController {
             this.timeline = new Timeline();
             this.timeline.setCycleCount(Timeline.INDEFINITE);
             this.timeline.getKeyFrames().add(new KeyFrame(
-                    Duration.seconds(5),
-                    this::update));
+                Duration.seconds(5),
+                this::update));
             this.timeline.play();
 
         } catch (Exception e) {
@@ -118,7 +117,7 @@ public class ShipController extends WindowController {
     private void addAllDecksTab() {
         ShipTablePane deckPane = new ShipTablePane(() -> {
             Map<Integer, Ship> shipMap = ShipCollection.get()
-                    .getShipMap();
+                .getShipMap();
             return DeckPortCollection.get().getDeckPortMap().values().stream()
                 .map(DeckPort::getShip)
                 .flatMap(List::stream)
@@ -155,60 +154,61 @@ public class ShipController extends WindowController {
                 return ShipCollection.get().getShipMap().values().stream()
                     .filter(ship -> SeaArea.fromArea(ship.getSallyArea()) == null)
                     .sorted(Comparator.comparing(Ship::getLv).reversed()
-                            .thenComparing(Comparator.comparing(Ship::getShipId)))
+                        .thenComparing(Comparator.comparing(Ship::getShipId)))
                     .collect(Collectors.toList());
             }, "海域札なし");
             this.tab.getTabs().add(new Tab("海域札なし", noLabelPane));
         }
         ShipCollection.get().getShipMap().values().stream()
-                .flatMap(ship -> {
-                    List<String> label = new ArrayList<>();
-                    SeaArea area = SeaArea.fromArea(ship.getSallyArea());
-                    if (area != null) {
-                        label.add(area.toString());
-                    }
-                    Set<String> labels = labelMap.get(ship.getId());
-                    if (labels != null) {
-                        label.addAll(labels);
-                    }
-                    return label.stream();
-                })
-                .filter(Objects::nonNull)
-                .distinct()
-                .sorted(Comparator.comparing(ShipController::labelSortOrder))
-                .forEach(label -> {
-                    ShipTablePane labelPane = new ShipTablePane(() -> {
-                        Map<Integer, Ship> shipMap = ShipCollection.get()
-                                .getShipMap();
-                        return shipMap.values().stream()
-                                .filter(ship -> {
-                                    SeaArea area = SeaArea.fromArea(ship.getSallyArea());
-                                    if (area != null && label.equals(area.toString()))
-                                        return true;
-                                    Set<String> labels = ShipLabelCollection.get().getLabels().get(ship.getId());
-                                    if (labels != null && labels.contains(label))
-                                        return true;
-                                    return false;
-                                })
-                                .sorted(Comparator.comparing(Ship::getLv).reversed()
-                                        .thenComparing(Comparator.comparing(Ship::getShipId)))
-                                .collect(Collectors.toList());
-                    }, label);
-                    this.tab.getTabs().add(new Tab(label, labelPane));
-                });
+            .flatMap(ship -> {
+                List<String> label = new ArrayList<>();
+                SeaArea area = SeaArea.fromArea(ship.getSallyArea());
+                if (area != null) {
+                    label.add(area.toString());
+                }
+                Set<String> labels = labelMap.get(ship.getId());
+                if (labels != null) {
+                    label.addAll(labels);
+                }
+                return label.stream();
+            })
+            .filter(Objects::nonNull)
+            .distinct()
+            .sorted(Comparator.comparing(ShipController::labelSortOrder))
+            .forEach(label -> {
+                ShipTablePane labelPane = new ShipTablePane(() -> {
+                    Map<Integer, Ship> shipMap = ShipCollection.get()
+                        .getShipMap();
+                    return shipMap.values().stream()
+                        .filter(ship -> {
+                            SeaArea area = SeaArea.fromArea(ship.getSallyArea());
+                            if (area != null && label.equals(area.toString()))
+                                return true;
+                            Set<String> labels = ShipLabelCollection.get().getLabels().get(ship.getId());
+                            if (labels != null && labels.contains(label))
+                                return true;
+                            return false;
+                        })
+                        .sorted(Comparator.comparing(Ship::getLv).reversed()
+                            .thenComparing(Comparator.comparing(Ship::getShipId)))
+                        .collect(Collectors.toList());
+                }, label);
+                this.tab.getTabs().add(new Tab(label, labelPane));
+            });
     }
 
     /**
      * ラベルのソート順を返します
+     *
      * @param label ラベル文字列
      * @return ソート順、もし定義にないものの場合は Integer.MAX_VALUE
      */
     private static int labelSortOrder(String label) {
         return Stream.of(SeaArea.values())
-                .filter(s -> s.getName().equals(label))
-                .findAny()
-                .map(SeaArea::getArea)
-                .orElse(Integer.MAX_VALUE);
+            .filter(s -> s.getName().equals(label))
+            .findAny()
+            .map(SeaArea::getArea)
+            .orElse(Integer.MAX_VALUE);
     }
 
     /**
@@ -225,7 +225,7 @@ public class ShipController extends WindowController {
      */
     void update(ActionEvent e) {
         Tab selectedTab = this.tab.getSelectionModel()
-                .getSelectedItem();
+            .getSelectedItem();
         if (selectedTab != null) {
             Node content = selectedTab.getContent();
             if (content instanceof ShipTablePane) {

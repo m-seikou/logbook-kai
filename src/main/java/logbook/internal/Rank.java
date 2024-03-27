@@ -2,7 +2,6 @@ package logbook.internal;
 
 /**
  * ランク
- *
  */
 public enum Rank {
 
@@ -14,10 +13,14 @@ public enum Rank {
     D敗北("D敗北", 0.7d),
     E敗北("E敗北", 0.5d);
 
-    /** 名前 */
+    /**
+     * 名前
+     */
     private String name;
 
-    /** 経験値倍率 */
+    /**
+     * 経験値倍率
+     */
     private double ratio;
 
     Rank(String name, double ratio) {
@@ -27,6 +30,7 @@ public enum Rank {
 
     /**
      * 名前を取得します。
+     *
      * @return 名前
      */
     public String getName() {
@@ -35,6 +39,7 @@ public enum Rank {
 
     /**
      * 経験値倍率を取得します。
+     *
      * @return 経験値倍率
      */
     public double getRatio() {

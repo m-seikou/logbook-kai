@@ -44,7 +44,6 @@ import logbook.internal.Missions;
 
 /**
  * 遠征確認画面
- *
  */
 public class MissionCheck extends WindowController {
 
@@ -77,9 +76,9 @@ public class MissionCheck extends WindowController {
             this.buildTree(deck);
         });
         this.fleet.getButtons().stream()
-                .skip(1)
-                .findFirst()
-                .ifPresent(b -> b.setSelected(true));
+            .skip(1)
+            .findFirst()
+            .ifPresent(b -> b.setSelected(true));
     }
 
     @FXML
@@ -96,17 +95,17 @@ public class MissionCheck extends WindowController {
         TreeItem<String> root = new TreeItem<>();
         if (deck != null) {
             Map<Integer, Ship> shipMap = ShipCollection.get()
-                    .getShipMap();
+                .getShipMap();
             List<Ship> fleet = DeckPortCollection.get().getDeckPortMap().get(deck.getId()).getShip()
-                    .stream()
-                    .map(shipMap::get)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+                .stream()
+                .map(shipMap::get)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
 
             Map<Integer, List<Mission>> missionMap = MissionCollection.get().getMissionMap().values().stream()
-                    .sorted(Comparator.comparing(Mission::getMapareaId, Comparator.nullsLast(Comparator.naturalOrder()))
-                            .thenComparing(Mission::getId, Comparator.nullsLast(Comparator.naturalOrder())))
-                    .collect(Collectors.groupingBy(Mission::getMapareaId, LinkedHashMap::new, Collectors.toList()));
+                .sorted(Comparator.comparing(Mission::getMapareaId, Comparator.nullsLast(Comparator.naturalOrder()))
+                    .thenComparing(Mission::getId, Comparator.nullsLast(Comparator.naturalOrder())))
+                .collect(Collectors.groupingBy(Mission::getMapareaId, LinkedHashMap::new, Collectors.toList()));
 
             for (Map.Entry<Integer, List<Mission>> missionEntry : missionMap.entrySet()) {
                 TreeItem<String> subTree = new TreeItem<>();
@@ -116,9 +115,9 @@ public class MissionCheck extends WindowController {
                 Integer mapareaId = missions.get(0).getMapareaId();
 
                 String area = Optional.ofNullable(MapareaCollection.get().getMaparea().get(mapareaId))
-                        .filter(map -> map.getId() != null && map.getId() <= 40)
-                        .map(Maparea::getName)
-                        .orElse("イベント海域");
+                    .filter(map -> map.getId() != null && map.getId() <= 40)
+                    .map(Maparea::getName)
+                    .orElse("イベント海域");
                 subTree.setValue(area);
 
                 for (Mission mission : missions) {
@@ -144,7 +143,7 @@ public class MissionCheck extends WindowController {
         }
         this.conditionTree.setRoot(root);
     }
-    
+
     private static MissionCondition createDefaultGreatSuccessCondition() {
         MissionCondition success = new MissionCondition();
         success.setType("艦隊");
@@ -171,20 +170,20 @@ public class MissionCheck extends WindowController {
             } else {
                 return null;
             }
-            
-            item.setValue(mission.toString()+" ["+Missions.getDurationText(mission) + "]");
+
+            item.setValue(mission.toString() + " [" + Missions.getDurationText(mission) + "]");
             if (mission.getDamageType() != null && mission.getDamageType().intValue() > 0) {
                 String label;
                 switch (mission.getDamageType()) {
-                case 1:
-                    label = "交戦型";
-                    break;
-                case 2:
-                    label = "交戦II型";
-                    break;
-                default:
-                    label = "交戦型(" + mission.getDamageType() + ")";
-                    break;
+                    case 1:
+                        label = "交戦型";
+                        break;
+                    case 2:
+                        label = "交戦II型";
+                        break;
+                    default:
+                        label = "交戦型(" + mission.getDamageType() + ")";
+                        break;
                 }
                 TreeItem<String> battle = new TreeItem<>(label);
                 ImageView image = new ImageView(Missions.damageTypeIcon(mission.getDamageType()));
@@ -200,8 +199,8 @@ public class MissionCheck extends WindowController {
                     Optional.ofNullable(StypeCollection.get()
                             .getStypeMap()
                             .get(type))
-                            .map(Stype::getName)
-                            .ifPresent(name -> sample.getChildren().add(new TreeItem<>(name)));
+                        .map(Stype::getName)
+                        .ifPresent(name -> sample.getChildren().add(new TreeItem<>(name)));
                 }
                 item.getChildren().add(sample);
             }

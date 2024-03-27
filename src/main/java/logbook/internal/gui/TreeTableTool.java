@@ -5,8 +5,9 @@ import javafx.scene.control.TreeTableView;
 public class TreeTableTool {
     /**
      * テーブル列の表示・非表示の設定を行う
+     *
      * @param table テーブル
-     * @param key テーブルのキー名
+     * @param key   テーブルのキー名
      */
     static void setVisible(TreeTableView<?> table, String key) {
         //Tools.Trees.setVisible(table, key);   // not yet implemented

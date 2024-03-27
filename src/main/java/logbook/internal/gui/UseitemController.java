@@ -22,34 +22,45 @@ import logbook.internal.LoggerHolder;
 
 /**
  * アイテム一覧のコントローラー
- *
  */
 public class UseitemController extends WindowController {
 
-    /** 持ってないアイテムも出す */
+    /**
+     * 持ってないアイテムも出す
+     */
     @FXML
     private CheckBox includeEmpty;
 
     @FXML
     private TableView<UseitemItem> table;
 
-    /** 行番号 */
+    /**
+     * 行番号
+     */
     @FXML
     private TableColumn<UseitemItem, Integer> row;
 
-    /** ID */
+    /**
+     * ID
+     */
     @FXML
     private TableColumn<UseitemItem, Integer> id;
 
-    /** 名前 */
+    /**
+     * 名前
+     */
     @FXML
     private TableColumn<UseitemItem, String> name;
 
-    /** 個数 */
+    /**
+     * 個数
+     */
     @FXML
     private TableColumn<UseitemItem, Integer> count;
 
-    /** 説明 */
+    /**
+     * 説明
+     */
     @FXML
     private TableColumn<UseitemItem, String> description;
 
@@ -88,10 +99,10 @@ public class UseitemController extends WindowController {
     @FXML
     void update(ActionEvent e) {
         List<UseitemItem> items = UseitemMstCollection.get().getUseitemMap().values().stream()
-                .map(UseitemItem::toUseitemItem)
-                .filter(this::filter)
-                .sorted(Comparator.comparing(UseitemItem::getId))
-                .collect(Collectors.toList());
+            .map(UseitemItem::toUseitemItem)
+            .filter(this::filter)
+            .sorted(Comparator.comparing(UseitemItem::getId))
+            .collect(Collectors.toList());
         if (this.itemsHashCode != items.hashCode()) {
             this.items.clear();
             this.items.addAll(items);
@@ -122,7 +133,7 @@ public class UseitemController extends WindowController {
     void columnVisible() {
         try {
             TableTool.showVisibleSetting(this.table, this.getClass().toString() + "#" + "table",
-                    this.getWindow());
+                this.getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -130,6 +141,7 @@ public class UseitemController extends WindowController {
 
     /**
      * フィルター
+     *
      * @param item アイテム
      * @return フィルタ結果
      */

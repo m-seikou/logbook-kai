@@ -18,7 +18,6 @@ import logbook.plugin.PluginContainer;
 
 /**
  * アプリケーション
- *
  */
 public final class Launcher {
 
@@ -70,10 +69,10 @@ public final class Launcher {
         if (AppConfig.get().isUsePlugin() && Files.isDirectory(dir)) {
             try {
                 plugins = Files.list(dir)
-                        .filter(Files::isRegularFile)
-                        .map(p -> JarBasedPlugin.toJarBasedPlugin(p, listener))
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList());
+                    .filter(Files::isRegularFile)
+                    .map(p -> JarBasedPlugin.toJarBasedPlugin(p, listener))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
 
             } catch (Exception e) {
                 listener.exceptionThrown(e);

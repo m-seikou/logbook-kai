@@ -16,7 +16,6 @@ import logbook.internal.Ships;
 
 /**
  * 艦隊タブの艦娘
- *
  */
 public class FleetTabShipPane extends HBox {
 
@@ -65,7 +64,7 @@ public class FleetTabShipPane extends HBox {
 
         // 名前
         String name = mst.map(ShipMst::getName)
-                .orElse("");
+            .orElse("");
         this.name.setText(name);
         this.level.setText("(Lv" + this.ship.getLv() + ")");
         this.hp.setText(this.ship.getNowhp() + "/" + this.ship.getMaxhp());

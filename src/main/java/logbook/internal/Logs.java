@@ -6,11 +6,12 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * ログの表示、書き込みで使用する
- *
  */
 public final class Logs {
 
-    /** 日付書式 */
+    /**
+     * 日付書式
+     */
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /**

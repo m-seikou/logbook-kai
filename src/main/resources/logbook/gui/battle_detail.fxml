@@ -38,14 +38,14 @@
                 <VBox>
                     <Separator/>
                     <GridPane>
-<!--
-艦隊行動    [戦型]     空白 空白       煙幕:  [smokeType]|
-味方陣形    [陣形]    敵陣形 [陣形]     基本経験値:  [exp]|
-制空値計    [制空値]   制空権 [制空]    艦娘経験値   [exp]|
-味方触接    [触接]    敵触接 [触接]    提督経験値:  [exp]|
-対空CI    [対空CI                           ]|
-評価  [judge]
--->
+                        <!--
+                        艦隊行動    [戦型]     空白 空白       煙幕:  [smokeType]|
+                        味方陣形    [陣形]    敵陣形 [陣形]     基本経験値:  [exp]|
+                        制空値計    [制空値]   制空権 [制空]    艦娘経験値   [exp]|
+                        味方触接    [触接]    敵触接 [触接]    提督経験値:  [exp]|
+                        対空CI    [対空CI                           ]|
+                        評価  [judge]
+                        -->
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES"/>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="30.0"/>

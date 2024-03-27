@@ -17,7 +17,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_battle_midnight/battle
- *
  */
 @API("/kcsapi/api_req_battle_midnight/battle")
 public class ApiReqBattleMidnightBattle implements APIListenerSpi {
@@ -40,10 +39,10 @@ public class ApiReqBattleMidnightBattle implements APIListenerSpi {
                     p.apply(log.getBattle());
                     p.apply(log.getMidnight());
                     ShipCollection.get()
-                            .getShipMap()
-                            .putAll(p.getAfterFriend().stream()
-                                    .filter(Objects::nonNull)
-                                    .collect(Collectors.toMap(Ship::getId, v -> v)));
+                        .getShipMap()
+                        .putAll(p.getAfterFriend().stream()
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toMap(Ship::getId, v -> v)));
                 }
             }
         }

@@ -32,7 +32,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_combined_battle/battleresult
- *
  */
 @API("/kcsapi/api_req_combined_battle/battleresult")
 public class ApiReqCombinedBattleBattleresult implements APIListenerSpi {
@@ -65,23 +64,23 @@ public class ApiReqCombinedBattleBattleresult implements APIListenerSpi {
                 BattleLogs.write(log);
 
                 LogWriter.getInstance(BattleResultLogFormat::new)
-                        .write(log);
+                    .write(log);
                 if (AppConfig.get().isApplyResult()) {
                     // 艦隊を更新
                     PhaseState p = new PhaseState(log);
                     p.apply(log.getBattle());
                     p.apply(log.getMidnight());
                     ShipCollection.get()
-                            .getShipMap()
-                            .putAll(Stream.of(p.getAfterFriend(), p.getAfterFriendCombined())
-                                    .flatMap(List::stream)
-                                    .filter(Objects::nonNull)
-                                    .collect(Collectors.toMap(Ship::getId, v -> v)));
+                        .getShipMap()
+                        .putAll(Stream.of(p.getAfterFriend(), p.getAfterFriendCombined())
+                            .flatMap(List::stream)
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toMap(Ship::getId, v -> v)));
                 }
             }
             if (result.achievementGimmick1()) {
                 Platform.runLater(
-                        () -> Tools.Controls.showNotify(null, "ギミック解除", "海域に変化が確認されました。", Duration.seconds(15)));
+                    () -> Tools.Controls.showNotify(null, "ギミック解除", "海域に変化が確認されました。", Duration.seconds(15)));
                 // 通知音再生
                 if (AppConfig.get().isUseSound()) {
                     Platform.runLater(Audios.playDefaultNotifySound());
@@ -93,7 +92,7 @@ public class ApiReqCombinedBattleBattleresult implements APIListenerSpi {
             }
             if (result.achievementGimmick2()) {
                 Platform.runLater(
-                        () -> Tools.Controls.showNotify(null, "ギミック解除", "ギミックの達成を確認しました。", Duration.seconds(15)));
+                    () -> Tools.Controls.showNotify(null, "ギミック解除", "ギミックの達成を確認しました。", Duration.seconds(15)));
                 // 通知音再生
                 if (AppConfig.get().isUseSound()) {
                     Platform.runLater(Audios.playDefaultNotifySound());

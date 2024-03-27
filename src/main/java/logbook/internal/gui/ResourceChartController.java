@@ -359,112 +359,112 @@ public class ResourceChartController extends WindowController {
             List<ResourceLog> log;
             try (Stream<String> lines = Files.lines(logFile, LogWriter.DEFAULT_CHARSET)) {
                 log = lines.skip(1)
-                        .map(ResourceLog::new)
-                        .filter(l -> l.getDate() != null)
-                        .filter(l -> l.getDate().compareTo(fromDateTime) >= 0)
-                        .filter(l -> l.getDate().compareTo(toDateTime) <= 0)
-                        .collect(Collectors.toList());
+                    .map(ResourceLog::new)
+                    .filter(l -> l.getDate() != null)
+                    .filter(l -> l.getDate().compareTo(fromDateTime) >= 0)
+                    .filter(l -> l.getDate().compareTo(toDateTime) <= 0)
+                    .collect(Collectors.toList());
             }
             ResourceSeries series = new ResourceSeries();
             // 燃料
             if (this.fuel.isSelected())
                 if (this.ppm.isSelected()) {
                     series.setFuel(log.stream()
-                            .map(r -> r.getFuelPpmSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getFuelPpmSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 } else {
                     series.setFuel(log.stream()
-                            .map(r -> r.getFuelSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getFuelSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 }
             // 弾薬
             if (this.ammo.isSelected())
                 if (this.ppm.isSelected()) {
                     series.setAmmo(log.stream()
-                            .map(r -> r.getAmmoPpmSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getAmmoPpmSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 } else {
                     series.setAmmo(log.stream()
-                            .map(r -> r.getAmmoSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getAmmoSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 }
             // 鋼材
             if (this.metal.isSelected())
                 if (this.ppm.isSelected()) {
                     series.setMetal(log.stream()
-                            .map(r -> r.getMetalPpmSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getMetalPpmSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 } else {
                     series.setMetal(log.stream()
-                            .map(r -> r.getMetalSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getMetalSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 }
             // ボーキ
             if (this.bauxite.isSelected())
                 if (this.ppm.isSelected()) {
                     series.setBauxite(log.stream()
-                            .map(r -> r.getBauxitePpmSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getBauxitePpmSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 } else {
                     series.setBauxite(log.stream()
-                            .map(r -> r.getBauxiteSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getBauxiteSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 }
             // 高速修復材
             if (this.bucket.isSelected())
                 if (this.ppm.isSelected()) {
                     series.setBucket(log.stream()
-                            .map(r -> r.getBucketPpmSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getBucketPpmSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 } else {
                     series.setBucket(log.stream()
-                            .map(r -> r.getBucketSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getBucketSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 }
             // 高速建造材
             if (this.burner.isSelected())
                 if (this.ppm.isSelected()) {
                     series.setBurner(log.stream()
-                            .map(r -> r.getBurnerPpmSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getBurnerPpmSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 } else {
                     series.setBurner(log.stream()
-                            .map(r -> r.getBurnerSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getBurnerSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 }
             // 開発資材
             if (this.research.isSelected())
                 if (this.ppm.isSelected()) {
                     series.setResearch(log.stream()
-                            .map(r -> r.getResearchPpmSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getResearchPpmSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 } else {
                     series.setResearch(log.stream()
-                            .map(r -> r.getResearchSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getResearchSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 }
             // 改修資材
             if (this.improve.isSelected())
                 if (this.ppm.isSelected()) {
                     series.setImprove(log.stream()
-                            .map(r -> r.getImprovePpmSeries(fromDateTime))
-                            .collect(Collectors.toList()));
-                }else{
+                        .map(r -> r.getImprovePpmSeries(fromDateTime))
+                        .collect(Collectors.toList()));
+                } else {
                     series.setImprove(log.stream()
-                            .map(r -> r.getImproveSeries(fromDateTime))
-                            .collect(Collectors.toList()));
+                        .map(r -> r.getImproveSeries(fromDateTime))
+                        .collect(Collectors.toList()));
                 }
 
             this.chart.getData().clear();
             this.chart.getData().addAll(
-                    Arrays.asList(series.getFuel(),
-                            series.getAmmo(),
-                            series.getMetal(),
-                            series.getBauxite(),
-                            series.getBucket(),
-                            series.getBurner(),
-                            series.getResearch(),
-                            series.getImprove()));
+                Arrays.asList(series.getFuel(),
+                    series.getAmmo(),
+                    series.getMetal(),
+                    series.getBauxite(),
+                    series.getBucket(),
+                    series.getBurner(),
+                    series.getResearch(),
+                    series.getImprove()));
 
         } catch (Exception e) {
             LoggerHolder.get().warn("資材ログの読込中に例外", e);
@@ -483,11 +483,11 @@ public class ResourceChartController extends WindowController {
                 Function<ResourceLog, LocalDate> mapping = r -> r.getDate().toLocalDate();
 
                 logs = lines
-                        .skip(1)
-                        .map(ResourceLog::new)
-                        .filter(l -> l.getDate() != null)
-                        .sorted(Comparator.comparing(ResourceLog::getDate))
-                        .collect(Collectors.toMap(mapping, d -> d, (d1, d2) -> d2, LinkedHashMap::new));
+                    .skip(1)
+                    .map(ResourceLog::new)
+                    .filter(l -> l.getDate() != null)
+                    .sorted(Comparator.comparing(ResourceLog::getDate))
+                    .collect(Collectors.toMap(mapping, d -> d, (d1, d2) -> d2, LinkedHashMap::new));
             }
             ObservableList<ResourceTable> tableBody = FXCollections.observableArrayList();
             // 前日
@@ -496,37 +496,37 @@ public class ResourceChartController extends WindowController {
                 ResourceTable row = new ResourceTable();
                 row.setDate(TABLE_DATE_FORMAT.format(log.getDate()));
                 row.setFuel(log.getFuel(),
-                        Optional.ofNullable(before)
-                                .map(r -> log.getFuel() - r.getFuel())
-                                .orElse(0));
+                    Optional.ofNullable(before)
+                        .map(r -> log.getFuel() - r.getFuel())
+                        .orElse(0));
                 row.setAmmo(log.getAmmo(),
-                        Optional.ofNullable(before)
-                                .map(r -> log.getAmmo() - r.getAmmo())
-                                .orElse(0));
+                    Optional.ofNullable(before)
+                        .map(r -> log.getAmmo() - r.getAmmo())
+                        .orElse(0));
                 row.setMetal(log.getMetal(),
-                        Optional.ofNullable(before)
-                                .map(r -> log.getMetal() - r.getMetal())
-                                .orElse(0));
+                    Optional.ofNullable(before)
+                        .map(r -> log.getMetal() - r.getMetal())
+                        .orElse(0));
                 row.setBauxite(log.getBauxite(),
-                        Optional.ofNullable(before)
-                                .map(r -> log.getBauxite() - r.getBauxite())
-                                .orElse(0));
+                    Optional.ofNullable(before)
+                        .map(r -> log.getBauxite() - r.getBauxite())
+                        .orElse(0));
                 row.setBucket(log.getBucket(),
-                        Optional.ofNullable(before)
-                                .map(r -> log.getBucket() - r.getBucket())
-                                .orElse(0));
+                    Optional.ofNullable(before)
+                        .map(r -> log.getBucket() - r.getBucket())
+                        .orElse(0));
                 row.setBurner(log.getBurner(),
-                        Optional.ofNullable(before)
-                                .map(r -> log.getBurner() - r.getBurner())
-                                .orElse(0));
+                    Optional.ofNullable(before)
+                        .map(r -> log.getBurner() - r.getBurner())
+                        .orElse(0));
                 row.setResearch(log.getResearch(),
-                        Optional.ofNullable(before)
-                                .map(r -> log.getResearch() - r.getResearch())
-                                .orElse(0));
+                    Optional.ofNullable(before)
+                        .map(r -> log.getResearch() - r.getResearch())
+                        .orElse(0));
                 row.setImprove(log.getImprove(),
-                        Optional.ofNullable(before)
-                                .map(r -> log.getImprove() - r.getImprove())
-                                .orElse(0));
+                    Optional.ofNullable(before)
+                        .map(r -> log.getImprove() - r.getImprove())
+                        .orElse(0));
                 tableBody.add(row);
                 before = log;
             }
@@ -565,7 +565,7 @@ public class ResourceChartController extends WindowController {
     void columnVisible() {
         try {
             TableTool.showVisibleSetting(this.table, this.getClass().toString() + "#" + "table",
-                    this.getWindow());
+                this.getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }

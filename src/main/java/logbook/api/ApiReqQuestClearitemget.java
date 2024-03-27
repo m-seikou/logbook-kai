@@ -9,7 +9,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_quest/clearitemget
- *
  */
 @API("/kcsapi/api_req_quest/clearitemget")
 public class ApiReqQuestClearitemget implements APIListenerSpi {

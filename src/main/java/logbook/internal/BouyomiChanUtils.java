@@ -32,8 +32,8 @@ public class BouyomiChanUtils {
         String id = type.toString();
         String text = "";
         AppBouyomiText config = AppBouyomiConfig.get()
-                .getText()
-                .get(id);
+            .getText()
+            .get(id);
         if (config != null && !config.isEnable()) {
             return;
         }
@@ -95,8 +95,8 @@ public class BouyomiChanUtils {
             }
             try {
                 new ProcessBuilder(path.toString())
-                        .directory(path.getParent().toFile())
-                        .start();
+                    .directory(path.getParent().toFile())
+                    .start();
             } catch (Exception e) {
             }
         }

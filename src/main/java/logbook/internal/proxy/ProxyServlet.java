@@ -86,6 +86,7 @@ public class ProxyServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     protected static final String ASYNC_CONTEXT = ProxyServlet.class.getName() + ".asyncContext";
     private static final Set<String> HOP_HEADERS = new HashSet<>();
+
     static {
         HOP_HEADERS.add("proxy-connection");
         HOP_HEADERS.add("connection");
@@ -265,7 +266,7 @@ public class ProxyServlet extends HttpServlet {
 
     @Override
     protected void service(final HttpServletRequest request, final HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
         URI rewrittenURI = this.rewriteURI(request);
 
         if (this._isDebugEnabled) {
@@ -290,13 +291,13 @@ public class ProxyServlet extends HttpServlet {
     }
 
     private Request createProxyRequest(HttpServletRequest request, HttpServletResponse response, URI targetUri,
-            ContentProvider contentProvider) {
+                                       ContentProvider contentProvider) {
         final Request proxyRequest = this._client.newRequest(targetUri)
-                .method(HttpMethod.fromString(request.getMethod()))
-                .version(HttpVersion.fromString(request.getProtocol()));
+            .method(HttpMethod.fromString(request.getMethod()))
+            .version(HttpVersion.fromString(request.getProtocol()));
 
         // Copy headers
-        for (Enumeration<String> headerNames = request.getHeaderNames(); headerNames.hasMoreElements();) {
+        for (Enumeration<String> headerNames = request.getHeaderNames(); headerNames.hasMoreElements(); ) {
             String headerName = headerNames.nextElement();
             String lowerHeaderName = headerName.toLowerCase(Locale.ENGLISH);
 
@@ -307,7 +308,7 @@ public class ProxyServlet extends HttpServlet {
             if ((this._hostHeader != null) && lowerHeaderName.equals("host"))
                 continue;
 
-            for (Enumeration<String> headerValues = request.getHeaders(headerName); headerValues.hasMoreElements();) {
+            for (Enumeration<String> headerValues = request.getHeaders(headerName); headerValues.hasMoreElements(); ) {
                 String headerValue = headerValues.nextElement();
                 if (headerValue != null)
                     proxyRequest.header(headerName, headerValue);
@@ -340,7 +341,7 @@ public class ProxyServlet extends HttpServlet {
     }
 
     protected void onResponseContent(HttpServletRequest request, HttpServletResponse response, Response proxyResponse,
-            byte[] buffer, int offset, int length) throws IOException {
+                                     byte[] buffer, int offset, int length) throws IOException {
         response.getOutputStream().write(buffer, offset, length);
         if (this._isDebugEnabled) {
             this._log.debug("{} proxying content to downstream: {} bytes", getRequestId(request), length);
@@ -356,7 +357,7 @@ public class ProxyServlet extends HttpServlet {
     }
 
     protected void onResponseFailure(HttpServletRequest request, HttpServletResponse response, Response proxyResponse,
-            Throwable failure) {
+                                     Throwable failure) {
         if (this._isDebugEnabled) {
             this._log.debug(getRequestId(request) + " proxying failed", failure);
         }
@@ -388,7 +389,7 @@ public class ProxyServlet extends HttpServlet {
      * The default implementation does nothing.
      *
      * @param proxyRequest the proxy request to customize
-     * @param request the request to be proxied
+     * @param request      the request to be proxied
      */
     protected void customizeProxyRequest(Request proxyRequest, HttpServletRequest request) {
     }
@@ -398,9 +399,9 @@ public class ProxyServlet extends HttpServlet {
      * The default implementation returns the header value as is.
      * If null is returned, this header won't be forwarded back to the client.
      *
-     * @param headerName the header name
+     * @param headerName  the header name
      * @param headerValue the header value
-     * @param request the request to proxy
+     * @param request     the request to proxy
      * @return filteredHeaderValue the new header value
      */
     protected String filterResponseHeader(HttpServletRequest request, String headerName, String headerValue) {
@@ -490,7 +491,7 @@ public class ProxyServlet extends HttpServlet {
         private boolean retryEnabled = true;
 
         public ProxyRequestHandler(HttpServletRequest request, HttpServletResponse response, URI targetUri)
-                throws IOException {
+            throws IOException {
             this.request = request;
             this.response = response;
             this.targetUri = targetUri;
@@ -499,14 +500,15 @@ public class ProxyServlet extends HttpServlet {
 
         /**
          * retryEnabled の時だけだよ
+         *
          * @return
          */
         private ContentProvider createRetryContentProvider() {
             final HttpServletRequest request = this.request;
 
             return new InputStreamContentProvider(
-                    new SequenceInputStream(new ByteArrayInputStream(this.contentBuffer.toByteArray()),
-                            this.contentInputStream)) {
+                new SequenceInputStream(new ByteArrayInputStream(this.contentBuffer.toByteArray()),
+                    this.contentInputStream)) {
                 @Override
                 public long getLength() {
                     return request.getContentLength();
@@ -516,7 +518,7 @@ public class ProxyServlet extends HttpServlet {
                 protected ByteBuffer onRead(byte[] buffer, int offset, int length) {
                     if (ProxyServlet.this._isDebugEnabled) {
                         ProxyServlet.this._log
-                                .debug("{} proxying content to upstream: {} bytes", getRequestId(request), length);
+                            .debug("{} proxying content to upstream: {} bytes", getRequestId(request), length);
                     }
                     return super.onRead(buffer, offset, length);
                 }
@@ -528,29 +530,29 @@ public class ProxyServlet extends HttpServlet {
             final ByteArrayOutputStream contentBuffer = this.contentBuffer;
 
             Request proxyRequest = ProxyServlet.this.createProxyRequest(request, this.response, this.targetUri,
-                    new InputStreamContentProvider(this.contentInputStream) {
-                        @Override
-                        public long getLength() {
-                            return request.getContentLength();
-                        }
+                new InputStreamContentProvider(this.contentInputStream) {
+                    @Override
+                    public long getLength() {
+                        return request.getContentLength();
+                    }
 
-                        @Override
-                        protected ByteBuffer onRead(byte[] buffer, int offset, int length) {
-                            if (length > 0) {
-                                if (contentBuffer.size() < RETRY_MAX_SIZE) {
-                                    contentBuffer.write(buffer, offset, length);
-                                } else {
-                                    // データが多すぎ、リトライ不可
-                                    ProxyRequestHandler.this.retryEnabled = false;
-                                }
+                    @Override
+                    protected ByteBuffer onRead(byte[] buffer, int offset, int length) {
+                        if (length > 0) {
+                            if (contentBuffer.size() < RETRY_MAX_SIZE) {
+                                contentBuffer.write(buffer, offset, length);
+                            } else {
+                                // データが多すぎ、リトライ不可
+                                ProxyRequestHandler.this.retryEnabled = false;
                             }
-                            if (ProxyServlet.this._isDebugEnabled) {
-                                ProxyServlet.this._log
-                                        .debug("{} proxying content to upstream: {} bytes", getRequestId(request), length);
-                            }
-                            return super.onRead(buffer, offset, length);
                         }
-                    });
+                        if (ProxyServlet.this._isDebugEnabled) {
+                            ProxyServlet.this._log
+                                .debug("{} proxying content to upstream: {} bytes", getRequestId(request), length);
+                        }
+                        return super.onRead(buffer, offset, length);
+                    }
+                });
 
             if (ProxyServlet.this._isDebugEnabled) {
                 StringBuilder builder = new StringBuilder(this.request.getMethod());
@@ -559,11 +561,11 @@ public class ProxyServlet extends HttpServlet {
                 if (query != null)
                     builder.append("?").append(query);
                 builder.append(" ").append(this.request.getProtocol()).append("\r\n");
-                for (Enumeration<String> headerNames = this.request.getHeaderNames(); headerNames.hasMoreElements();) {
+                for (Enumeration<String> headerNames = this.request.getHeaderNames(); headerNames.hasMoreElements(); ) {
                     String headerName = headerNames.nextElement();
                     builder.append(headerName).append(": ");
                     for (Enumeration<String> headerValues = this.request.getHeaders(headerName); headerValues
-                            .hasMoreElements();) {
+                        .hasMoreElements(); ) {
                         String headerValue = headerValues.nextElement();
                         if (headerValue != null)
                             builder.append(headerValue);
@@ -575,12 +577,12 @@ public class ProxyServlet extends HttpServlet {
                 builder.append("\r\n");
 
                 ProxyServlet.this._log.debug("{} proxying to upstream:{}{}{}{}",
-                        getRequestId(this.request),
-                        System.lineSeparator(),
-                        builder,
-                        proxyRequest,
-                        System.lineSeparator(),
-                        proxyRequest.getHeaders().toString().trim());
+                    getRequestId(this.request),
+                    System.lineSeparator(),
+                    builder,
+                    proxyRequest,
+                    System.lineSeparator(),
+                    proxyRequest.getHeaders().toString().trim());
             }
 
             proxyRequest.send(this);
@@ -601,11 +603,11 @@ public class ProxyServlet extends HttpServlet {
             if (ProxyServlet.this._isDebugEnabled) {
                 StringBuilder builder = new StringBuilder("\r\n");
                 builder.append(this.request.getProtocol()).append(" ").append(this.response.getStatus()).append(" ")
-                        .append(proxyResponse.getReason()).append("\r\n");
+                    .append(proxyResponse.getReason()).append("\r\n");
                 for (String headerName : this.response.getHeaderNames()) {
                     builder.append(headerName).append(": ");
                     for (Iterator<String> headerValues = this.response.getHeaders(headerName).iterator(); headerValues
-                            .hasNext();) {
+                        .hasNext(); ) {
                         String headerValue = headerValues.next();
                         if (headerValue != null)
                             builder.append(headerValue);
@@ -615,13 +617,13 @@ public class ProxyServlet extends HttpServlet {
                     builder.append("\r\n");
                 }
                 ProxyServlet.this._log.debug("{} proxying to downstream:{}{}{}{}{}",
-                        getRequestId(this.request),
-                        System.lineSeparator(),
-                        proxyResponse,
-                        System.lineSeparator(),
-                        proxyResponse.getHeaders().toString().trim(),
-                        System.lineSeparator(),
-                        builder);
+                    getRequestId(this.request),
+                    System.lineSeparator(),
+                    proxyResponse,
+                    System.lineSeparator(),
+                    proxyResponse.getHeaders().toString().trim(),
+                    System.lineSeparator(),
+                    builder);
             }
         }
 
@@ -646,8 +648,8 @@ public class ProxyServlet extends HttpServlet {
 
         private boolean isRetry(Throwable failure) {
             return this.retryEnabled &&
-                    (failure instanceof EOFException) &&
-                    (HttpVersion.fromString(this.request.getProtocol()) == HttpVersion.HTTP_1_1);
+                (failure instanceof EOFException) &&
+                (HttpVersion.fromString(this.request.getProtocol()) == HttpVersion.HTTP_1_1);
         }
 
         @Override
@@ -669,7 +671,7 @@ public class ProxyServlet extends HttpServlet {
                 }
 
                 Request proxyRequest = ProxyServlet.this.createProxyRequest(this.request, this.response,
-                        this.targetUri, this.createRetryContentProvider());
+                    this.targetUri, this.createRetryContentProvider());
                 proxyRequest.send(this);
             } else {
                 if (ProxyServlet.this._isDebugEnabled) {

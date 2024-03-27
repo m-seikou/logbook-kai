@@ -11,7 +11,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_nyukyo/start
- *
  */
 @API("/kcsapi/api_req_nyukyo/start")
 public class ApiReqNyukyoStart implements APIListenerSpi {
@@ -19,10 +18,10 @@ public class ApiReqNyukyoStart implements APIListenerSpi {
     @Override
     public void accept(JsonObject json, RequestMetaData req, ResponseMetaData res) {
         Map<Integer, Ship> map = ShipCollection.get()
-                .getShipMap();
+            .getShipMap();
         Integer shipId = Integer.valueOf(req.getParameter("api_ship_id"));
         Ship ship = map.get(shipId)
-                .clone();
+            .clone();
 
         if ("1".equals(req.getParameter("api_highspeed"))) {
             ship.setNowhp(ship.getMaxhp());

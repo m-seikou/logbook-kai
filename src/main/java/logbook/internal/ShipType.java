@@ -5,7 +5,6 @@ import logbook.bean.Stype;
 
 /**
  * 艦種定数
- *
  */
 public enum ShipType {
 
@@ -72,10 +71,10 @@ public enum ShipType {
     public boolean equals(ShipMst shipMst) {
         return shipMst != null && this.stype == shipMst.getStype();
     }
-    
+
     /**
      * 艦種定数を返します
-     * 
+     *
      * @return 艦種定数
      */
     public int getStype() {

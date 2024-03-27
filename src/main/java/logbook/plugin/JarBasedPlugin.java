@@ -10,7 +10,6 @@ import java.util.jar.Manifest;
 
 /**
  * Jarファイルベースのプラグインです
- *
  */
 public class JarBasedPlugin {
 
@@ -20,6 +19,7 @@ public class JarBasedPlugin {
 
     /**
      * 指定したpathからプラグインを作成します
+     *
      * @param path Jarファイルのパス
      * @throws IOException Jarファイルの解析中に入出力エラーが発生した場合
      */
@@ -38,6 +38,7 @@ public class JarBasedPlugin {
 
     /**
      * このプラグインのURL表現を返します
+     *
      * @return URL
      */
     public URL getURL() {
@@ -52,6 +53,7 @@ public class JarBasedPlugin {
      * <li>Implementation-Title
      * <li>Specification-Title
      * </ul>
+     *
      * @return 名称 見つからなかった場合、空の文字列
      */
     public String getName() {
@@ -66,6 +68,7 @@ public class JarBasedPlugin {
      * <li>IImplementation-Vendor
      * <li>Specification-Vendor
      * </ul>
+     *
      * @return ベンダー名 見つからなかった場合、空の文字列
      */
     public String getVendor() {
@@ -80,6 +83,7 @@ public class JarBasedPlugin {
      * <li>Implementation-Version
      * <li>Specification-Version
      * </ul>
+     *
      * @return バージョン 見つからなかった場合、空の文字列
      */
     public String getVersion() {
@@ -92,6 +96,7 @@ public class JarBasedPlugin {
      * <ul>
      * <li>Bundle-License
      * </ul>
+     *
      * @return ライセンス 見つからなかった場合、空の文字列
      */
     public String getLicense() {

@@ -35,66 +35,95 @@ import logbook.internal.ToStringConverter;
 
 /**
  * 編成記録
- *
  */
 public class Deck extends WindowController {
 
-    /** 左ペイン */
+    /**
+     * 左ペイン
+     */
     @FXML
     private VBox left;
 
-    /** 編成↑ */
+    /**
+     * 編成↑
+     */
     @FXML
     private Button deckUp;
 
-    /** 編成↓ */
+    /**
+     * 編成↓
+     */
     @FXML
     private Button deckDown;
-    
-    /** 編成リスト */
+
+    /**
+     * 編成リスト
+     */
     @FXML
     private ListView<AppDeck> deckList;
 
-    /** 艦隊リスト */
+    /**
+     * 艦隊リスト
+     */
     @FXML
     private ListView<DeckFleetPane> fleetList;
 
-    /** 右ペイン */
+    /**
+     * 右ペイン
+     */
     @FXML
     private VBox right;
 
-    /** 保存ステータス */
+    /**
+     * 保存ステータス
+     */
     @FXML
     private Label status;
 
-    /** 編成テンプレート */
+    /**
+     * 編成テンプレート
+     */
     @FXML
     private ComboBox<DeckPort> preFleetList;
 
-    /** 編成テンプレートから追加 */
+    /**
+     * 編成テンプレートから追加
+     */
     @FXML
     private Button addPreFleet;
-    
-    /** 編成 */
+
+    /**
+     * 編成
+     */
     @FXML
     private VBox deck;
 
-    /** 名前 */
+    /**
+     * 名前
+     */
     @FXML
     private TextField deckName;
 
-    /** 艦隊 */
+    /**
+     * 艦隊
+     */
     @FXML
     private TilePane fleets;
 
-    /** 右ペインのスクロールペイン */
+    /**
+     * 右ペインのスクロールペイン
+     */
     @FXML
     private ScrollPane decksPane;
-    
-    /** 選択している編成 */
+
+    /**
+     * 選択している編成
+     */
     private ObjectProperty<AppDeck> currentDeck = new SimpleObjectProperty<>();
 
-    /** 変更検知 */
+    /**
+     * 変更検知
+     */
     private BooleanProperty modified = new SimpleBooleanProperty(false);
 
     @FXML
@@ -103,13 +132,13 @@ public class Deck extends WindowController {
         this.fleetList.setDisable(true);
         // 編成記録のリスト
         AppDeckCollection.get().getDecks()
-                .forEach(this.deckList.getItems()::add);
+            .forEach(this.deckList.getItems()::add);
         this.deckList.getSelectionModel().selectedItemProperty()
-                .addListener((ov) -> {
-                    this.currentDeck.set(this.deckList.getSelectionModel().getSelectedItem());
-                    this.deckUp.setDisable(this.deckList.getSelectionModel().getSelectedIndex() == 0);
-                    this.deckDown.setDisable(this.deckList.getSelectionModel().getSelectedIndex() == this.deckList.getItems().size()-1);
-                });
+            .addListener((ov) -> {
+                this.currentDeck.set(this.deckList.getSelectionModel().getSelectedItem());
+                this.deckUp.setDisable(this.deckList.getSelectionModel().getSelectedIndex() == 0);
+                this.deckDown.setDisable(this.deckList.getSelectionModel().getSelectedIndex() == this.deckList.getItems().size() - 1);
+            });
         this.deckList.getItems().addListener(this::changeDeckList);
         this.deckList.setCellFactory(e -> new DeckCell());
         // 艦隊リスト
@@ -126,13 +155,13 @@ public class Deck extends WindowController {
         this.deckName.textProperty().addListener((ov, o, n) -> this.modified.set(true));
         this.fleetList.getSelectionModel().selectedIndexProperty().addListener((ob, o, n) -> {
             if (n != null && n.intValue() >= 0) {
-                double maxX = this.deck.getWidth()-this.decksPane.getViewportBounds().getWidth();
+                double maxX = this.deck.getWidth() - this.decksPane.getViewportBounds().getWidth();
                 double targetX = this.fleets.getChildren().get(n.intValue()).getBoundsInParent().getMinX();
-                this.decksPane.setHvalue(Math.min(targetX/maxX, 1.0));
-                
-                double maxY = this.deck.getHeight()-this.decksPane.getViewportBounds().getHeight();
-                double targetY = this.fleets.getBoundsInParent().getMinY()+this.fleets.getChildren().get(n.intValue()).getBoundsInParent().getMinY();
-                this.decksPane.setVvalue(Math.min(targetY/maxY, 1.0));
+                this.decksPane.setHvalue(Math.min(targetX / maxX, 1.0));
+
+                double maxY = this.deck.getHeight() - this.decksPane.getViewportBounds().getHeight();
+                double targetY = this.fleets.getBoundsInParent().getMinY() + this.fleets.getChildren().get(n.intValue()).getBoundsInParent().getMinY();
+                this.decksPane.setVvalue(Math.min(targetY / maxY, 1.0));
             }
         });
     }
@@ -175,7 +204,7 @@ public class Deck extends WindowController {
     @FXML
     void up(ActionEvent event) {
         AppDeck selectedDeck = this.deckList.getSelectionModel()
-                .getSelectedItem();
+            .getSelectedItem();
         if (selectedDeck != null) {
             List<AppDeck> decks = this.deckList.getItems();
             int index = decks.indexOf(selectedDeck);
@@ -191,7 +220,7 @@ public class Deck extends WindowController {
     @FXML
     void down(ActionEvent event) {
         AppDeck selectedDeck = this.deckList.getSelectionModel()
-                .getSelectedItem();
+            .getSelectedItem();
         if (selectedDeck != null) {
             List<AppDeck> decks = this.deckList.getItems();
             int index = decks.indexOf(selectedDeck);
@@ -279,7 +308,6 @@ public class Deck extends WindowController {
 
     /**
      * 編成記録のリストが変更された時のリスナー
-     *
      */
     private void changeDeckList(Change<?> change) {
         AppDeckCollection.get().getDecks().clear();
@@ -302,7 +330,6 @@ public class Deck extends WindowController {
 
     /**
      * 編成記録のリストセル
-     *
      */
     private class DeckCell extends ListCell<AppDeck> {
         @Override
@@ -343,7 +370,6 @@ public class Deck extends WindowController {
 
     /**
      * 編成記録の艦隊のリストセル
-     *
      */
     private class DeckFleetCell extends ListCell<DeckFleetPane> {
         @Override
@@ -354,23 +380,23 @@ public class Deck extends WindowController {
                     Label text = new Label();
                     text.textProperty().bind(item.getFleetName().textProperty());
                     Pane pane = new Pane();
-                    
+
                     Button up = new Button("↑");
                     up.setOnAction(e -> {
                         int index = Deck.this.fleetList.getItems().indexOf(item);
-                        Deck.this.fleetList.getItems().add(index-1, Deck.this.fleetList.getItems().remove(index));
-                        Deck.this.fleets.getChildren().add(index-1, Deck.this.fleets.getChildren().remove(index));
+                        Deck.this.fleetList.getItems().add(index - 1, Deck.this.fleetList.getItems().remove(index));
+                        Deck.this.fleets.getChildren().add(index - 1, Deck.this.fleets.getChildren().remove(index));
                     });
                     up.setDisable(Deck.this.fleetList.getItems().indexOf(item) == 0);
-                            
+
                     Button down = new Button("↓");
                     down.setOnAction(e -> {
                         int index = Deck.this.fleetList.getItems().indexOf(item);
-                        Deck.this.fleetList.getItems().add(index+1, Deck.this.fleetList.getItems().remove(index));
-                        Deck.this.fleets.getChildren().add(index+1, Deck.this.fleets.getChildren().remove(index));
+                        Deck.this.fleetList.getItems().add(index + 1, Deck.this.fleetList.getItems().remove(index));
+                        Deck.this.fleets.getChildren().add(index + 1, Deck.this.fleets.getChildren().remove(index));
                     });
-                    down.setDisable(Deck.this.fleetList.getItems().indexOf(item)+1 == Deck.this.fleetList.getItems().size());
-                    
+                    down.setDisable(Deck.this.fleetList.getItems().indexOf(item) + 1 == Deck.this.fleetList.getItems().size());
+
                     Button del = new Button("除去");
                     del.getStyleClass().add("delete");
                     del.setOnAction(e -> {

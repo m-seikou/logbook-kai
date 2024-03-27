@@ -66,7 +66,6 @@ import lombok.Data;
 
 /**
  * 所有装備一覧のUIコントローラー
- *
  */
 public class ItemItemController extends WindowController {
 
@@ -74,25 +73,33 @@ public class ItemItemController extends WindowController {
     private SplitPane splitPane;
 
     // フィルター
-    /** フィルター */
+    /**
+     * フィルター
+     */
     @FXML
     private TitledPane filter;
 
     @FXML
     private FlowPane filters;
 
-    /** テキスト */
+    /**
+     * テキスト
+     */
     @FXML
     private ToggleSwitch textFilter;
 
-    /** テキスト */
+    /**
+     * テキスト
+     */
     @FXML
     private ComboBox<String> textValue;
 
     @FXML
     private GridPane typeFilterPane;
 
-    /** 種類フィルター */
+    /**
+     * 種類フィルター
+     */
     @FXML
     private ToggleSwitch typeFilter;
 
@@ -104,103 +111,153 @@ public class ItemItemController extends WindowController {
     /** 種別フィルターの全選択・全解除 */
     private CheckBox allTypes;
 
-    /** 種別フィルター */
+    /**
+     * 種別フィルター
+     */
     private final Map<Integer, CheckBox> typeFilters = new TreeMap<>();
 
-    /** パラメータフィルター */
+    /**
+     * パラメータフィルター
+     */
     private List<ParameterFilterPane<Item>> parameterFilters;
 
     // 一覧(装備一覧)
 
-    /** 一覧 */
+    /**
+     * 一覧
+     */
     @FXML
     private TableView<Item> typeTable;
 
-    /** 名称 */
+    /**
+     * 名称
+     */
     @FXML
     private TableColumn<Item, Integer> name;
 
-    /** 種別 */
+    /**
+     * 種別
+     */
     @FXML
     private TableColumn<Item, String> type;
 
-    /** 個数 */
+    /**
+     * 個数
+     */
     @FXML
     private TableColumn<Item, Integer> count;
 
-    /** 火力 */
+    /**
+     * 火力
+     */
     @FXML
     private TableColumn<Item, Integer> houg;
 
-    /** 命中 */
+    /**
+     * 命中
+     */
     @FXML
     private TableColumn<Item, Integer> houm;
 
-    /** 射程 */
+    /**
+     * 射程
+     */
     @FXML
     private TableColumn<Item, Integer> leng;
 
-    /** 運 */
+    /**
+     * 運
+     */
     @FXML
     private TableColumn<Item, Integer> luck;
 
-    /** 回避 */
+    /**
+     * 回避
+     */
     @FXML
     private TableColumn<Item, Integer> houk;
 
-    /** 爆装 */
+    /**
+     * 爆装
+     */
     @FXML
     private TableColumn<Item, Integer> baku;
 
-    /** 雷装 */
+    /**
+     * 雷装
+     */
     @FXML
     private TableColumn<Item, Integer> raig;
 
-    /** 索敵 */
+    /**
+     * 索敵
+     */
     @FXML
     private TableColumn<Item, Integer> saku;
 
-    /** 対潜 */
+    /**
+     * 対潜
+     */
     @FXML
     private TableColumn<Item, Integer> tais;
 
-    /** 対空 */
+    /**
+     * 対空
+     */
     @FXML
     private TableColumn<Item, Integer> tyku;
 
-    /** 装甲 */
+    /**
+     * 装甲
+     */
     @FXML
     private TableColumn<Item, Integer> souk;
 
     // 一覧(所持)
 
-    /** 詳細・名前 */
+    /**
+     * 詳細・名前
+     */
     @FXML
     private Label detailName;
 
-    /** 詳細・一覧 */
+    /**
+     * 詳細・一覧
+     */
     @FXML
     private TableView<DetailItem> detailTable;
 
-    /** 熟練 */
+    /**
+     * 熟練
+     */
     @FXML
     private TableColumn<DetailItem, Integer> alv;
 
-    /** 改修 */
+    /**
+     * 改修
+     */
     @FXML
     private TableColumn<DetailItem, Integer> level;
 
-    /** 所持 */
+    /**
+     * 所持
+     */
     @FXML
     private TableColumn<DetailItem, Ship> ship;
 
-    /** 一覧 */
+    /**
+     * 一覧
+     */
     private FilteredList<Item> types;
 
-    /** 詳細一覧 */
+    /**
+     * 詳細一覧
+     */
     private ObservableList<DetailItem> details = FXCollections.observableArrayList();
 
-    /** フィルターの更新停止 */
+    /**
+     * フィルターの更新停止
+     */
     private boolean disableFilterUpdate;
 
     @FXML
@@ -235,16 +292,16 @@ public class ItemItemController extends WindowController {
             final List<CheckBox> categoryCheckBoxes = new ArrayList<CheckBox>();
             categories.forEach((name, equipTypes) -> {
                 List<CheckBox> types = equipTypes.stream()
-                        // 該当の装備を1つも持ってないものは除外
-                        .filter(type -> type != null && existingTypes.contains(type.getId()))
-                        .map(type -> {
-                            CheckBox check = new CheckBox(type.getName());
-                            check.setDisable(true);
-                            check.selectedProperty().addListener(this::filterAction);
-                            this.typeFilters.put(type.getId(), check);
-                            return check;
-                        })
-                        .collect(Collectors.toList());
+                    // 該当の装備を1つも持ってないものは除外
+                    .filter(type -> type != null && existingTypes.contains(type.getId()))
+                    .map(type -> {
+                        CheckBox check = new CheckBox(type.getName());
+                        check.setDisable(true);
+                        check.selectedProperty().addListener(this::filterAction);
+                        this.typeFilters.put(type.getId(), check);
+                        return check;
+                    })
+                    .collect(Collectors.toList());
                 if (types.isEmpty()) {
                     // 空であれば何もしない
                     return;
@@ -307,25 +364,25 @@ public class ItemItemController extends WindowController {
             this.detailTable.setOnKeyPressed(TableTool::defaultOnKeyPressedHandler);
             // 行を作る
             ObservableList<Item> items = SlotitemMstCollection.get()
-                    .getSlotitemMap()
-                    .values()
-                    .stream()
-                    .map(Item::toItem)
-                    .filter(e -> e.getCount() > 0)
-                    .sorted(Comparator.comparing(Item::getType3).thenComparing(Comparator.comparing(Item::getName)))
-                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+                .getSlotitemMap()
+                .values()
+                .stream()
+                .map(Item::toItem)
+                .filter(e -> e.getCount() > 0)
+                .sorted(Comparator.comparing(Item::getType3).thenComparing(Comparator.comparing(Item::getName)))
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
             // テキストフィルター
             this.textValue.setItems(items.stream()
-                    .map(Item::typeProperty)
-                    .map(StringProperty::get)
-                    .distinct()
-                    .collect(Collectors.toCollection(FXCollections::observableArrayList)));
+                .map(Item::typeProperty)
+                .map(StringProperty::get)
+                .distinct()
+                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
             TextFields.bindAutoCompletion(this.textValue.getEditor(),
-                    new SuggestSupport(String::contains, items.stream()
-                            .flatMap(i -> Stream.of(i.typeProperty().get(), i.getName()))
-                            .distinct()
-                            .sorted()
-                            .collect(Collectors.toList())));
+                new SuggestSupport(String::contains, items.stream()
+                    .flatMap(i -> Stream.of(i.typeProperty().get(), i.getName()))
+                    .distinct()
+                    .sorted()
+                    .collect(Collectors.toList())));
 
             // 装備一覧(装備一覧)
             this.types = new FilteredList<>(items);
@@ -339,9 +396,9 @@ public class ItemItemController extends WindowController {
 
             // 装備が選択された時のリスナーを設定
             this.typeTable.getSelectionModel()
-                    .selectedItemProperty()
-                    .addListener(this::detail);
-            
+                .selectedItemProperty()
+                .addListener(this::detail);
+
             loadConfig();
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
@@ -355,12 +412,12 @@ public class ItemItemController extends WindowController {
         createFilter();
         saveConfig();
     }
-    
+
     private void createFilter() {
         Predicate<Item> filter = ItemFilter.DefaultFilter.builder()
-                .typeFilter(this.textFilter.isSelected())
-                .typeValue(this.textValue.getValue() == null ? "" : this.textValue.getValue())
-                .build();
+            .typeFilter(this.textFilter.isSelected())
+            .typeValue(this.textValue.getValue() == null ? "" : this.textValue.getValue())
+            .build();
         filter = filterAnd(filter, this.parameterFilters.stream()
             .map(ParameterFilterPane::filterProperty)
             .map(ReadOnlyObjectProperty::get)
@@ -373,12 +430,12 @@ public class ItemItemController extends WindowController {
         }
         this.types.setPredicate(filter);
     }
-    
+
     private Set<Integer> getSelectedTypes() {
         return this.typeFilters.entrySet().stream()
-                .filter(entry -> entry.getValue().isSelected())
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toSet());
+            .filter(entry -> entry.getValue().isSelected())
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toSet());
     }
 
     private <T> Predicate<T> filterAnd(Predicate<T> base, Predicate<T> add) {
@@ -392,8 +449,8 @@ public class ItemItemController extends WindowController {
      * 右ペインに詳細表示するリスナー
      *
      * @param observable 値が変更されたObservableValue
-     * @param oldValue 古い値
-     * @param value 新しい値
+     * @param oldValue   古い値
+     * @param value      新しい値
      */
     private void detail(ObservableValue<? extends Item> observable, Item oldValue, Item value) {
         this.details.clear();
@@ -402,20 +459,20 @@ public class ItemItemController extends WindowController {
             this.detailName.setText(value.getName());
             // 行を作る
             List<DetailItem> items = SlotItemCollection.get()
-                    .getSlotitemMap()
-                    .values()
-                    .stream()
-                    .filter(e -> e.getSlotitemId().equals(value.idProperty().get()))
-                    .sorted(Comparator.comparing(SlotItem::getAlv,
-                            Comparator.nullsFirst(Comparator.naturalOrder()))
-                            .reversed())
-                    .sorted(Comparator.comparing(SlotItem::getLevel,
-                            Comparator.nullsFirst(Comparator.naturalOrder()))
-                            .reversed())
-                    .map(DetailItem::toDetailItem)
-                    .sorted(Comparator.comparing(DetailItem::getShipId,
-                            Comparator.nullsFirst(Comparator.naturalOrder())))
-                    .collect(Collectors.toList());
+                .getSlotitemMap()
+                .values()
+                .stream()
+                .filter(e -> e.getSlotitemId().equals(value.idProperty().get()))
+                .sorted(Comparator.comparing(SlotItem::getAlv,
+                        Comparator.nullsFirst(Comparator.naturalOrder()))
+                    .reversed())
+                .sorted(Comparator.comparing(SlotItem::getLevel,
+                        Comparator.nullsFirst(Comparator.naturalOrder()))
+                    .reversed())
+                .map(DetailItem::toDetailItem)
+                .sorted(Comparator.comparing(DetailItem::getShipId,
+                    Comparator.nullsFirst(Comparator.naturalOrder())))
+                .collect(Collectors.toList());
             this.details.addAll(items);
         } else {
             // 未選択
@@ -432,8 +489,8 @@ public class ItemItemController extends WindowController {
             super.updateItem(itemId, empty);
             if (!empty) {
                 SlotitemMst mst = SlotitemMstCollection.get()
-                        .getSlotitemMap()
-                        .get(itemId);
+                    .getSlotitemMap()
+                    .get(itemId);
 
                 if (mst != null) {
                     this.setGraphic(Tools.Controls.zoomImage(new ImageView(Items.itemImage(mst))));
@@ -476,9 +533,9 @@ public class ItemItemController extends WindowController {
             super.updateItem(lv, empty);
             if (!empty) {
                 this.setText(Optional.ofNullable(lv)
-                        .filter(v -> v > 0)
-                        .map(v -> Messages.getString("item.level", v)) //$NON-NLS-1$
-                        .orElse(""));
+                    .filter(v -> v > 0)
+                    .map(v -> Messages.getString("item.level", v)) //$NON-NLS-1$
+                    .orElse(""));
                 if (!this.getStyleClass().contains("level")) {
                     this.getStyleClass().add("level");
                 }
@@ -545,11 +602,11 @@ public class ItemItemController extends WindowController {
     void kancolleFleetanalysis() {
         try {
             List<KancolleFleetanalysisItem> list = SlotItemCollection.get().getSlotitemMap().values().stream()
-                    .filter(item -> item.getLocked())
-                    .map(KancolleFleetanalysisItem::toItem)
-                    .sorted(Comparator.comparing(KancolleFleetanalysisItem::getId)
-                            .thenComparing(Comparator.comparing(KancolleFleetanalysisItem::getLv)))
-                    .collect(Collectors.toList());
+                .filter(item -> item.getLocked())
+                .map(KancolleFleetanalysisItem::toItem)
+                .sorted(Comparator.comparing(KancolleFleetanalysisItem::getId)
+                    .thenComparing(Comparator.comparing(KancolleFleetanalysisItem::getLv)))
+                .collect(Collectors.toList());
             ObjectMapper mapper = new ObjectMapper();
             String input = mapper.writeValueAsString(list);
 
@@ -568,7 +625,7 @@ public class ItemItemController extends WindowController {
     void columnVisibleType() {
         try {
             TableTool.showVisibleSetting(this.typeTable, this.getClass().toString() + "#" + "typeTable",
-                    this.getWindow());
+                this.getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -597,7 +654,7 @@ public class ItemItemController extends WindowController {
     void columnVisibleDetail() {
         try {
             TableTool.showVisibleSetting(this.detailTable, this.getClass().toString() + "#" + "detailTable",
-                    this.getWindow());
+                this.getWindow());
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }
@@ -625,7 +682,7 @@ public class ItemItemController extends WindowController {
             this.disableFilterUpdate = false;
         }
     }
-    
+
     private void saveConfig() {
         if (this.disableFilterUpdate) {
             return;

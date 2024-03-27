@@ -34,38 +34,51 @@ import logbook.internal.Ships;
 
 /**
  * 統計
- *
  */
 public class StatisticsPane extends VBox {
 
     @FXML
     private VBox content;
 
-    /** 総計 */
+    /**
+     * 総計
+     */
     @FXML
     private Text total;
 
-    /** 比率 */
+    /**
+     * 比率
+     */
     @FXML
     private PieChart ratio;
 
-    /** 平均レベル */
+    /**
+     * 平均レベル
+     */
     @FXML
     private StackedBarChart<Double, String> average;
 
-    /** 平均レベル カテゴリ軸 */
+    /**
+     * 平均レベル カテゴリ軸
+     */
     @FXML
     private CategoryAxis averageCategory;
 
-    /** レベル分布 */
+    /**
+     * レベル分布
+     */
     @FXML
     private StackedBarChart<Long, String> spectrum;
 
-    /** レベル分布 カテゴリ軸 */
+    /**
+     * レベル分布 カテゴリ軸
+     */
     @FXML
     private CategoryAxis spectrumCategory;
 
-    /** レベル分布 */
+    /**
+     * レベル分布
+     */
     @FXML
     private BubbleChart<Double, Double> bubble;
 
@@ -86,6 +99,7 @@ public class StatisticsPane extends VBox {
 
     /**
      * 画像ファイルに保存
+     *
      * @param event ActionEvent
      */
     @FXML
@@ -99,12 +113,12 @@ public class StatisticsPane extends VBox {
     public void update() {
         // 対象艦抽出
         List<Ship> ships = ShipCollection.get()
-                .getShipMap()
-                .values()
-                .stream()
-                // ロックしている艦
-                .filter(Ship::getLocked)
-                .collect(Collectors.toList());
+            .getShipMap()
+            .values()
+            .stream()
+            // ロックしている艦
+            .filter(Ship::getLocked)
+            .collect(Collectors.toList());
         // 総計
         this.setTotal(ships);
         // 経験値比率
@@ -118,22 +132,24 @@ public class StatisticsPane extends VBox {
 
     /**
      * 総計
+     *
      * @param ships 対象艦
      */
     private void setTotal(List<Ship> ships) {
         this.total.setText(this.suffixDecimal(ships.stream()
-                .mapToLong(this::getExp)
-                .sum()));
+            .mapToLong(this::getExp)
+            .sum()));
     }
 
     /**
      * 経験値比率
+     *
      * @param ships 対象艦
      */
     private void setRatio(List<Ship> ships) {
         Map<TypeGroup, Long> collect = ships.stream()
-                .collect(Collectors.groupingBy(TypeGroup::toTypeGroup, TreeMap::new,
-                        Collectors.summingLong(this::getExp)));
+            .collect(Collectors.groupingBy(TypeGroup::toTypeGroup, TreeMap::new,
+                Collectors.summingLong(this::getExp)));
 
         ObservableList<PieChart.Data> value = FXCollections.observableArrayList();
         for (Entry<TypeGroup, Long> data : collect.entrySet()) {
@@ -145,54 +161,56 @@ public class StatisticsPane extends VBox {
 
     /**
      * 平均レベル
+     *
      * @param ships 対象艦
      */
     private void setAverage(List<Ship> ships) {
         this.average.getData().clear();
 
         this.averageCategory.setCategories(
-                Arrays.stream(TypeGroup.values())
-                        .map(TypeGroup::name)
-                        .collect(Collectors.toCollection(FXCollections::observableArrayList)));
+            Arrays.stream(TypeGroup.values())
+                .map(TypeGroup::name)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
         ships.stream()
-                .collect(Collectors.groupingBy(TypeGroup::toTypeGroup,
-                        Collectors.averagingLong(Ship::getLv)))
-                .entrySet().stream()
-                .filter(e -> e.getKey() != null)
-                .sorted(Comparator.comparing(Entry<TypeGroup, Double>::getKey))
-                .map(e -> new XYChart.Data<>(e.getValue(), e.getKey().name()))
-                .forEach(data -> {
-                    XYChart.Series<Double, String> series = new XYChart.Series<>();
-                    series.setName(data.getYValue());
-                    series.getData().add(data);
-                    this.average.getData().add(series);
-                });
+            .collect(Collectors.groupingBy(TypeGroup::toTypeGroup,
+                Collectors.averagingLong(Ship::getLv)))
+            .entrySet().stream()
+            .filter(e -> e.getKey() != null)
+            .sorted(Comparator.comparing(Entry<TypeGroup, Double>::getKey))
+            .map(e -> new XYChart.Data<>(e.getValue(), e.getKey().name()))
+            .forEach(data -> {
+                XYChart.Series<Double, String> series = new XYChart.Series<>();
+                series.setName(data.getYValue());
+                series.getData().add(data);
+                this.average.getData().add(series);
+            });
     }
 
     /**
      * レベル分布
+     *
      * @param ships 対象艦
      */
     private void setSpectrum(List<Ship> ships) {
         this.spectrum.getData().clear();
 
         Map<TypeGroup, Map<Integer, Long>> value = ships.stream()
-                .collect(Collectors.groupingBy(TypeGroup::toTypeGroup, Collectors.mapping(this::tickLevel,
-                        Collectors.groupingBy(Function.identity(), Collectors.counting()))));
+            .collect(Collectors.groupingBy(TypeGroup::toTypeGroup, Collectors.mapping(this::tickLevel,
+                Collectors.groupingBy(Function.identity(), Collectors.counting()))));
         this.spectrumCategory.setCategories(
-                IntStream.rangeClosed(1, ExpTable.maxLv())
-                        .map(i -> i / 10 * 10)
-                        .distinct()
-                        .mapToObj(Integer::valueOf)
-                        .map(i -> i + "-" + (i + 9))
-                        .collect(Collectors.toCollection(FXCollections::observableArrayList)));
+            IntStream.rangeClosed(1, ExpTable.maxLv())
+                .map(i -> i / 10 * 10)
+                .distinct()
+                .mapToObj(Integer::valueOf)
+                .map(i -> i + "-" + (i + 9))
+                .collect(Collectors.toCollection(FXCollections::observableArrayList)));
         for (TypeGroup group : TypeGroup.values()) {
             Map<Integer, Long> tick = value.get(group);
             if (tick != null) {
                 ObservableList<XYChart.Data<Long, String>> data = tick.entrySet()
-                        .stream()
-                        .map(e -> new XYChart.Data<>(e.getValue(), e.getKey() + "-" + (e.getKey() + 9)))
-                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+                    .stream()
+                    .map(e -> new XYChart.Data<>(e.getValue(), e.getKey() + "-" + (e.getKey() + 9)))
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
                 XYChart.Series<Long, String> series = new XYChart.Series<>();
                 series.setName(group.name());
@@ -204,27 +222,28 @@ public class StatisticsPane extends VBox {
 
     /**
      * レベル分布
+     *
      * @param ships 対象艦
      */
     private void setBubble(List<Ship> ships) {
         this.bubble.getData().clear();
 
         Map<TypeGroup, List<Integer>> value = ships.stream()
-                .collect(Collectors.groupingBy(TypeGroup::toTypeGroup,
-                        Collectors.mapping(Ship::getLv, Collectors.toList())));
+            .collect(Collectors.groupingBy(TypeGroup::toTypeGroup,
+                Collectors.mapping(Ship::getLv, Collectors.toList())));
 
         for (TypeGroup group : TypeGroup.values()) {
             List<Integer> levels = value.get(group);
             if (levels != null) {
                 double average = levels.stream()
-                        .mapToInt(Integer::intValue)
-                        .average()
-                        .orElse(0);
+                    .mapToInt(Integer::intValue)
+                    .average()
+                    .orElse(0);
                 int size = levels.size();
                 levels.sort(Integer::compareTo);
                 double median = (size % 2 == 0)
-                        ? (double) (levels.get(size / 2) + levels.get(Math.max(size / 2 - 1, 0))) / 2
-                        : (double) levels.get(size / 2);
+                    ? (double) (levels.get(size / 2) + levels.get(Math.max(size / 2 - 1, 0))) / 2
+                    : (double) levels.get(size / 2);
 
                 ObservableList<XYChart.Data<Double, Double>> datas = FXCollections.observableArrayList();
                 datas.add(new XYChart.Data<>(average, median, ((double) size) / 5));
@@ -236,6 +255,7 @@ public class StatisticsPane extends VBox {
 
     /**
      * 接尾辞付きの数値に変換する
+     *
      * @param v 数値
      * @return 接尾辞付きの数値 (100Mなど)
      */
@@ -257,8 +277,8 @@ public class StatisticsPane extends VBox {
             scale = 1;
         }
         return BigDecimal.valueOf(v)
-                .divide(d, scale, RoundingMode.HALF_EVEN)
-                .toPlainString() + prefix;
+            .divide(d, scale, RoundingMode.HALF_EVEN)
+            .toPlainString() + prefix;
     }
 
     private long getExp(Ship ship) {

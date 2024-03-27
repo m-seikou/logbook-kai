@@ -27,7 +27,6 @@ import lombok.Data;
 
 /**
  * 任務進捗集計
- *
  */
 @Data
 public class QuestCollect {
@@ -80,7 +79,7 @@ public class QuestCollect {
     public static QuestCollect collect(AppQuest quest, AppQuestCondition condition) {
         if (condition.getType() == Type.遠征) {
             return missionCollect(quest, condition);
-        } else{
+        } else {
             return battleCollect(quest, condition);
         }
     }
@@ -88,17 +87,17 @@ public class QuestCollect {
     private static QuestCollect missionCollect(AppQuest quest, AppQuestCondition condition) {
         QuestCollect collect = new QuestCollect();
         List<SimpleMissionLog> logs = AppQuestDuration.get().getMissionCondition(quest)
-                .orElse(Collections.emptyList());
+            .orElse(Collections.emptyList());
         collect.setMissions(logs.stream()
-                .filter(log -> !"失敗".equals(log.getResult()))
-                .collect(Collectors.groupingBy(SimpleMissionLog::getName, Collectors.counting())));
+            .filter(log -> !"失敗".equals(log.getResult()))
+            .collect(Collectors.groupingBy(SimpleMissionLog::getName, Collectors.counting())));
         return collect;
     }
-    
+
     private static QuestCollect battleCollect(AppQuest quest, AppQuestCondition condition) {
         QuestCollect collect = new QuestCollect();
         List<SimpleBattleLog> logs = AppQuestDuration.get().getCondition(quest)
-                .orElse(Collections.emptyList());
+            .orElse(Collections.emptyList());
         Collection<MapinfoMst> mapinfo = MapinfoMstCollection.get().getMapinfo().values();
         for (SimpleBattleLog log : logs) {
             if (Thread.currentThread().isInterrupted()) {
@@ -106,9 +105,9 @@ public class QuestCollect {
             }
             // 海域
             String map = mapinfo.stream().filter(i -> log.getArea().equals(i.getName()))
-                    .map(i -> i.getMapareaId() + "-" + i.getNo())
-                    .findFirst()
-                    .orElse(null);
+                .map(i -> i.getMapareaId() + "-" + i.getNo())
+                .findFirst()
+                .orElse(null);
 
             // 戦闘ログ
             BattleLog battleLog = null;
@@ -125,11 +124,11 @@ public class QuestCollect {
                     p = new PhaseState(battleLog);
 
                     List<ShipMst> ships = p.getAfterFriend().stream()
-                            .filter(Objects::nonNull)
-                            .map(Ships::shipMst)
-                            .map(s -> s.orElse(null))
-                            .filter(Objects::nonNull)
-                            .collect(Collectors.toList());
+                        .filter(Objects::nonNull)
+                        .map(Ships::shipMst)
+                        .map(s -> s.orElse(null))
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
 
                     if (!filter.getFleet().test(ships)) {
                         continue;
@@ -150,19 +149,19 @@ public class QuestCollect {
                 e.addAll(p.getAfterEnemy());
                 e.addAll(p.getAfterEnemyCombined());
                 e.stream()
-                        .filter(Objects::nonNull)
-                        // 撃沈したか？
-                        .filter(o -> o.getNowhp() <= 0)
-                        // 艦種に変換
-                        .map(Ships::stype)
-                        .map(o -> o.orElse(null))
-                        .filter(Objects::nonNull)
-                        // 艦種の名前を取り出す
-                        .map(Stype::getName)
-                        // 艦種ごとにカウント
-                        .forEach(key -> {
-                            collect.getStype().merge(key, 1, (a, b) -> a + b);
-                        });
+                    .filter(Objects::nonNull)
+                    // 撃沈したか？
+                    .filter(o -> o.getNowhp() <= 0)
+                    // 艦種に変換
+                    .map(Ships::stype)
+                    .map(o -> o.orElse(null))
+                    .filter(Objects::nonNull)
+                    // 艦種の名前を取り出す
+                    .map(Stype::getName)
+                    // 艦種ごとにカウント
+                    .forEach(key -> {
+                        collect.getStype().merge(key, 1, (a, b) -> a + b);
+                    });
             }
             if (map != null) {
                 // 海域ごとのカウント

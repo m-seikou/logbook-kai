@@ -6,14 +6,19 @@ import java.util.List;
 
 /**
  * 画像キャッシュ設定
- *
  */
 public enum ShipImageCacheStrategy {
-    /** 全て */
+    /**
+     * 全て
+     */
     ALL,
-    /** 使用される画像のみ */
+    /**
+     * 使用される画像のみ
+     */
     USED("1.jpg", "1.png", "3.jpg", "3.png"),
-    /** 制限 */
+    /**
+     * 制限
+     */
     LIMIT("1.jpg", "1.png");
 
     private List<String> names;

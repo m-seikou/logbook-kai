@@ -42,7 +42,6 @@ import lombok.Setter;
 
 /**
  * スクリーンショットに関係するメソッドを集めたクラス
- *
  */
 class ScreenCapture {
 
@@ -50,29 +49,39 @@ class ScreenCapture {
 
     private static final int SCREEN_HEIGHT = 720;
 
-    /** Jpeg品質 */
+    /**
+     * Jpeg品質
+     */
     private static final float QUALITY = 0.9f;
 
-    /** ゲーム画面サイズ */
+    /**
+     * ゲーム画面サイズ
+     */
     private static final Dimension[] sizes = IntStream.rangeClosed(600, 1500)
-            .mapToObj(w -> new Dimension(w, (int) (((float) w) / SCREEN_WIDTH * SCREEN_HEIGHT)))
-            .toArray(Dimension[]::new);
+        .mapToObj(w -> new Dimension(w, (int) (((float) w) / SCREEN_WIDTH * SCREEN_HEIGHT)))
+        .toArray(Dimension[]::new);
 
     @Setter
     @Getter
     private Robot robot;
 
-    /** キャプチャ範囲 */
+    /**
+     * キャプチャ範囲
+     */
     @Setter
     @Getter
     private Rectangle rectangle;
 
-    /** 切り取り範囲 */
+    /**
+     * 切り取り範囲
+     */
     @Setter
     @Getter
     private Rectangle cutRect;
 
-    /** 形式 */
+    /**
+     * 形式
+     */
     @Setter
     @Getter
     private String type = "jpg";
@@ -83,13 +92,21 @@ class ScreenCapture {
 
     private ObjectProperty<ImageData> current;
 
-    /** 切り取り範囲 */
+    /**
+     * 切り取り範囲
+     */
     enum CutType {
-        /** 切り取らない */
+        /**
+         * 切り取らない
+         */
         NONE(null),
-        /** 改装一覧の範囲(艦娘除く) */
+        /**
+         * 改装一覧の範囲(艦娘除く)
+         */
         UNIT_WITHOUT_SHIP(new Rectangle(490, 154, 345, 547)),
-        /** 改装一覧の範囲 */
+        /**
+         * 改装一覧の範囲
+         */
         UNIT(new Rectangle(490, 154, 690, 547));
 
         private Rectangle angle;
@@ -106,7 +123,7 @@ class ScreenCapture {
     /**
      * スクリーンショット
      *
-     * @param robot Robot
+     * @param robot     Robot
      * @param rectangle ゲーム画面の座標
      */
     ScreenCapture(Robot robot, Rectangle rectangle) {
@@ -128,12 +145,12 @@ class ScreenCapture {
 
     void capture() throws IOException {
         ThreadManager.getExecutorService()
-                .execute(this::execute);
+            .execute(this::execute);
     }
 
     void captureDirect(Path dir) {
         ThreadManager.getExecutorService()
-                .execute(() -> this.executeDirect(dir));
+            .execute(() -> this.executeDirect(dir));
     }
 
     private void execute() {
@@ -201,8 +218,8 @@ class ScreenCapture {
      */
     static GraphicsConfiguration detectScreenDevice(int x, int y) {
         GraphicsDevice[] gds = GraphicsEnvironment
-                .getLocalGraphicsEnvironment()
-                .getScreenDevices();
+            .getLocalGraphicsEnvironment()
+            .getScreenDevices();
 
         for (GraphicsDevice gd : gds) {
             for (GraphicsConfiguration gc : gd.getConfigurations()) {
@@ -277,7 +294,7 @@ class ScreenCapture {
     /**
      * BufferedImageをエンコードします
      *
-     * @param image BufferedImage
+     * @param image  BufferedImage
      * @param format 画像形式
      * @return エンコードされた画像
      * @throws IOException 入出力例外
@@ -317,7 +334,7 @@ class ScreenCapture {
     /**
      * BufferedImageを指定された形式にエンコードします
      *
-     * @param image BufferedImage
+     * @param image  BufferedImage
      * @param format 画像形式
      * @return 指定された形式の画像
      * @throws IOException 入出力例外
@@ -331,7 +348,7 @@ class ScreenCapture {
             gd.drawImage(image, 0, 0, null);
             gd.dispose();
             WritableRaster r = newImg.getAlphaRaster();
-            int[] alpha = new int[] { 0xfe };
+            int[] alpha = new int[]{0xfe};
             r.setPixel(0, 0, alpha);
             image = newImg;
         }
@@ -351,7 +368,7 @@ class ScreenCapture {
      * BufferedImageを{@code rect}で指定された範囲で切り取ります
      *
      * @param image BufferedImage
-     * @param rect 画像の範囲
+     * @param rect  画像の範囲
      * @return BufferedImage
      */
     static BufferedImage cut(BufferedImage image, Rectangle rect) {
@@ -376,7 +393,7 @@ class ScreenCapture {
     /**
      * 複数の画像を横に並べた画像を返します
      *
-     * @param bytes JPEG形式などにエンコード済みの画像ファイルのバイト配列
+     * @param bytes  JPEG形式などにエンコード済みの画像ファイルのバイト配列
      * @param column 列数
      * @return 横に並べた画像
      */
@@ -410,24 +427,32 @@ class ScreenCapture {
 
     /**
      * 画像データ
-     *
      */
     static final class ImageData {
 
-        /** 日付書式 */
+        /**
+         * 日付書式
+         */
         private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
-        /** 画像フォーマット */
+        /**
+         * 画像フォーマット
+         */
         private String format;
 
-        /** 日付 */
+        /**
+         * 日付
+         */
         private ZonedDateTime dateTime;
 
-        /** 画像データ */
+        /**
+         * 画像データ
+         */
         private Reference<byte[]> image;
 
         /**
          * 画像フォーマットを取得します。
+         *
          * @return 画像フォーマット
          */
         String getFormat() {
@@ -436,6 +461,7 @@ class ScreenCapture {
 
         /**
          * 画像フォーマットを設定します。
+         *
          * @param format 画像フォーマット
          */
         void setFormat(String format) {
@@ -444,6 +470,7 @@ class ScreenCapture {
 
         /**
          * 日付を取得します。
+         *
          * @return 日付
          */
         ZonedDateTime getDateTime() {
@@ -452,6 +479,7 @@ class ScreenCapture {
 
         /**
          * 日付を設定します。
+         *
          * @param dateTime 日付
          */
         void setDateTime(ZonedDateTime dateTime) {
@@ -460,6 +488,7 @@ class ScreenCapture {
 
         /**
          * 画像データを取得します。
+         *
          * @return 画像データ
          */
         byte[] getImage() {
@@ -468,6 +497,7 @@ class ScreenCapture {
 
         /**
          * 画像データを設定します。
+         *
          * @param image 画像データ
          */
         void setImage(byte[] image) {

@@ -14,17 +14,24 @@ import javafx.beans.property.StringProperty;
  */
 public class BattleLogDetailAggregate {
 
-    /** 種類 */
+    /**
+     * 種類
+     */
     private StringProperty name = new SimpleStringProperty();
 
-    /** 合計 */
+    /**
+     * 合計
+     */
     private LongProperty count = new SimpleLongProperty();
 
-    /** 割合 */
+    /**
+     * 割合
+     */
     private DoubleProperty ratio = new SimpleDoubleProperty();
 
     /**
      * 種類を取得します。
+     *
      * @return 種類
      */
     public StringProperty nameProperty() {
@@ -33,6 +40,7 @@ public class BattleLogDetailAggregate {
 
     /**
      * 種類を取得します。
+     *
      * @return 種類
      */
     public String getName() {
@@ -41,6 +49,7 @@ public class BattleLogDetailAggregate {
 
     /**
      * 種類を設定します。
+     *
      * @param name 種類
      */
     public void setName(String name) {
@@ -49,6 +58,7 @@ public class BattleLogDetailAggregate {
 
     /**
      * 合計を取得します。
+     *
      * @return 合計
      */
     public LongProperty countProperty() {
@@ -57,6 +67,7 @@ public class BattleLogDetailAggregate {
 
     /**
      * 合計を取得します。
+     *
      * @return 合計
      */
     public Long getCount() {
@@ -65,6 +76,7 @@ public class BattleLogDetailAggregate {
 
     /**
      * 合計を設定します。
+     *
      * @param count 合計
      */
     public void setCount(Long count) {
@@ -73,6 +85,7 @@ public class BattleLogDetailAggregate {
 
     /**
      * 割合を取得します。
+     *
      * @return 割合
      */
     public DoubleProperty ratioProperty() {
@@ -81,6 +94,7 @@ public class BattleLogDetailAggregate {
 
     /**
      * 割合を取得します。
+     *
      * @return 割合
      */
     public Double getRatio() {
@@ -89,6 +103,7 @@ public class BattleLogDetailAggregate {
 
     /**
      * 割合を設定します。
+     *
      * @param ratio 割合
      */
     public void setRatio(Double ratio) {
@@ -98,9 +113,9 @@ public class BattleLogDetailAggregate {
     @Override
     public String toString() {
         return new StringJoiner("\t")
-                .add(this.name.get())
-                .add(String.valueOf(this.count.get()))
-                .add(String.valueOf(this.ratio.get()))
-                .toString();
+            .add(this.name.get())
+            .add(String.valueOf(this.count.get()))
+            .add(String.valueOf(this.ratio.get()))
+            .toString();
     }
 }

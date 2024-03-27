@@ -10,7 +10,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_hensei/preset_select
- *
  */
 @API("/kcsapi/api_req_hensei/preset_select")
 public class ApiReqHenseiPresetSelect implements APIListenerSpi {
@@ -22,15 +21,15 @@ public class ApiReqHenseiPresetSelect implements APIListenerSpi {
             Integer deckId = Integer.valueOf(req.getParameter("api_deck_id"));
             String name = data.getString("api_name");
             DeckPort deckPort = DeckPortCollection.get()
-                    .getDeckPortMap()
-                    .get(deckId)
-                    .clone();
+                .getDeckPortMap()
+                .get(deckId)
+                .clone();
             deckPort.setName(name);
             deckPort.setShip(JsonHelper.toIntegerList(data.getJsonArray("api_ship")));
 
             DeckPortCollection.get()
-                    .getDeckPortMap()
-                    .put(deckId, deckPort);
+                .getDeckPortMap()
+                .put(deckId, deckPort);
         }
     }
 

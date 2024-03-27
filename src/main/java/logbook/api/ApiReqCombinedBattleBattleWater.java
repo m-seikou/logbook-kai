@@ -19,7 +19,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_combined_battle/battle_water
- *
  */
 @API("/kcsapi/api_req_combined_battle/battle_water")
 public class ApiReqCombinedBattleBattleWater implements APIListenerSpi {
@@ -48,11 +47,11 @@ public class ApiReqCombinedBattleBattleWater implements APIListenerSpi {
                     PhaseState p = new PhaseState(log);
                     p.apply(log.getBattle());
                     ShipCollection.get()
-                            .getShipMap()
-                            .putAll(Stream.of(p.getAfterFriend(), p.getAfterFriendCombined())
-                                    .flatMap(List::stream)
-                                    .filter(Objects::nonNull)
-                                    .collect(Collectors.toMap(Ship::getId, v -> v)));
+                        .getShipMap()
+                        .putAll(Stream.of(p.getAfterFriend(), p.getAfterFriendCombined())
+                            .flatMap(List::stream)
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toMap(Ship::getId, v -> v)));
                 }
             }
         }

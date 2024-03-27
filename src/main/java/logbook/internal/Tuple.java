@@ -4,7 +4,6 @@ import java.util.Objects;
 
 /**
  * Tuple
- *
  */
 public interface Tuple {
 
@@ -115,7 +114,7 @@ public interface Tuple {
                 return false;
             Pair<?, ?> unit = (Pair<?, ?>) obj;
             return Objects.equals(this._1, unit._1)
-                    && Objects.equals(this._2, unit._2);
+                && Objects.equals(this._2, unit._2);
         }
     }
 
@@ -170,8 +169,8 @@ public interface Tuple {
                 return false;
             Triplet<?, ?, ?> unit = (Triplet<?, ?, ?>) obj;
             return Objects.equals(this._1, unit._1)
-                    && Objects.equals(this._2, unit._2)
-                    && Objects.equals(this._3, unit._3);
+                && Objects.equals(this._2, unit._2)
+                && Objects.equals(this._3, unit._3);
         }
     }
 }

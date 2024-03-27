@@ -41,7 +41,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_port/port
- *
  */
 @API("/kcsapi/api_port/port")
 public class ApiPortPort implements APIListenerSpi {
@@ -80,7 +79,7 @@ public class ApiPortPort implements APIListenerSpi {
     private void apiShip(JsonArray array) {
         // 差し替え前
         Map<Integer, Ship> before = ShipCollection.get()
-                .getShipMap();
+            .getShipMap();
         // 差し替え前のID
         Set<Integer> beforeShipIds = before.keySet();
         // 差し替え後
@@ -107,12 +106,12 @@ public class ApiPortPort implements APIListenerSpi {
 
         // 差し替え前に存在して、差し替え後に存在しない艦娘の装備を廃棄する
         beforeShipIds.stream()
-                .filter(((Predicate<Integer>) afterShipIds::contains).negate())
-                .map(before::get)
-                .forEach(this::destryItem);
+            .filter(((Predicate<Integer>) afterShipIds::contains).negate())
+            .map(before::get)
+            .forEach(this::destryItem);
 
         ShipCollection.get()
-                .setShipMap(afterShipMap);
+            .setShipMap(afterShipMap);
     }
 
     /**
@@ -123,14 +122,14 @@ public class ApiPortPort implements APIListenerSpi {
     private void apiDeckPort(JsonArray array) {
         Map<Integer, DeckPort> deckMap = JsonHelper.toMap(array, DeckPort::getId, DeckPort::toDeckPort);
         DeckPortCollection.get()
-                .setDeckPortMap(deckMap);
+            .setDeckPortMap(deckMap);
         DeckPortCollection.get()
-                .setMissionShips(deckMap.values()
-                        .stream()
-                        .filter(d -> d.getMission().get(0) != 0)
-                        .map(DeckPort::getShip)
-                        .flatMap(List::stream)
-                        .collect(Collectors.toCollection(LinkedHashSet::new)));
+            .setMissionShips(deckMap.values()
+                .stream()
+                .filter(d -> d.getMission().get(0) != 0)
+                .map(DeckPort::getShip)
+                .flatMap(List::stream)
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
     /**
@@ -142,14 +141,14 @@ public class ApiPortPort implements APIListenerSpi {
         // 入渠
         Map<Integer, Ndock> map = JsonHelper.toMap(array, Ndock::getId, Ndock::toNdock);
         NdockCollection.get()
-                .setNdockMap(map);
+            .setNdockMap(map);
         // 入渠中の艦娘
         NdockCollection.get()
-                .setNdockSet(map.entrySet()
-                        .stream()
-                        .map(Map.Entry::getValue)
-                        .map(Ndock::getShipId)
-                        .collect(Collectors.toCollection(LinkedHashSet::new)));
+            .setNdockSet(map.entrySet()
+                .stream()
+                .map(Map.Entry::getValue)
+                .map(Ndock::getShipId)
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
     /**
@@ -161,12 +160,12 @@ public class ApiPortPort implements APIListenerSpi {
         Map<Integer, Material> material = JsonHelper.toMap(array, Material::getId, Material::toMaterial);
         AppCondition.get().setMaterial(material);
         Duration duration = Duration.ofMillis(System.currentTimeMillis() - AppCondition.get()
-                .getWroteMaterialLogLast());
+            .getWroteMaterialLogLast());
         if (duration.compareTo(Duration.ofSeconds(AppConfig.get().getMaterialLogInterval())) >= 0) {
             LogWriter.getInstance(MaterialLogFormat::new)
-                    .write(material);
+                .write(material);
             AppCondition.get()
-                    .setWroteMaterialLogLast(System.currentTimeMillis());
+                .setWroteMaterialLogLast(System.currentTimeMillis());
         }
     }
 
@@ -195,7 +194,7 @@ public class ApiPortPort implements APIListenerSpi {
      */
     private void destryItem(Ship ship) {
         Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         // 持っている装備を廃棄する
         for (Integer itemId : ship.getSlot()) {
             itemMap.remove(itemId);
@@ -233,7 +232,7 @@ public class ApiPortPort implements APIListenerSpi {
 
     /**
      * api_data.api_event_object
-     * 
+     *
      * @param object api_data
      */
     private void detectGimmick(JsonObject object) {
@@ -242,8 +241,8 @@ public class ApiPortPort implements APIListenerSpi {
             if (eventObject.containsKey("api_m_flag2")) {
                 if (JsonHelper.toInteger(eventObject.get("api_m_flag2")) > 0) {
                     Platform.runLater(
-                            () -> Tools.Controls.showNotify(null, "ギミック解除", "ギミックの達成を確認しました。",
-                                    javafx.util.Duration.seconds(15)));
+                        () -> Tools.Controls.showNotify(null, "ギミック解除", "ギミックの達成を確認しました。",
+                            javafx.util.Duration.seconds(15)));
                     // 通知音再生
                     if (AppConfig.get().isUseSound()) {
                         Platform.runLater(Audios.playDefaultNotifySound());

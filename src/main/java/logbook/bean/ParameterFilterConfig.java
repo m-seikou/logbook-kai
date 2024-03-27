@@ -8,14 +8,24 @@ import lombok.Data;
  */
 @Data
 public class ParameterFilterConfig {
-    /** 有効 */
+    /**
+     * 有効
+     */
     private boolean enabled;
-    /** 選ばれていたパラメータ */
+    /**
+     * 選ばれていたパラメータ
+     */
     private String name;
-    /** フィールドの値 */
+    /**
+     * フィールドの値
+     */
     private Integer value;
-    /** 選択のインデックス */
+    /**
+     * 選択のインデックス
+     */
     private Integer valueChoice;
-    /** 比較タイプ */
+    /**
+     * 比較タイプ
+     */
     private Operator type;
 }

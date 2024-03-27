@@ -12,83 +12,130 @@ import lombok.Data;
 
 /**
  * 夜戦(連合艦隊)
- *
  */
 @Data
 public class CombinedBattleEcMidnightBattle implements ICombinedEcMidnightBattle, IMidnightBattle, Serializable {
 
     private static final long serialVersionUID = 8584847683187523584L;
 
-    /** api_active_deck */
+    /**
+     * api_active_deck
+     */
     private List<Integer> activeDeck;
 
-    /** api_dock_id/api_deck_id */
+    /**
+     * api_dock_id/api_deck_id
+     */
     private Integer dockId;
 
-    /** api_ship_ke */
+    /**
+     * api_ship_ke
+     */
     private List<Integer> shipKe;
 
-    /** api_ship_ke_combined */
+    /**
+     * api_ship_ke_combined
+     */
     private List<Integer> shipKeCombined;
 
-    /** api_ship_lv */
+    /**
+     * api_ship_lv
+     */
     private List<Integer> shipLv;
 
-    /** api_ship_lv_combined */
+    /**
+     * api_ship_lv_combined
+     */
     private List<Integer> shipLvCombined;
 
-    /** api_f_nowhps */
+    /**
+     * api_f_nowhps
+     */
     private List<Integer> fNowHps;
 
-    /** api_f_maxhps */
+    /**
+     * api_f_maxhps
+     */
     private List<Integer> fMaxHps;
 
-    /** api_e_nowhps */
+    /**
+     * api_e_nowhps
+     */
     private List<Integer> eNowHps;
 
-    /** api_e_maxhps */
+    /**
+     * api_e_maxhps
+     */
     private List<Integer> eMaxHps;
 
-    /** api_e_nowhps_combined */
+    /**
+     * api_e_nowhps_combined
+     */
     private List<Integer> eNowHpsCombined;
 
-    /** api_e_maxhps_combined */
+    /**
+     * api_e_maxhps_combined
+     */
     private List<Integer> eMaxHpsCombined;
 
-    /** api_eSlot */
+    /**
+     * api_eSlot
+     */
     private List<List<Integer>> eSlot;
 
-    /** api_eSlot_combined */
+    /**
+     * api_eSlot_combined
+     */
     private List<List<Integer>> eSlotCombined;
 
-    /** api_fParam */
+    /**
+     * api_fParam
+     */
     private List<List<Integer>> fParam;
 
-    /** api_fParam_combined */
+    /**
+     * api_fParam_combined
+     */
     private List<List<Integer>> fParamCombined;
 
-    /** api_eParam */
+    /**
+     * api_eParam
+     */
     private List<List<Integer>> eParam;
 
-    /** api_eParam_combined */
+    /**
+     * api_eParam_combined
+     */
     private List<List<Integer>> eParamCombined;
 
-    /** api_friendly_info */
+    /**
+     * api_friendly_info
+     */
     private BattleTypes.FriendlyInfo friendlyInfo;
 
-    /** api_friendly_battle */
+    /**
+     * api_friendly_battle
+     */
     private BattleTypes.FriendlyBattle friendlyBattle;
 
-    /** api_touch_plane */
+    /**
+     * api_touch_plane
+     */
     private List<Integer> touchPlane;
 
-    /** api_flare_pos */
+    /**
+     * api_flare_pos
+     */
     private List<Integer> flarePos;
 
-    /** api_hougeki */
+    /**
+     * api_hougeki
+     */
     private BattleTypes.MidnightHougeki hougeki;
 
-    /** api_smoke_type */
+    /**
+     * api_smoke_type
+     */
     private Integer smokeType;
 
     /**
@@ -100,30 +147,30 @@ public class CombinedBattleEcMidnightBattle implements ICombinedEcMidnightBattle
     public static CombinedBattleEcMidnightBattle toBattle(JsonObject json) {
         CombinedBattleEcMidnightBattle bean = new CombinedBattleEcMidnightBattle();
         JsonHelper.bind(json)
-                .setIntegerList("api_active_deck", bean::setActiveDeck)
-                .setInteger("api_dock_id", bean::setDockId)
-                .setInteger("api_deck_id", bean::setDockId)
-                .setIntegerList("api_ship_ke", bean::setShipKe)
-                .setIntegerList("api_ship_ke_combined", bean::setShipKeCombined)
-                .setIntegerList("api_ship_lv", bean::setShipLv)
-                .setIntegerList("api_ship_lv_combined", bean::setShipLvCombined)
-                .setIntegerList("api_f_nowhps", bean::setFNowHps)
-                .setIntegerList("api_f_maxhps", bean::setFMaxHps)
-                .setIntegerList("api_e_nowhps", bean::setENowHps)
-                .setIntegerList("api_e_maxhps", bean::setEMaxHps)
-                .setIntegerList("api_e_nowhps_combined", bean::setENowHpsCombined)
-                .setIntegerList("api_e_maxhps_combined", bean::setEMaxHpsCombined)
-                .set("api_eSlot", bean::setESlot, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_eSlot_combined", bean::setESlotCombined, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_fParam", bean::setFParam, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_eParam", bean::setEParam, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_eParam_combined", bean::setEParamCombined, JsonHelper.toList(JsonHelper::toIntegerList))
-                .set("api_friendly_info", bean::setFriendlyInfo, BattleTypes.FriendlyInfo::toFriendlyInfo)
-                .set("api_friendly_battle", bean::setFriendlyBattle, BattleTypes.FriendlyBattle::toFriendlyBattle)
-                .setIntegerList("api_touch_plane", bean::setTouchPlane)
-                .setIntegerList("api_flare_pos", bean::setFlarePos)
-                .set("api_hougeki", bean::setHougeki, BattleTypes.MidnightHougeki::toMidnightHougeki)
-                .setInteger("api_smoke_type", bean::setSmokeType)
+            .setIntegerList("api_active_deck", bean::setActiveDeck)
+            .setInteger("api_dock_id", bean::setDockId)
+            .setInteger("api_deck_id", bean::setDockId)
+            .setIntegerList("api_ship_ke", bean::setShipKe)
+            .setIntegerList("api_ship_ke_combined", bean::setShipKeCombined)
+            .setIntegerList("api_ship_lv", bean::setShipLv)
+            .setIntegerList("api_ship_lv_combined", bean::setShipLvCombined)
+            .setIntegerList("api_f_nowhps", bean::setFNowHps)
+            .setIntegerList("api_f_maxhps", bean::setFMaxHps)
+            .setIntegerList("api_e_nowhps", bean::setENowHps)
+            .setIntegerList("api_e_maxhps", bean::setEMaxHps)
+            .setIntegerList("api_e_nowhps_combined", bean::setENowHpsCombined)
+            .setIntegerList("api_e_maxhps_combined", bean::setEMaxHpsCombined)
+            .set("api_eSlot", bean::setESlot, JsonHelper.toList(JsonHelper::toIntegerList))
+            .set("api_eSlot_combined", bean::setESlotCombined, JsonHelper.toList(JsonHelper::toIntegerList))
+            .set("api_fParam", bean::setFParam, JsonHelper.toList(JsonHelper::toIntegerList))
+            .set("api_eParam", bean::setEParam, JsonHelper.toList(JsonHelper::toIntegerList))
+            .set("api_eParam_combined", bean::setEParamCombined, JsonHelper.toList(JsonHelper::toIntegerList))
+            .set("api_friendly_info", bean::setFriendlyInfo, BattleTypes.FriendlyInfo::toFriendlyInfo)
+            .set("api_friendly_battle", bean::setFriendlyBattle, BattleTypes.FriendlyBattle::toFriendlyBattle)
+            .setIntegerList("api_touch_plane", bean::setTouchPlane)
+            .setIntegerList("api_flare_pos", bean::setFlarePos)
+            .set("api_hougeki", bean::setHougeki, BattleTypes.MidnightHougeki::toMidnightHougeki)
+            .setInteger("api_smoke_type", bean::setSmokeType)
         ;
         return bean;
     }

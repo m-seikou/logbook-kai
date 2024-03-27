@@ -6,30 +6,33 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root prefWidth="260.0" styleClass="ndock" type="HBox" xmlns="http://javafx.com/javafx/8.0.72" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <AnchorPane prefHeight="40.0" prefWidth="160.0">
-         <children>
-            <ImageView fx:id="img" fitHeight="40.0" fitWidth="160.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-      </ImageView>
-         </children>
-      </AnchorPane>
-      <AnchorPane prefHeight="40.0" prefWidth="100.0">
-         <children>
-            <HBox AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Label fx:id="name" styleClass="name" />
-                  <Label fx:id="level" />
-               </children>
-            </HBox>
-            <HBox alignment="BASELINE_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-               <children>
-                  <Label fx:id="hp" styleClass="hp" />
-                  <ImageView fx:id="supply" fitHeight="12.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" styleClass="supply" />
-                  <Label fx:id="cond" styleClass="cond" />
-               </children>
-            </HBox>
-         </children>
-      </AnchorPane>
-   </children>
+<fx:root prefWidth="260.0" styleClass="ndock" type="HBox" xmlns="http://javafx.com/javafx/8.0.72"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane prefHeight="40.0" prefWidth="160.0">
+            <children>
+                <ImageView fx:id="img" fitHeight="40.0" fitWidth="160.0" AnchorPane.leftAnchor="0.0"
+                           AnchorPane.topAnchor="0.0">
+                </ImageView>
+            </children>
+        </AnchorPane>
+        <AnchorPane prefHeight="40.0" prefWidth="100.0">
+            <children>
+                <HBox AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <Label fx:id="name" styleClass="name"/>
+                        <Label fx:id="level"/>
+                    </children>
+                </HBox>
+                <HBox alignment="BASELINE_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                    <children>
+                        <Label fx:id="hp" styleClass="hp"/>
+                        <ImageView fx:id="supply" fitHeight="12.0" fitWidth="36.0" pickOnBounds="true"
+                                   preserveRatio="true" styleClass="supply"/>
+                        <Label fx:id="cond" styleClass="cond"/>
+                    </children>
+                </HBox>
+            </children>
+        </AnchorPane>
+    </children>
 </fx:root>

@@ -13,7 +13,6 @@ import logbook.proxy.ResponseMetaData;
 
 /**
  * /kcsapi/api_req_practice/battle
- *
  */
 @API("/kcsapi/api_req_practice/battle")
 public class ApiReqPracticeBattle implements APIListenerSpi {
@@ -30,8 +29,8 @@ public class ApiReqPracticeBattle implements APIListenerSpi {
                 log.setBattle(SortieBattle.toBattle(data));
                 // 出撃艦隊
                 Integer dockId = Optional.ofNullable(log.getBattle())
-                        .map(IFormation::getDockId)
-                        .orElse(1);
+                    .map(IFormation::getDockId)
+                    .orElse(1);
                 // 艦隊スナップショットを作る
                 BattleLog.snapshot(log, dockId);
             }

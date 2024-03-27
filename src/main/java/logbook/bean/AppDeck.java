@@ -11,7 +11,6 @@ import lombok.Setter;
 
 /**
  * 編成記録
- *
  */
 @Getter
 @Setter
@@ -19,28 +18,37 @@ public class AppDeck implements Serializable {
 
     private static final long serialVersionUID = -8608415733587694654L;
 
-    /** 編成の名前 */
+    /**
+     * 編成の名前
+     */
     private String name;
 
-    /** 艦隊 */
+    /**
+     * 艦隊
+     */
     private List<AppDeckFleet> fleets = new ArrayList<>();
 
     /**
      * 編成記録の艦隊
-     *
      */
     @Data
     public static class AppDeckFleet implements Serializable {
 
         private static final long serialVersionUID = -442573580025545733L;
 
-        /** 艦隊の名前 */
+        /**
+         * 艦隊の名前
+         */
         private String name;
 
-        /** メモ */
+        /**
+         * メモ
+         */
         private String description;
 
-        /** 艦娘達 */
+        /**
+         * 艦娘達
+         */
         private List<AppDeckShip> ships = new ArrayList<>();
 
         /**
@@ -89,20 +97,25 @@ public class AppDeck implements Serializable {
 
     /**
      * 編成記録の艦娘
-     *
      */
     @Data
     public static class AppDeckShip implements Serializable {
 
         private static final long serialVersionUID = -6719777410606952140L;
 
-        /** 艦娘 */
+        /**
+         * 艦娘
+         */
         private Integer shipId;
 
-        /** 装備 */
+        /**
+         * 装備
+         */
         private List<Integer> items = new ArrayList<>();
 
-        /** 装備改修 */
+        /**
+         * 装備改修
+         */
         private List<Integer> itemLvs = new ArrayList<>();
     }
 }

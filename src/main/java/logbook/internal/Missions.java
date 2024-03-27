@@ -22,28 +22,29 @@ import logbook.plugin.PluginServices;
 
 /**
  * 遠征
- *
  */
 public class Missions {
 
-    /** 画像キャッシュ */
+    /**
+     * 画像キャッシュ
+     */
     private static final ReferenceCache<String, Image> CACHE = new ReferenceCache<>(50);
 
     /**
      * 遠征IDから{@link Mission}を返します。
-     * 
+     *
      * @param missionId 遠征ID
      * @return {@link Mission}
      */
     public static Mission getMission(Integer missionId) {
         return MissionCollection.get()
-                .getMissionMap()
-                .get(missionId);
+            .getMissionMap()
+            .get(missionId);
     }
 
     /**
      * 遠征IDから{@link MissionCondition}を返します。
-     * 
+     *
      * @param missionId 遠征ID
      * @return {@link MissionCondition}
      * @throws IOException
@@ -62,7 +63,7 @@ public class Missions {
         }
 
         InputStream is = PluginServices
-                .getResourceAsStream("logbook/mission/" + mission.getMapareaId() + "/" + mission.getDispNo() + ".json");
+            .getResourceAsStream("logbook/mission/" + mission.getMapareaId() + "/" + mission.getDispNo() + ".json");
         if (is == null) {
             return Optional.empty();
         }
@@ -80,22 +81,23 @@ public class Missions {
 
     /**
      * 遠征の定義から時間を表すテキストを返します。
+     *
      * @param mission 遠征定義
      * @return テキスト - 30分、3時間15分、1日など
      */
     public static String getDurationText(Mission mission) {
         if (mission.getTime() != null) {
             int minutes = mission.getTime();
-            final int DAY_IN_MINUTE = 60*24;
+            final int DAY_IN_MINUTE = 60 * 24;
             StringBuilder sb = new StringBuilder(16);
             if (minutes >= DAY_IN_MINUTE) {
-                int days = minutes/DAY_IN_MINUTE;
-                minutes -= days*DAY_IN_MINUTE;
+                int days = minutes / DAY_IN_MINUTE;
+                minutes -= days * DAY_IN_MINUTE;
                 sb.append(days).append("日");
             }
             if (minutes >= 60) {
-                int hours = minutes/60;
-                minutes -= hours*60;
+                int hours = minutes / 60;
+                minutes -= hours * 60;
                 sb.append(hours).append("時間");
             }
             if (minutes > 0) {
@@ -118,8 +120,8 @@ public class Missions {
     /**
      * 遠征画像をロードします。
      *
-     * @param id 画像ID
-     * @param prefWidth 幅
+     * @param id         画像ID
+     * @param prefWidth  幅
      * @param prefHeight 高さ
      * @return 画像
      */
@@ -127,7 +129,7 @@ public class Missions {
         Path dir = Paths.get(AppConfig.get().getResourcesDir());
         Path p = dir.resolve(Paths.get("sally", "sally_expedition/sally_expedition_" + id + ".png"));
 
-        return CACHE.get(p.toUri().toString()+"@"+prefWidth+"x"+prefHeight, (url, status) -> {
+        return CACHE.get(p.toUri().toString() + "@" + prefWidth + "x" + prefHeight, (url, status) -> {
             Image image = new Image(url.substring(0, url.lastIndexOf("@")));
             if (image.isError()) {
                 status.setDoCache(false);

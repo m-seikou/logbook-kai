@@ -11,7 +11,6 @@ import logbook.bean.SlotitemMstCollection;
 
 /**
  * 基地航空隊に関するメソッドを集めたクラス
- *
  */
 public class AirBases {
 
@@ -23,9 +22,9 @@ public class AirBases {
      */
     public static int airSuperiority(AirBase airBase) {
         Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
 
         // 防空の場合true
         boolean isIntercept = airBase.getActionKind() == 2;
@@ -65,8 +64,8 @@ public class AirBases {
     /**
      * スロット内制空値
      *
-     * @param item 装備
-     * @param onSlot 機数
+     * @param item        装備
+     * @param onSlot      機数
      * @param isIntercept 防空の場合true
      * @return 制空値
      */
@@ -74,7 +73,7 @@ public class AirBases {
         if (onSlot <= 0)
             return 0;
         Map<Integer, SlotitemMst> itemMstMap = SlotitemMstCollection.get()
-                .getSlotitemMap();
+            .getSlotitemMap();
         SlotitemMst itemMst = itemMstMap.get(item.getSlotitemId());
         if (itemMst == null)
             return 0;
@@ -99,7 +98,7 @@ public class AirBases {
     /**
      * 加算される行動半径を計算します。
      *
-     * @param distance 最小行動半径
+     * @param distance      最小行動半径
      * @param reconDistance 偵察機の行動半径
      * @return 加算される行動半径
      */
@@ -112,6 +111,7 @@ public class AirBases {
 
     /**
      * 防空時の偵察機補正
+     *
      * @param itemMst 装備
      * @return 乗算値
      */
@@ -140,6 +140,7 @@ public class AirBases {
 
     /**
      * 出撃時の偵察機補正
+     *
      * @param itemMst 装備
      * @return 乗算値
      */

@@ -17,100 +17,115 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.ToggleSwitch?>
 
-<VBox xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logbook.internal.gui.ItemItemController">
+<VBox xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="logbook.internal.gui.ItemItemController">
     <children>
         <SplitPane fx:id="splitPane" dividerPositions="0.5" VBox.vgrow="ALWAYS">
-           <items>
-              <VBox>
-                 <children>
-                    <TitledPane fx:id="filter" animated="false" expanded="false" text="フィルター">
-                   <content>
-                      <VBox spacing="5">
-                      <FlowPane fx:id="filters" hgap="5" >
-                         <children>
-                            <VBox>
-                               <children>
-                                  <ToggleSwitch fx:id="textFilter" prefWidth="0.0" style="-fx-font-weight: bold;" text="テキスト" />
-                                  <ComboBox fx:id="textValue" disable="true" editable="true" prefWidth="180.0" />
-                                  <ToggleSwitch fx:id="typeFilter" prefWidth="0.0" style="-fx-font-weight: bold; -fx-padding: 20 0 0 0;" text="種類" />
-                               </children>
-                            </VBox>
-                         </children>
-                      </FlowPane>
-                      <TitledPane fx:id="typeFilterTitledPane" animated="false" expanded="false" text="種類フィルター">
-                         <GridPane fx:id="typeFilterPane" hgap="20" vgap="5">
-                            <columnConstraints>
-                               <ColumnConstraints fillWidth="false" minWidth="100"/>
-                               <ColumnConstraints fillWidth="true" />
-                          </columnConstraints>
-                          <children>
-                             <CheckBox fx:id="allTypes" text="すべて" allowIndeterminate="true" disable="true"/>
-                          </children>
-                         </GridPane>
-                      </TitledPane>
-                      </VBox>
-                   </content>
-                    </TitledPane>
-                    <TableView fx:id="typeTable" VBox.vgrow="ALWAYS">
-                      <columns>
-                        <TableColumn fx:id="name" prefWidth="170.0" text="名称" />
-                        <TableColumn fx:id="type" prefWidth="110.0" text="種類" />
-                        <TableColumn fx:id="count" prefWidth="35.0" text="所持" />
-                        <TableColumn fx:id="houg" prefWidth="35.0" text="火力" />
-                        <TableColumn fx:id="houm" prefWidth="35.0" text="命中" />
-                        <TableColumn fx:id="leng" prefWidth="35.0" text="射程" />
-                        <TableColumn fx:id="luck" prefWidth="35.0" text="運" />
-                        <TableColumn fx:id="houk" prefWidth="35.0" text="回避" />
-                        <TableColumn fx:id="baku" prefWidth="35.0" text="爆装" />
-                        <TableColumn fx:id="raig" prefWidth="35.0" text="雷装" />
-                        <TableColumn fx:id="saku" prefWidth="35.0" text="索敵" />
-                        <TableColumn fx:id="tais" prefWidth="35.0" text="対潜" />
-                        <TableColumn fx:id="tyku" prefWidth="35.0" text="対空" />
-                        <TableColumn fx:id="souk" prefWidth="35.0" text="装甲" />
-                      </columns>
-                      <contextMenu>
-                         <ContextMenu>
-                           <items>
-                             <MenuItem mnemonicParsing="false" onAction="#copyType" text="クリップボードにコピー" />
-                             <MenuItem mnemonicParsing="false" onAction="#selectAllType" text="すべてを選択" />
-                             <MenuItem mnemonicParsing="false" onAction="#storeType" text="CSVファイルとして保存" />
-                             <SeparatorMenuItem mnemonicParsing="false" />
-                             <Menu mnemonicParsing="false" text="艦隊分析">
-                               <items>
-                                 <MenuItem mnemonicParsing="false" onAction="#kancolleFleetanalysis" text="ロック装備をクリップボードにコピー" />
-                               </items>
-                             </Menu>
-                             <SeparatorMenuItem mnemonicParsing="false" />
-                             <MenuItem mnemonicParsing="false" onAction="#columnVisibleType" text="列の表示・非表示" />
-                           </items>
-                         </ContextMenu>
-                      </contextMenu>
-                    </TableView>
-                 </children>
-              </VBox>
-              <VBox>
-                 <children>
-                    <Label fx:id="detailName" styleClass="detailName" text="" />
-                    <TableView fx:id="detailTable" VBox.vgrow="ALWAYS">
-                      <columns>
-                        <TableColumn fx:id="alv" prefWidth="50.0" text="熟練" />
-                        <TableColumn fx:id="level" prefWidth="50.0" text="改修" />
-                        <TableColumn fx:id="ship" prefWidth="300.0" text="所持" />
-                      </columns>
-                      <contextMenu>
-                         <ContextMenu>
-                           <items>
-                             <MenuItem mnemonicParsing="false" onAction="#copyDetail" text="クリップボードにコピー" />
-                             <MenuItem mnemonicParsing="false" onAction="#selectAllDetail" text="すべてを選択" />
-                             <SeparatorMenuItem mnemonicParsing="false" />
-                             <MenuItem mnemonicParsing="false" onAction="#columnVisibleDetail" text="列の表示・非表示" />
-                           </items>
-                         </ContextMenu>
-                      </contextMenu>
-                    </TableView>
-                 </children>
-              </VBox>
-           </items>
+            <items>
+                <VBox>
+                    <children>
+                        <TitledPane fx:id="filter" animated="false" expanded="false" text="フィルター">
+                            <content>
+                                <VBox spacing="5">
+                                    <FlowPane fx:id="filters" hgap="5">
+                                        <children>
+                                            <VBox>
+                                                <children>
+                                                    <ToggleSwitch fx:id="textFilter" prefWidth="0.0"
+                                                                  style="-fx-font-weight: bold;" text="テキスト"/>
+                                                    <ComboBox fx:id="textValue" disable="true" editable="true"
+                                                              prefWidth="180.0"/>
+                                                    <ToggleSwitch fx:id="typeFilter" prefWidth="0.0"
+                                                                  style="-fx-font-weight: bold; -fx-padding: 20 0 0 0;"
+                                                                  text="種類"/>
+                                                </children>
+                                            </VBox>
+                                        </children>
+                                    </FlowPane>
+                                    <TitledPane fx:id="typeFilterTitledPane" animated="false" expanded="false"
+                                                text="種類フィルター">
+                                        <GridPane fx:id="typeFilterPane" hgap="20" vgap="5">
+                                            <columnConstraints>
+                                                <ColumnConstraints fillWidth="false" minWidth="100"/>
+                                                <ColumnConstraints fillWidth="true"/>
+                                            </columnConstraints>
+                                            <children>
+                                                <CheckBox fx:id="allTypes" text="すべて" allowIndeterminate="true"
+                                                          disable="true"/>
+                                            </children>
+                                        </GridPane>
+                                    </TitledPane>
+                                </VBox>
+                            </content>
+                        </TitledPane>
+                        <TableView fx:id="typeTable" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="name" prefWidth="170.0" text="名称"/>
+                                <TableColumn fx:id="type" prefWidth="110.0" text="種類"/>
+                                <TableColumn fx:id="count" prefWidth="35.0" text="所持"/>
+                                <TableColumn fx:id="houg" prefWidth="35.0" text="火力"/>
+                                <TableColumn fx:id="houm" prefWidth="35.0" text="命中"/>
+                                <TableColumn fx:id="leng" prefWidth="35.0" text="射程"/>
+                                <TableColumn fx:id="luck" prefWidth="35.0" text="運"/>
+                                <TableColumn fx:id="houk" prefWidth="35.0" text="回避"/>
+                                <TableColumn fx:id="baku" prefWidth="35.0" text="爆装"/>
+                                <TableColumn fx:id="raig" prefWidth="35.0" text="雷装"/>
+                                <TableColumn fx:id="saku" prefWidth="35.0" text="索敵"/>
+                                <TableColumn fx:id="tais" prefWidth="35.0" text="対潜"/>
+                                <TableColumn fx:id="tyku" prefWidth="35.0" text="対空"/>
+                                <TableColumn fx:id="souk" prefWidth="35.0" text="装甲"/>
+                            </columns>
+                            <contextMenu>
+                                <ContextMenu>
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#copyType"
+                                                  text="クリップボードにコピー"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#selectAllType"
+                                                  text="すべてを選択"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#storeType"
+                                                  text="CSVファイルとして保存"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <Menu mnemonicParsing="false" text="艦隊分析">
+                                            <items>
+                                                <MenuItem mnemonicParsing="false" onAction="#kancolleFleetanalysis"
+                                                          text="ロック装備をクリップボードにコピー"/>
+                                            </items>
+                                        </Menu>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#columnVisibleType"
+                                                  text="列の表示・非表示"/>
+                                    </items>
+                                </ContextMenu>
+                            </contextMenu>
+                        </TableView>
+                    </children>
+                </VBox>
+                <VBox>
+                    <children>
+                        <Label fx:id="detailName" styleClass="detailName" text=""/>
+                        <TableView fx:id="detailTable" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="alv" prefWidth="50.0" text="熟練"/>
+                                <TableColumn fx:id="level" prefWidth="50.0" text="改修"/>
+                                <TableColumn fx:id="ship" prefWidth="300.0" text="所持"/>
+                            </columns>
+                            <contextMenu>
+                                <ContextMenu>
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#copyDetail"
+                                                  text="クリップボードにコピー"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#selectAllDetail"
+                                                  text="すべてを選択"/>
+                                        <SeparatorMenuItem mnemonicParsing="false"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#columnVisibleDetail"
+                                                  text="列の表示・非表示"/>
+                                    </items>
+                                </ContextMenu>
+                            </contextMenu>
+                        </TableView>
+                    </children>
+                </VBox>
+            </items>
         </SplitPane>
     </children>
 </VBox>

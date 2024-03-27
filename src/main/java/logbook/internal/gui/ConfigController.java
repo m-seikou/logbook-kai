@@ -58,18 +58,21 @@ import logbook.plugin.PluginServices;
 
 /**
  * 設定コントローラー
- *
  */
 public class ConfigController extends WindowController {
 
     @FXML
     private ToggleGroup windowStyle;
 
-    /** メイン画面のスタイル-スマート */
+    /**
+     * メイン画面のスタイル-スマート
+     */
     @FXML
     private RadioButton windowStyleSmart;
 
-    /** メイン画面のスタイル-ワイド */
+    /**
+     * メイン画面のスタイル-ワイド
+     */
     @FXML
     private RadioButton windowStyleWide;
 
@@ -80,228 +83,342 @@ public class ConfigController extends WindowController {
     @FXML
     private ToggleGroup fontSize;
 
-    /** 文字の大きさ-標準 */
+    /**
+     * 文字の大きさ-標準
+     */
     @FXML
     private RadioButton fontSizeDefault;
 
-    /** 文字の大きさ-少し大きい */
+    /**
+     * 文字の大きさ-少し大きい
+     */
     @FXML
     private RadioButton fontSizeLarge1;
 
-    /** 文字の大きさ-大きい */
+    /**
+     * 文字の大きさ-大きい
+     */
     @FXML
     private RadioButton fontSizeLarge2;
 
-    /** 遠征・入渠完了時に通知をする */
+    /**
+     * 遠征・入渠完了時に通知をする
+     */
     @FXML
     private CheckBox useNotification;
 
-    /** 疲労回復予想時刻にトースト通知をする */
+    /**
+     * 疲労回復予想時刻にトースト通知をする
+     */
     @FXML
     private CheckBox useCondRecoverToast;
 
-    /** 出撃時に大破艦がいる場合に通知をする */
+    /**
+     * 出撃時に大破艦がいる場合に通知をする
+     */
     @FXML
     private CheckBox alertBadlyStart;
 
-    /** 進撃時に大破艦がいる場合に通知をする */
+    /**
+     * 進撃時に大破艦がいる場合に通知をする
+     */
     @FXML
     private CheckBox alertBadlyNext;
 
-    /** 大破警告から第二艦隊旗艦を除外する */
+    /**
+     * 大破警告から第二艦隊旗艦を除外する
+     */
     @FXML
     private CheckBox ignoreSecondFlagship;
 
-    /** 通知でサウンドを鳴らす */
+    /**
+     * 通知でサウンドを鳴らす
+     */
     @FXML
     private CheckBox useSound;
 
-    /** デフォルトサウンド */
+    /**
+     * デフォルトサウンド
+     */
     @FXML
     private TextField defaultNotifySound;
 
-    /** 通知でトーストを表示 */
+    /**
+     * 通知でトーストを表示
+     */
     @FXML
     private CheckBox useToast;
 
-    /** トーストの位置 */
+    /**
+     * トーストの位置
+     */
     @FXML
     private ChoiceBox<Pair<String, String>> toastLocation;
 
-    /** 戦果ペインの表示 */
+    /**
+     * 戦果ペインの表示
+     */
     @FXML
     private CheckBox showAchievement;
 
-    /** 遠征ペインの表示 */
+    /**
+     * 遠征ペインの表示
+     */
     @FXML
     private CheckBox showMission;
 
-    /** 入渠ペインの表示 */
+    /**
+     * 入渠ペインの表示
+     */
     @FXML
     private CheckBox showNdock;
 
-    /** 任務ペインの表示 */
+    /**
+     * 任務ペインの表示
+     */
     @FXML
     private CheckBox showQuest;
-    
-    /** 遠征完了時のリマインド */
+
+    /**
+     * 遠征完了時のリマインド
+     */
     @FXML
     private CheckBox useRemind;
 
-    /** 遠征完了時のリマインド(秒) */
+    /**
+     * 遠征完了時のリマインド(秒)
+     */
     @FXML
     private TextField remind;
 
-    /** 音量 */
+    /**
+     * 音量
+     */
     @FXML
     private TextField soundLevel;
-    
-    /** 資材ログ保存間隔 */
+
+    /**
+     * 資材ログ保存間隔
+     */
     @FXML
     private TextField materialLogInterval;
 
-    /** 戦闘開始時に結果を反映 */
+    /**
+     * 戦闘開始時に結果を反映
+     */
     @FXML
     private CheckBox applyBattle;
 
-    /** 戦闘開始時に結果を反映 */
+    /**
+     * 戦闘開始時に結果を反映
+     */
     @FXML
     private CheckBox applyResult;
 
-    /** 戦闘ログの保存期限 */
+    /**
+     * 戦闘ログの保存期限
+     */
     @FXML
     private TextField battleLogExpires;
 
-    /** 戦闘ログの保存期間無期限 */
+    /**
+     * 戦闘ログの保存期間無期限
+     */
     @FXML
     private CheckBox indefiniteExpires;
 
-    /** 戦闘ログを圧縮する */
+    /**
+     * 戦闘ログを圧縮する
+     */
     @FXML
     private CheckBox compressBattleLogs;
 
-    /** 戦闘ログにローデータを含める */
+    /**
+     * 戦闘ログにローデータを含める
+     */
     @FXML
     private CheckBox includeRawData;
 
-    /** 艦娘の画像に経験値バーを表示する */
+    /**
+     * 艦娘の画像に経験値バーを表示する
+     */
     @FXML
     private CheckBox visibleExpGauge;
 
-    /** 母港枠 */
+    /**
+     * 母港枠
+     */
     @FXML
     private TextField shipFullyThreshold;
 
-    /** 装備枠 */
+    /**
+     * 装備枠
+     */
     @FXML
     private TextField itemFullyThreshold;
 
-    /** 画像拡大縮小割合(%) */
+    /**
+     * 画像拡大縮小割合(%)
+     */
     @FXML
     private TextField imageZoomRate;
 
-    /** 艦隊タブに全艦隊のタブを追加 */
+    /**
+     * 艦隊タブに全艦隊のタブを追加
+     */
     @FXML
     private CheckBox allDecksTab;
 
-    /** 艦隊タブに艦隊単位のタブを追加 */
+    /**
+     * 艦隊タブに艦隊単位のタブを追加
+     */
     @FXML
     private CheckBox deckTabs;
 
-    /** 艦隊タブにラベル単位のタブを追加 */
+    /**
+     * 艦隊タブにラベル単位のタブを追加
+     */
     @FXML
     private CheckBox labelTabs;
 
-    /** 艦隊タブの色（無傷） */
+    /**
+     * 艦隊タブの色（無傷）
+     */
     @FXML
     private TextField tabColorNoDamage;
-    /** 艦隊タブの色（健在） */
+    /**
+     * 艦隊タブの色（健在）
+     */
     @FXML
     private TextField tabColorLessThanSlightDamage;
-    /** 艦隊タブの色（小破） */
+    /**
+     * 艦隊タブの色（小破）
+     */
     @FXML
     private TextField tabColorSlightDamage;
-    /** 艦隊タブの色（中破） */
+    /**
+     * 艦隊タブの色（中破）
+     */
     @FXML
     private TextField tabColorHalfDamage;
-    /** 艦隊タブの色（大破） */
+    /**
+     * 艦隊タブの色（大破）
+     */
     @FXML
     private TextField tabColorBadlyDamage;
-    /** 艦隊タブの色（未遠征） */
+    /**
+     * 艦隊タブの色（未遠征）
+     */
     @FXML
     private TextField tabColorNoMission;
-    /** 艦隊タブの色（要補給） */
+    /**
+     * 艦隊タブの色（要補給）
+     */
     @FXML
     private TextField tabColorNeedRefuel;
-    
-    /** 最前面に表示する */
+
+    /**
+     * 最前面に表示する
+     */
     @FXML
     private CheckBox onTop;
 
-    /** 終了時に確認する */
+    /**
+     * 終了時に確認する
+     */
     @FXML
     private CheckBox checkDoit;
 
-    /** 起動時にアップデートチェック */
+    /**
+     * 起動時にアップデートチェック
+     */
     @FXML
     private CheckBox checkUpdate;
 
-    /** 報告書の保存先 */
+    /**
+     * 報告書の保存先
+     */
     @FXML
     private TextField reportDir;
 
     @FXML
     private ToggleGroup shipImage;
 
-    /** 艦娘画像キャッシュ設定-全て */
+    /**
+     * 艦娘画像キャッシュ設定-全て
+     */
     @FXML
     private RadioButton shipImageCacheStrategyAll;
 
-    /** 艦娘画像キャッシュ設定-使用される画像のみ */
+    /**
+     * 艦娘画像キャッシュ設定-使用される画像のみ
+     */
     @FXML
     private RadioButton shipImageCacheStrategyUsed;
 
-    /** 艦娘画像キャッシュ設定-制限 */
+    /**
+     * 艦娘画像キャッシュ設定-制限
+     */
     @FXML
     private RadioButton shipImageCacheStrategyLimit;
 
-    /** 画像ファイルを再圧縮 */
+    /**
+     * 画像ファイルを再圧縮
+     */
     @FXML
     private CheckBox shipImageCompress;
 
-    /** 所有艦娘一覧から艦娘画像を隠す */
+    /**
+     * 所有艦娘一覧から艦娘画像を隠す
+     */
     @FXML
     private CheckBox hideShipImageFromShipTablePane;
 
-    /** 所有艦娘一覧から装備画像を隠す */
+    /**
+     * 所有艦娘一覧から装備画像を隠す
+     */
     @FXML
     private CheckBox hideItemImageFromShipTablePane;
 
-    /** 艦隊タブに旗艦の立ち絵を表示 */
+    /**
+     * 艦隊タブに旗艦の立ち絵を表示
+     */
     @FXML
     private CheckBox visiblePoseImageOnFleetTab;
 
-    /** 通信エラーの抑止 */
+    /**
+     * 通信エラーの抑止
+     */
     @FXML
     private CheckBox connectionClose;
 
-    /** ポート番号 */
+    /**
+     * ポート番号
+     */
     @FXML
     private TextField listenPort;
 
-    /** ローカルループバックアドレスからの接続のみ受け入れる */
+    /**
+     * ローカルループバックアドレスからの接続のみ受け入れる
+     */
     @FXML
     private CheckBox allowOnlyFromLocalhost;
 
-    /** 接続にプロキシを使用する */
+    /**
+     * 接続にプロキシを使用する
+     */
     @FXML
     private CheckBox useProxy;
 
-    /** プロキシポート番号 */
+    /**
+     * プロキシポート番号
+     */
     @FXML
     private TextField proxyPort;
 
-    /** プロキシホスト */
+    /**
+     * プロキシホスト
+     */
     @FXML
     private TextField proxyHost;
 
@@ -317,47 +434,69 @@ public class ConfigController extends WindowController {
     @FXML
     private Button storeApiStart2DirRef;
 
-    /** FFmpeg 実行ファイル */
+    /**
+     * FFmpeg 実行ファイル
+     */
     @FXML
     private TextField ffmpegPath;
 
-    /** FFmpeg 引数テンプレート */
+    /**
+     * FFmpeg 引数テンプレート
+     */
     @FXML
     private ChoiceBox<Map<?, ?>> ffmpegTemplate;
 
-    /** FFmpeg 引数 */
+    /**
+     * FFmpeg 引数
+     */
     @FXML
     private TextArea ffmpegArgs;
 
-    /** FFmpeg 拡張子 */
+    /**
+     * FFmpeg 拡張子
+     */
     @FXML
     private TextField ffmpegExt;
 
-    /** プラグインを有効にする */
+    /**
+     * プラグインを有効にする
+     */
     @FXML
     private CheckBox usePlugin;
 
-    /** プラグイン一覧 */
+    /**
+     * プラグイン一覧
+     */
     @FXML
     private TableView<DetailPlugin> pluginTable;
 
-    /** 名称 */
+    /**
+     * 名称
+     */
     @FXML
     private TableColumn<DetailPlugin, String> pluginName;
 
-    /** 作者 */
+    /**
+     * 作者
+     */
     @FXML
     private TableColumn<DetailPlugin, String> pluginVendor;
 
-    /** バージョン */
+    /**
+     * バージョン
+     */
     @FXML
     private TableColumn<DetailPlugin, String> pluginVersion;
 
-    /** ライセンス */
+    /**
+     * ライセンス
+     */
     @FXML
     private TableColumn<DetailPlugin, String> pluginLicense;
 
-    /** 場所 */
+    /**
+     * 場所
+     */
     @FXML
     private TableColumn<DetailPlugin, String> pluginLocation;
 
@@ -382,10 +521,10 @@ public class ConfigController extends WindowController {
     private ObservableList<DetailPlugin> plugins = FXCollections.observableArrayList();
 
     private EnumMap<BouyomiChanUtils.Type, Supplier<Boolean>> enableBouyomiTextMap = new EnumMap<>(
-            BouyomiChanUtils.Type.class);
+        BouyomiChanUtils.Type.class);
 
     private EnumMap<BouyomiChanUtils.Type, Supplier<String>> bouyomiTextMap = new EnumMap<>(
-            BouyomiChanUtils.Type.class);
+        BouyomiChanUtils.Type.class);
 
     @FXML
     void initialize() {
@@ -394,7 +533,7 @@ public class ConfigController extends WindowController {
         this.toastLocation.getItems().add(Tuple.of("右上", "TOP_RIGHT"));
         this.toastLocation.getItems().add(Tuple.of("右下", "BOTTOM_RIGHT"));
         this.toastLocation.setConverter(ToStringConverter.of(Pair::getKey));
-        
+
         AppConfig conf = AppConfig.get();
         this.windowStyleSmart.setSelected("main".equals(conf.getWindowStyle()));
         this.windowStyleWide.setSelected("main_wide".equals(conf.getWindowStyle()));
@@ -446,15 +585,15 @@ public class ConfigController extends WindowController {
         ShipImageCacheStrategy shipImageCacheStrategy = conf.getShipImageCacheStrategy();
         if (shipImageCacheStrategy != null) {
             switch (shipImageCacheStrategy) {
-            case ALL:
-                this.shipImageCacheStrategyAll.setSelected(true);
-                break;
-            case USED:
-                this.shipImageCacheStrategyUsed.setSelected(true);
-                break;
-            case LIMIT:
-                this.shipImageCacheStrategyLimit.setSelected(true);
-                break;
+                case ALL:
+                    this.shipImageCacheStrategyAll.setSelected(true);
+                    break;
+                case USED:
+                    this.shipImageCacheStrategyUsed.setSelected(true);
+                    break;
+                case LIMIT:
+                    this.shipImageCacheStrategyLimit.setSelected(true);
+                    break;
             }
         } else {
             this.shipImageCacheStrategyAll.setSelected(true);
@@ -486,14 +625,14 @@ public class ConfigController extends WindowController {
         this.pluginLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
 
         PluginContainer.getInstance()
-                .getPlugins()
-                .stream()
-                .map(DetailPlugin::toDetailPlugin)
-                .forEach(this.plugins::add);
+            .getPlugins()
+            .stream()
+            .map(DetailPlugin::toDetailPlugin)
+            .forEach(this.plugins::add);
         this.pluginTable.setItems(this.plugins);
 
         this.toastLocation.getSelectionModel().selectedItemProperty().addListener(
-                (ob, o, n) -> Tools.Controls.showNotify(null, "確認", "この位置に表示されます。", Duration.seconds(5), Pos.valueOf(n.getValue())));
+            (ob, o, n) -> Tools.Controls.showNotify(null, "確認", "この位置に表示されます。", Duration.seconds(5), Pos.valueOf(n.getValue())));
 
         this.bouyomiChanInit();
     }
@@ -551,7 +690,7 @@ public class ConfigController extends WindowController {
         conf.setCheckDoit(this.checkDoit.isSelected());
         conf.setCheckUpdate(this.checkUpdate.isSelected());
         conf.setReportPath(this.reportDir.getText());
-        
+
         conf.setApplyBattle(this.applyBattle.isSelected());
         conf.setApplyResult(this.applyResult.isSelected());
         conf.setBattleLogExpires(this.toInt(this.battleLogExpires.getText()));
@@ -572,7 +711,7 @@ public class ConfigController extends WindowController {
         conf.setTabColorBadlyDamage(this.tabColorBadlyDamage.getText());
         conf.setTabColorNoMission(this.tabColorNoMission.getText());
         conf.setTabColorNeedRefuel(this.tabColorNeedRefuel.getText());
-        
+
         ShipImageCacheStrategy shipImageCacheStrategy = ShipImageCacheStrategy.ALL;
         if (this.shipImageCacheStrategyAll.isSelected())
             shipImageCacheStrategy = ShipImageCacheStrategy.ALL;
@@ -585,7 +724,7 @@ public class ConfigController extends WindowController {
         conf.setHideShipImageFromShipTablePane(this.hideShipImageFromShipTablePane.isSelected());
         conf.setHideItemImageFromShipTablePane(this.hideItemImageFromShipTablePane.isSelected());
         conf.setVisiblePoseImageOnFleetTab(this.visiblePoseImageOnFleetTab.isSelected());
-        
+
         conf.setConnectionClose(this.connectionClose.isSelected());
         conf.setListenPort(this.toInt(this.listenPort.getText()));
         conf.setAllowOnlyFromLocalhost(this.allowOnlyFromLocalhost.isSelected());
@@ -594,7 +733,7 @@ public class ConfigController extends WindowController {
         conf.setProxyPort(this.toInt(this.proxyPort.getText()));
         conf.setStoreApiStart2(this.storeApiStart2.isSelected());
         conf.setStoreApiStart2Dir(this.storeApiStart2Dir.getText());
-        
+
         conf.setFfmpegPath(this.ffmpegPath.getText());
         conf.setFfmpegArgs(this.ffmpegArgs.getText());
         conf.setFfmpegExt(this.ffmpegExt.getText());
@@ -603,7 +742,7 @@ public class ConfigController extends WindowController {
         this.bouyomiChanStore();
 
         ThreadManager.getExecutorService()
-                .execute(Config.getDefault()::store);
+            .execute(Config.getDefault()::store);
         this.getWindow().close();
     }
 
@@ -612,8 +751,8 @@ public class ConfigController extends WindowController {
         FileChooser fc = new FileChooser();
         fc.setTitle("サウンドファイルの選択");
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("サウンドファイル",
-                "*.aif", "*.aiff", "*.fxm", "*.flv", "*.m3u8",
-                "*.m3u8", "*.mp3", "*.mp4", "*.m4a", "*.m4v", "*.wav"));
+            "*.aif", "*.aiff", "*.fxm", "*.flv", "*.m3u8",
+            "*.m3u8", "*.mp3", "*.mp4", "*.m4a", "*.m4v", "*.wav"));
         String current = this.defaultNotifySound.getText();
         if (current != null && !current.isEmpty()) {
             Path path = Paths.get(current);
@@ -623,9 +762,9 @@ public class ConfigController extends WindowController {
             }
         }
         Optional.ofNullable(fc.showOpenDialog(this.getWindow()))
-                .filter(File::exists)
-                .map(File::getAbsolutePath)
-                .ifPresent(this.defaultNotifySound::setText);
+            .filter(File::exists)
+            .map(File::getAbsolutePath)
+            .ifPresent(this.defaultNotifySound::setText);
     }
 
     @FXML
@@ -636,9 +775,9 @@ public class ConfigController extends WindowController {
             dc.setInitialDirectory(new File(this.reportDir.getText()));
         }
         Optional.ofNullable(dc.showDialog(this.getWindow()))
-                .filter(File::exists)
-                .map(File::getAbsolutePath)
-                .ifPresent(this.reportDir::setText);
+            .filter(File::exists)
+            .map(File::getAbsolutePath)
+            .ifPresent(this.reportDir::setText);
     }
 
     @FXML
@@ -646,9 +785,9 @@ public class ConfigController extends WindowController {
         FileChooser fc = new FileChooser();
         fc.setTitle("FFmpegの選択");
         Optional.ofNullable(fc.showOpenDialog(this.getWindow()))
-                .filter(File::exists)
-                .map(File::getAbsolutePath)
-                .ifPresent(this.ffmpegPath::setText);
+            .filter(File::exists)
+            .map(File::getAbsolutePath)
+            .ifPresent(this.ffmpegPath::setText);
     }
 
     @FXML
@@ -680,9 +819,9 @@ public class ConfigController extends WindowController {
             dc.setInitialDirectory(Paths.get(this.storeApiStart2Dir.getText()).toAbsolutePath().toFile());
         }
         Optional.ofNullable(dc.showDialog(this.getWindow()))
-                .filter(File::exists)
-                .map(File::getAbsolutePath)
-                .ifPresent(this.storeApiStart2Dir::setText);
+            .filter(File::exists)
+            .map(File::getAbsolutePath)
+            .ifPresent(this.storeApiStart2Dir::setText);
     }
 
     @FXML
@@ -712,9 +851,9 @@ public class ConfigController extends WindowController {
             dc.setInitialDirectory(Paths.get(pathText).toFile());
         }
         Path baseDir = Optional.ofNullable(dc.showDialog(this.getWindow()))
-                .filter(File::exists)
-                .map(File::toPath)
-                .orElse(null);
+            .filter(File::exists)
+            .map(File::toPath)
+            .orElse(null);
         if (baseDir == null)
             return;
 
@@ -739,9 +878,9 @@ public class ConfigController extends WindowController {
             this.bouyomiPath.setText(bouyomichanPath.toString());
         } else {
             Tools.Controls.alert(AlertType.INFORMATION,
-                    "BouyomiChan.exeが見つかりません",
-                    "選択されたフォルダにBouyomiChan.exeが見つかりませんでした。",
-                    this.getWindow());
+                "BouyomiChan.exeが見つかりません",
+                "選択されたフォルダにBouyomiChan.exeが見つかりませんでした。",
+                this.getWindow());
         }
     }
 
@@ -786,7 +925,7 @@ public class ConfigController extends WindowController {
             BouyomiChanUtils.Type type = BouyomiChanUtils.Type.valueOf(setting.getId());
 
             AppBouyomiText bouyomiConfig = config.getText()
-                    .get(setting.getId());
+                .get(setting.getId());
 
             CheckBox checkBox = new CheckBox(setting.getLabel());
             checkBox.setSelected(true);
@@ -854,10 +993,10 @@ public class ConfigController extends WindowController {
     public void setWindowLocation(WindowLocation location) {
         if (location != null) {
             boolean intersect = Screen.getScreens()
-                    .stream()
-                    .map(Screen::getVisualBounds)
-                    .anyMatch(r -> r.intersects(
-                            location.getX(), location.getY(), location.getWidth(), location.getHeight()));
+                .stream()
+                .map(Screen::getVisualBounds)
+                .anyMatch(r -> r.intersects(
+                    location.getX(), location.getY(), location.getWidth(), location.getHeight()));
 
             if (intersect) {
                 this.getWindow().setX(location.getX());

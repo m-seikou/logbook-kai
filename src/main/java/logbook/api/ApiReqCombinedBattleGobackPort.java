@@ -19,9 +19,8 @@ import logbook.proxy.ResponseMetaData;
 /**
  * /kcsapi/api_req_sortie/goback_port
  * /kcsapi/api_req_combined_battle/goback_port
- *
  */
-@API({ "/kcsapi/api_req_sortie/goback_port", "/kcsapi/api_req_combined_battle/goback_port" })
+@API({"/kcsapi/api_req_sortie/goback_port", "/kcsapi/api_req_combined_battle/goback_port"})
 public class ApiReqCombinedBattleGobackPort implements APIListenerSpi {
 
     @Override
@@ -33,18 +32,18 @@ public class ApiReqCombinedBattleGobackPort implements APIListenerSpi {
             Escape escape = result.getEscape();
 
             Set<Integer> escapeSet = AppCondition.get()
-                    .getEscape();
+                .getEscape();
 
             // 退避
             Optional.of(escape.getEscapeIdx())
-                    .map(e -> e.get(0))
-                    .map(i -> this.getShipId(log.getDeckMap(), i))
-                    .ifPresent(escapeSet::add);
+                .map(e -> e.get(0))
+                .map(i -> this.getShipId(log.getDeckMap(), i))
+                .ifPresent(escapeSet::add);
             // 護衛
             Optional.ofNullable(escape.getTowIdx())
-                    .map(e -> e.get(0))
-                    .map(i -> this.getShipId(log.getDeckMap(), i))
-                    .ifPresent(escapeSet::add);
+                .map(e -> e.get(0))
+                .map(i -> this.getShipId(log.getDeckMap(), i))
+                .ifPresent(escapeSet::add);
         }
     }
 
@@ -52,7 +51,7 @@ public class ApiReqCombinedBattleGobackPort implements APIListenerSpi {
      * 退避した艦娘のIDを返します
      *
      * @param deckMap 艦隊スナップショット
-     * @param index 艦隊インデックス
+     * @param index   艦隊インデックス
      * @return 退避した艦娘のID
      */
     private Integer getShipId(Map<Integer, List<Ship>> deckMap, Integer index) {
