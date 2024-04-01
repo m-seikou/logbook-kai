@@ -21,6 +21,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import logbook.internal.BattleLogs;
@@ -32,6 +33,7 @@ import logbook.internal.BattleLogs.SimpleBattleLog;
  */
 public class ExpChartController extends WindowController {
 
+    public Button reload;
     @FXML
     private ChoiceBox<TypeOption> type;
 

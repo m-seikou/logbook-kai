@@ -390,12 +390,9 @@ public class BattleLogs {
             Path dir = Paths.get(AppConfig.get().getReportPath());
             Path path = dir.resolve(new BattleResultLogFormat().fileName());
 
-            Stream<String> tmp;
-            if (Files.exists(path)) {
-                tmp = Files.lines(path, LogWriter.DEFAULT_CHARSET);
-            } else {
-                tmp = Stream.empty();
-            }
+            Stream<String> tmp = (Files.exists(path))
+                    ? Files.lines(path, LogWriter.DEFAULT_CHARSET)
+                    : Stream.empty();
 
             // 海域名と略称(例:1-5)のマッピング
             Map<String, String> mapNames = Mapping.fullNameToShort();
