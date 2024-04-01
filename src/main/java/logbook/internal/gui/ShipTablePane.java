@@ -1307,8 +1307,11 @@ public class ShipTablePane extends VBox {
         @JsonProperty("ex")
         private int ex;
 
+        @JsonProperty("area")
+        private int area;
+
         public static KancolleFleetanalysisItem toItem(Ship ship) {
-            return new KancolleFleetanalysisItem(ship.getShipId(), ship.getLv(), ship.getKyouka(), ship.getExp(), ship.getSlotEx());
+            return new KancolleFleetanalysisItem(ship.getShipId(), ship.getLv(), ship.getKyouka(), ship.getExp(), ship.getSlotEx(),ship.getSallyArea());
         }
     }
 }
