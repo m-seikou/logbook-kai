@@ -167,6 +167,7 @@
             </VBox>
             <Button focusTraversable="false" mnemonicParsing="false" onAction="#storeImageAction"
                     text="画像ファイルに保存..."/>
+            <Button onAction="#copyDeckBuilder" text="編成をクリップボードへ"/>
         </HBox>
         <VBox fx:id="phase"/>
     </VBox>

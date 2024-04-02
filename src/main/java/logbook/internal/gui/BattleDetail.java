@@ -216,6 +216,10 @@ public class BattleDetail extends WindowController {
         }
     }
 
+    @FXML
+    void copyDeckBuilder(){
+        DeckBuilder.battleDataCopy(this.log);
+    }
     /**
      * 戦況表示
      * @param last 出撃/進撃
