@@ -15,6 +15,7 @@ import javafx.scene.input.ClipboardContent;
 import logbook.bean.*;
 import logbook.bean.Mapinfo.AirBase;
 import logbook.bean.Mapinfo.PlaneInfo;
+import logbook.internal.LoggerHolder;
 import lombok.Data;
 
 /**
@@ -88,8 +89,40 @@ public class DeckBuilder {
         /*
          * {1:[ship...],...}
          */
+        LoggerHolder.get().error("＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝");
         battleLog.getDeckMap().forEach((Integer f, List<Ship> ships) -> {
-            Map<String, Object> fleetMap = fleetToTree(ships);
+            Map<String, Object> fleetMap = new TreeMap<>();
+            for (int s = 0; s < ships.size(); s++) {
+                Map<String, Object> shipMap = new TreeMap<>();
+                Ship ship = ships.get(s);
+                if (ship == null) continue;
+                shipMap.put("id", ship.getShipId());
+                shipMap.put("lv", ship.getLv());
+                shipMap.put("luck", ship.getLucky().get(0));
+                Map<String, Object> items = new TreeMap<>();
+                for (int i = 0; i < ship.getSlot().size(); i++) {
+                    Map<String, Object> itemMap = new TreeMap<>();
+                    SlotItem item = battleLog.getItemMap().get(ship.getSlot().get(i));
+                    if (item == null)continue;
+                    itemMap.put("id", item.getSlotitemId());
+                    itemMap.put("rf", item.getLevel());
+                    itemMap.put("mas", item.getAlv());
+                    items.put("i" + (i + 1), itemMap);
+                }
+                if(ship.getSlotEx() !=null){
+                    Map<String, Object> itemMap = new TreeMap<>();
+                    SlotItem item = battleLog.getItemMap().get(ship.getSlotEx());
+                    if(item != null) {
+                        itemMap.put("id", item.getSlotitemId());
+                        itemMap.put("rf", item.getLevel());
+                        itemMap.put("mas", item.getAlv());
+                        items.put("ix", itemMap);
+                    }
+                }
+                shipMap.put("items", items);
+                fleetMap.put("s" + (s + 1), shipMap);
+//                fleetMap.put("s" + (s + 1), "hoge");
+            }
             //battleLog.getDeckMap() からは艦隊名は取れないので 第n艦隊 の固定文字列とする
             fleetMap.put("name", "第" + f + "艦隊");
             // 陣形は battleLog.getDeckMap() ではなく battleLog.getBattle().getFormation() にある
@@ -97,33 +130,33 @@ public class DeckBuilder {
             data.put("f" + f, fleetMap);
         });
 
-        if (!battleLog.getAirBase().isEmpty()) {
-            for (Mapinfo.AirBase airBase : battleLog.getAirBase()) {
-                String baseId = "a" + airBase.getRid();
-                Map<String, Object> airBaseData = new TreeMap<>();
-                airBaseData.put("name", airBase.getName());
-                airBaseData.put("mode", airBase.getActionKind());
-                Map<String, Object> items = new TreeMap<>();
-                for (int i = 0; i < airBase.getPlaneInfo().size(); i++) {
-                    Integer slotId = airBase.getPlaneInfo().get(i).getSlotid();
-                    if (battleLog.getItemMap().containsKey(slotId)) continue;
-                    Map<String, Object> plane = new TreeMap<>();
-                    SlotItem slotItem = battleLog.getItemMap().get(slotId);
-                    plane.put("id", slotItem.getId());
-                    plane.put("rf", slotItem.getLevel());
-                    plane.put("mas", slotItem.getAlv());
-                    items.put("i" + (i + 1), plane);
-                }
-                airBaseData.put("items", items);
-                data.put(baseId, airBaseData);
-            }
-        } else {
-            for (BattleTypes.AirBaseAttack airBaseAttack : battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack()) {
-                String baseId = "a" + airBaseAttack.getBaseId();
-                if (data.containsKey(baseId)) continue;
-                data.put(baseId, airBaseAttacksToTree(airBaseAttack));
-            }
-        }
+//        if (!battleLog.getAirBase().isEmpty()) {
+//            for (Mapinfo.AirBase airBase : battleLog.getAirBase()) {
+//                String baseId = "a" + airBase.getRid();
+//                Map<String, Object> airBaseData = new TreeMap<>();
+//                airBaseData.put("name", airBase.getName());
+//                airBaseData.put("mode", airBase.getActionKind());
+//                Map<String, Object> items = new TreeMap<>();
+//                for (int i = 0; i < airBase.getPlaneInfo().size(); i++) {
+//                    Integer slotId = airBase.getPlaneInfo().get(i).getSlotid();
+//                    if (battleLog.getItemMap().containsKey(slotId)) continue;
+//                    Map<String, Object> plane = new TreeMap<>();
+//                    SlotItem slotItem = battleLog.getItemMap().get(slotId);
+//                    plane.put("id", slotItem.getSlotitemId());
+//                    plane.put("rf", slotItem.getLevel());
+//                    plane.put("mas", slotItem.getAlv());
+//                    items.put("i" + (i + 1), plane);
+//                }
+//                airBaseData.put("items", items);
+//                data.put(baseId, airBaseData);
+//            }
+//        } else if(!battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack().isEmpty()){
+//            for (BattleTypes.AirBaseAttack airBaseAttack : battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack()) {
+//                String baseId = "a" + airBaseAttack.getBaseId();
+//                if (data.containsKey(baseId)) continue;
+//                data.put(baseId, airBaseAttacksToTree(airBaseAttack));
+//            }
+//        }
 
         ObjectMapper mapper = new ObjectMapper();
         try {
