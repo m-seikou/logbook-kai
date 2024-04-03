@@ -47,6 +47,9 @@ public class BattleLog implements Serializable {
     /** 戦闘結果 */
     private BattleResult result;
 
+    /** 基地航空隊 */
+    private List<Mapinfo.AirBase> airBase;
+
     /** 艦隊スナップショット */
     private Map<Integer, List<Ship>> deckMap;
 
@@ -77,6 +80,19 @@ public class BattleLog implements Serializable {
      * @param dockIds 艦隊ID
      */
     public static void snapshot(BattleLog log, Integer... dockIds) {
+
+        /*
+         * 基地航空隊のスナップショット作成
+         */
+        int areaId = log.getNext().isEmpty() ? 0 : log.getNext().get(0).getMapareaId();
+        if(areaId == 0){
+            log.setAirBase(Mapinfo.get().getAirBase());
+        }else{
+            Mapinfo.get().getAirBase().forEach((Mapinfo.AirBase ab) -> {
+                if (ab.getAreaId() == areaId) log.getAirBase().add(ab);
+            });
+        }
+
         Map<Integer, Ship> shipMap = ShipCollection.get()
                 .getShipMap();
         Map<Integer, SlotItem> itemMap = SlotItemCollection.get()
@@ -85,6 +101,7 @@ public class BattleLog implements Serializable {
         Map<Integer, List<Ship>> deckMap = new HashMap<>();
         Map<Integer, SlotItem> cloneItem = new HashMap<>();
 
+        // 出撃艦と搭載装備のスナップショット作成
         for (Integer dockId : dockIds) {
             List<Ship> ships = new ArrayList<>();
             for (Integer shipId : DeckPortCollection.get()
@@ -112,6 +129,17 @@ public class BattleLog implements Serializable {
                 ships.add(ship);
             }
             deckMap.put(dockId, ships);
+        }
+        // 基地航空隊を装備スナップショットに追加
+        if (!log.getAirBase().isEmpty()) {
+            for (Mapinfo.AirBase airBase : log.getAirBase()) {
+                if (airBase.getPlaneInfo().isEmpty()) continue;
+                for (Mapinfo.PlaneInfo planeInfo : airBase.getPlaneInfo()) {
+                    Integer slotId = planeInfo.getSlotid();
+                    if (slotId == null) continue;
+                    cloneItem.put(slotId, itemMap.get(slotId));
+                }
+            }
         }
         log.setDeckMap(deckMap);
         log.setItemMap(cloneItem);
