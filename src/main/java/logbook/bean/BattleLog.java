@@ -88,9 +88,13 @@ public class BattleLog implements Serializable {
         if(areaId == 0){
             log.setAirBase(Mapinfo.get().getAirBase());
         }else{
-            Mapinfo.get().getAirBase().forEach((Mapinfo.AirBase ab) -> {
-                if (ab.getAreaId() == areaId) log.getAirBase().add(ab);
-            });
+            List<Mapinfo.AirBase> airBases = new ArrayList<>();
+            for(Mapinfo.AirBase ab : Mapinfo.get().getAirBase()){
+                if (ab.getAreaId() == areaId) {
+                    airBases.add(ab);
+                }
+            }
+            log.setAirBase(airBases);
         }
 
         Map<Integer, Ship> shipMap = ShipCollection.get()
@@ -136,7 +140,7 @@ public class BattleLog implements Serializable {
                 if (airBase.getPlaneInfo().isEmpty()) continue;
                 for (Mapinfo.PlaneInfo planeInfo : airBase.getPlaneInfo()) {
                     Integer slotId = planeInfo.getSlotid();
-                    if (slotId == null) continue;
+                    if (slotId == null || slotId == 0) continue;
                     cloneItem.put(slotId, itemMap.get(slotId));
                 }
             }
