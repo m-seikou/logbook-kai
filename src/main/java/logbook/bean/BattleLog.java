@@ -80,7 +80,7 @@ public class BattleLog implements Serializable {
      * @param dockIds 艦隊ID
      */
     public static void snapshot(BattleLog log, Integer... dockIds) {
-
+        LoggerHolder.get().error("hogehoge");
         /*
          * 基地航空隊のスナップショット作成
          */

@@ -15,13 +15,11 @@ public class LoggerHolder {
 
     public static class LoggerProxy {
 
-        private String callerClass;
-
-        private Logger logger;
+        private final Logger logger;
 
         public LoggerProxy() {
-            this.callerClass = getCallerClass(3);
-            this.logger = LogManager.getLogger(this.callerClass);
+            String callerClass = getCallerClass(3);
+            this.logger = LogManager.getLogger(callerClass);
         }
 
         public boolean isDebugEnabled() {
@@ -142,9 +140,6 @@ public class LoggerHolder {
         if (cn.equals("java.lang.Class") && mn.equals("newInstance")) {
             return false;
         }
-        if (cn.equals("java.lang.invoke.MethodHandle") && mn.startsWith("invoke")) {
-            return false;
-        }
-        return true;
+        return !cn.equals("java.lang.invoke.MethodHandle") || !mn.startsWith("invoke");
     }
 }

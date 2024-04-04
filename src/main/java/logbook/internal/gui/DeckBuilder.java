@@ -81,15 +81,23 @@ public class DeckBuilder {
         copyToClipboard(ShipCollection.get().getShipMap().values(), list);
     }
 
+    /**
+     * BattleLog から編成情報を作成しクリップボードへ書き込み
+     * @param battleLog 戦闘ログ
+     */
     public static void battleDataCopy(BattleLog battleLog) {
         Map<String, Object> data = new TreeMap<>();
         data.put("version",4);
         data.put("hqlv",battleLog.getResult().getMemberLv());
-        /*
-         * {1:[ship...],...}
-         */
+
         battleLog.getDeckMap().forEach((Integer f, List<Ship> ships) -> {
-            Map<String, Object> fleetMap = fleetToTree(ships);
+            Map<String, Object> fleetMap = new TreeMap<>();
+            if (ships.isEmpty()) return;
+            for (int s = 0; s < ships.size(); s++) {
+                if(ships.get(s) == null) continue;
+                fleetMap.put("s" + (s + 1), new Kanmusu(ships.get(s), battleLog.getItemMap()));
+            }
+
             //battleLog.getDeckMap() からは艦隊名は取れないので 第n艦隊 の固定文字列とする
             fleetMap.put("name", "第" + f + "艦隊");
             // 陣形は battleLog.getDeckMap() ではなく battleLog.getBattle().getFormation() にある
@@ -98,30 +106,16 @@ public class DeckBuilder {
         });
 
         if (!battleLog.getAirBase().isEmpty()) {
+            // 基地航空隊のスナップショットがある場合はこれをもとにする
             for (Mapinfo.AirBase airBase : battleLog.getAirBase()) {
-                String baseId = "a" + airBase.getRid();
-                Map<String, Object> airBaseData = new TreeMap<>();
-                airBaseData.put("name", airBase.getName());
-                airBaseData.put("mode", airBase.getActionKind());
-                Map<String, Object> items = new TreeMap<>();
-                for (int i = 0; i < airBase.getPlaneInfo().size(); i++) {
-                    Integer slotId = airBase.getPlaneInfo().get(i).getSlotid();
-                    if (battleLog.getItemMap().containsKey(slotId)) continue;
-                    Map<String, Object> plane = new TreeMap<>();
-                    SlotItem slotItem = battleLog.getItemMap().get(slotId);
-                    plane.put("id", slotItem.getId());
-                    plane.put("rf", slotItem.getLevel());
-                    plane.put("mas", slotItem.getAlv());
-                    items.put("i" + (i + 1), plane);
-                }
-                airBaseData.put("items", items);
-                data.put(baseId, airBaseData);
+                data.put("a" + airBase.getRid(), new Airbase(airBase, battleLog.getItemMap()));
             }
-        } else {
+        } else if (!battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack().isEmpty()) {
+            // 基地航空隊のスナップショットが無いので航空隊の攻撃情報から編成情報を作る
             for (BattleTypes.AirBaseAttack airBaseAttack : battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack()) {
                 String baseId = "a" + airBaseAttack.getBaseId();
                 if (data.containsKey(baseId)) continue;
-                data.put(baseId, airBaseAttacksToTree(airBaseAttack));
+                data.put(baseId, new Airbase(airBaseAttack));
             }
         }
 
@@ -133,30 +127,6 @@ public class DeckBuilder {
         } catch (JsonProcessingException e) {
             // ignore
         }
-    }
-
-    private static Map<String, Object> fleetToTree(List<Ship> ships) {
-        Map<String, Object> fleet = new TreeMap<>();
-        for (int s = 0; s < ships.size(); s++) {
-            fleet.put("s" + (s + 1), new Kanmusu(ships.get(s)));
-        }
-        return fleet;
-    }
-
-    private static Map<String, Object> airBaseAttacksToTree(BattleTypes.AirBaseAttack airBaseAttacks) {
-        Map<String, Object> attack = new TreeMap<>();
-        attack.put("name", "第" + airBaseAttacks.getBaseId() + "基地航空隊");
-        attack.put("mode", 1);// ログに現れるのは「出撃」のみ
-        Map<String, Object> items = new TreeMap<>();
-        for (int i = 0; i < airBaseAttacks.getSquadronPlane().size(); i++) {
-            Map<String, Object> plane = new TreeMap<>();
-            plane.put("id", airBaseAttacks.getSquadronPlane().get(i).getMstId());
-            plane.put("rf", 0);// ログからは改修値は取れない模様
-            plane.put("mas", 0);// ログからは熟練度?は取れない模様
-            items.put("i" + (i + 1), plane);
-        }
-        attack.put("items",items);
-        return attack;
     }
 
     private static void copyToClipboard(Collection<Ship> ships, List<Airbase> airbase) {
@@ -220,6 +190,12 @@ public class DeckBuilder {
             this.rf = item.getLevel();
             this.mas = item.getAlv();
         }
+
+        Item(int id, Integer rf, Integer mas) {
+            this.id = id;
+            this.rf = rf;
+            this.mas = mas;
+        }
     }
 
     @Data
@@ -227,7 +203,7 @@ public class DeckBuilder {
         private final int id;
         private final int lv;
         private final int luck;
-        private Map<String, DeckBuilder.Item> items;
+        private final Map<String, DeckBuilder.Item> items;
 
         Kanmusu(Ship ship) {
             this.id = ship.getShipId();
@@ -250,12 +226,30 @@ public class DeckBuilder {
                 .map(DeckBuilder.Item::new)
                 .ifPresent(item -> this.items.put("ix", item));
         }
+
+        Kanmusu(Ship ship, Map<Integer, SlotItem> itemMap) {
+            id = ship.getShipId();
+            lv = ship.getLv();
+            luck = ship.getLucky().get(0);
+            items = new TreeMap<>();
+            if (!ship.getSlot().isEmpty()) {
+                for (int i = 0; i < ship.getSlot().size(); i++) {
+                    if (!itemMap.containsKey(ship.getSlot().get(i))) continue;
+                    items.put("i" + (i+1), new Item(itemMap.get(ship.getSlot().get(i))));
+                }
+            }
+            if (itemMap.containsKey(ship.getSlotEx())) {
+                items.put("ix", new Item(itemMap.get(ship.getSlotEx())));
+            }
+        }
+
     }
 
     @Data
     private static class Airbase {
         private int mode = 1;     // default
         private final Map<String, DeckBuilder.Item> items = new TreeMap<>();
+        private String name="";
         @JsonIgnore
         private List<AirBaseItem> list;
 
@@ -268,6 +262,25 @@ public class DeckBuilder {
             if (ab != null && ab.getPlaneInfo() != null) {
                 Map<Integer, SlotItem> map = SlotItemCollection.get().getSlotitemMap();
                 this.list = ab.getPlaneInfo().stream().map(PlaneInfo::getSlotid).map(map::get).map(AirBaseItem::toAirBaseItem).collect(Collectors.toList());
+            }
+        }
+
+        Airbase(AirBase ab, Map<Integer, SlotItem> itemMap) {
+            mode = ab.getActionKind();
+            name = ab.getName();
+            if(ab.getPlaneInfo().isEmpty()){
+               return;
+            }
+            for (int i = 0; i < ab.getPlaneInfo().size(); i++) {
+                if (!itemMap.containsKey(ab.getPlaneInfo().get(i).getSlotid())) continue;
+                items.put("i" + (i + 1), new Item(itemMap.get(ab.getPlaneInfo().get(i).getSlotid())));
+            }
+        }
+        Airbase(BattleTypes.AirBaseAttack airBaseAttack){
+            name = "第" + airBaseAttack.getBaseId() + "基地航空隊";
+            for (int i = 0; i < airBaseAttack.getSquadronPlane().size(); i++) {
+                // 攻撃情報には改修値と練度が入っていないので0とする
+                items.put("i" + (i + 1), new Item(airBaseAttack.getSquadronPlane().get(i).getMstId(), 0, 0));
             }
         }
     }
