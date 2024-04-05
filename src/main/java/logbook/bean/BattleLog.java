@@ -48,7 +48,7 @@ public class BattleLog implements Serializable {
     private BattleResult result;
 
     /** 基地航空隊 */
-    private List<Mapinfo.AirBase> airBase;
+    private List<Mapinfo.AirBase> airBase = new ArrayList<>();
 
     /** 艦隊スナップショット */
     private Map<Integer, List<Ship>> deckMap;

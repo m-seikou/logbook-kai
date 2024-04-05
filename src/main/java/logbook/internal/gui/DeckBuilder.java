@@ -110,21 +110,19 @@ public class DeckBuilder {
         });
 
         if (!battleLog.getAirBase().isEmpty()) {
+            // 基地の設定された海域であれば基地情報を全部入れる
             LoggerHolder.get().info("new Air Base!");
-            // 基地航空隊のスナップショットがある場合はこれをもとにする
             for (Mapinfo.AirBase airBase : battleLog.getAirBase()) {
                 data.put("a" + airBase.getRid(), new Airbase(airBase, battleLog.getItemMap()));
             }
-        } else if (!battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack().isEmpty()) {
+        } else if (battleLog.getBattle().isIAirBaseAttack()) {
+            // 基地情報は無いが攻撃に来ているので、こちらの情報から基地設定を作り上げる
             LoggerHolder.get().info("old Air Base!");
-            // 基地航空隊のスナップショットが無いので航空隊の攻撃情報から編成情報を作る
             for (BattleTypes.AirBaseAttack airBaseAttack : battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack()) {
                 String baseId = "a" + airBaseAttack.getBaseId();
                 if (data.containsKey(baseId)) continue;
                 data.put(baseId, new Airbase(airBaseAttack));
             }
-        }else{
-            LoggerHolder.get().info("no air base.");
         }
 
         ObjectMapper mapper = new ObjectMapper();
