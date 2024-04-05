@@ -15,6 +15,7 @@ import javafx.scene.input.ClipboardContent;
 import logbook.bean.*;
 import logbook.bean.Mapinfo.AirBase;
 import logbook.bean.Mapinfo.PlaneInfo;
+import logbook.internal.LoggerHolder;
 import lombok.Data;
 
 /**
@@ -86,13 +87,15 @@ public class DeckBuilder {
      * @param battleLog 戦闘ログ
      */
     public static void battleDataCopy(BattleLog battleLog) {
+        LoggerHolder.get().info(battleLog);
         Map<String, Object> data = new TreeMap<>();
         data.put("version",4);
         data.put("hqlv",battleLog.getResult().getMemberLv());
 
         battleLog.getDeckMap().forEach((Integer f, List<Ship> ships) -> {
-            Map<String, Object> fleetMap = new TreeMap<>();
+            LoggerHolder.get().info(ships);
             if (ships.isEmpty()) return;
+            Map<String, Object> fleetMap = new TreeMap<>();
             for (int s = 0; s < ships.size(); s++) {
                 if(ships.get(s) == null) continue;
                 fleetMap.put("s" + (s + 1), new Kanmusu(ships.get(s), battleLog.getItemMap()));
@@ -103,28 +106,35 @@ public class DeckBuilder {
             // 陣形は battleLog.getDeckMap() ではなく battleLog.getBattle().getFormation() にある
             fleetMap.put("t", battleLog.getBattle().getFormation().get(0));
             data.put("f" + f, fleetMap);
+            LoggerHolder.get().info(fleetMap);
         });
 
         if (!battleLog.getAirBase().isEmpty()) {
+            LoggerHolder.get().info("new Air Base!");
             // 基地航空隊のスナップショットがある場合はこれをもとにする
             for (Mapinfo.AirBase airBase : battleLog.getAirBase()) {
                 data.put("a" + airBase.getRid(), new Airbase(airBase, battleLog.getItemMap()));
             }
         } else if (!battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack().isEmpty()) {
+            LoggerHolder.get().info("old Air Base!");
             // 基地航空隊のスナップショットが無いので航空隊の攻撃情報から編成情報を作る
             for (BattleTypes.AirBaseAttack airBaseAttack : battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack()) {
                 String baseId = "a" + airBaseAttack.getBaseId();
                 if (data.containsKey(baseId)) continue;
                 data.put(baseId, new Airbase(airBaseAttack));
             }
+        }else{
+            LoggerHolder.get().info("no air base.");
         }
 
         ObjectMapper mapper = new ObjectMapper();
         try {
+            LoggerHolder.get().info(data);
             ClipboardContent content = new ClipboardContent();
             content.putString(mapper.writeValueAsString(data));
             Clipboard.getSystemClipboard().setContent(content);
         } catch (JsonProcessingException e) {
+            LoggerHolder.get().error(e);
             // ignore
         }
     }
@@ -228,6 +238,7 @@ public class DeckBuilder {
         }
 
         Kanmusu(Ship ship, Map<Integer, SlotItem> itemMap) {
+            LoggerHolder.get().info(ship);
             id = ship.getShipId();
             lv = ship.getLv();
             luck = ship.getLucky().get(0);
@@ -266,6 +277,7 @@ public class DeckBuilder {
         }
 
         Airbase(AirBase ab, Map<Integer, SlotItem> itemMap) {
+            LoggerHolder.get().info(ab);
             mode = ab.getActionKind();
             name = ab.getName();
             if(ab.getPlaneInfo().isEmpty()){
@@ -277,6 +289,7 @@ public class DeckBuilder {
             }
         }
         Airbase(BattleTypes.AirBaseAttack airBaseAttack){
+            LoggerHolder.get().info(airBaseAttack);
             name = "第" + airBaseAttack.getBaseId() + "基地航空隊";
             for (int i = 0; i < airBaseAttack.getSquadronPlane().size(); i++) {
                 // 攻撃情報には改修値と練度が入っていないので0とする

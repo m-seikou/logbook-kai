@@ -344,13 +344,16 @@ public class BattleDetail extends WindowController {
         this.eTouchPlaneImage.setFitHeight(0);
         this.eTouchPlane.setText("");
         this.tykuCI.setText("");
-        Integer smokeType = this.battle.asISortieBattle().getSmokeType();
+        Integer smokeType = this.battle.getSmokeType();
         if (smokeType == null || smokeType == 0) {
             this.smokeType.setText("なし");
         } else {
             this.smokeType.setText(smokeType + "重");
         }
 
+        if(!this.battle.isIKouku()){
+            return;
+        }
         Kouku kouku = this.battle.asIKouku().getKouku();
         if (kouku == null) {
             return;
