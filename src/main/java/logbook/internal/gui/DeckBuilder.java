@@ -87,53 +87,50 @@ public class DeckBuilder {
      * @param battleLog 戦闘ログ
      */
     public static void battleDataCopy(BattleLog battleLog) {
-        LoggerHolder.get().info(battleLog);
-        Map<String, Object> data = new TreeMap<>();
-        data.put("version",4);
-        data.put("hqlv",battleLog.getResult().getMemberLv());
-
-        battleLog.getDeckMap().forEach((Integer f, List<Ship> ships) -> {
-            LoggerHolder.get().info(ships);
-            if (ships.isEmpty()) return;
-            Map<String, Object> fleetMap = new TreeMap<>();
-            for (int s = 0; s < ships.size(); s++) {
-                if(ships.get(s) == null) continue;
-                fleetMap.put("s" + (s + 1), new Kanmusu(ships.get(s), battleLog.getItemMap()));
-            }
-
-            //battleLog.getDeckMap() からは艦隊名は取れないので 第n艦隊 の固定文字列とする
-            fleetMap.put("name", "第" + f + "艦隊");
-            // 陣形は battleLog.getDeckMap() ではなく battleLog.getBattle().getFormation() にある
-            fleetMap.put("t", battleLog.getBattle().getFormation().get(0));
-            data.put("f" + f, fleetMap);
-            LoggerHolder.get().info(fleetMap);
-        });
-
-        if (!battleLog.getAirBase().isEmpty()) {
-            // 基地の設定された海域であれば基地情報を全部入れる
-            LoggerHolder.get().info("new Air Base!");
-            for (Mapinfo.AirBase airBase : battleLog.getAirBase()) {
-                data.put("a" + airBase.getRid(), new Airbase(airBase, battleLog.getItemMap()));
-            }
-        } else if (battleLog.getBattle().isIAirBaseAttack()) {
-            // 基地情報は無いが攻撃に来ているので、こちらの情報から基地設定を作り上げる
-            LoggerHolder.get().info("old Air Base!");
-            for (BattleTypes.AirBaseAttack airBaseAttack : battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack()) {
-                String baseId = "a" + airBaseAttack.getBaseId();
-                if (data.containsKey(baseId)) continue;
-                data.put(baseId, new Airbase(airBaseAttack));
-            }
-        }
-
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            LoggerHolder.get().info(data);
-            ClipboardContent content = new ClipboardContent();
-            content.putString(mapper.writeValueAsString(data));
-            Clipboard.getSystemClipboard().setContent(content);
-        } catch (JsonProcessingException e) {
-            LoggerHolder.get().error(e);
-            // ignore
+            LoggerHolder.get().info(battleLog);
+            Map<String, Object> data = new TreeMap<>();
+            data.put("version", 4);
+            data.put("hqlv", (battleLog.getResult() != null) ? battleLog.getResult().getMemberLv() : 120);
+
+            battleLog.getDeckMap().forEach((Integer f, List<Ship> ships) -> {
+                LoggerHolder.get().info(ships);
+                if (ships.isEmpty()) return;
+                Fleet fleet = new Fleet(f, battleLog.getBattle().isICombinedBattle() ? 1 : 0, ships, battleLog.getItemMap());
+                data.put(fleet.getId(), fleet);
+                LoggerHolder.get().info(fleet);
+            });
+
+            if (!battleLog.getAirBase().isEmpty()) {
+                // 基地の設定された海域であれば基地情報を全部入れる
+                LoggerHolder.get().info("new Air Base!");
+                for (Mapinfo.AirBase airBase : battleLog.getAirBase()) {
+                    data.put("a" + airBase.getRid(), new Airbase(airBase, battleLog.getItemMap()));
+                }
+            } else if (battleLog.getBattle().isIAirBaseAttack()
+                    && battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack() != null) {
+                // 基地情報は無いが攻撃に来ているので、こちらの情報から基地設定を作り上げる
+                LoggerHolder.get().info("old Air Base!");
+
+                for (BattleTypes.AirBaseAttack airBaseAttack : battleLog.getBattle().asIAirBaseAttack().getAirBaseAttack()) {
+                    String baseId = "a" + airBaseAttack.getBaseId();
+                    if (data.containsKey(baseId)) continue;
+                    data.put(baseId, new Airbase(airBaseAttack));
+                }
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                LoggerHolder.get().info(data);
+                ClipboardContent content = new ClipboardContent();
+                content.putString(mapper.writeValueAsString(data));
+                Clipboard.getSystemClipboard().setContent(content);
+            } catch (JsonProcessingException e) {
+                LoggerHolder.get().error(e);
+                // ignore
+            }
+        }catch (Exception e){
+            LoggerHolder.get().error(e.getMessage(), e);
         }
     }
 
@@ -142,34 +139,38 @@ public class DeckBuilder {
         Map<Integer, Ship> shipsMap = ShipCollection.get().getShipMap();
         Map<String, Object> data = new TreeMap<>();
         data.put("version", 4);
-        Optional.ofNullable(Basic.get().getLevel()).ifPresent(lv -> data.put("hqlv", lv));
-        DeckPortCollection.get().getDeckPortMap().values().stream().forEach(port -> {
-            Map<String, DeckBuilder.Kanmusu> fleet = new TreeMap<>();
-            Optional.ofNullable(port.getShip()).ifPresent(list -> {
-                for (int i = 0; i < list.size(); i++) {
-                    final int index = i+1;
-                    Optional.ofNullable(list.get(i))
-                        .filter(targets::contains)
-                        .map(shipsMap::get)
-                        .map(DeckBuilder.Kanmusu::new)
-                        .ifPresent(kanmusu -> fleet.put("s" + index, kanmusu));
-                }
+        try {
+            Optional.ofNullable(Basic.get().getLevel()).ifPresent(lv -> data.put("hqlv", lv));
+            DeckPortCollection.get().getDeckPortMap().values().forEach(port -> {
+                Map<String, DeckBuilder.Kanmusu> fleet = new TreeMap<>();
+                Optional.ofNullable(port.getShip()).ifPresent(list -> {
+                    for (int i = 0; i < list.size(); i++) {
+                        final int index = i + 1;
+                        Optional.ofNullable(list.get(i))
+                                .filter(targets::contains)
+                                .map(shipsMap::get)
+                                .map(DeckBuilder.Kanmusu::new)
+                                .ifPresent(kanmusu -> fleet.put("s" + index, kanmusu));
+                    }
+                });
+                data.put("f" + port.getId(), fleet);
             });
-            data.put("f" + port.getId(), fleet);
-        });
-        Optional.ofNullable(airbase).ifPresent(list -> {
-            for (int a = 0; a < airbase.size(); a++) {
-                Airbase ab = airbase.get(a);
-                if (ab.getList() != null && ab.getList().size() > 0) {
-                    data.put("a" + (a+1), ab);
-                    List<AirBaseItem> planes = ab.getList();
-                    for (int i = 0; i < planes.size(); i++) {
-                        Item item = new Item(planes.get(i));
-                        ab.getItems().put("i" + (i+1), item);
+            Optional.ofNullable(airbase).ifPresent(list -> {
+                for (int a = 0; a < airbase.size(); a++) {
+                    Airbase ab = airbase.get(a);
+                    if (ab.getList() != null && !ab.getList().isEmpty()) {
+                        data.put("a" + (a + 1), ab);
+                        List<AirBaseItem> planes = ab.getList();
+                        for (int i = 0; i < planes.size(); i++) {
+                            Item item = new Item(planes.get(i));
+                            ab.getItems().put("i" + (i + 1), item);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }catch (Exception e){
+            LoggerHolder.get().error(e.getMessage(), e);
+        }
         ObjectMapper mapper = new ObjectMapper();
         try {
             ClipboardContent content = new ClipboardContent();
@@ -180,6 +181,45 @@ public class DeckBuilder {
         }
     }
 
+    /**
+     * DeckBuilder用クラス - 艦隊
+     */
+    @Data
+    private static class Fleet {
+        private final String name;
+        /**
+         * todo 上手な書き方無いかなぁ
+         */
+        private final Kanmusu s1;
+        private final Kanmusu s2;
+        private final Kanmusu s3;
+        private final Kanmusu s4;
+        private final Kanmusu s5;
+        private final Kanmusu s6;
+        private final Kanmusu s7;
+        // 0: 通常 1-3: 不明
+        private final int t;
+
+        @JsonIgnore
+        private final String id;
+
+        Fleet(Integer f, int t, List<Ship> ships, Map<Integer, SlotItem> itemMap) {
+            this.name = "第" + f + "艦隊";
+            this.id = "f" + f;
+            this.t = t;
+            this.s1 = (!ships.isEmpty()) ? new Kanmusu(ships.get(0), itemMap) : null;
+            this.s2 = (ships.size() >= 2) ? new Kanmusu(ships.get(1), itemMap) : null;
+            this.s3 = (ships.size() >= 3) ? new Kanmusu(ships.get(2), itemMap) : null;
+            this.s4 = (ships.size() >= 4) ? new Kanmusu(ships.get(3), itemMap) : null;
+            this.s5 = (ships.size() >= 5) ? new Kanmusu(ships.get(4), itemMap) : null;
+            this.s6 = (ships.size() >= 6) ? new Kanmusu(ships.get(5), itemMap) : null;
+            this.s7 = (ships.size() >= 7) ? new Kanmusu(ships.get(6), itemMap) : null;
+        }
+    }
+
+    /**
+     * DeckBuilder用クラス - 艤装
+     */
     @Data
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private static class Item {
@@ -206,17 +246,31 @@ public class DeckBuilder {
         }
     }
 
+    /**
+     * DeckBuilder用クラス - 艦娘
+     */
     @Data
     private static class Kanmusu {
         private final int id;
         private final int lv;
         private final int luck;
         private final Map<String, DeckBuilder.Item> items;
+        /*
+         * https://github.com/noro6/kc-web/blob/main/src/classes/convert.ts#L371
+         * 制空権シミュレーターでは増設有無,HP,対潜まで扱っている。他のパラメーターは上限まで改装した扱いと思われる
+         */
+        private final int hp;
+        private final int asw;
+        private final boolean exa;
+
 
         Kanmusu(Ship ship) {
             this.id = ship.getShipId();
             this.lv = ship.getLv();
             this.luck = ship.getLucky().get(0);
+            this.hp = ship.getMaxhp();
+            this.asw = ship.getTaisen().get(0);
+            this.exa = !ship.getSlotEx().equals(0);
             this.items = new TreeMap<>();
             Map<Integer, SlotItem> slotitemMap = SlotItemCollection.get().getSlotitemMap();
             Optional.ofNullable(ship.getSlot())
@@ -241,6 +295,11 @@ public class DeckBuilder {
             lv = ship.getLv();
             luck = ship.getLucky().get(0);
             items = new TreeMap<>();
+            hp = ship.getMaxhp();
+            LoggerHolder.get().debug(ship);
+            asw = ship.getTaisen().get(0);
+            exa = !ship.getSlotEx().equals(0);
+
             if (!ship.getSlot().isEmpty()) {
                 for (int i = 0; i < ship.getSlot().size(); i++) {
                     if (!itemMap.containsKey(ship.getSlot().get(i))) continue;
@@ -254,6 +313,9 @@ public class DeckBuilder {
 
     }
 
+    /**
+     * DeckBuilder用クラス - 基地航空隊
+     */
     @Data
     private static class Airbase {
         private int mode = 1;     // default
@@ -268,12 +330,17 @@ public class DeckBuilder {
 
         Airbase(AirBase ab) {
             this.mode = ab.getActionKind();
-            if (ab != null && ab.getPlaneInfo() != null) {
+            if (ab.getPlaneInfo() != null) {
                 Map<Integer, SlotItem> map = SlotItemCollection.get().getSlotitemMap();
-                this.list = ab.getPlaneInfo().stream().map(PlaneInfo::getSlotid).map(map::get).map(AirBaseItem::toAirBaseItem).collect(Collectors.toList());
+                this.list = ab.getPlaneInfo().stream().map(PlaneInfo::getSlotid).map(map::get).filter(Objects::nonNull).map(AirBaseItem::toAirBaseItem).collect(Collectors.toList());
             }
         }
 
+        /**
+         *
+         * @param ab 基地航空隊
+         * @param itemMap 編成に組み込んだ装備
+         */
         Airbase(AirBase ab, Map<Integer, SlotItem> itemMap) {
             LoggerHolder.get().info(ab);
             mode = ab.getActionKind();
