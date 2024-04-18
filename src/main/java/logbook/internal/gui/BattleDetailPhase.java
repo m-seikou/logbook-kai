@@ -127,7 +127,12 @@ public class BattleDetailPhase extends TitledPane {
         PopOver<Chara> popover = new PopOver<>((node, chara) -> {
             VBox child = new VBox();
             child.getChildren().add(new FleetTabShipPopup(chara, this.phase.getItemMap()));
-            List<PhaseState.AttackDetail> details = this.attackDetails.stream()
+            // 砲撃戦のpopupは先制対潜と開幕雷撃も入れる
+            List<PhaseState.AttackDetail> attacks = new ArrayList<>();
+            attacks.addAll(this.TSBK);
+            attacks.addAll(this.openingAttack);
+            attacks.addAll(this.attackDetails);
+            List<PhaseState.AttackDetail> details = attacks.stream()
                     .filter(e -> {
                         if (chara.getClass() != e.getAttacker().getClass()) {
                             return false;
