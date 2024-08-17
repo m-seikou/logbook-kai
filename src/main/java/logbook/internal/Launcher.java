@@ -41,7 +41,7 @@ public final class Launcher {
                 launcher.exitLocalProxy();
                 launcher.exitLocalThreadPool();
             }
-        } catch (Exception | Error e) {
+        } catch (Throwable e) {
             LoggerHolder.get().warn("例外が発生しました", e); //$NON-NLS-1$
         }
     }

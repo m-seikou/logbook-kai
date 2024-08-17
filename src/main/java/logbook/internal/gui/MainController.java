@@ -151,6 +151,7 @@ public class MainController extends WindowController {
                     .map(Thread::new)
                     .peek(t -> t.setDaemon(true))
                     .forEach(Thread::start);
+            BouyomiChanUtils.speak("棒読みちゃんスタート");
         } catch (Exception e) {
             LoggerHolder.get().error("FXMLの初期化に失敗しました", e);
         }

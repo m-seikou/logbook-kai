@@ -1,5 +1,7 @@
 package logbook.internal;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -9,6 +11,7 @@ import java.nio.ByteOrder;
 import java.nio.channels.Channels;
 import java.nio.channels.WritableByteChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -115,30 +118,49 @@ public class BouyomiChan {
      * @throws IOException 接続に失敗した、または要求を送信出来ない場合。
      */
     public void speak(String text) throws IOException {
-        byte[] textBytes = text.getBytes(StandardCharsets.UTF_8);
-        int length = textBytes.length;
+        LoggerHolder.get().info("**************" + text);
+        try {
+            byte[] textBytes = text.getBytes(StandardCharsets.UTF_8);
+            int length = textBytes.length;
 
-        ByteBuffer buffer = ByteBuffer.allocate(15 + length);
-        buffer.order(ByteOrder.LITTLE_ENDIAN);
-        // コマンド
-        buffer.putShort((short) 1);
-        // 速度
-        buffer.putShort(this.speed);
-        // 音程
-        buffer.putShort(this.tone);
-        // 音量
-        buffer.putShort(this.volume);
-        // 声質
-        buffer.putShort(this.voice);
-        // エンコード(UTF-8)
-        buffer.put((byte) 0);
-        // 長さ
-        buffer.putInt(length);
-        // 文章
-        buffer.put(textBytes);
+            LoggerHolder.get().info("************** 1" + Arrays.toString(textBytes));
+            ByteBuffer buffer = ByteBuffer.allocate(15 + length);
+            LoggerHolder.get().info("************** 2" + buffer);
+            buffer.order(ByteOrder.LITTLE_ENDIAN);
+            LoggerHolder.get().info("************** 3" + buffer);
+            // コマンド
+            buffer.putShort((short) 1);
+            LoggerHolder.get().info("************** 4" + buffer);
+            // 速度
+            LoggerHolder.get().info("************** 5" + buffer);
+            buffer.putShort(this.speed);
+            // 音程
+            LoggerHolder.get().info("************** 6" + buffer);
+            buffer.putShort(this.tone);
+            // 音量
+            LoggerHolder.get().info("************** 7" + buffer);
+            buffer.putShort(this.volume);
+            // 声質
+            LoggerHolder.get().info("************** 8" + buffer);
+            buffer.putShort(this.voice);
+            // エンコード(UTF-8)
+            LoggerHolder.get().info("************** 9" + buffer);
+            buffer.put((byte) 0);
+            // 長さ
+            LoggerHolder.get().info("************** 10" + buffer);
+            buffer.putInt(length);
+            // 文章
+            LoggerHolder.get().info("************** 11" + buffer);
+            buffer.put(textBytes);
 
-        buffer.position(0);
-        this.send(buffer);
+            LoggerHolder.get().info("************** 12" + buffer);
+//            buffer.position(0);
+            LoggerHolder.get().info("************** 13" + buffer);
+            this.send(buffer);
+        }catch (Throwable e){
+            LoggerHolder.get().info("************** e" + e);
+            throw e;
+        }
     }
 
     private void command(short command) throws IOException {
@@ -151,12 +173,21 @@ public class BouyomiChan {
     }
 
     private void send(ByteBuffer data) throws IOException {
+        LoggerHolder.get().info(data);
         Socket socket = new Socket();
         socket.connect(this.addr, (int) TimeUnit.SECONDS.toMillis(1));
         try (OutputStream out = socket.getOutputStream()) {
+            LoggerHolder.get().info("///////" + data);
             try (WritableByteChannel channel = Channels.newChannel(out)) {
+                LoggerHolder.get().info("///////??????data:" + data);
+                LoggerHolder.get().info("///////??????:channel:" + channel);
+                data.rewind();
+                LoggerHolder.get().info("///////rewind probrem");
                 channel.write(data);
             }
+        }catch(Throwable e){
+            LoggerHolder.get().error("socket error." ,e);
+            throw e;
         } finally {
             socket.close();
         }
