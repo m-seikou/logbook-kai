@@ -19,6 +19,8 @@ public class AkashiTimerPane extends AnchorPane {
 
     @FXML
     private Label time;
+    @FXML
+    private Label nosakiTimer;
 
     /**
      * 泊地修理タイマーペインのコンストラクタ
@@ -52,6 +54,12 @@ public class AkashiTimerPane extends AnchorPane {
             this.time.setText(Time.toString(Duration.ofMillis(System.currentTimeMillis() - timer), ""));
         } else {
             this.time.setText("");
+        }
+        long nosakiTimer = AppCondition.get().getNoshiTimer();
+        if (timer > 0) {
+            this.nosakiTimer.setText(Time.toString(Duration.ofMillis(System.currentTimeMillis() - nosakiTimer), ""));
+        } else {
+            this.nosakiTimer.setText("");
         }
     }
 }

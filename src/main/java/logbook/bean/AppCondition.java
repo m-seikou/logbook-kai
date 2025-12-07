@@ -51,6 +51,8 @@ public class AppCondition implements Serializable {
 
     /** 泊地修理タイマー */
     private long akashiTimer = 0;
+    /** 泊地修理タイマー */
+    private long noshiTimer = 0;
 
     /** cond値更新時間(エポック秒) */
     private long condUpdateTime = 0;

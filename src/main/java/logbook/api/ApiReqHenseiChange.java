@@ -88,6 +88,10 @@ public class ApiReqHenseiChange implements APIListenerSpi {
                             AppCondition.get().setAkashiTimer(System.currentTimeMillis());
                             break;
                         }
+                        if ("補給艦".equals(type)) {
+                            AppCondition.get().setNoshiTimer(System.currentTimeMillis());
+                            break;
+                        }
                     }
                 }
             }
