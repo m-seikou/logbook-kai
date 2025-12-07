@@ -1909,6 +1909,8 @@ public class BattleTypes {
         やまむさタッチ("第一戦隊、突撃！主砲、全力斉射ッ！"),
         大和タッチ("大和、突撃します！二番艦も続いてください！"),
         潜水艦隊攻撃("潜水艦隊攻撃"),
+        リシュタッチ("Richelieuよ！圧倒しなさいっ！"),
+        ロイヤルタッチ("姉妹艦連携砲撃"),
 
         // 新しいものが出てきた場合補足できるように用意しておく
         // 大和タッチ,潜水艦タッチ
@@ -1953,6 +1955,10 @@ public class BattleTypes {
                     return ColoradoTouch;
                 case 104:
                     return 僚艦夜戦突撃;
+                case 105:
+                    return リシュタッチ;
+                case 106:
+                    return ロイヤルタッチ;
                 case 401:
                     return やまむさタッチ;
                 default:
@@ -2041,6 +2047,8 @@ public class BattleTypes {
         大和タッチ("大和、突撃します！二番艦も続いてください！"),
         潜水艦隊攻撃("潜水艦隊攻撃"),
         夜間瑞雲夜戦CI("夜間瑞雲夜戦カットイン"),
+        リシュタッチ("Richelieuよ！圧倒しなさいっ！"),
+        ロイヤルタッチ("姉妹艦連携砲撃"),
         unknown("未定義");
 
 
@@ -2097,6 +2105,10 @@ public class BattleTypes {
                     return ColoradoTouch;
                 case 104:
                     return 僚艦夜戦突撃;
+                case 105:
+                    return リシュタッチ;
+                case 106:
+                    return ロイヤルタッチ;
                 case 200:
                     return 夜間瑞雲夜戦CI;
                 case 401:
@@ -2118,6 +2130,8 @@ public class BattleTypes {
                 case やまむさタッチ:
                 case 大和タッチ:
                 case 潜水艦隊攻撃:
+                case リシュタッチ:
+                case ロイヤルタッチ:
                     return true;
                 default:
                     return false;
