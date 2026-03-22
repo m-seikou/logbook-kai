@@ -229,6 +229,10 @@ public class ApiPortPort implements APIListenerSpi {
         if (System.currentTimeMillis() - timer >= Duration.ofMinutes(20).toMillis()) {
             AppCondition.get().setAkashiTimer(System.currentTimeMillis());
         }
+        long nosakiTimer = AppCondition.get().getNoshiTimer();
+        if (System.currentTimeMillis() - nosakiTimer >= Duration.ofMinutes(15).toMillis()) {
+            AppCondition.get().setNoshiTimer(System.currentTimeMillis());
+        }
     }
 
     /**

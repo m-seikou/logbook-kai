@@ -417,7 +417,7 @@ public class MainController extends WindowController {
     private void akashiTimer() {
         ObservableList<Node> nodes = this.akashiTimer.getChildren();
 
-        if (AppCondition.get().getAkashiTimer() == 0) {
+        if (AppCondition.get().getAkashiTimer() == 0 && AppCondition.get().getNoshiTimer() == 0) {
             if (!nodes.isEmpty()) {
                 nodes.clear();
             }

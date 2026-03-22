@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import logbook.internal.Config;
+import logbook.internal.gui.Item;
 import lombok.Data;
 
 /**
@@ -49,9 +50,9 @@ public class AppCondition implements Serializable {
     /** 最後に資材ログに書き込んだ時間 */
     private long wroteMaterialLogLast = 0;
 
-    /** 泊地修理タイマー */
+    /** 明石 泊地修理タイマー */
     private long akashiTimer = 0;
-    /** 泊地修理タイマー */
+    /** 野埼タイマー */
     private long noshiTimer = 0;
 
     /** cond値更新時間(エポック秒) */
@@ -62,6 +63,8 @@ public class AppCondition implements Serializable {
 
     /** ルート(mapping.jsonを参照) */
     private List<String> route = new ArrayList<>();
+
+    private List<Material> foundItem = new ArrayList<>();
 
     /**
      * アプリケーションのデフォルト設定ディレクトリから{@link AppCondition}を取得します、

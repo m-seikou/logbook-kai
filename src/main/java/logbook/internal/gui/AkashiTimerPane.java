@@ -56,7 +56,7 @@ public class AkashiTimerPane extends AnchorPane {
             this.time.setText("");
         }
         long nosakiTimer = AppCondition.get().getNoshiTimer();
-        if (timer > 0) {
+        if (nosakiTimer > 0) {
             this.nosakiTimer.setText(Time.toString(Duration.ofMillis(System.currentTimeMillis() - nosakiTimer), ""));
         } else {
             this.nosakiTimer.setText("");

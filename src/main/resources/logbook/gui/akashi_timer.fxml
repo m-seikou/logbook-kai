@@ -8,6 +8,6 @@
       <Label maxWidth="40.0" prefWidth="40.0" styleClass="name" text="明石" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" />
       <Label fx:id="time" maxWidth="90.0" prefWidth="90.0" styleClass="time" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="60.0" />
        <Label maxWidth="40.0" prefWidth="40.0" styleClass="name" text="野埼" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="160.0" />
-       <Label fx:id="nosakiTime" maxWidth="90.0" prefWidth="90.0" styleClass="time" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="220.0" />
+       <Label fx:id="nosakiTimer" maxWidth="90.0" prefWidth="90.0" styleClass="time" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="220.0" />
    </children>
 </fx:root>
