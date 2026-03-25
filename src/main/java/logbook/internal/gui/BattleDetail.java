@@ -24,9 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.WindowEvent;
-import logbook.bean.BattleLog;
-import logbook.bean.BattleResult;
-import logbook.bean.BattleTypes;
+import logbook.bean.*;
 import logbook.bean.BattleTypes.AirBaseAttack;
 import logbook.bean.BattleTypes.CombinedType;
 import logbook.bean.BattleTypes.IAirBaseAttack;
@@ -40,17 +38,7 @@ import logbook.bean.BattleTypes.Stage1;
 import logbook.bean.BattleTypes.Stage2;
 import logbook.bean.BattleTypes.SupportAiratack;
 import logbook.bean.BattleTypes.SupportInfo;
-import logbook.bean.CombinedBattleEachBattle;
-import logbook.bean.MapStartNext;
-import logbook.bean.Ship;
-import logbook.bean.SlotItem;
-import logbook.bean.SlotitemMst;
-import logbook.bean.SlotitemMstCollection;
-import logbook.internal.Items;
-import logbook.internal.Mapping;
-import logbook.internal.PhaseState;
-import logbook.internal.Rank;
-import logbook.internal.Ships;
+import logbook.internal.*;
 import lombok.Getter;
 
 /**
@@ -175,6 +163,9 @@ public class BattleDetail extends WindowController {
 
     @FXML
     private Label smokeType;
+
+    @FXML
+    private Label material;
 
     /** ハッシュ・コード */
     private int hashCode;
@@ -349,6 +340,10 @@ public class BattleDetail extends WindowController {
             this.smokeType.setText("なし");
         } else {
             this.smokeType.setText(smokeType + "重");
+        }
+        // 獲得資源
+        if (AppCondition.get().getMaterial() != null) {
+            this.material.setText(String.join(" ", AppCondition.get().getFoundItem()));
         }
 
         if(!this.battle.isIKouku()){

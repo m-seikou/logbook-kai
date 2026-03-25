@@ -67,6 +67,8 @@ public class BattleLog implements Serializable {
 
     /** ルート */
     private List<String> route;
+    /** 拾い物 */
+    private List<String> foundItem;
 
     /** ローデータ */
     private RawData raw;

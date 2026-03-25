@@ -121,9 +121,15 @@
                         <HBox GridPane.rowIndex="4">
                             <Label text="対空CI:"/>
                         </HBox>
-                        <HBox GridPane.columnIndex="1" GridPane.columnSpan="7"
+                        <HBox GridPane.columnIndex="1" GridPane.columnSpan="5"
                               GridPane.rowIndex="4">
                             <Label fx:id="tykuCI"/>
+                        </HBox>
+                        <HBox GridPane.rowIndex="4" GridPane.columnIndex="6">
+                            <Label text="獲得資源:"/>
+                        </HBox>
+                        <HBox GridPane.columnIndex="7" GridPane.rowIndex="4">
+                            <Label fx:id="material"/>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" GridPane.rowIndex="5">
                             <Label text="評価:"/>

@@ -2,11 +2,10 @@ package logbook.api;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 
 import javafx.application.Platform;
@@ -14,19 +13,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
 import logbook.Messages;
-import logbook.bean.AppBouyomiConfig;
-import logbook.bean.AppCondition;
-import logbook.bean.AppConfig;
-import logbook.bean.BattleLog;
+import logbook.bean.*;
 import logbook.bean.BattleTypes.CombinedType;
-import logbook.bean.DeckPortCollection;
-import logbook.bean.MapStartNext;
-import logbook.bean.Ship;
-import logbook.bean.ShipMst;
 import logbook.internal.Audios;
 import logbook.internal.BouyomiChanUtils;
 import logbook.internal.BouyomiChanUtils.Type;
 import logbook.internal.LoggerHolder;
+import logbook.internal.Material;
 import logbook.internal.Ships;
 import logbook.internal.Tuple;
 import logbook.internal.gui.Tools;
@@ -62,6 +55,14 @@ public class ApiReqMapNext implements APIListenerSpi {
                     .add(data.getJsonNumber("api_no").toString())
                     .toString());
 
+            if (data.get("api_itemget") instanceof JsonObject) {
+                condition.getFoundItem().add(this.toFoundMessage(data.getJsonObject("api_itemget")));
+            } else if (data.get("api_itemget") instanceof JsonArray) {
+                for (javax.json.JsonValue foundItem : data.getJsonArray("api_itemget")) {
+                    condition.getFoundItem().add(this.toFoundMessage(foundItem.asJsonObject()));
+                }
+            }
+            condition.setBattleResult(log);
             if (AppConfig.get().isAlertBadlyNext() || AppBouyomiConfig.get().isEnable()) {
                 // 大破した艦娘
                 List<Ship> badlyShips = DeckPortCollection.get()
@@ -109,6 +110,11 @@ public class ApiReqMapNext implements APIListenerSpi {
         }
     }
 
+    private String toFoundMessage(JsonObject json){
+        return Material.values()[json.asJsonObject().getInt("api_id")].name()
+                + ":"
+                + json.asJsonObject().getInt("api_getcount");
+    }
     /**
      * 大破警告
      *

@@ -2,6 +2,7 @@ package logbook.api;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -59,6 +60,7 @@ public class ApiReqMapStart implements APIListenerSpi {
                     .add(data.getJsonNumber("api_mapinfo_no").toString())
                     .add(data.getJsonNumber("api_no").toString())
                     .toString());
+            condition.setFoundItem(new ArrayList<>());
 
             if (AppConfig.get().isAlertBadlyStart() || AppBouyomiConfig.get().isEnable()) {
                 // 大破した艦娘
