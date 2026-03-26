@@ -49,6 +49,7 @@ public class ApiReqMapStart implements APIListenerSpi {
             BattleLog log = new BattleLog();
             log.setCombinedType(CombinedType.toCombinedType(AppCondition.get().getCombinedType()));
             log.getNext().add(MapStartNext.toMapStartNext(data));
+            log.setFoundMaterial(new ArrayList<>());
 
             AppCondition condition = AppCondition.get();
             condition.setBattleResult(log);
@@ -60,7 +61,6 @@ public class ApiReqMapStart implements APIListenerSpi {
                     .add(data.getJsonNumber("api_mapinfo_no").toString())
                     .add(data.getJsonNumber("api_no").toString())
                     .toString());
-            condition.setFoundItem(new ArrayList<>());
 
             if (AppConfig.get().isAlertBadlyStart() || AppBouyomiConfig.get().isEnable()) {
                 // 大破した艦娘
