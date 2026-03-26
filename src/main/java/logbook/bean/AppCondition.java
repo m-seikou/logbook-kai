@@ -64,8 +64,6 @@ public class AppCondition implements Serializable {
     /** ルート(mapping.jsonを参照) */
     private List<String> route = new ArrayList<>();
 
-    private List<String> foundItem = new ArrayList<>();
-
     /**
      * アプリケーションのデフォルト設定ディレクトリから{@link AppCondition}を取得します、
      * これは次の記述と同等です

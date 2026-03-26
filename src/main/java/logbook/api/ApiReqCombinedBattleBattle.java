@@ -35,7 +35,6 @@ public class ApiReqCombinedBattleBattle implements APIListenerSpi {
                 condition.setBattleCount(condition.getBattleCount() + 1);
                 log.setBattleCount(condition.getBattleCount());
                 log.setRoute(condition.getRoute());
-                log.setFoundItem(condition.getFoundItem());
 
                 log.setBattle(CombinedBattleBattle.toBattle(data));
                 // ローデータを設定する

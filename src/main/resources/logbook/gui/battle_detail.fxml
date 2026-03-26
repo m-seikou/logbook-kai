@@ -129,7 +129,7 @@
                             <Label text="獲得資源:"/>
                         </HBox>
                         <HBox GridPane.columnIndex="7" GridPane.rowIndex="4">
-                            <Label fx:id="material"/>
+                            <Label fx:id="foundMaterial"/>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" GridPane.rowIndex="5">
                             <Label text="評価:"/>

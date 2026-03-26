@@ -165,7 +165,7 @@ public class BattleDetail extends WindowController {
     private Label smokeType;
 
     @FXML
-    private Label material;
+    private Label foundMaterial;
 
     /** ハッシュ・コード */
     private int hashCode;
@@ -342,8 +342,8 @@ public class BattleDetail extends WindowController {
             this.smokeType.setText(smokeType + "重");
         }
         // 獲得資源
-        if (AppCondition.get().getMaterial() != null) {
-            this.material.setText(String.join(" ", AppCondition.get().getFoundItem()));
+        if (!this.log.getFoundMaterial().isEmpty()) {
+            this.foundMaterial.setText(String.join(" ", this.log.getFoundMaterial()));
         }
 
         if(!this.battle.isIKouku()){
