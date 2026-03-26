@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import logbook.internal.Config;
-import logbook.internal.gui.Item;
 import lombok.Data;
 
 /**

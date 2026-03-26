@@ -159,7 +159,7 @@ public class BattleDetail extends WindowController {
     private boolean isPractice;
 
     /** 周期タイマー */
-    private Timeline timeline = new Timeline();
+    private final Timeline timeline = new Timeline();
 
     @FXML
     private Label smokeType;
@@ -192,7 +192,7 @@ public class BattleDetail extends WindowController {
             this.log = log;
         }
         if (this.log != null) {
-            MapStartNext last = this.log.getNext().size() > 0 ? this.log.getNext().get(this.log.getNext().size() - 1) : null;
+            MapStartNext last = !this.log.getNext().isEmpty() ? this.log.getNext().get(this.log.getNext().size() - 1) : null;
             CombinedType combinedType = this.log.getCombinedType();
             Map<Integer, List<Ship>> deckMap = this.log.getDeckMap();
             Map<Integer, SlotItem> itemMap = this.log.getItemMap();
