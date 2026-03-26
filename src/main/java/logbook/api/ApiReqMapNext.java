@@ -54,12 +54,12 @@ public class ApiReqMapNext implements APIListenerSpi {
                     .add(data.getJsonNumber("api_mapinfo_no").toString())
                     .add(data.getJsonNumber("api_no").toString())
                     .toString());
-
+            BattleResult result = log.getResult();
             if (data.get("api_itemget") instanceof JsonObject) {
-                condition.getBattleResult().getFoundMaterial().add(this.toFoundMessage(data.getJsonObject("api_itemget")));
+                log.getFoundMaterial().add(this.toFoundMessage(data.getJsonObject("api_itemget")));
             } else if (data.get("api_itemget") instanceof JsonArray) {
                 for (javax.json.JsonValue foundItem : data.getJsonArray("api_itemget")) {
-                    condition.getBattleResult().getFoundMaterial().add(this.toFoundMessage(foundItem.asJsonObject()));
+                    log.getFoundMaterial().add(this.toFoundMessage(foundItem.asJsonObject()));
                 }
             }
             condition.setBattleResult(log);
