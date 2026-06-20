@@ -203,7 +203,7 @@ public class BattleDetail extends WindowController {
             Integer battleCount = this.log.getBattleCount();
             List<String> route = this.log.getRoute();
             boolean isPractice = this.log.isPractice();
-            this.setData(last, combinedType, deckMap, escape, itemMap, battle, midnight, result, battleCount, route, isPractice);
+            this.setData(last, combinedType, deckMap, escape, itemMap, battle, midnight, result, battleCount, route,this.log.getFoundMaterial(), isPractice);
         }
     }
 
@@ -227,7 +227,7 @@ public class BattleDetail extends WindowController {
      */
     void setData(MapStartNext last, CombinedType combinedType, Map<Integer, List<Ship>> deckMap, Set<Integer> escape,
             Map<Integer, SlotItem> itemMap, IFormation battle, IMidnightBattle midnight, BattleResult result,
-            Integer battleCount, List<String> route, boolean isPractice) {
+            Integer battleCount, List<String> route,List<String> foundMaterial, boolean isPractice) {
         int hashCode = Objects.hash(last, battle, midnight, result);
         if (this.hashCode == hashCode) {
             return;
@@ -244,6 +244,7 @@ public class BattleDetail extends WindowController {
         this.result = result;
         this.battleCount = battleCount;
         this.routeList = route;
+        this.foundMaterial.setText(String.join(" ",foundMaterial));
         this.isPractice = isPractice;
         this.update();
     }

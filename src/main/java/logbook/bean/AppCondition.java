@@ -75,4 +75,15 @@ public class AppCondition implements Serializable {
     public static AppCondition get() {
         return Config.getDefault().get(AppCondition.class, AppCondition::new);
     }
+
+    public BattleLog getBattlelog(){
+        BattleLog log;
+        if ((log = this.getBattleResult()) != null) {
+            return log;
+        }
+        if ((log = this.getBattleResultConfirm()) != null) {
+            return log;
+        }
+        return null;
+    }
 }

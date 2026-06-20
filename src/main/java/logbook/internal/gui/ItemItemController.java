@@ -542,10 +542,21 @@ public class ItemItemController extends WindowController {
      * 艦隊分析
      */
     @FXML
-    void kancolleFleetanalysis() {
+    void kancolleFleetanalysisAll() {
+        kancolleFleetanalysis(true);
+    }
+    /**
+     * 艦隊分析
+     */
+    @FXML
+    void kancolleFleetanalysisLocked() {
+        kancolleFleetanalysis(false);
+    }
+
+    void kancolleFleetanalysis(boolean allItems) {
         try {
             List<KancolleFleetanalysisItem> list = SlotItemCollection.get().getSlotitemMap().values().stream()
-                    .filter(item -> item.getLocked())
+                    .filter(item -> allItems || item.getLocked())
                     .map(KancolleFleetanalysisItem::toItem)
                     .sorted(Comparator.comparing(KancolleFleetanalysisItem::getId)
                             .thenComparing(Comparator.comparing(KancolleFleetanalysisItem::getLv)))

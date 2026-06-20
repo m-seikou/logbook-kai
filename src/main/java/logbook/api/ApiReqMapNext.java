@@ -41,7 +41,7 @@ public class ApiReqMapNext implements APIListenerSpi {
             MapStartNext next = MapStartNext.toMapStartNext(data);
 
             AppCondition condition = AppCondition.get();
-            BattleLog log = condition.getBattleResult();
+            BattleLog log = condition.getBattlelog();
             if (log == null) {
                 log = new BattleLog();
                 condition.setBattleResult(log);
@@ -54,7 +54,8 @@ public class ApiReqMapNext implements APIListenerSpi {
                     .add(data.getJsonNumber("api_mapinfo_no").toString())
                     .add(data.getJsonNumber("api_no").toString())
                     .toString());
-            BattleResult result = log.getResult();
+
+            // 拾い物
             if (data.get("api_itemget") instanceof JsonObject) {
                 log.getFoundMaterial().add(this.toFoundMessage(data.getJsonObject("api_itemget")));
             } else if (data.get("api_itemget") instanceof JsonArray) {

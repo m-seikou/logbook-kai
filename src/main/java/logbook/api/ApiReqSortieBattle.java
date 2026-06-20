@@ -31,7 +31,7 @@ public class ApiReqSortieBattle implements APIListenerSpi {
             return;
         }
         AppCondition condition = AppCondition.get();
-        BattleLog log = condition.getBattleResult();
+        BattleLog log = condition.getBattlelog();
         if (log == null) {
             return;
         }

@@ -11,10 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.nio.file.attribute.FileTime;
 import java.time.Duration;
 import java.util.function.BiConsumer;
@@ -217,7 +214,7 @@ public class ImageListener implements ContentListenerSpi {
 
     private void move(Path from, Path to) throws IOException {
         if (!Files.exists(from)) {
-            LoggerHolder.get().warn(from.toString() + " not exists.");
+            LoggerHolder.get().warn(from + " not exists.");
             return;
         }
         Path parent = to.getParent();
@@ -225,6 +222,8 @@ public class ImageListener implements ContentListenerSpi {
             if (!Files.exists(parent)) {
                 Files.createDirectories(parent);
             }
+        } else if (!Files.isRegularFile(to, LinkOption.NOFOLLOW_LINKS)) {
+            Files.delete(to);
         }
         Files.move(from, to, StandardCopyOption.REPLACE_EXISTING);
     }

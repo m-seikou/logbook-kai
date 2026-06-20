@@ -41,7 +41,7 @@ public class ApiReqSortieBattleresult implements APIListenerSpi {
         JsonObject data = json.getJsonObject("api_data");
         if (data != null) {
             BattleResult result = BattleResult.toBattleResult(data);
-            BattleLog log = AppCondition.get().getBattleResult();
+            BattleLog log = AppCondition.get().getBattlelog();
             if (log != null) {
                 // 削除
                 AppCondition.get().setBattleResult(null);

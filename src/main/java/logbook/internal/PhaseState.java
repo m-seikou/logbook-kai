@@ -902,21 +902,22 @@ public class PhaseState {
             if (index.get(i) == null) {
                 continue;
             }
-            for(int j = 0;j < index.get(i).size();j++){
-                if (index.get(i).get(j) >= 0) {
-                    Chara attacker = Math.max(attackerFleet.size(), 6) > i
-                            ? attackerFleet.get(i)
-                            : attackerFleetCombined.get(i - 6);
-                    Chara defender = Math.max(defenderFleet.size(), 6) > index.get(i).get(j)
-                            ? defenderFleet.get(index.get(i).get(j))
-                            : defenderFleetCombined.get(index.get(i).get(j) - 6);
-                    int damage = (int) ydam.get(i).get(j).doubleValue();
-
-                    defender.setNowhp(defender.getNowhp() - damage);
-
-                    this.addDetail(attacker, defender, damage, Collections.singletonList(damage), Collections.singletonList(critical.get(i).get(j)),
-                            SortieAtTypeRaigeki.開幕雷撃);
+            for (int j = 0; j < index.get(i).size(); j++) {
+                if (index.get(i).get(j) < 0) {
+                    continue;
                 }
+                Chara attacker = Math.max(attackerFleet.size(), 6) > i
+                        ? attackerFleet.get(i)
+                        : attackerFleetCombined.get(i - 6);
+                Chara defender = Math.max(defenderFleet.size(), 6) > index.get(i).get(j)
+                        ? defenderFleet.get(index.get(i).get(j))
+                        : defenderFleetCombined.get(index.get(i).get(j) - 6);
+                int damage = (int) ydam.get(i).get(j).doubleValue();
+
+                defender.setNowhp(defender.getNowhp() - damage);
+
+                this.addDetail(attacker, defender, damage, Collections.singletonList(damage), Collections.singletonList(critical.get(i).get(j)),
+                        SortieAtTypeRaigeki.開幕雷撃);
             }
         }
     }

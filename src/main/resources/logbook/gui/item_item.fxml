@@ -77,8 +77,11 @@
                              <SeparatorMenuItem mnemonicParsing="false" />
                              <Menu mnemonicParsing="false" text="艦隊分析">
                                <items>
-                                 <MenuItem mnemonicParsing="false" onAction="#kancolleFleetanalysis" text="ロック装備をクリップボードにコピー" />
+                                 <MenuItem mnemonicParsing="false" onAction="#kancolleFleetanalysisLocked" text="ロック装備をクリップボードにコピー" />
                                </items>
+                                 <items>
+                                     <MenuItem mnemonicParsing="false" onAction="#kancolleFleetanalysisAll" text="全装備をクリップボードにコピー" />
+                                 </items>
                              </Menu>
                              <SeparatorMenuItem mnemonicParsing="false" />
                              <MenuItem mnemonicParsing="false" onAction="#columnVisibleType" text="列の表示・非表示" />
